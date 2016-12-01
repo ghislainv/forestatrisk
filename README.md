@@ -74,7 +74,7 @@ The easiest way to install the `deforestprob` Python module is via [pip](https:/
 ~$ sudo pip install --upgrade https://github.com/ghislainv/deforestprob/archive/master.zip
 ```
 
-but you can also directly use the `setup.py` file:
+but you can also install it executing the `setup.py` file:
 
 ```
 ~$ git clone https://github.com/ghislainv/deforestprob
