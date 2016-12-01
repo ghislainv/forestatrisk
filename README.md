@@ -1,6 +1,6 @@
 # deforestprob Python package
 
-## Estimating deforestation probability in the tropics
+## Estimating the spatial probability of deforestation in tropical countries
 
 `deforestprob` is a Python package to estimate the spatial probability
 of deforestation in the tropics depending on various spatial
