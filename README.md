@@ -68,17 +68,25 @@ doi: [10.5281/zenodo.48470](http://doi.org/10.5281/zenodo.48470)
 
 ## Installation
 
-You can easily install the `deforestprob` Python module using
-[pip](https://pip.pypa.io/en/stable/):
+The easiest way to install the `deforestprob` Python module is via [pip](https://pip.pypa.io/en/stable/):
 
 ```
+~$ sudo pip install --upgrade https://github.com/ghislainv/deforestprob/archive/master.zip
+```
+
+but you can also directly use the `setup.py` file:
+
+```
+~$ git clone https://github.com/ghislainv/deforestprob
 ~$ cd deforestprob
-~/deforestprob$ sudo pip install .
+~/deforestprob$ sudo python setup.py install
 ```
 
 ## Figure
 
-Map of the probability of deforestation in Madagascar for the year 2010 obtained with deforestprob. Dark red: high probability of deforestation, Dark green: low probability of deforestation.
+Map of the probability of deforestation in Madagascar for the year
+2010 obtained with deforestprob. Dark red: high probability of
+deforestation, Dark green: low probability of deforestation.
 
 <img src="docs/images/prob2010.png" width=400"/>
 
