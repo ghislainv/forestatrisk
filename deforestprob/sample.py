@@ -1,0 +1,268 @@
+#!/usr/bin/python
+
+# ==============================================================================
+#
+# sample.py
+#
+# Python script to extract raster values from a sample of points:
+# 1. Draw spatial points in deforested and forested areas
+# 2. Extract environmental variable values from spatial points
+#
+# Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+# November 2016
+#
+# call: sample(nsamp=10000, Seed=1234, csize=10,
+#              var_dir="data",
+#              input_forest_raster="forest.tif",
+#              output_file="output/sample.txt")
+#
+# - nsamp: number of random spatial points
+# - seed: seed for random number generator
+# - csize: spatial cell size in km
+# - var_dir: directory with raster data
+# - input_forest_raster: name of the forest/defor raster file
+#   (1=forest, 0=deforested) in var_dir
+# - output_file: path to save the text file with sample points
+#
+# =============================================================================
+
+# Libraries
+from osgeo import gdal  # GIS libraries
+import os  # Operating system interfaces
+from glob import glob  # To explore files in a folder
+import sys  # To read and write files
+import numpy as np  # For arrays
+from tqdm import tqdm  # Progress bar
+from makeblock import makeblock
+
+
+def sample(nsamp=10000, Seed=1234, csize=10,
+           var_dir="data",
+           input_forest_raster="forest.tif",
+           output_file="output/sample.txt"):
+
+    # Set random seed
+    np.random.seed(Seed)
+
+    # =============================================
+    # Sampling pixels
+    # =============================================
+
+    print("Sample 2x" + str(nsamp) + " pixels (deforested vs. forest)")
+
+    # Read defor raster
+    forest_raster_file = os.path.join(var_dir, input_forest_raster)
+    forestR = gdal.Open(forest_raster_file)
+    forestB = forestR.GetRasterBand(1)
+
+    # Make blocks
+    blockinfo = makeblock(forest_raster_file)
+    nblock = blockinfo[0]
+    nblock_x = blockinfo[1]
+    x = blockinfo[3]
+    y = blockinfo[4]
+    nx = blockinfo[5]
+    ny = blockinfo[6]
+    print("Divide region in " + str(nblock) + " blocks")
+
+    # Number of defor/forest pixels by block
+    print("Compute number of deforested and forest pixels per block")
+    ndc = 0
+    ndc_block = np.zeros(nblock, dtype=np.int)
+    nfc = 0
+    nfc_block = np.zeros(nblock, dtype=np.int)
+
+    # Loop on blocks of data
+    for b in tqdm(range(nblock)):
+        # Position in 1D-arrays
+        px = b % nblock_x
+        py = b / nblock_x
+        # Read the data
+        forest = forestB.ReadAsArray(x[px], y[py], nx[px], ny[py])
+        # Identify pixels (x/y coordinates) which are deforested
+        deforpix = np.nonzero(forest == 0)
+        ndc_block[b] = len(deforpix[0])  # Number of defor pixels
+        ndc += len(deforpix[0])
+        # Identify pixels (x/y coordinates) which are forest
+        forpix = np.nonzero(forest == 1)
+        nfc_block[b] = len(forpix[0])  # Number of forest pixels
+        nfc += len(forpix[0])
+
+    # Proba of drawing a block
+    print("Draw blocks at random")
+    proba_block_d = ndc_block.astype(np.float)/ndc
+    proba_block_f = nfc_block.astype(np.float)/nfc
+    # Draw block number nsamp times
+    block_draw_d = np.random.choice(range(nblock), size=nsamp,
+                                    replace=True, p=proba_block_d)
+    block_draw_f = np.random.choice(range(nblock), size=nsamp,
+                                    replace=True, p=proba_block_f)
+    # Number of times the block is drawn
+    nblock_draw_d = np.zeros(nblock, dtype=np.int)
+    nblock_draw_f = np.zeros(nblock, dtype=np.int)
+    for s in range(nsamp):
+        nblock_draw_d[block_draw_d[s]] += 1
+        nblock_draw_f[block_draw_f[s]] += 1
+
+    # Draw defor/forest pixels in blocks
+    print("Draw pixels at random in blocks")
+    # Object to store coordinates of selected pixels
+    deforselect = np.empty(shape=(0, 2), dtype=np.int)
+    forselect = np.empty(shape=(0, 2), dtype=np.int)
+    # Loop on blocks of data
+    for b in tqdm(range(nblock)):
+        nbdraw_d = nblock_draw_d[b]
+        nbdraw_f = nblock_draw_f[b]
+        # Position in 1D-arrays
+        px = b % nblock_x
+        py = b / nblock_x
+        # Read the data
+        forest = forestB.ReadAsArray(x[px], y[py], nx[px], ny[py])
+        # Identify pixels (x/y coordinates) which are deforested
+        # !! Values returned in row-major, C-style order (y/x) !!
+        deforpix = np.nonzero(forest == 0)
+        deforpix = np.transpose((x[px] + deforpix[1],
+                                 y[py] + deforpix[0]))
+        ndc_block = len(deforpix)
+        # Identify pixels (x/y coordinates) which are forested
+        forpix = np.nonzero(forest == 1)
+        forpix = np.transpose((x[px] + forpix[1],
+                               y[py] + forpix[0]))
+        nfc_block = len(forpix)
+        # Sample deforested pixels
+        if nbdraw_d > 0:
+            if nbdraw_d < ndc_block:
+                i = np.random.choice(ndc_block, size=nbdraw_d,
+                                     replace=False)
+                deforselect = np.concatenate((deforselect, deforpix[i]),
+                                             axis=0)
+            else:
+                # nbdraw = ndc_block
+                deforselect = np.concatenate((deforselect, deforpix),
+                                             axis=0)
+        # Sample forest pixels
+        if nbdraw_f > 0:
+            if nbdraw_f < nfc_block:
+                i = np.random.choice(nfc_block, size=nbdraw_f,
+                                     replace=False)
+                forselect = np.concatenate((forselect, forpix[i]),
+                                           axis=0)
+            else:
+                # nbdraw = ndc_block
+                forselect = np.concatenate((forselect, forpix),
+                                           axis=0)
+
+    # =============================================
+    # Compute center of pixel coordinates
+    # =============================================
+
+    print("Compute center of pixel coordinates")
+
+    # Landscape variables
+    gt = forestR.GetGeoTransform()
+    ncol = forestR.RasterXSize
+    nrow = forestR.RasterYSize
+    Xmin = gt[0]
+    Xmax = gt[0]+gt[1]*ncol
+    Ymin = gt[3]+gt[5]*nrow
+    Ymax = gt[3]
+
+    # Concatenate selected pixels
+    select = np.concatenate((deforselect, forselect), axis=0)
+
+    # Offsets and coordinates
+    xOffset = select[:, 0]
+    yOffset = select[:, 1]
+    pts_x = (xOffset+0.5)*gt[1]+gt[0]  # +0.5 for center of pixels
+    pts_y = (yOffset+0.5)*gt[5]+gt[3]  # +0.5 for center of pixels
+
+    # ================================================
+    # Compute cell number for spatial autocorrelation
+    # ================================================
+
+    # Cell number from region
+    print("Compute number of %d x %d km spatial cells" % (csize, csize))
+    csize = csize * 1000  # Transform km in m
+    ncell_byrow = np.int(np.ceil((Xmax - Xmin) / csize))
+    ncell_bycol = np.int(np.ceil((Ymax - Ymin) / csize))
+    ncell = ncell_byrow * ncell_bycol
+    print("... %d cells (%d x %d)" % (ncell, ncell_bycol, ncell_byrow))
+    # I and J are the coordinates of the cells and start at zero
+    print("Identify cell number from XY coordinates")
+    J = ((pts_x - Xmin) / csize).astype(np.int)
+    I = ((Ymax - pts_y) / csize).astype(np.int)
+    cell = I * ncell_byrow + J  # Cell number starts at zero
+
+    # =============================================
+    # Extract values from rasters
+    # =============================================
+
+    # Raster list
+    var_tif = var_dir + "/*.tif"
+    raster_list = glob(var_tif)
+
+    # Make vrt with gdalbuildvrt
+    print("Make virtual raster with variables as raster bands")
+    inputvar = " ".join(raster_list)
+    outputfile = var_dir + "/var.vrt"
+    os.system("gdalbuildvrt -separate -o " + outputfile + " " + inputvar)
+
+    # Load vrt file
+    stack = gdal.Open(var_dir + "/var.vrt")
+
+    # List of nodata values
+    nband = stack.RasterCount
+    bandND = np.zeros(nband)
+    for k in range(nband):
+        band = stack.GetRasterBand(k+1)
+        if band is None:
+            print("NoData value is not specified \
+            for input raster file %d" % k)
+            sys.exit(1)
+        bandND[k] = band.GetNoDataValue()
+
+    # Numpy array to store values
+    nobs = select.shape[0]
+    val = np.zeros(shape=(nobs, nband), dtype=np.float32)
+
+    # Extract raster values
+    print("Extract raster values for selected pixels")
+    for i in tqdm(range(nobs)):
+        extract = stack.ReadAsArray(xOffset[i], yOffset[i], 1, 1)
+        val[i, :] = extract.reshape(nband,)
+
+    # Close stack
+    del stack
+
+    # Replace NA
+    # NB: ReadAsArray return float32 type
+    bandND = bandND.astype(np.float32)
+    for k in range(nband):
+        val[val[:, k] == bandND[k], k] = np.nan
+
+    # Add XY coordinates and cell number
+    pts_x.shape = (nobs, 1)
+    pts_y.shape = (nobs, 1)
+    cell.shape = (nobs, 1)
+    val = np.concatenate((val, pts_x, pts_y, cell), axis=1)
+
+    # =============================================
+    # Export and return value
+    # =============================================
+
+    print("Export results to file " + output_file)
+
+    # Write to file by row
+    colname = raster_list
+    for i in range(len(colname)):
+        colname[i] = os.path.basename(colname[i])[:-4]
+
+    varname = ",".join(colname)+",X,Y,cell"
+    np.savetxt(output_file, val, header=varname, fmt="%s",
+               delimiter=",", comments="")
+
+    return(val)
+
+# ============================================================================
+# End of sample.py
+# ============================================================================
