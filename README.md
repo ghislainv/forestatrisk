@@ -78,7 +78,7 @@ You can easily install the deforestprob Python module using
 
 ## Figure
 
-Map of the probability of deforestation in Madagascar for the year 2010 obtained with deforestprob. Red: high probability of deforestation, Green: low probability of deforestation.
+Map of the probability of deforestation in Madagascar for the year 2010 obtained with deforestprob. Dark red: high probability of deforestation, Dark green: low probability of deforestation.
 
-<img src="docs/images/prob2010.png" width=200"/>
+<img src="docs/images/prob2010.png" width=400"/>
 
