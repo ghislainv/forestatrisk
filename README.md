@@ -68,7 +68,7 @@ doi: [10.5281/zenodo.48470](http://doi.org/10.5281/zenodo.48470)
 
 ## Installation
 
-You can easily install the deforestprob Python module using
+You can easily install the `deforestprob` Python module using
 [pip](https://pip.pypa.io/en/stable/):
 
 ```
