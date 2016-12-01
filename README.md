@@ -3,8 +3,8 @@
 ## Estimating deforestation probability in the tropics
 
 `deforestprob` is a Python package to estimate the spatial probability
-of deforestation in tropics depending on various spatial environmental
-variables.
+of deforestation in the tropics depending on various spatial
+environmental variables.
 
 Spatial environmental variables can be derived from topography
 (altitude, slope, and aspect), accessibility (distance to roads,
@@ -24,13 +24,13 @@ Function `.model()` can be used to estimate the parameters of a
 deforestation model. Two algorithms are available: Random Forest and
 hSDM\_binomial\_iCAR:
 
-* Random Forest (Breiman 2001) uses an ensemble modelling of random classification
-trees to estimate the deforestation probability of a pixel given the
-environmental variables. The model using Random Forest includes X and
-Y coordinates to account for the spatial autocorrelation of the
-observations (Mascaro et al. 2014). The `.model()` function calls the
-`RandomForestClassifier()` function from the external
-`sklearn.ensemble` module.
+* Random Forest (Breiman 2001) uses an ensemble modelling of random
+classification trees to estimate the deforestation probability of a
+pixel given the environmental variables. The model using Random Forest
+includes X and Y coordinates to account for the spatial
+autocorrelation of the observations (Mascaro et al. 2014). The
+`.model()` function calls the `RandomForestClassifier()` function from
+the external `sklearn.ensemble` module.
 
 * hSDM\_binomial\_iCAR (Vieilledent et al. 2014) uses a linear Binomial
 logistic regression model to estimate the deforestation probability of
@@ -66,4 +66,16 @@ Jr.** 2014. hSDM CRAN release v1.4 for hierarchical Bayesian species
 distribution models. _Zenodo_.
 doi: [10.5281/zenodo.48470](http://doi.org/10.5281/zenodo.48470)
 
+## Installation
 
+You can easily install the deforestprob Python module using
+[pip](https://pip.pypa.io/en/stable/):
+
+```
+~$ cd deforestprob
+~/deforestprob$ sudo pip install .
+```
+
+## Figure
+
+![Map of the probability of deforestation in Madagascar for the year 2010 obtained with deforestprob. Red: high probability of deforestation, Green: low probability of deforestation](docs/images/prob2010.png)
