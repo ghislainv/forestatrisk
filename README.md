@@ -78,4 +78,7 @@ You can easily install the deforestprob Python module using
 
 ## Figure
 
-![Map of the probability of deforestation in Madagascar for the year 2010 obtained with deforestprob. Red: high probability of deforestation, Green: low probability of deforestation](docs/images/prob2010.png =250x)
+Map of the probability of deforestation in Madagascar for the year 2010 obtained with deforestprob. Red: high probability of deforestation, Green: low probability of deforestation.
+
+<img src="docs/images/prob2010.png" style="width: 200px;"/>
+
