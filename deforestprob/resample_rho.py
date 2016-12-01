@@ -19,23 +19,24 @@ import numpy as np
 from osgeo import gdal
 import os
 
-
 # =============================================
 # resamp_rho
 # =============================================
 
 
-def resample_rho(rho, raster, output_file="output/rho.tif",
+def resample_rho(rho, input_raster, output_file="output/rho.tif",
                  csize_orig=10, csize_new=1):
 
     # Region
-    r = gdal.Open(raster)
+    r = gdal.Open(input_raster)
     ncol = r.RasterXSize
     nrow = r.RasterYSize
     gt = r.GetGeoTransform()
+    xres = gt[1]
+    yres = -gt[5]
     Xmin = gt[0]
-    Xmax = gt[0]+gt[1]*ncol
-    Ymin = gt[3]+gt[5]*nrow
+    Xmax = gt[0] + xres*ncol
+    Ymin = gt[3] - yres*nrow
     Ymax = gt[3]
 
     # Cell number from region
@@ -48,9 +49,10 @@ def resample_rho(rho, raster, output_file="output/rho.tif",
 
     # Create .tif file
     dirname = os.path.dirname(output_file)
-    filename = os.path.join(dirname, "rho_orig.tif")
+    rho_orig_filename = os.path.join(dirname, "rho_orig.tif")
     driver = gdal.GetDriverByName("GTiff")
-    rho_R = driver.Create(filename, ncell_X, ncell_Y, 1, gdal.GDT_Float64)
+    rho_R = driver.Create(rho_orig_filename, ncell_X, ncell_Y, 1,
+                          gdal.GDT_Float64)
     rho_R.SetProjection(r.GetProjection())
     gt = list(gt)
     gt[1] = csize_orig
@@ -65,8 +67,25 @@ def resample_rho(rho, raster, output_file="output/rho.tif",
     rho_B = None
     del rho_R
 
-    # Resample with interpolation
-    command = "gdalwarp -overwrite -tr 1000 1000 -r bilinear " + filename + " " + output_file
+    # Bilinear interpolation to csize_new*1000 km
+    rho_interpol_filename = os.path.join(dirname, "rho_interpol.tif")
+    param = ["gdalwarp", "-overwrite",
+             "-tr", str(csize_new*1000), str(csize_new*1000),
+             "-r bilinear",
+             rho_orig_filename, rho_interpol_filename]
+    command = " ".join(param)
     os.system(command)
+    # Resample to resolution and extent of input_raster
+    param = ["gdalwarp", "-overwrite",
+             "-te", str(Xmin), str(Ymin), str(Xmax), str(Ymax),
+             "-tr", str(xres), str(yres),
+             "-r near",
+             "-ot Float32",
+             "-co 'COMPRESS=LZW'", "-co 'PREDICTOR=2'",
+             rho_interpol_filename, output_file]
+    command = " ".join(param)
+    os.system(command)
+
+    # Print message and return None
     print("Spatial random effects resampled to file " + output_file)
     return (None)
