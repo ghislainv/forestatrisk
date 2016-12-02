@@ -63,6 +63,7 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     rho_B = rho_R.GetRasterBand(1)
     rho_B.WriteArray(rho_arr)
     rho_B.FlushCache()
+    rho_B.SetNoDataValue(-9999)
     rho_B.ComputeStatistics(False)
     rho_B = None
     del rho_R

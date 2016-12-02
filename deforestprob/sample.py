@@ -200,6 +200,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # Raster list
     var_tif = var_dir + "/*.tif"
     raster_list = glob(var_tif)
+    raster_list.sort()
 
     # Make vrt with gdalbuildvrt
     print("Make virtual raster with variables as raster bands")
