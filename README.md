@@ -88,5 +88,5 @@ Map of the probability of deforestation in Madagascar for the year
 2010 obtained with deforestprob. Dark red: high probability of
 deforestation, Dark green: low probability of deforestation.
 
-<img src="docs/images/prob2010.png" width=400"/>
+<img src="docs/images/proba_hSDM.png" width=400"/>
 
