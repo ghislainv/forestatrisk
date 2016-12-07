@@ -242,7 +242,7 @@ class hSDM_binomial_iCAR(object):
             new_rho = np.mean(self.rho, axis=0)[new_cell]
         return (invlogit(np.dot(new_X, self.betas) + new_rho))
 
-    def plot(self, output_file="mcmc.pdf", nb_plots_per_page=5,
+    def plot(self, output_file="mcmc.pdf", plots_per_page=5,
              figsize=(8.27, 11.69), dpi=100):
         # Message
         print("Traces and posteriors will be plotted in " + output_file)
@@ -256,14 +256,16 @@ class hSDM_binomial_iCAR(object):
         pdf_pages = PdfPages(output_file)
         # Generate the pages
         nb_plots = len(varnames)
-        grid_size = (nb_plots_per_page, 2)
+        grid_size = (plots_per_page, 2)
+        # List of figures to be returned
+        figures = []
         # Loop on parameters
         for i in range(nb_plots):
             # Create a figure instance (ie. a new page) if needed
-            if i % nb_plots_per_page == 0:
+            if i % plots_per_page == 0:
                 fig = plt.figure(figsize=figsize, dpi=dpi)
             # Trace
-            ax = plt.subplot2grid(grid_size, (i % nb_plots_per_page, 0))
+            ax = plt.subplot2grid(grid_size, (i % plots_per_page, 0))
             plt.axhline(y=posterior_means[i], linewidth=1, color="r")
             plt.plot(MCMC[:, i], color="#000000")
             plt.text(0, 1, varnames[i],
@@ -271,16 +273,17 @@ class hSDM_binomial_iCAR(object):
                      verticalalignment="bottom", fontsize=11,
                      transform=ax.transAxes)
             # Posterior distribution
-            plt.subplot2grid(grid_size, (i % nb_plots_per_page, 1))
+            plt.subplot2grid(grid_size, (i % plots_per_page, 1))
             plt.hist(MCMC[:, i], normed=1, bins=20, color="#808080")
             plt.axvline(x=posterior_means[i], linewidth=1, color="r")
             # Close the page if needed
-            if (i + 1) % nb_plots_per_page == 0 or (i + 1) == nb_plots:
+            if (i + 1) % plots_per_page == 0 or (i + 1) == nb_plots:
                 plt.tight_layout()
+                figures.append(fig)
                 pdf_pages.savefig(fig)
         # Write the PDF document to the disk
         pdf_pages.close()
-        return None
+        return (figures)
 
 # ===================================================================
 # END

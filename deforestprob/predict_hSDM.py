@@ -245,6 +245,9 @@ def predict_hSDM(hSDM_model, var_dir="data",
     plt.close(fig)
     SaveFigureAsImage(fig_name, fig, dpi=200)
 
+    # Return figure
+    return (fig)
+
 # ============================================================================
 # End of predict_hSDM.py
 # ============================================================================

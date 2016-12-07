@@ -1,32 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # ==============================================================================
-#
-# sample.py
-#
-# Python script to extract raster values from a sample of points:
-# 1. Draw spatial points in deforested and forested areas
-# 2. Extract environmental variable values from spatial points
-#
-# Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
-# November 2016
-#
-# call: sample(nsamp=10000, Seed=1234, csize=10,
-#              var_dir="data",
-#              input_forest_raster="forest.tif",
-#              output_file="output/sample.txt")
-#
-# - nsamp: number of random spatial points
-# - seed: seed for random number generator
-# - csize: spatial cell size in km
-# - var_dir: directory with raster data
-# - input_forest_raster: name of the forest/defor raster file
-#   (1=forest, 0=deforested) in var_dir
-# - output_file: path to save the text file with sample points
-#
-# =============================================================================
+# author          :Ghislain Vieilledent
+# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+# web             :https://ghislainv.github.io
+# python_version  :2.7
+# ==============================================================================
 
+# =============================================
 # Libraries
+# =============================================
+
 from osgeo import gdal  # GIS libraries
 import os  # Operating system interfaces
 from glob import glob  # To explore files in a folder
@@ -34,12 +18,33 @@ import sys  # To read and write files
 import numpy as np  # For arrays
 from tqdm import tqdm  # Progress bar
 from makeblock import makeblock
+import pandas as pd  # To export result as a pandas DF
+
+# =============================================
+# sample
+# =============================================
 
 
 def sample(nsamp=10000, Seed=1234, csize=10,
            var_dir="data",
            input_forest_raster="forest.tif",
            output_file="output/sample.txt"):
+    """Sample points and extract raster values.
+
+    This function (i) randomly draw spatial points in deforested and
+    forested areas and (ii) extract environmental variable values for
+    each spatial point.
+
+    :param nsamp: number of random spatial points.
+    :param seed: seed for random number generator.
+    :param csize: spatial cell size in km.
+    :param var_dir: directory with raster data.
+    :param input_forest_raster: name of the forest raster file (1=forest, \
+    0=deforested).
+    :param output_file: path to file to save sample points.
+    :return: a pandas DataFrame, each row being one observation.
+
+    """
 
     # Set random seed
     np.random.seed(Seed)
@@ -255,14 +260,19 @@ def sample(nsamp=10000, Seed=1234, csize=10,
 
     # Write to file by row
     colname = raster_list
-    for i in range(len(colname)):
-        colname[i] = os.path.basename(colname[i])[:-4]
+    for i in range(len(raster_list)):
+        base_name = os.path.basename(raster_list[i])
+        index_dot = base_name.index(".")
+        colname[i] = base_name[:index_dot]
 
     varname = ",".join(colname)+",X,Y,cell"
     np.savetxt(output_file, val, header=varname, fmt="%s",
                delimiter=",", comments="")
 
-    return(val)
+    # Convert to pandas DataFrame and return the result
+    colname.extend(["X", "Y", "cell"])
+    val_DF = pd.DataFrame(val, columns=colname)
+    return(val_DF)
 
 # ============================================================================
 # End of sample.py
