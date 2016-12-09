@@ -1,20 +1,13 @@
 #!/usr/bin/python
 
-# ============================================================================
-#
-# predict_hSDM.py
-#
-# Predict deforestation probability from hSDM model
-#
-# Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
-# November 2016
-#
-# ============================================================================
+# ==============================================================================
+# author          :Ghislain Vieilledent
+# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+# web             :https://ghislainv.github.io
+# python_version  :2.7
+# ==============================================================================
 
-# =============================================
-# Libraries
-# =============================================
-
+# Import
 from osgeo import gdal
 from tqdm import tqdm
 from glob import glob
@@ -25,85 +18,52 @@ from patsy import build_design_matrices
 import numpy as np
 import os
 import sys
-import deforestprob as dfp
-
-# =============================================
-# Functions
-# =============================================
+import makeblock
+from miscellaneous import invlogit, rescale, figure_as_image
 
 
-# Function to rescale from 1-1000000 to 1-65535 (UInt16)
-def rescale(value):
-    return (((value - 1) * 65534 / 999999) + 1)
-
-
-# Function invlogit
-def invlogit(x):
-    """
-    Compute the inverse-logit of a numpy array
-
-    We differenciate the positive and negative values
-    to avoid under- or overflow with the use of exp()
-
-    :param x: numpy array
-    :return: return the inverse-logit of the array
-    """
-    r = x
-    r[x > 0] = 1. / (1. + np.exp(-x[x > 0]))
-    r[x <= 0] = np.exp(x[x <= 0]) / (1 + np.exp(x[x <= 0]))
-    return (r)
-
-
-# Predict function for hSDM model
+# predict
 def predict(hSDM_model, new_data, rhos):
+    """Function to return the predictions of a hSDM_binomial_iCAR model.
+
+    Function to return the predictions of a hSDM_binomial_iCAR model
+    for a new data-set. In this function, rho values for spatial cells
+    are directly provided and not obtained from the model.
+
+    :param hSDM_model: hSDM_binomial_iCAR to predict from.
+    :param new_data: pandas DataFrame including explicative variables.
+    :param rhos: spatial random effects for each observation (row) in new_data.
+    :return: prediction (a probability).
+
+    """
+
     (new_x,) = build_design_matrices([hSDM_model._x_design_info],
                                      new_data)
     new_X = new_x[:, :-1]
     return (invlogit(np.dot(new_X, hSDM_model.betas) + rhos))
 
 
-# Saving a matplotlib.pyplot figure as a border-less frame-less image
-def SaveFigureAsImage(fileName, fig=None, dpi=300, **kwargs):
-    ''' Save a Matplotlib figure as an image without borders or frames.
-        Args:
-            fileName (str): String that ends in .png etc.
-            fig (Matplotlib figure instance): figure you want to \
-            save as the image
-        Keyword Args:
-            orig_size (tuple): width, height of the original image \
-            used to maintain
-            aspect ratio.
-    '''
-    fig_size = fig.get_size_inches()
-    w, h = fig_size[0], fig_size[1]
-    fig.patch.set_alpha(0)
-    if "orig_size" in kwargs:  # Aspect ratio scaling if required
-        w, h = kwargs["orig_size"]
-        w2, h2 = fig_size[0], fig_size[1]
-        h2 == (w2 / w) * h
-        fig.set_size_inches([w2, h2])
-        fig.set_dpi((w2 / w) * fig.get_dpi())
-    a = fig.gca()
-    a.set_frame_on(False)
-    a.set_xticks([])
-    a.set_yticks([])
-    plt.axis('off')
-    plt.xlim(0, h)
-    plt.ylim(w, 0)
-    fig.savefig(fileName, transparent=True, bbox_inches='tight',
-                pad_inches=0, dpi=dpi)
-
-
-# =============================================
 # predict_hSDM
-# =============================================
-
-
 def predict_hSDM(hSDM_model, var_dir="data",
                  input_cell_raster="output/rho.tif",
                  input_forest_raster="data/forest.tif",
                  output_file="output/pred_hSDM.tif",
                  blk_rows=128):
+    """Predict the spatial probability of deforestation from a hSDM model.
+
+    This function predicts the spatial probability of deforestation
+    from a hSDM_binomial_iCAR model. Computation are done by block and
+    can be performed on large geographical areas.
+
+    :param hSDM_model: hSDM_binomial_iCAR to predict from.
+    :param var_dir: directory with rasters (.tif) of explicative variables.
+    :param input_cell_raster: path to raster of rho values for spatial cells.
+    :param input_forest_raster: path to forest raster (1 for forest).
+    :param output_file: name of the raster file to output the probability map.
+    :param blk_rows: if > 0, number of rows for computation by block.
+    :return: a figure object for the probability map that can be plotted.
+
+    """
 
     # Mask on forest
     fmaskR = gdal.Open(input_forest_raster)
@@ -146,7 +106,7 @@ def predict_hSDM(hSDM_model, var_dir="data",
     bandND = bandND.astype(np.float32)
 
     # Make blocks
-    blockinfo = dfp.makeblock(output_vrt, blk_rows=blk_rows)
+    blockinfo = makeblock(output_vrt, blk_rows=blk_rows)
     nblock = blockinfo[0]
     nblock_x = blockinfo[1]
     x = blockinfo[3]
@@ -252,15 +212,13 @@ def predict_hSDM(hSDM_model, var_dir="data",
     fig_name = fig_name[:index_dot]
     fig_name = fig_name + ".png"
     # Plot raster and save
-    fig = plt.figure(1)
+    fig = plt.figure()
     plt.subplot(111)
     plt.imshow(ov_arr, cmap=color_map)
     plt.close(fig)
-    SaveFigureAsImage(fig_name, fig, dpi=200)
+    fig_img = figure_as_image(fig, fig_name, dpi=200)
 
     # Return figure
-    return(fig)
+    return(fig_img)
 
-# ============================================================================
-# End of predict_hSDM.py
-# ============================================================================
+# End

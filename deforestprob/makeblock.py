@@ -1,24 +1,36 @@
 #!/usr/bin/python
 
-# =============================================================================
-#
-# makeblock.py
-#
-# Python function to read raster data in block
-#
-# Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
-# November 2016
-#
-# call: makeblock(rasterfile, byrows=False, nrows=128)
-#
-# ============================================================================
+# ==============================================================================
+# author          :Ghislain Vieilledent
+# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+# web             :https://ghislainv.github.io
+# python_version  :2.7
+# ==============================================================================
 
-# Libraries
+# Import
 from osgeo import gdal  # GIS libraries
 import numpy as np  # For arrays
 
 
+# Makeblock
 def makeblock(rasterfile, blk_rows=128):
+    """Compute block information.
+
+    This function computes block information from the caracteristics
+    of a raster file and an indication on the number of rows to
+    consider.
+
+    :param rasterfile: path to a raster file.
+
+    :param blk_rows: If > 0, number of rows for block. If <=0, the
+    block size will be 256 x 256.
+
+    :return: a tuple of length 6 including block number, block number
+    on x axis, block number on y axis, block offsets on x axis, block
+    offsets on y axis, block sizes on x axis, block sizes on y axis.
+
+    """
+
     r = gdal.Open(rasterfile)
     # b = r.GetRasterBand(1)
     # Landscape variables
@@ -51,3 +63,5 @@ def makeblock(rasterfile, blk_rows=128):
     # b = None
     del r
     return (nblock, nblock_x, nblock_y, x, y, nx, ny)
+
+# End

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
@@ -7,19 +7,13 @@
 # python_version  :2.7
 # ==============================================================================
 
-# =============================================
-# Libraries
-# =============================================
-
+# Import
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
-# =============================================
-# correlationshape
-# =============================================
 
-
+# Correlationshape
 def correlationshape(y, data, plots_per_page=4,
                      figsize=(8.27, 11.69), dpi=100,
                      output_file="output/correlationshape.pdf"):
@@ -38,7 +32,7 @@ def correlationshape(y, data, plots_per_page=4,
     """
 
     # Data
-    y = 1-y  # Transform: defor=1, forest=0
+    y = 1 - y  # Transform: defor=1, forest=0
     perc = np.arange(0, 110, 10)
     nperc = len(perc)
     colnames = data.columns.values
@@ -57,26 +51,26 @@ def correlationshape(y, data, plots_per_page=4,
         if i % nb_plots_per_page == 0:
             fig = plt.figure(figsize=figsize, dpi=dpi)
         varname = colnames[i]
-        theta = np.zeros(nperc-1)
-        se = np.zeros(nperc-1)
-        x = np.zeros(nperc-1)
+        theta = np.zeros(nperc - 1)
+        se = np.zeros(nperc - 1)
+        x = np.zeros(nperc - 1)
         quantiles = np.nanpercentile(data[varname], q=perc)
         # Compute theta and se by bins
-        for j in range(nperc-1):
+        for j in range(nperc - 1):
             inf = quantiles[j]
-            sup = quantiles[j+1]
-            x[j] = inf+(sup-inf)/2
+            sup = quantiles[j + 1]
+            x[j] = inf + (sup - inf) / 2
             y_bin = y[(data[varname] > inf) &
                       (data[varname] <= sup)]
             y_bin = np.array(y_bin)  # Transform into np.array to compute sum
             s = float(sum(y_bin == 1))  # success
             n = len(y_bin)  # trials
             if n is not 0:
-                theta[j] = s/n
+                theta[j] = s / n
             else:
                 theta[j] = np.nan
-            ph = (s+1/2)/(n+1)
-            se[j] = np.sqrt(ph*(1-ph)/(n+1))
+            ph = (s + 1 / 2) / (n + 1)
+            se[j] = np.sqrt(ph * (1 - ph) / (n + 1))
         # Plots
         # Histogram
         plt.subplot2grid(grid_size, (i % nb_plots_per_page, 0))
@@ -99,6 +93,4 @@ def correlationshape(y, data, plots_per_page=4,
     pdf_pages.close()
     return (figures)
 
-# ============================================================================
-# End of correlationshape.py
-# ============================================================================
+# End

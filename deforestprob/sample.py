@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
@@ -7,10 +7,7 @@
 # python_version  :2.7
 # ==============================================================================
 
-# =============================================
-# Libraries
-# =============================================
-
+# Import
 from osgeo import gdal  # GIS libraries
 import os  # Operating system interfaces
 from glob import glob  # To explore files in a folder
@@ -20,11 +17,8 @@ from tqdm import tqdm  # Progress bar
 from makeblock import makeblock
 import pandas as pd  # To export result as a pandas DF
 
-# =============================================
-# sample
-# =============================================
 
-
+# Sample
 def sample(nsamp=10000, Seed=1234, csize=10,
            var_dir="data",
            input_forest_raster="forest.tif",
@@ -276,6 +270,4 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     val_DF = pd.DataFrame(val, columns=colname)
     return(val_DF)
 
-# ============================================================================
-# End of sample.py
-# ============================================================================
+# End

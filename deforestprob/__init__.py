@@ -5,3 +5,4 @@ from cellneigh import cellneigh
 from correlationshape import correlationshape
 from resample_rho import resample_rho
 from predict_hSDM import predict_hSDM
+from miscellaneous import invlogit, rescale, figure_as_image

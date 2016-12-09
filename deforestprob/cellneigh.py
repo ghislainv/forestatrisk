@@ -1,32 +1,30 @@
 #!/usr/bin/python
 
-# ============================================================================
-#
-# cellneigh.py
-#
-# Compute number of spatial cells and neighbours
-#
-# Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
-# November 2016
-#
-# call: cellneigh(region, csize, rank=1)
-# raster = path to raster file to compute region
-# region = list/tuple of region coordinates (east, west, south, north)
-# csize = spatial cell size (in km)
-# rank = rank of the neighborhood (1 for chess king's move)
-#
-# ============================================================================
+# ==============================================================================
+# author          :Ghislain Vieilledent
+# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+# web             :https://ghislainv.github.io
+# python_version  :2.7
+# ==============================================================================
 
-# =============================================
-# Libraries
-# =============================================
-
+# Import
 import numpy as np
 import sys
 from osgeo import gdal
 
 
+# cellneigh
 def cellneigh(raster=None, region=None, csize=10, rank=1):
+    """
+    Compute number of spatial cells and neighbours
+
+    :param raster: path to raster file to compute region
+    :param region: list/tuple of region coordinates (east, west, south, north)
+    :param csize: spatial cell size (in km)
+    :param rank: rank of the neighborhood (1 for chess king's move)
+    :return: a list of length 2 with number of neighbours for each cell \
+    and adjacent cells
+    """
 
     # Region
     if raster is not None:
@@ -35,8 +33,8 @@ def cellneigh(raster=None, region=None, csize=10, rank=1):
         nrow = r.RasterYSize
         gt = r.GetGeoTransform()
         Xmin = gt[0]
-        Xmax = gt[0]+gt[1]*ncol
-        Ymin = gt[3]+gt[5]*nrow
+        Xmax = gt[0] + gt[1] * ncol
+        Ymin = gt[3] + gt[5] * nrow
         Ymax = gt[3]
     elif region is not None:
         Xmin = region[0]
@@ -60,7 +58,7 @@ def cellneigh(raster=None, region=None, csize=10, rank=1):
     print("Identify adjacent cells and compute number of neighbors")
     nneigh = []
     adj = []
-    around = np.arange(-rank, rank+1)
+    around = np.arange(-rank, rank + 1)
     for i in range(ncell_bycol):
         for j in range(ncell_byrow):
             I = i + around
@@ -78,6 +76,4 @@ def cellneigh(raster=None, region=None, csize=10, rank=1):
 
     return(nneigh, adj)
 
-# ============================================================================
-# End of cellneigh.py
-# ============================================================================
+# End

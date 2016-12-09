@@ -1,31 +1,40 @@
 #!/usr/bin/python
 
-# ============================================================================
-#
-# resamp_rho.py
-#
-# Resample spatial random effects
-#
-# Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
-# November 2016
-#
-# ============================================================================
+# ==============================================================================
+# author          :Ghislain Vieilledent
+# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+# web             :https://ghislainv.github.io
+# python_version  :2.7
+# ==============================================================================
 
-# =============================================
-# Libraries
-# =============================================
-
+# Import
 import numpy as np
 from osgeo import gdal
 import os
 
-# =============================================
-# resamp_rho
-# =============================================
 
-
+# Resample_rho
 def resample_rho(rho, input_raster, output_file="output/rho.tif",
                  csize_orig=10, csize_new=1):
+    """Resample rho values with interpolation.
+
+    This function resamples the spatial random effects (rho values)
+    obtained from an iCAR model. First, it performs a bilinear
+    interpolation at a finer resolution and smoothens the rho
+    values. Second a resampling at a resolution given by the input
+    raster using the nearest neighbour algorithm is performed to
+    facilitate the computation of the probability of deforestation in
+    the following steps. This second resampling does not provide
+    additional smoothing of the spatial random effects.
+
+    :param rho: original rho values estimates with the iCAR model.
+    :param input_raster: path to input raster to define region.
+    :output_file: path to output raster file with resampled rho values.
+    :csize_orig: original size of the spatial cells (in km).
+    :csize_new: new size of the spatial cells for bilinear \
+    interpolation (in km).
+
+    """
 
     # Region
     r = gdal.Open(input_raster)
@@ -35,8 +44,8 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     xres = gt[1]
     yres = -gt[5]
     Xmin = gt[0]
-    Xmax = gt[0] + xres*ncol
-    Ymin = gt[3] - yres*nrow
+    Xmax = gt[0] + xres * ncol
+    Ymin = gt[3] - yres * nrow
     Ymax = gt[3]
 
     # Cell number from region
@@ -71,7 +80,7 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     # Bilinear interpolation to csize_new*1000 km
     rho_interpol_filename = os.path.join(dirname, "rho_interpol.tif")
     param = ["gdalwarp", "-overwrite",
-             "-tr", str(csize_new*1000), str(csize_new*1000),
+             "-tr", str(csize_new * 1000), str(csize_new * 1000),
              "-r bilinear",
              rho_orig_filename, rho_interpol_filename]
     command = " ".join(param)
@@ -90,3 +99,5 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     # Print message and return None
     print("Spatial random effects resampled to file " + output_file)
     return (None)
+
+# End

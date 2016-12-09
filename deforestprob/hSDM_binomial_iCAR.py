@@ -1,43 +1,30 @@
 #!/usr/bin/python
 
-# =============================================================================
-#
-# hSDM_binomial_iCAR.py
-#
-# Function which estimates the parameters of a Binomial model with
-# iCAR process for spatial autocorrelation in a hierarchical Bayesian
-# framework
-#
-# Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
-# November 2016
-#
-# Suitability formula:
-# Of the form: y + trial ~ x1 + x2 + x3 + cell
-# The last term on the right of the formula should correspond
-# to the cells
-#
-# ============================================================================
+# ==============================================================================
+# author          :Ghislain Vieilledent
+# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+# web             :https://ghislainv.github.io
+# python_version  :2.7
+# ==============================================================================
 
+# Import
 import numpy as np
 from patsy import dmatrices, build_design_matrices
 import hsdm
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
+from miscellaneous import invlogit
 
 
-# Function invlogit
-def invlogit(x):
-    if x > 0:
-        return 1. / (1. + np.exp(-x))
-    elif x <= 0:
-        return np.exp(x) / (1 + np.exp(x))
-    else:
-        raise ValueError
-
-
-# binomial_iCAR function
+# hSDM_binomial_iCAR
 class hSDM_binomial_iCAR(object):
+    """hSDM_binomial_iCAR class.
+
+    hSDM_binomial_iCAR class to estimates the parameters of a Binomial
+    model with iCAR process for spatial autocorrelation in a
+    hierarchical Bayesian framework.
+    """
 
     def __init__(self,  # Observations
                  suitability_formula, data,
@@ -60,6 +47,12 @@ class hSDM_binomial_iCAR(object):
                  # Various
                  seed=1234, verbose=1,
                  save_rho=0, save_p=0):
+        """Function to fit a hSDM_binomial_iCAR model.
+
+        The function hSDM_binomial_iCAR estimates the parameters of a
+        Binomial model with iCAR process for spatial autocorrelation
+        in a hierarchical Bayesian framework.
+        """
 
         # ========
         # Form response, covariate matrices and model parameters
@@ -205,6 +198,14 @@ class hSDM_binomial_iCAR(object):
         self.theta_latent = np.array(Sample[4])
 
     def __repr__(self):
+        """Summary of hSDM_binomial_iCAR model.
+
+        This function returns a summary of a hSDM_binomial_iCAR model
+        with posterior mean parameter estimates, standard-deviation
+        and credible intervals at 95%. It also provides the deviance
+        estimate for model comparison.
+        """
+
         summary = ("Binomial logistic regression with iCAR process\n"
                    "  Model: %s ~ %s\n"
                    "  Posteriors:\n"
@@ -236,6 +237,18 @@ class hSDM_binomial_iCAR(object):
         return (summary)
 
     def predict(self, new_data):
+        """Function to return the predictions of a hSDM_binomial_iCAR model.
+
+        Function to return the predictions of a hSDM_binomial_iCAR model
+        for a new data-set.
+
+        :param hSDM_model: hSDM_binomial_iCAR to predict from.
+        :param new_data: pandas DataFrame including explicative variables \
+        and cell values.
+        :return: prediction (a probability).
+
+        """
+
         (new_x,) = build_design_matrices([self._x_design_info],
                                          new_data)
         new_X = new_x[:, :-1]
@@ -248,6 +261,12 @@ class hSDM_binomial_iCAR(object):
 
     def plot(self, output_file="mcmc.pdf", plots_per_page=5,
              figsize=(8.27, 11.69), dpi=100):
+        """Plot traces and posterior distributions.
+
+        This function plots the traces and posterior distributions of
+        the parameters of a hSDM_binomial_iCAR model.
+        """
+
         # Message
         print("Traces and posteriors will be plotted in " + output_file)
         # Varnames
@@ -289,6 +308,4 @@ class hSDM_binomial_iCAR(object):
         pdf_pages.close()
         return (figures)
 
-# ===================================================================
-# END
-# ===================================================================
+# End
