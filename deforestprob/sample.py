@@ -28,7 +28,8 @@ import pandas as pd  # To export result as a pandas DF
 def sample(nsamp=10000, Seed=1234, csize=10,
            var_dir="data",
            input_forest_raster="forest.tif",
-           output_file="output/sample.txt"):
+           output_file="output/sample.txt",
+           blk_rows=0):
     """Sample points and extract raster values.
 
     This function (i) randomly draw spatial points in deforested and
@@ -42,6 +43,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     :param input_forest_raster: name of the forest raster file (1=forest, \
     0=deforested).
     :param output_file: path to file to save sample points.
+    :param blk_rows: if > 0, number of lines per block.
     :return: a pandas DataFrame, each row being one observation.
 
     """
@@ -61,7 +63,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     forestB = forestR.GetRasterBand(1)
 
     # Make blocks
-    blockinfo = makeblock(forest_raster_file)
+    blockinfo = makeblock(forest_raster_file, blk_rows=0)
     nblock = blockinfo[0]
     nblock_x = blockinfo[1]
     x = blockinfo[3]
@@ -95,8 +97,8 @@ def sample(nsamp=10000, Seed=1234, csize=10,
 
     # Proba of drawing a block
     print("Draw blocks at random")
-    proba_block_d = ndc_block.astype(np.float)/ndc
-    proba_block_f = nfc_block.astype(np.float)/nfc
+    proba_block_d = ndc_block.astype(np.float) / ndc
+    proba_block_f = nfc_block.astype(np.float) / nfc
     # Draw block number nsamp times
     block_draw_d = np.random.choice(range(nblock), size=nsamp,
                                     replace=True, p=proba_block_d)
@@ -168,8 +170,8 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     ncol = forestR.RasterXSize
     nrow = forestR.RasterYSize
     Xmin = gt[0]
-    Xmax = gt[0]+gt[1]*ncol
-    Ymin = gt[3]+gt[5]*nrow
+    Xmax = gt[0] + gt[1] * ncol
+    Ymin = gt[3] + gt[5] * nrow
     Ymax = gt[3]
 
     # Concatenate selected pixels
@@ -178,8 +180,8 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # Offsets and coordinates
     xOffset = select[:, 0]
     yOffset = select[:, 1]
-    pts_x = (xOffset+0.5)*gt[1]+gt[0]  # +0.5 for center of pixels
-    pts_y = (yOffset+0.5)*gt[5]+gt[3]  # +0.5 for center of pixels
+    pts_x = (xOffset + 0.5) * gt[1] + gt[0]  # +0.5 for center of pixels
+    pts_y = (yOffset + 0.5) * gt[5] + gt[3]  # +0.5 for center of pixels
 
     # ================================================
     # Compute cell number for spatial autocorrelation
@@ -220,7 +222,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     nband = stack.RasterCount
     bandND = np.zeros(nband)
     for k in range(nband):
-        band = stack.GetRasterBand(k+1)
+        band = stack.GetRasterBand(k + 1)
         if band is None:
             print("NoData value is not specified \
             for input raster file %d" % k)
@@ -265,7 +267,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
         index_dot = base_name.index(".")
         colname[i] = base_name[:index_dot]
 
-    varname = ",".join(colname)+",X,Y,cell"
+    varname = ",".join(colname) + ",X,Y,cell"
     np.savetxt(output_file, val, header=varname, fmt="%s",
                delimiter=",", comments="")
 

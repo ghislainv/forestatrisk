@@ -28,8 +28,12 @@ from sklearn.linear_model import LogisticRegression
 
 # Function invlogit
 def invlogit(x):
-    Result = 1/(1+np.exp(-x))
-    return (Result)
+    if x > 0:
+        return 1. / (1. + np.exp(-x))
+    elif x <= 0:
+        return np.exp(x) / (1 + np.exp(x))
+    else:
+        raise ValueError
 
 
 # binomial_iCAR function
@@ -92,10 +96,10 @@ class hSDM_binomial_iCAR(object):
             npred = len(cells_pred)
         # Model parameters
         npar = ncol_X
-        ngibbs = mcmc+burnin
+        ngibbs = mcmc + burnin
         nthin = thin
         nburn = burnin
-        nsamp = mcmc/thin
+        nsamp = mcmc / thin
 
         # ========
         # Initial starting values for M-H
@@ -174,10 +178,10 @@ class hSDM_binomial_iCAR(object):
             save_p=int(save_p))
 
         # Array of MCMC samples
-        MCMC = np.zeros(shape=(nsamp, npar+2))
+        MCMC = np.zeros(shape=(nsamp, npar + 2))
         MCMC[:, :npar] = np.array(Sample[0]).reshape(npar, nsamp).transpose()
         MCMC[:, npar] = Sample[2]
-        MCMC[:, npar+1] = Sample[3]
+        MCMC[:, npar + 1] = Sample[3]
         self.mcmc = MCMC
         posterior_means = np.mean(MCMC, axis=0)
         self.betas = posterior_means[:-2]

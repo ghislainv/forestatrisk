@@ -37,10 +37,21 @@ def rescale(value):
     return (((value - 1) * 65534 / 999999) + 1)
 
 
-# Inverse-logit
+# Function invlogit
 def invlogit(x):
-    Result = 1/(1+np.exp(-x))
-    return (Result)
+    """
+    Compute the inverse-logit of a numpy array
+
+    We differenciate the positive and negative values
+    to avoid under- or overflow with the use of exp()
+
+    :param x: numpy array
+    :return: return the inverse-logit of the array
+    """
+    r = x
+    r[x > 0] = 1. / (1. + np.exp(-x[x > 0]))
+    r[x <= 0] = np.exp(x[x <= 0]) / (1 + np.exp(x[x <= 0]))
+    return (r)
 
 
 # Predict function for hSDM model
@@ -69,9 +80,9 @@ def SaveFigureAsImage(fileName, fig=None, dpi=300, **kwargs):
     if "orig_size" in kwargs:  # Aspect ratio scaling if required
         w, h = kwargs["orig_size"]
         w2, h2 = fig_size[0], fig_size[1]
-        h2 == (w2/w)*h
+        h2 == (w2 / w) * h
         fig.set_size_inches([w2, h2])
-        fig.set_dpi((w2/w)*fig.get_dpi())
+        fig.set_dpi((w2 / w) * fig.get_dpi())
     a = fig.gca()
     a.set_frame_on(False)
     a.set_xticks([])
@@ -82,6 +93,7 @@ def SaveFigureAsImage(fileName, fig=None, dpi=300, **kwargs):
     fig.savefig(fileName, transparent=True, bbox_inches='tight',
                 pad_inches=0, dpi=dpi)
 
+
 # =============================================
 # predict_hSDM
 # =============================================
@@ -90,7 +102,8 @@ def SaveFigureAsImage(fileName, fig=None, dpi=300, **kwargs):
 def predict_hSDM(hSDM_model, var_dir="data",
                  input_cell_raster="output/rho.tif",
                  input_forest_raster="data/forest.tif",
-                 output_file="output/pred_hSDM.tif"):
+                 output_file="output/pred_hSDM.tif",
+                 blk_rows=128):
 
     # Mask on forest
     fmaskR = gdal.Open(input_forest_raster)
@@ -125,7 +138,7 @@ def predict_hSDM(hSDM_model, var_dir="data",
     # List of nodata values
     bandND = np.zeros(nband)
     for k in range(nband):
-        band = stack.GetRasterBand(k+1)
+        band = stack.GetRasterBand(k + 1)
         bandND[k] = band.GetNoDataValue()
         if (bandND[k] is None) or (bandND[k] is np.nan):
             print("NoData value is not specified for input raster file %d" % k)
@@ -133,7 +146,7 @@ def predict_hSDM(hSDM_model, var_dir="data",
     bandND = bandND.astype(np.float32)
 
     # Make blocks
-    blockinfo = dfp.makeblock(output_vrt, byrows=True, nrows=128)
+    blockinfo = dfp.makeblock(output_vrt, blk_rows=blk_rows)
     nblock = blockinfo[0]
     nblock_x = blockinfo[1]
     x = blockinfo[3]
@@ -162,7 +175,7 @@ def predict_hSDM(hSDM_model, var_dir="data",
         px = b % nblock_x
         py = b / nblock_x
         # Number of pixels
-        npix = nx[px]*ny[py]
+        npix = nx[px] * ny[py]
         # Data for one block of the stack (shape = (nband,nrow,ncol))
         data = stack.ReadAsArray(x[px], y[py], nx[px], ny[py])
         # Replace ND values with -9999
@@ -177,7 +190,7 @@ def predict_hSDM(hSDM_model, var_dir="data",
         data = np.concatenate((data, fmaskA), axis=0)
         # Transpose and reshape to 2D array
         data = data.transpose(1, 2, 0)
-        data = data.reshape(npix, nband+1)
+        data = data.reshape(npix, nband + 1)
         # Observations without NA
         w = np.nonzero(~(data == -9999).any(axis=1))
         # Remove observations with NA
@@ -197,7 +210,7 @@ def predict_hSDM(hSDM_model, var_dir="data",
             # Avoid nodata value (0) for low proba
             p[p < 1e-06] = 1e-06
             # np.rint: round to nearest integer
-            p = np.rint(1000000*p)
+            p = np.rint(1000000 * p)
             # Rescale and return to pred
             pred[w] = rescale(p)
         # Assign prediction to raster
@@ -219,14 +232,14 @@ def predict_hSDM(hSDM_model, var_dir="data",
 
     # Dereference driver
     Pband = None
-    del Pdrv
+    del(Pdrv)
 
     # Colormap
     colors = []
     colors.append((0, (0, 0, 0, 0)))
-    colors.append((1/65535., (34/255., 139/255., 34/255., 1)))
-    colors.append((45000/65535., (1, 165/255., 0, 1)))
-    colors.append((55000/65535., (1, 0, 0, 1)))
+    colors.append((1 / 65535., (34 / 255., 139 / 255., 34 / 255., 1)))
+    colors.append((45000 / 65535., (1, 165 / 255., 0, 1)))
+    colors.append((55000 / 65535., (1, 0, 0, 1)))
     colors.append((1, (0, 0, 0, 1)))
     color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
                                                   N=65535, gamma=1.0)
@@ -246,7 +259,7 @@ def predict_hSDM(hSDM_model, var_dir="data",
     SaveFigureAsImage(fig_name, fig, dpi=200)
 
     # Return figure
-    return (fig)
+    return(fig)
 
 # ============================================================================
 # End of predict_hSDM.py
