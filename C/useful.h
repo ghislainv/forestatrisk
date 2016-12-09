@@ -1,3 +1,11 @@
+// ==============================================================================
+// author          :Ghislain Vieilledent
+// email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+// web             :https://ghislainv.github.io
+// python_version  :2.7
+// license         :GPLv3
+// ==============================================================================
+
 // Prototype of useful functions
 double logit (double x);
 double invlogit (double x);

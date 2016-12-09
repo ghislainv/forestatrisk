@@ -1,15 +1,29 @@
+#!/usr/bin/python
+
+# ==============================================================================
+# author          :Ghislain Vieilledent
+# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+# web             :https://ghislainv.github.io
+# python_version  :2.7
+# license         :GPLv3
+# ==============================================================================
+
+# Import
 from distutils.core import setup, Extension
 import numpy.distutils.misc_util
 
 
+# Markdown README file
 def readme():
     with open("README.md") as f:
         return f.read()
 
+# Informations to compile internal hsdm module
 hSDM_module = Extension("hsdm",
                         sources=["C/hSDMmodule.c", "C/useful.c"],
-			extra_compile_args=['-std=c99'])
+                        extra_compile_args=['-std=c99'])
 
+# Setup
 setup(name="deforestprob",
       version="0.1",
       author="Ghislain Vieilledent",

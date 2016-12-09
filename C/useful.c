@@ -1,3 +1,12 @@
+// ==============================================================================
+// author          :Ghislain Vieilledent
+// email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+// web             :https://ghislainv.github.io
+// python_version  :2.7
+// license         :GPLv3
+// ==============================================================================
+
+/* Include */
 #include <stdlib.h> // For rand(), RAND_MAX and exit
 #include <stdio.h> // For fprintf and stderr
 #include <math.h>
@@ -36,8 +45,12 @@ double logit (double x) {
 /*********************/
 /* Function invlogit */
 double invlogit (double x) {
-    double Result=1/(1+exp(-x));
-    return Result;
+    if (x > 0) {
+        return 1/(1+exp(-x));
+    }
+    else {
+	return exp(x)/(1+exp(x));
+    }
 }
 
 /************************************************************/

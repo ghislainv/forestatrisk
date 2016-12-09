@@ -5,11 +5,13 @@
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
 # python_version  :2.7
+# license         :GPLv3
 # ==============================================================================
 
 # Import
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 
 # Invlogit
@@ -28,6 +30,20 @@ def invlogit(x):
     r[x > 0] = 1. / (1. + np.exp(-x[x > 0]))
     r[x <= 0] = np.exp(x[x <= 0]) / (1 + np.exp(x[x <= 0]))
     return (r)
+
+
+# Function to make a directory
+def make_dir(directory):
+    """
+    Make new directory
+
+    :param directory: path to be created.
+    :return: this function does not return any value.
+    """
+    if not os.path.exists(directory):
+        os.mkdir(directory)
+
+    return None
 
 
 # Rescale

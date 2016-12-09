@@ -5,6 +5,7 @@
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
 # python_version  :2.7
+# license         :GPLv3
 # ==============================================================================
 
 # Import
@@ -18,7 +19,7 @@ from patsy import build_design_matrices
 import numpy as np
 import os
 import sys
-import makeblock
+from makeblock import makeblock
 from miscellaneous import invlogit, rescale, figure_as_image
 
 
@@ -61,7 +62,7 @@ def predict_hSDM(hSDM_model, var_dir="data",
     :param input_forest_raster: path to forest raster (1 for forest).
     :param output_file: name of the raster file to output the probability map.
     :param blk_rows: if > 0, number of rows for computation by block.
-    :return: a figure object for the probability map that can be plotted.
+    :return: a Matplotlib figure of the probability map.
 
     """
 
@@ -196,11 +197,11 @@ def predict_hSDM(hSDM_model, var_dir="data",
 
     # Colormap
     colors = []
-    colors.append((0, (0, 0, 0, 0)))
-    colors.append((1 / 65535., (34 / 255., 139 / 255., 34 / 255., 1)))
-    colors.append((45000 / 65535., (1, 165 / 255., 0, 1)))
-    colors.append((55000 / 65535., (1, 0, 0, 1)))
-    colors.append((1, (0, 0, 0, 1)))
+    colors.append((0, (0, 0, 0, 0)))  # transparent
+    colors.append((1 / 65535., (34 / 255., 139 / 255., 34 / 255., 1)))  # green
+    colors.append((45000 / 65535., (1, 165 / 255., 0, 1)))  # red
+    colors.append((55000 / 65535., (1, 0, 0, 1)))  # orange
+    colors.append((1, (0, 0, 0, 1)))  # black
     color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
                                                   N=65535, gamma=1.0)
 

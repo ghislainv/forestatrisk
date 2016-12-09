@@ -1,23 +1,10 @@
-////////////////////////////////////////////////////////////////////
-//
-// hSDMmodule.c
-//
-////////////////////////////////////////////////////////////////////
-//
-// Code by Ghislain Vieilledent, November 2016
-// JRC Bio-economy unit (JRC.D.1) / CIRAD UPR Forêts et Sociétés
-// ghislain.vieilledent@cirad.fr / ghislainv@gmail.com
-//
-////////////////////////////////////////////////////////////////////
-//
-// This software is distributed under the terms of the GNU GENERAL
-// PUBLIC LICENSE Version 3. See the package LICENSE file for more
-// information.
-//
-// Copyright (C) 2016 Ghislain Vieilledent
-// 
-////////////////////////////////////////////////////////////////////
-
+// ==============================================================================
+// author          :Ghislain Vieilledent
+// email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+// web             :https://ghislainv.github.io
+// python_version  :2.7
+// license         :GPLv3
+// ==============================================================================
 
 // Python libraries
 #include <Python.h>
@@ -874,6 +861,4 @@ PyMODINIT_FUNC inithsdm(void) {
   import_array();
 }
 
-////////////////////////////////////////////////////////////////////
-// END
-////////////////////////////////////////////////////////////////////
+// End
