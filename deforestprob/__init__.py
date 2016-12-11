@@ -16,3 +16,6 @@ from correlationshape import correlationshape
 from resample_rho import resample_rho
 from predict_hSDM import predict_hSDM
 from miscellaneous import invlogit, figure_as_image, make_dir, rescale
+from plot_forest import plot_forest
+from plot_obs import plot_obs
+

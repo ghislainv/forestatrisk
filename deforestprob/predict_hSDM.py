@@ -197,10 +197,12 @@ def predict_hSDM(hSDM_model, var_dir="data",
 
     # Colormap
     colors = []
+    cmax = 255.0  # float for division
+    vmax = 65535.0  # float for division
     colors.append((0, (0, 0, 0, 0)))  # transparent
-    colors.append((1 / 65535., (34 / 255., 139 / 255., 34 / 255., 1)))  # green
-    colors.append((45000 / 65535., (1, 165 / 255., 0, 1)))  # red
-    colors.append((55000 / 65535., (1, 0, 0, 1)))  # orange
+    colors.append((1/vmax, (34/cmax, 139/cmax, 34/cmax, 1)))  # green
+    colors.append((45000/vmax, (1, 165/cmax, 0, 1)))  # red
+    colors.append((55000/vmax, (1, 0, 0, 1)))  # orange
     colors.append((1, (0, 0, 0, 1)))  # black
     color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
                                                   N=65535, gamma=1.0)

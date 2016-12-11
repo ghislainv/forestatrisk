@@ -16,20 +16,25 @@ from matplotlib.patches import Rectangle
 
 
 # plot_forest
-def plot_forest(input_forest_raster,
-                output_file="output/forest.png",
-                zoom=None,
-                dpi=200):
-    """Plot the forest map.
+def plot_obs(sample,
+             name_forest_var,
+             input_forest_raster,
+             output_file="output/obs.png",
+             zoom=None,
+             dpi=200):
+    """Plot the sample points over the forest map.
 
-    This function plots the forest map. Green is the remaining forest
-    (value 1), red is the deforestation (value 0).
+    This function plots the sample points over the forest map. Green
+    is the remaining forest (value 1), red is the deforestation (value
+    0).
 
+    :param sample: pandas DataFrame with observation coordinates (X, Y).
+    :param name_forest_var: name of the forest variable in sample DataFrame.
     :param input_forest_raster: path to forest raster.
     :param output_file: name of the plot file.
     :param dpi: resolution for output image.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
-    :return: a Matplotlib figure of the forest map.
+    :return: a Matplotlib figure of the sample points.
 
     """
 
@@ -65,28 +70,26 @@ def plot_forest(input_forest_raster,
     color_map = ListedColormap(colors)
 
     # Plot raster and save
-    place = 111 if zoom is None else 121
     fig = plt.figure(dpi=dpi)
-    ax1 = plt.subplot(place)
+    ax1 = plt.subplot(111)
+    # No frame
     ax1.set_frame_on(False)
     ax1.set_xticks([])
     ax1.set_yticks([])
-    plt.imshow(ov_arr, cmap=color_map, extent=extent)
     plt.axis("off")
+    # Raster
+    plt.imshow(ov_arr, cmap=color_map, extent=extent)
+    # Points
+    f = name_forest_var
+    x_defor = sample[sample[f] == 0]["X"]
+    y_defor = sample[sample[f] == 0]["Y"]
+    x_for = sample[sample[f] == 1]["X"]
+    y_for = sample[sample[f] == 1]["Y"]
+    plt.scatter(x_defor, y_defor, color="darkred")
+    plt.scatter(x_for, y_for, color="darkgreen")
     if zoom is not None:
-        z = Rectangle(
-            (zoom[0], zoom[2]),
-            zoom[1]-zoom[0],
-            zoom[3]-zoom[2],
-            fill=False
-        )
-        ax1.add_patch(z)
-        ax2 = plt.subplot(222)
-        plt.imshow(ov_arr, cmap=color_map, extent=extent)
         plt.xlim(zoom[0], zoom[1])
         plt.ylim(zoom[2], zoom[3])
-        ax2.set_xticks([])
-        ax2.set_yticks([])
     plt.close(fig)
     # Save and return figure
     fig.tight_layout()
