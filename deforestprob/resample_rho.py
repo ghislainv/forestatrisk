@@ -9,9 +9,9 @@
 # ==============================================================================
 
 # Import
+import os
 import numpy as np
 from osgeo import gdal
-import os
 
 
 # Resample_rho
@@ -99,6 +99,6 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
 
     # Print message and return None
     print("Spatial random effects resampled to file " + output_file)
-    return (None)
+    return None
 
 # End

@@ -36,7 +36,7 @@ setup(name="deforestprob",
         "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python :: 2.7",
-          "Topic :: Scientific/Engineering :: Bio-Informatics",
+        "Topic :: Scientific/Engineering :: Bio-Informatics",
       ],
       keywords="deforestation hsdm hierarchical logistic model probability \
       risk Bayesian spatial autocorrelation",

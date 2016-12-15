@@ -10,41 +10,67 @@
 
 # Import
 from osgeo import gdal
+from glob import glob
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
-from matplotlib.patches import Rectangle
+import os
+import sys
+import numpy as np
 
 
-# plot_forest
-def plot_forest(input_forest_raster,
-                output_file="output/forest.png",
-                zoom=None,
-                dpi=200):
-    """Plot the forest map.
+# plot_var
+def plot_var(var_dir,
+             output_file="output/var.png",
+             dpi=200):
+    """Plot the map of variables.
 
-    This function plots the forest map. Green is the remaining forest
-    (value 1), red is the deforestation (value 0).
+    This function plots the map of variables.
 
-    :param input_forest_raster: path to forest raster.
+    :param var_dir: path to variable directory.
     :param output_file: name of the plot file.
     :param dpi: resolution for output image.
-    :param zoom: zoom to region (xmin, xmax, ymin, ymax).
-    :return: a Matplotlib figure of the forest map.
+    :return: Matplotlib figures of the variables.
 
     """
 
-    # Load raster and band
-    forestR = gdal.Open(input_forest_raster)
-    forestB = forestR.GetRasterBand(1)
-    forestND = forestB.GetNoDataValue()
-    gt = forestR.GetGeoTransform()
-    ncol = forestR.RasterXSize
-    nrow = forestR.RasterYSize
+    # Raster list
+    var_tif = var_dir + "/*.tif"
+    raster_list = glob(var_tif)
+    raster_list.sort()
+
+    # Make vrt with gdalbuildvrt
+    print("Make virtual raster with variables as raster bands")
+    inputvar = " ".join(raster_list)
+    outputfile = var_dir + "/var.vrt"
+    os.system("gdalbuildvrt -separate -o " + outputfile + " " + inputvar)
+
+    # Load vrt file
+    stack = gdal.Open(var_dir + "/var.vrt")
+    gt = stack.GetGeoTransform()
+    ncol = stack.RasterXSize
+    nrow = stack.RasterYSize
     Xmin = gt[0]
     Xmax = gt[0] + gt[1] * ncol
     Ymin = gt[3] + gt[5] * nrow
     Ymax = gt[3]
     extent = [Xmin, Xmax, Ymin, Ymax]
+
+    # List of nodata values
+    nband = stack.RasterCount
+    bandND = np.zeros(nband)
+    for k in range(nband):
+        band = stack.GetRasterBand(k + 1)
+        if band is None:
+            print("NoData value is not specified \
+            for input raster file %d" % k)
+            sys.exit(1)
+        bandND[k] = band.GetNoDataValue()
+
+    # Load raster and band
+    forestR = gdal.Open(input_forest_raster)
+    forestB = forestR.GetRasterBand(1)
+    forestND = forestB.GetNoDataValue()
+
 
     # Overviews
     if forestB.GetOverviewCount() == 0:

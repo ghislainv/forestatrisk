@@ -9,18 +9,17 @@
 # ==============================================================================
 
 # Import
-from osgeo import gdal
-from tqdm import tqdm
-from glob import glob
-import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
-import pandas as pd
-from patsy import build_design_matrices
-import numpy as np
 import os
 import sys
-from makeblock import makeblock
+from glob import glob
+import numpy as np
+import pandas as pd
+from patsy import build_design_matrices
+from osgeo import gdal
+import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 from miscellaneous import invlogit, rescale, figure_as_image
+from miscellaneous import progress_bar, makeblock
 
 
 # predict
@@ -116,7 +115,7 @@ def predict_hSDM(hSDM_model, var_dir="data",
     ny = blockinfo[6]
     print("Divide region in " + str(nblock) + " blocks")
 
-    # Rasters of predictions
+    # Raster of predictions
     print("Create a raster file on disk for projections")
     driver = gdal.GetDriverByName("GTiff")
     Pdrv = driver.Create(output_file, ncol, nrow, 1,
@@ -131,7 +130,9 @@ def predict_hSDM(hSDM_model, var_dir="data",
     # Message
     print("Predict deforestation probability by block")
     # Loop on blocks of data
-    for b in tqdm(range(nblock)):
+    for b in range(nblock):
+        # Progress bar
+        progress_bar(nblock, b+1)
         # Position in 1D-arrays
         px = b % nblock_x
         py = b / nblock_x

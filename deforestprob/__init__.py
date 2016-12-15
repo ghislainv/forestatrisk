@@ -8,14 +8,12 @@
 # license         :GPLv3
 # ==============================================================================
 
+from miscellaneous import invlogit, make_dir
+import plot
 from hSDM_binomial_iCAR import hSDM_binomial_iCAR
-from makeblock import makeblock
 from sample import sample
 from cellneigh import cellneigh
-from correlationshape import correlationshape
-from resample_rho import resample_rho
 from predict_hSDM import predict_hSDM
-from miscellaneous import invlogit, figure_as_image, make_dir, rescale
-from plot_forest import plot_forest
-from plot_obs import plot_obs
+from resample_rho import resample_rho
 
+# End

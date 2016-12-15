@@ -9,14 +9,13 @@
 # ==============================================================================
 
 # Import
-from osgeo import gdal  # GIS libraries
 import os  # Operating system interfaces
-from glob import glob  # To explore files in a folder
 import sys  # To read and write files
+from glob import glob  # To explore files in a folder
 import numpy as np  # For arrays
-from tqdm import tqdm  # Progress bar
-from makeblock import makeblock
 import pandas as pd  # To export result as a pandas DF
+from osgeo import gdal  # GIS libraries
+from miscellaneous import makeblock, progress_bar
 
 
 # Sample
@@ -75,7 +74,9 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     nfc_block = np.zeros(nblock, dtype=np.int)
 
     # Loop on blocks of data
-    for b in tqdm(range(nblock)):
+    for b in range(nblock):
+        # Progress bar
+        progress_bar(nblock, b+1)
         # Position in 1D-arrays
         px = b % nblock_x
         py = b / nblock_x
@@ -112,7 +113,10 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     deforselect = np.empty(shape=(0, 2), dtype=np.int)
     forselect = np.empty(shape=(0, 2), dtype=np.int)
     # Loop on blocks of data
-    for b in tqdm(range(nblock)):
+    for b in range(nblock):
+        # Progress bar
+        progress_bar(nblock, b+1)
+        # nbdraw
         nbdraw_d = nblock_draw_d[b]
         nbdraw_f = nblock_draw_f[b]
         # Position in 1D-arrays
@@ -202,7 +206,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # Raster list
     var_tif = var_dir + "/*.tif"
     raster_list = glob(var_tif)
-    raster_list.sort()
+    raster_list.sort()  # Sort names, important step!
 
     # Make vrt with gdalbuildvrt
     print("Make virtual raster with variables as raster bands")
@@ -230,7 +234,10 @@ def sample(nsamp=10000, Seed=1234, csize=10,
 
     # Extract raster values
     print("Extract raster values for selected pixels")
-    for i in tqdm(range(nobs)):
+    for i in range(nobs):
+        # Progress bar
+        progress_bar(nobs, i+1)
+        # ReadArray for extract
         extract = stack.ReadAsArray(xOffset[i], yOffset[i], 1, 1)
         val[i, :] = extract.reshape(nband,)
 
