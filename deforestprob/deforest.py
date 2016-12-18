@@ -12,15 +12,16 @@
 import numpy as np
 from osgeo import gdal
 import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.colors import ListedColormap
 from miscellaneous import figure_as_image
 from miscellaneous import progress_bar, makeblock
 
 
 # deforest
-def deforest(input_raster, hectares,
+def deforest(input_raster,
+             hectares,
              output_file="output/forest_cover.tif",
-             blk_rows=0):
+             blk_rows=128):
     """Function to map the future forest cover.
 
     This function computes the future forest cover map based on (i) a
@@ -43,10 +44,77 @@ def deforest(input_raster, hectares,
     proj = probR.GetProjection()
     ncol = probR.RasterXSize
     nrow = probR.RasterYSize
-    Xmin = gt[0]
-    Xmax = gt[0] + gt[1] * ncol
-    Ymin = gt[3] + gt[5] * nrow
-    Ymax = gt[3]
+
+    # Number of pixels to deforest
+    surface_pixel = -gt[1]*gt[5]
+    ndefor = np.around((hectares*10000)/surface_pixel).astype(np.int)
+
+    # Make blocks
+    blockinfo = makeblock(input_raster, blk_rows=blk_rows)
+    nblock = blockinfo[0]
+    nblock_x = blockinfo[1]
+    x = blockinfo[3]
+    y = blockinfo[4]
+    nx = blockinfo[5]
+    ny = blockinfo[6]
+    print("Divide region in " + str(nblock) + " blocks")
+
+    # Compute the total number of forest pixels
+    print("Compute the total number of forest pixels")
+    nfc = 0
+    # Loop on blocks of data
+    for b in range(nblock):
+        # Progress bar
+        progress_bar(nblock, b+1)
+        # Position in 1D-arrays
+        px = b % nblock_x
+        py = b / nblock_x
+        # Data for one block
+        data = probB.ReadAsArray(x[px], y[py], nx[px], ny[py])
+        forpix = np.nonzero(data != 0)
+        nfc += len(forpix[0])
+
+    # Compute the histogram of values
+    print("Compute the histogram of values")
+    nvalues = 65635
+    counts = np.zeros(nvalues, dtype=np.float)
+    # Loop on blocks of data
+    for b in range(nblock):
+        # Progress bar
+        progress_bar(nblock, b+1)
+        # Position in 1D-arrays
+        px = b % nblock_x
+        py = b / nblock_x
+        # Data for one block
+        data = probB.ReadAsArray(x[px], y[py], nx[px], ny[py])
+        flat_data = data.flatten()
+        flat_data_nonzero = flat_data[flat_data != 0]
+        for i in flat_data_nonzero:
+            counts[i-1] += 1.0/nfc
+    # Plot histogram
+    # plt.plot(counts, "ro")
+
+    # Identify threshold
+    print("Identify threshold")
+    quant = ndefor/np.float(nfc)
+    cS = 0.0
+    cumSum = np.zeros(nvalues, dtype=np.float)
+    go_on = True
+    for i in np.arange(nvalues-1, -1, -1):
+        cS += counts[i]
+        cumSum[i] = cS
+        if (cS >= quant) & (go_on is True):
+            go_on = False
+            index = i
+            threshold = index+1
+
+    # Minimize error
+    print("Minimize error on deforested hectares")
+    diff_inf = ndefor-cumSum[index+1]*nfc
+    diff_sup = cumSum[index]*nfc-ndefor
+    if diff_sup >= diff_inf:
+        index = index+1
+        threshold = index+1
 
     # Raster of predictions
     print("Create a raster file on disk for forest cover")
@@ -59,24 +127,9 @@ def deforest(input_raster, hectares,
     forestB = forestR.GetRasterBand(1)
     forestB.SetNoDataValue(255)
 
-    # Object to store histogram values
-    nvalues = 65635
-    counts = np.ones(shape=(nvalues, 2))
-    counts[:, 0] = np.array(range(nvalues)) + 1
-
-    # Make blocks
-    blockinfo = makeblock(input_raster, blk_rows=blk_rows)
-    nblock = blockinfo[0]
-    nblock_x = blockinfo[1]
-    x = blockinfo[3]
-    y = blockinfo[4]
-    nx = blockinfo[5]
-    ny = blockinfo[6]
-    print("Divide region in " + str(nblock) + " blocks")
-
-    # Computation by block
-    # Message
-    print("Compute the histogram of values")
+    # Write raster of forest cover
+    print("Write raster of forest cover")
+    ndc = 0
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
@@ -84,43 +137,47 @@ def deforest(input_raster, hectares,
         # Position in 1D-arrays
         px = b % nblock_x
         py = b / nblock_x
-        # Number of pixels
-        npix = nx[px] * ny[py]
-        # Data for one block of the stack (shape = (nband,nrow,ncol))
-        data = probB.ReadAsArray(x[px], y[py], nx[px], ny[py])
-        for i in range(nvalues):
-            count[i, 1] = sum(data == (i+1))
-        # Assign prediction to raster
-        Pband.WriteArray(forestB, x[px], y[py])
+        # Data for one block
+        prob_data = probB.ReadAsArray(x[px], y[py], nx[px], ny[py])
+        # Number of pixels that are really deforested
+        deforpix = np.nonzero(prob_data >= threshold)
+        ndc += len(deforpix[0])
+        # Forest cover
+        for_data = np.ones(shape=prob_data.shape, dtype=np.int8)
+        for_data = for_data*255  # nodata
+        for_data[prob_data != 0] = 1
+        for_data[deforpix] = 0
+        forestB.WriteArray(for_data, x[px], y[py])
+    # Estimates of error on deforested hectares
+    error = [0, 0]
+    error[0] = ndc*surface_pixel/10000-hectares
+    error[1] = 100*error[0]/hectares  # in percent
 
     # Compute statistics
     print("Compute statistics")
-    Pband.FlushCache()  # Write cache data to disk
-    Pband.ComputeStatistics(False)
+    forestB.FlushCache()  # Write cache data to disk
+    forestB.ComputeStatistics(False)
 
     # Build overviews
     print("Build overview")
-    Pdrv.BuildOverviews("average", [8, 16, 32])
+    forestR.BuildOverviews("nearest", [8, 16, 32])
 
     # Get data from finest overview
-    ov_band = Pband.GetOverview(0)
+    ov_band = forestB.GetOverview(0)
     ov_arr = ov_band.ReadAsArray()
+    ov_arr[ov_arr == 255] = 2
 
     # Dereference driver
-    Pband = None
-    del(Pdrv)
+    forestB = None
+    del(forestR)
 
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    vmax = 65535.0  # float for division
-    colors.append((0, (0, 0, 0, 0)))  # transparent
-    colors.append((1/vmax, (34/cmax, 139/cmax, 34/cmax, 1)))  # green
-    colors.append((45000/vmax, (1, 165/cmax, 0, 1)))  # red
-    colors.append((55000/vmax, (1, 0, 0, 1)))  # orange
-    colors.append((1, (0, 0, 0, 1)))  # black
-    color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
-                                                  N=65535, gamma=1.0)
+    colors.append((1, 0, 0, 1))  # red
+    colors.append((34/cmax, 139/cmax, 34/cmax, 1))  # forest green
+    colors.append((0, 0, 0, 0))  # transparent
+    color_map = ListedColormap(colors)
 
     # Plot
     print("Plot map")
@@ -137,6 +194,6 @@ def deforest(input_raster, hectares,
     fig_img = figure_as_image(fig, fig_name, dpi=200)
 
     # Return figure
-    return(fig_img)
+    return(fig_img, tuple(error))
 
 # End
