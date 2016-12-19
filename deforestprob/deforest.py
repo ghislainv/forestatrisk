@@ -22,24 +22,31 @@ def deforest(input_raster,
              hectares,
              output_file="output/forest_cover.tif",
              blk_rows=128):
+
     """Function to map the future forest cover.
 
     This function computes the future forest cover map based on (i) a
     raster of probability of deforestation (rescaled from 1 to 65535),
     and (ii) a surface (in hectares) to be deforested.
 
-    :param input_raster: raster of probability of deforestation (1 to 65535).
+    :param input_raster: raster of probability of deforestation (1 to 65535
+    with 0 as nodata value).
+
     :param hectares: number of hectares to deforest.
+
     :param output_file: name of the raster file for forest cover map.
+
     :param blk_rows: if > 0, number of rows for block (else 256x256).
-    :return: a Matplotlib figure of the forest cover.
+
+    :return: a dictionary with two items, 1) a Matplotlib figure of
+    the forest cover, 2) a tuple of statistics (hectares, frequence,
+    threshold, error).
 
     """
 
     # Load raster and band
     probR = gdal.Open(input_raster)
     probB = probR.GetRasterBand(1)
-    probND = probB.GetNoDataValue()
     gt = probR.GetGeoTransform()
     proj = probR.GetProjection()
     ncol = probR.RasterXSize
@@ -91,8 +98,6 @@ def deforest(input_raster,
         flat_data_nonzero = flat_data[flat_data != 0]
         for i in flat_data_nonzero:
             counts[i-1] += 1.0/nfc
-    # Plot histogram
-    # plt.plot(counts, "ro")
 
     # Identify threshold
     print("Identify threshold")
@@ -148,10 +153,9 @@ def deforest(input_raster,
         for_data[prob_data != 0] = 1
         for_data[deforpix] = 0
         forestB.WriteArray(for_data, x[px], y[py])
+
     # Estimates of error on deforested hectares
-    error = [0, 0]
-    error[0] = ndc*surface_pixel/10000-hectares
-    error[1] = 100*error[0]/hectares  # in percent
+    error = (ndc*surface_pixel/10000)-hectares
 
     # Compute statistics
     print("Compute statistics")
@@ -194,6 +198,7 @@ def deforest(input_raster,
     fig_img = figure_as_image(fig, fig_name, dpi=200)
 
     # Return figure
-    return(fig_img, tuple(error))
+    return {"figure": fig_img, "statistics": (counts, threshold,
+                                              error, hectares)}
 
 # End

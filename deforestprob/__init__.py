@@ -15,5 +15,6 @@ from sample import sample
 from cellneigh import cellneigh
 from predict_hSDM import predict_hSDM
 from resample_rho import resample_rho
+from deforest import deforest
 
 # End
