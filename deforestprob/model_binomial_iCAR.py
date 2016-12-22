@@ -18,11 +18,11 @@ from sklearn.linear_model import LogisticRegression
 from miscellaneous import invlogit
 
 
-# hSDM_binomial_iCAR
-class hSDM_binomial_iCAR(object):
-    """hSDM_binomial_iCAR class.
+# model_binomial_iCAR
+class model_binomial_iCAR(object):
+    """model_binomial_iCAR class.
 
-    hSDM_binomial_iCAR class to estimates the parameters of a Binomial
+    model_binomial_iCAR class to estimates the parameters of a Binomial
     model with iCAR process for spatial autocorrelation in a
     hierarchical Bayesian framework.
     """
@@ -48,9 +48,9 @@ class hSDM_binomial_iCAR(object):
                  # Various
                  seed=1234, verbose=1,
                  save_rho=0, save_p=0):
-        """Function to fit a hSDM_binomial_iCAR model.
+        """Function to fit a model_binomial_iCAR model.
 
-        The function hSDM_binomial_iCAR estimates the parameters of a
+        The function model_binomial_iCAR estimates the parameters of a
         Binomial model with iCAR process for spatial autocorrelation
         in a hierarchical Bayesian framework.
         """
@@ -199,9 +199,9 @@ class hSDM_binomial_iCAR(object):
         self.theta_latent = np.array(Sample[4])
 
     def __repr__(self):
-        """Summary of hSDM_binomial_iCAR model.
+        """Summary of model_binomial_iCAR model.
 
-        This function returns a summary of a hSDM_binomial_iCAR model
+        This function returns a summary of a model_binomial_iCAR model
         with posterior mean parameter estimates, standard-deviation
         and credible intervals at 95%. It also provides the deviance
         estimate for model comparison.
@@ -238,12 +238,12 @@ class hSDM_binomial_iCAR(object):
         return (summary)
 
     def predict(self, new_data):
-        """Function to return the predictions of a hSDM_binomial_iCAR model.
+        """Function to return the predictions of a model_binomial_iCAR model.
 
-        Function to return the predictions of a hSDM_binomial_iCAR model
+        Function to return the predictions of a model_binomial_iCAR model
         for a new data-set.
 
-        :param hSDM_model: hSDM_binomial_iCAR to predict from.
+        :param model: model_binomial_iCAR to predict from.
         :param new_data: pandas DataFrame including explicative variables \
         and cell values.
         :return: prediction (a probability).
@@ -265,7 +265,7 @@ class hSDM_binomial_iCAR(object):
         """Plot traces and posterior distributions.
 
         This function plots the traces and posterior distributions of
-        the parameters of a hSDM_binomial_iCAR model.
+        the parameters of a model_binomial_iCAR model.
         """
 
         # Message

@@ -10,10 +10,10 @@
 
 from miscellaneous import invlogit, make_dir
 import plot
-from hSDM_binomial_iCAR import hSDM_binomial_iCAR
+from model_binomial_iCAR import model_binomial_iCAR
 from sample import sample
 from cellneigh import cellneigh
-from predict_hSDM import predict_hSDM
+from predict import predict
 from resample_rho import resample_rho
 from deforest import deforest
 

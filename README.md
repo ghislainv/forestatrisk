@@ -12,6 +12,8 @@ towns, and forest edge), deforestation history (distance to previous
 deforestation) or landscape policy (location inside a protected area)
 for example.
 
+### Sampling
+
 Function `.sample()` allows the random sampling of observations points
 considering historical deforestation maps. The sampling is balanced
 and stratified considering remaining forest and deforested areas after
@@ -20,28 +22,20 @@ environmental variables for each sampled point. The sampling is done
 by block to allow the computation on large study areas (e.g. country
 or continental scale) with a fine spatial resolution (e.g. 30m).
 
-Function `.model()` can be used to estimate the parameters of a
-deforestation model. Two algorithms are available: Random Forest and
-hSDM\_binomial\_iCAR:
+### Modelling
 
-* Random Forest (Breiman 2001) uses an ensemble modelling of random
-classification trees to estimate the deforestation probability of a
-pixel given the environmental variables. The model using Random Forest
-includes X and Y coordinates to account for the spatial
-autocorrelation of the observations (Mascaro et al. 2014). The
-`.model()` function calls the `RandomForestClassifier()` function from
-the external `sklearn.ensemble` module.
-
-* hSDM\_binomial\_iCAR (Vieilledent et al. 2014) uses a linear Binomial
-logistic regression model to estimate the deforestation probability of
-a pixel given the environmental variables. The model includes an
+Function `.model` can be used to fit the deforestation model from the
+data. A linear Binomial logistic regression model is used to estimate
+the parameters of the deforestation model. The model includes an
 intrinsic Conditional Autoregressive (iCAR) process to account for the
-spatial autocorrelation of the observations. Parameter inference is
-done in a hierarchical Bayesian framework. The `.model()` function
-calls the `binomial_iCAR()` function from the internal `hSDM`
-module. The `binomial_iCAR()` function includes a Gibbs sampler with
-a Metropolis algorithm written in pure C code to reduce computation
-time.
+spatial autocorrelation of the observations (Vieilledent et
+al. 2014). Parameter inference is done in a hierarchical Bayesian
+framework. The `.model()` function calls the `.binomial_iCAR()`
+function from the internal `hsdm` module. The `.binomial_iCAR()`
+function includes a Gibbs sampler with a Metropolis algorithm written
+in pure C code to reduce computation time.
+
+### Predicting
 
 Function `.predict()` allows predicting the deforestation probability
 on the whole study area using the deforestation model fitted with the
@@ -49,16 +43,19 @@ on the whole study area using the deforestation model fitted with the
 computation on large study areas (e.g. country or continental scale)
 with a fine spatial resolution (e.g. 30m).
 
-## References
+Function `.deforest()` predict the future forest cover map based on a
+raster of probability of deforestation (rescaled from 1 to 65535),
+which is obtained from function `.predict()`, and a surface (in
+hectares) to be deforested.
 
-**Breiman L.** 2001. Random Forests. _Machine Learning_. 45: 5-32.
-doi: [10.1023/A:1010933404324](http://dx.doi.org/10.1023/A:1010933404324)
+## Tutorial
 
-**Mascaro J., G. P. Asner, D. E. Knapp, T. Kennedy-Bowdoin,
-R. E. Martin, C. Anderson, M. Higgins and K. D. Chadwick.** 2014. A
-tale of two "forests": Random Forest machine learning aids tropical
-forest carbon mapping. _PLoS One_. 9(1): e85993.
-doi: [10.1371%2Fjournal.pone.0085993](http://dx.doi.org/10.1371%2Fjournal.pone.0085993)
+A vignette showing how to use the `deforestprob` Python module has been
+written using a Jupyter/IPython notebook taking Madagascar as a case
+study. The vignette is available as a web page at the following adress:
+https://ghislainv.github.io/deforestprob
+
+## Reference
 
 **Vieilledent G., C. Merow, J. Guélat, A. M. Latimer, M. Kéry,
 A. E. Gelfand, A. M. Wilson, F. Mortier and J. A. Silander
@@ -88,5 +85,5 @@ Map of the probability of deforestation in Madagascar for the year
 2010 obtained with deforestprob. Dark red: high probability of
 deforestation, Dark green: low probability of deforestation.
 
-<img src="docs/images/pred_hSDM.png" width=400"/>
+<img src="docs/images/pred_hSDM.png" width=300"/>
 

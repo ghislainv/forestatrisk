@@ -22,40 +22,40 @@ from miscellaneous import invlogit, rescale, figure_as_image
 from miscellaneous import progress_bar, makeblock
 
 
-# predict
-def predict(hSDM_model, new_data, rhos):
-    """Function to return the predictions of a hSDM_binomial_iCAR model.
+# predict_binomial_iCAR
+def predict_binomial_iCAR(model, new_data, rhos):
+    """Function to return the predictions of a model_binomial_iCAR model.
 
-    Function to return the predictions of a hSDM_binomial_iCAR model
+    Function to return the predictions of a model_binomial_iCAR model
     for a new data-set. In this function, rho values for spatial cells
     are directly provided and not obtained from the model.
 
-    :param hSDM_model: hSDM_binomial_iCAR to predict from.
+    :param model: model_binomial_iCAR model to predict from.
     :param new_data: pandas DataFrame including explicative variables.
     :param rhos: spatial random effects for each observation (row) in new_data.
     :return: prediction (a probability).
 
     """
 
-    (new_x,) = build_design_matrices([hSDM_model._x_design_info],
+    (new_x,) = build_design_matrices([model._x_design_info],
                                      new_data)
     new_X = new_x[:, :-1]
-    return (invlogit(np.dot(new_X, hSDM_model.betas) + rhos))
+    return (invlogit(np.dot(new_X, model.betas) + rhos))
 
 
-# predict_hSDM
-def predict_hSDM(hSDM_model, var_dir="data",
-                 input_cell_raster="output/rho.tif",
-                 input_forest_raster="data/forest.tif",
-                 output_file="output/pred_hSDM.tif",
-                 blk_rows=128):
-    """Predict the spatial probability of deforestation from a hSDM model.
+# predict
+def predict(model, var_dir="data",
+            input_cell_raster="output/rho.tif",
+            input_forest_raster="data/forest.tif",
+            output_file="output/pred_binomial_iCAR.tif",
+            blk_rows=128):
+    """Predict the spatial probability of deforestation from a model.
 
     This function predicts the spatial probability of deforestation
-    from a hSDM_binomial_iCAR model. Computation are done by block and
+    from a model_binomial_iCAR model. Computation are done by block and
     can be performed on large geographical areas.
 
-    :param hSDM_model: hSDM_binomial_iCAR to predict from.
+    :param model: model_binomial_iCAR model to predict from.
     :param var_dir: directory with rasters (.tif) of explicative variables.
     :param input_cell_raster: path to raster of rho values for spatial cells.
     :param input_forest_raster: path to forest raster (1 for forest).
@@ -162,13 +162,13 @@ def predict_hSDM(hSDM_model, var_dir="data",
         df.columns = raster_names
         # Add fake "cell" column
         df["cell"] = 0
-        # Predict with hSDM model
+        # Predict with binomial iCAR model
         pred = np.zeros(npix)  # Initialize with nodata value (0)
         if len(w[0]) > 0:
             # Get predictions into an array
-            p = predict(hSDM_model,
-                        new_data=df,
-                        rhos=data[:, -2])
+            p = predict_binomial_iCAR(model,
+                                      new_data=df,
+                                      rhos=data[:, -2])
             # Avoid nodata value (0) for low proba
             p[p < 1e-06] = 1e-06
             # np.rint: round to nearest integer

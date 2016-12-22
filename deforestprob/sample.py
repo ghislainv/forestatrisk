@@ -222,11 +222,11 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     bandND = np.zeros(nband)
     for k in range(nband):
         band = stack.GetRasterBand(k + 1)
-        if band is None:
-            print("NoData value is not specified \
-            for input raster file %d" % k)
-            sys.exit(1)
         bandND[k] = band.GetNoDataValue()
+        if bandND[k] is None:
+            print("NoData value is not specified \
+            for input raster file %s" % raster_list[k])
+            sys.exit(1)
 
     # Numpy array to store values
     nobs = select.shape[0]
