@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>vignette</title>
+<title>Vignette deforestprob Python module</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -24702,7 +24702,7 @@ YII=
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Spatial-deforestation-model">Spatial deforestation model<a class="anchor-link" href="#Spatial-deforestation-model">&#182;</a></h2><p>We propose to use the <strong>Binomial iCAR</strong> model (<a href="http://doi.org/10.5281/zenodo.48470">Vieilledent et al. 2014</a>) to estimate the deforestation probability of a pixel given a set of environmental variables. The Binomial iCAR model is a linear Binomial logistic regression model including an intrinsic Conditional Autoregressive (iCAR) process to account for the spatial autocorrelation of the observations. Parameter inference is done in a hierarchical Bayesian framework. The <code>.model_binomial_iCAR()</code> function from the <code>deforestprob</code> module includes a Metropolis-within-Gibbs algorithm written in pure C code to reduce computation time.</p>
-<p>&lt;img alt="iCAR process" src="docs/images/Bayes.jpg", width=280, height=280&gt;
+<p><img alt="iCAR process" src="docs/images/Bayes.jpg", width=280, height=280>
 <strong>Figure caption:</strong> Parameter inference is done in a hierarchical Bayesian framework, which relies on the <a href="https://en.wikipedia.org/wiki/Bayes&#39;_theorem">Bayes' theorem</a> named after <a href="https://en.wikipedia.org/wiki/Thomas_Bayes">Reverend Thomas Bayes</a>. Each parameter has a prior and an approximated posterior probability distribution from which we can compute the mean, standard deviation, credible intervals at 95%, etc.</p>
 
 </div>
@@ -24732,7 +24732,7 @@ y_i \sim \mathcal{B}inomial(\theta_i,t_i) \\
 \end{equation}<p>$\mu_j$: mean of $\rho_{j'}$ in the neighborhood of $j$.</p>
 <p>$V_{\rho}$: variance of the spatial random effects.</p>
 <p>$n_j$: number of neighbors for spatial entity $j$.</p>
-<p>&lt;img alt="iCAR process" src="docs/images/iCAR.png", width=240, height=240&gt;
+<p><img alt="iCAR process" src="docs/images/iCAR.png", width=240, height=240>
 <strong>Figure caption:</strong> Representation of the neighborhood for the intrinsic conditional autoregressive (iCAR) process. Target spatial cell $j$ has 8 neighbors in this case. Several observations (black points, equivalent to pixel centers in our case) can be located in each spatial cell. Deforestation probability in one spatial cell $j$ depends on deforestation probability in neighboring cells.</p>
 
 </div>
