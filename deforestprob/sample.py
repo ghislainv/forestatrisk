@@ -164,7 +164,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
 
     print("Compute center of pixel coordinates")
 
-    # Landscape variables
+    # Landscape variables from forest raster
     gt = forestR.GetGeoTransform()
     ncol = forestR.RasterXSize
     nrow = forestR.RasterYSize
@@ -176,7 +176,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # Concatenate selected pixels
     select = np.concatenate((deforselect, forselect), axis=0)
 
-    # Offsets and coordinates # !! TO BE CHANGED Must be the vrt Offset !!
+    # Offsets and coordinates #
     xOffset = select[:, 0]
     yOffset = select[:, 1]
     pts_x = (xOffset + 0.5) * gt[1] + gt[0]  # +0.5 for center of pixels
@@ -209,13 +209,19 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     raster_list.sort()  # Sort names, important step!
 
     # Make vrt with gdalbuildvrt
+    # Note: Extent and resolution from forest raster!
     print("Make virtual raster with variables as raster bands")
     inputvar = " ".join(raster_list)
     outputfile = var_dir + "/var.vrt"
-    os.system("gdalbuildvrt -separate -resolution user -tr %f %f -o %s %s" % (gt[1], -gt[5], outputfile, inputvar))
+    cmd_gdalbuildvrt = "gdalbuildvrt -separate -resolution user \
+                       -r nearest \
+                       -te %f %f %f %f \
+                       -tr %f %f -o %s %s" % (Xmin, Ymin, Xmax, Ymax, gt[1],
+                                              -gt[5], outputfile, inputvar)
+    os.system(cmd_gdalbuildvrt)
 
     # Load vrt file
-    stack = gdal.Open(var_dir + "/var.vrt")
+    stack = gdal.Open(outputfile)
 
     # List of nodata values
     nband = stack.RasterCount
@@ -238,8 +244,14 @@ def sample(nsamp=10000, Seed=1234, csize=10,
         # Progress bar
         progress_bar(nobs, i+1)
         # ReadArray for extract
-        extract = stack.ReadAsArray(xOffset[i], yOffset[i], 1, 1)  # !! TO BE CHANGED Must be the vrt Offset !!
+        extract = stack.ReadAsArray(xOffset[i], yOffset[i], 1, 1)
         val[i, :] = extract.reshape(nband,)
+        # # Using gdallocationinfo for extract is slow
+        # cmd_gdallocation = "gdallocationinfo -valonly \
+        #                    -geoloc %s %f %f" % (outputfile,
+        #                                         pts_x[i], pts_y[i])
+        # extract = os.popen(cmd_gdallocation).read()
+        # val[i, :] = np.array(extract.split("\n")[:-1]).astype(np.float32)
 
     # Close stack
     del stack
