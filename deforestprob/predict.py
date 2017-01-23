@@ -69,10 +69,19 @@ def predict(model, var_dir="data",
     fmaskR = gdal.Open(input_forest_raster)
     fmaskB = fmaskR.GetRasterBand(1)
 
+    # Landscape variables from forest raster
+    gt = fmaskR.GetGeoTransform()
+    ncol = fmaskR.RasterXSize
+    nrow = fmaskR.RasterYSize
+    Xmin = gt[0]
+    Xmax = gt[0] + gt[1] * ncol
+    Ymin = gt[3] + gt[5] * nrow
+    Ymax = gt[3]
+
     # Raster list
     var_tif = var_dir + "/*.tif"
     raster_list = glob(var_tif)
-    raster_list.sort()
+    raster_list.sort()  # Sort names
     raster_list.append(input_cell_raster)
     raster_names = []
     for i in range(len(raster_list)):
@@ -83,16 +92,20 @@ def predict(model, var_dir="data",
 
     # Make vrt with gdalbuildvrt
     print("Make virtual raster with variables as raster bands")
-    inputvar = " ".join(raster_list)
+    input_var = " ".join(raster_list)
     output_vrt = var_dir + "/var.vrt"
-    os.system("gdalbuildvrt -separate -o " + output_vrt + " " + inputvar)
+    param = ["gdalbuildvrt", "-overwrite", "-separate",
+             "-resolution user",
+             "-r nearest",
+             "-te", str(Xmin), str(Ymin), str(Xmax), str(Ymax),
+             "-tr", str(gt[1]), str(-gt[5]),
+             output_vrt, input_var]
+    cmd_gdalbuildvrt = " ".join(param)
+    os.system(cmd_gdalbuildvrt)
 
     # Load vrt file
     stack = gdal.Open(output_vrt)
-    ncol = stack.RasterXSize
-    nrow = stack.RasterYSize
     nband = stack.RasterCount
-    gt = stack.GetGeoTransform()
     proj = stack.GetProjection()
 
     # List of nodata values

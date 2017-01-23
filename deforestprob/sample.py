@@ -206,7 +206,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # Raster list
     var_tif = var_dir + "/*.tif"
     raster_list = glob(var_tif)
-    raster_list.sort()  # Sort names, important step!
+    raster_list.sort()  # Sort names
 
     # Make vrt with gdalbuildvrt
     # Note: Extent and resolution from forest raster!
