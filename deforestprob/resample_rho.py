@@ -20,16 +20,11 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     """Resample rho values with interpolation.
 
     This function resamples the spatial random effects (rho values)
-    obtained from an iCAR model. First, it performs a bilinear
-    interpolation at a finer resolution and smoothens the rho
-    values. Second a resampling at a resolution given by the input
-    raster using the nearest neighbour algorithm is performed to
-    facilitate the computation of the probability of deforestation in
-    the following steps. This second resampling does not provide
-    additional smoothing of the spatial random effects.
+    obtained from an iCAR model. It performs a bilinear interpolation
+    at a finer resolution and smoothens the rho values.
 
     :param rho: original rho values estimates with the iCAR model.
-    :param input_raster: path to input raster to define region.
+    :param input_raster: path to input raster defining the region.
     :output_file: path to output raster file with resampled rho values.
     :csize_orig: original size of the spatial cells (in km).
     :csize_new: new size of the spatial cells for bilinear \

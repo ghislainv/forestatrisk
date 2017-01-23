@@ -197,7 +197,7 @@ def deforest(input_raster,
     plt.close(fig)
     fig_img = figure_as_image(fig, fig_name, dpi=200)
 
-    # Return figure
+    # Return results
     return {"figure": fig_img, "statistics": (counts, threshold,
                                               error, hectares)}
 

@@ -107,6 +107,8 @@ def correlation(y, data, plots_per_page=4,
 def forest(input_forest_raster,
            output_file="output/forest.png",
            zoom=None,
+           col=(255, 0, 0, 255),
+           figsize=(11.69, 8.27),
            dpi=200):
     """Plot the forest map.
 
@@ -115,8 +117,10 @@ def forest(input_forest_raster,
 
     :param input_forest_raster: path to forest raster.
     :param output_file: name of the plot file.
-    :param dpi: resolution for output image.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
+    :param col: rgba color for deforestation.
+    :param figsize: figure size in inches.
+    :param dpi: resolution for output image.
     :return: a Matplotlib figure of the forest map.
 
     """
@@ -147,14 +151,15 @@ def forest(input_forest_raster,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    colors.append((1, 0, 0, 1))  # red
+    col = tuple(np.array(col)/cmax)
+    colors.append(col)  # default is red
     colors.append((34/cmax, 139/cmax, 34/cmax, 1))  # forest green
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
     # Plot raster and save
     place = 111 if zoom is None else 121
-    fig = plt.figure(dpi=dpi)
+    fig = plt.figure(figsize=figsize, dpi=dpi)
     ax1 = plt.subplot(place)
     ax1.set_frame_on(False)
     ax1.set_xticks([])
@@ -188,6 +193,8 @@ def obs(sample,
         input_forest_raster,
         output_file="output/obs.png",
         zoom=None,
+        s=20,
+        figsize=(11.69, 8.27),
         dpi=200):
     """Plot the sample points over the forest map.
 
@@ -199,8 +206,10 @@ def obs(sample,
     :param name_forest_var: name of the forest variable in sample DataFrame.
     :param input_forest_raster: path to forest raster.
     :param output_file: name of the plot file.
-    :param dpi: resolution for output image.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
+    :param s: marker size for sample points.
+    :param figsize: figure size in inches.
+    :param dpi: resolution for output image.
     :return: a Matplotlib figure of the sample points.
 
     """
@@ -252,8 +261,10 @@ def obs(sample,
     y_defor = sample[sample[f] == 0]["Y"]
     x_for = sample[sample[f] == 1]["X"]
     y_for = sample[sample[f] == 1]["Y"]
-    plt.scatter(x_defor, y_defor, color="darkred")
-    plt.scatter(x_for, y_for, color="darkgreen")
+    plt.scatter(x_defor, y_defor,
+                color="darkred", s=s)
+    plt.scatter(x_for, y_for,
+                color="darkgreen", s=s)
     if zoom is not None:
         plt.xlim(zoom[0], zoom[1])
         plt.ylim(zoom[2], zoom[3])
