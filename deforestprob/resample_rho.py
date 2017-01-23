@@ -79,21 +79,12 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     del rho_R
 
     # Bilinear interpolation to csize_new*1000 km
-    rho_interpol_filename = os.path.join(dirname, "rho_interpol.tif")
     param = ["gdalwarp", "-overwrite",
              "-tr", str(csize_new * 1000), str(csize_new * 1000),
              "-r bilinear",
-             rho_orig_filename, rho_interpol_filename]
-    command = " ".join(param)
-    os.system(command)
-    # Resample to resolution and extent of input_raster
-    param = ["gdalwarp", "-overwrite",
-             "-te", str(Xmin), str(Ymin), str(Xmax), str(Ymax),
-             "-tr", str(xres), str(yres),
-             "-r near",
              "-ot Float32",
-             "-co 'COMPRESS=LZW'", "-co 'PREDICTOR=2'",
-             rho_interpol_filename, output_file]
+             "-co 'COMPRESS=LZW'", "-co 'PREDICTOR=3'",
+             rho_orig_filename, output_file]
     command = " ".join(param)
     os.system(command)
 

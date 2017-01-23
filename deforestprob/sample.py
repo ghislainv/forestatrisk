@@ -211,17 +211,19 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # Make vrt with gdalbuildvrt
     # Note: Extent and resolution from forest raster!
     print("Make virtual raster with variables as raster bands")
-    inputvar = " ".join(raster_list)
-    outputfile = var_dir + "/var.vrt"
-    cmd_gdalbuildvrt = "gdalbuildvrt -separate -resolution user \
-                       -r nearest \
-                       -te %f %f %f %f \
-                       -tr %f %f -o %s %s" % (Xmin, Ymin, Xmax, Ymax, gt[1],
-                                              -gt[5], outputfile, inputvar)
+    input_var = " ".join(raster_list)
+    output_vrt = var_dir + "/var.vrt"
+    param = ["gdalbuildvrt", "-overwrite", "-separate",
+             "-resolution user",
+             "-r nearest",
+             "-te", str(Xmin), str(Ymin), str(Xmax), str(Ymax),
+             "-tr", str(gt[1]), str(-gt[5]),
+             output_vrt, input_var]
+    cmd_gdalbuildvrt = " ".join(param)
     os.system(cmd_gdalbuildvrt)
 
     # Load vrt file
-    stack = gdal.Open(outputfile)
+    stack = gdal.Open(output_vrt)
 
     # List of nodata values
     nband = stack.RasterCount
