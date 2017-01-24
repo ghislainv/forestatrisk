@@ -12,11 +12,15 @@
 import os
 import numpy as np
 from osgeo import gdal
+import matplotlib.pyplot as plt
+from miscellaneous import figure_as_image
 
 
 # Resample_rho
 def resample_rho(rho, input_raster, output_file="output/rho.tif",
-                 csize_orig=10, csize_new=1):
+                 csize_orig=10, csize_new=1,
+                 figsize=(11.69, 8.27),
+                 dpi=200):
     """Resample rho values with interpolation.
 
     This function resamples the spatial random effects (rho values)
@@ -29,6 +33,9 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     :csize_orig: original size of the spatial cells (in km).
     :csize_new: new size of the spatial cells for bilinear \
     interpolation (in km).
+    :param figsize: figure size in inches.
+    :param dpi: resolution for output image.
+    :return: a Matplotlib figure of the spatial random effects.
 
     """
 
@@ -65,15 +72,32 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     rho_R.SetGeoTransform(gt)
 
     # Write data
+    print("Write spatial random effect data to disk")
     rho_B = rho_R.GetRasterBand(1)
     rho_B.WriteArray(rho_arr)
     rho_B.FlushCache()
     rho_B.SetNoDataValue(-9999)
+
+    # Compute statistics
+    print("Compute statistics")
+    rho_B.FlushCache()  # Write cache data to disk
     rho_B.ComputeStatistics(False)
+
+    # Build overviews
+    print("Build overview")
+    rho_R.BuildOverviews("average", [2, 4, 8, 16, 32])
+
+    # Get data from finest overview
+    # ov_band = rho_B.GetOverview(0)
+    ov_band = rho_B
+    ov_arr = ov_band.ReadAsArray()
+
+    # Dereference driver
     rho_B = None
     del rho_R
 
     # Bilinear interpolation to csize_new*1000 km
+    print("Resampling spatial random effects to file " + output_file)
     param = ["gdalwarp", "-overwrite",
              "-tr", str(csize_new * 1000), str(csize_new * 1000),
              "-r bilinear",
@@ -83,8 +107,22 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     command = " ".join(param)
     os.system(command)
 
-    # Print message and return None
-    print("Spatial random effects resampled to file " + output_file)
-    return None
+    # Plot
+    print("Plot spatial random effect map")
+    # Figure name
+    fig_name = output_file
+    index_dot = output_file.index(".")
+    fig_name = fig_name[:index_dot]
+    fig_name = fig_name + ".png"
+    # Plot raster and save
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    plt.subplot(111)
+    plt.imshow(ov_arr, cmap="RdYlGn", vmin=-5, vmax=5)
+    plt.colorbar()
+    plt.close(fig)
+    fig_img = figure_as_image(fig, fig_name, dpi=dpi)
+
+    # Return figure
+    return(fig_img)
 
 # End

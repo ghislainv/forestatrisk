@@ -266,6 +266,12 @@ class model_binomial_iCAR(object):
 
         This function plots the traces and posterior distributions of
         the parameters of a model_binomial_iCAR model.
+
+        :param output_file: name of the plot file.
+        :param plots_per_page: number of plots (lines) per page.
+        :param figsize: figure size in inches.
+        :param dpi: resolution for output image.
+
         """
 
         # Message

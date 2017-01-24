@@ -21,9 +21,11 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 
 # plot.correlation
-def correlation(y, data, plots_per_page=4,
-                figsize=(8.27, 11.69), dpi=100,
-                output_file="output/correlation.pdf"):
+def correlation(y, data,
+                output_file="output/correlation.pdf",
+                plots_per_page=4,
+                figsize=(8.27, 11.69),
+                dpi=100):
     """
     Correlation between variables and the probability of deforestation.
 
@@ -33,10 +35,10 @@ def correlation(y, data, plots_per_page=4,
 
     :param y: a 1D array for the response variable (forest=1, defor=0).
     :param data: a pandas DataFrame with column names.
+    :param output_file: path to output file.
     :param plots_per_page: number of plots (lines) per page.
     :param figsize: figure size.
     :param dpi: resolution for output image.
-    :param output_file: path to output file.
     :return: list of Matplotlib figures.
     """
 
@@ -278,7 +280,7 @@ def obs(sample,
 # plot.var
 def var(var_dir,
         output_file="output/var.pdf",
-        grid_size=(3, 3),
+        gridsize=(3, 3),
         figsize=(11.69, 8.27),
         dpi=200):
     """Plot variable maps.
@@ -303,9 +305,9 @@ def var(var_dir,
     # The PDF document
     pdf_pages = PdfPages(output_file)
     # Generate the pages
-    grid_size = grid_size
-    ny = grid_size[0]
-    nx = grid_size[1]
+    gridsize = gridsize
+    ny = gridsize[0]
+    nx = gridsize[1]
     nplot_per_page = ny*nx
     # List of figures to be returned
     figures = []
@@ -351,7 +353,7 @@ def var(var_dir,
         ov_arr = ov_band.ReadAsArray()
         mov_arr = np.ma.array(ov_arr, mask=(ov_arr == ND))
         # Plot raster
-        ax = plt.subplot2grid(grid_size,
+        ax = plt.subplot2grid(gridsize,
                               ((i % nplot_per_page)/nx, i % nx))
         ax.set_frame_on(False)
         ax.set_xticks([])

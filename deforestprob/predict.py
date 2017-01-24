@@ -48,7 +48,9 @@ def predict(model, var_dir="data",
             input_cell_raster="output/rho.tif",
             input_forest_raster="data/forest.tif",
             output_file="output/pred_binomial_iCAR.tif",
-            blk_rows=128):
+            blk_rows=128,
+            figsize=(11.69, 8.27),
+            dpi=200):
     """Predict the spatial probability of deforestation from a model.
 
     This function predicts the spatial probability of deforestation
@@ -61,6 +63,8 @@ def predict(model, var_dir="data",
     :param input_forest_raster: path to forest raster (1 for forest).
     :param output_file: name of the raster file to output the probability map.
     :param blk_rows: if > 0, number of rows for computation by block.
+    :param figsize: figure size in inches.
+    :param dpi: resolution for output image.
     :return: a Matplotlib figure of the probability map.
 
     """
@@ -229,11 +233,11 @@ def predict(model, var_dir="data",
     fig_name = fig_name[:index_dot]
     fig_name = fig_name + ".png"
     # Plot raster and save
-    fig = plt.figure()
+    fig = plt.figure(figsize=figsize)
     plt.subplot(111)
     plt.imshow(ov_arr, cmap=color_map)
     plt.close(fig)
-    fig_img = figure_as_image(fig, fig_name, dpi=200)
+    fig_img = figure_as_image(fig, fig_name, dpi=dpi)
 
     # Return figure
     return(fig_img)

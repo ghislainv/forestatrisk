@@ -140,7 +140,7 @@ def rescale(value):
 
 
 # Saving a matplotlib.pyplot figure as a border-less frame-less image
-def figure_as_image(fig, output_file, dpi=300):
+def figure_as_image(fig, output_file, dpi=200):
     """Remove borders and frames of a Matplotlib figure and save.
 
     :param fig: Matplotlib figure you want to save as the image.
