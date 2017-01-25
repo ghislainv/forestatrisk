@@ -49,11 +49,11 @@ hectares) to be deforested.
 
 ## Tutorial
 
-We wrote a vignette using a Jupyter/IPython notebook to show how to
+We wrote a tutorial using a Jupyter/IPython notebook to show how to
 use the `deforestprob` Python module. We took Madagascar as a case
 study considering past deforestation on the period 2000-2010,
 estimating deforestation probability for the year 2010, and projecting
-the future forest cover in 2050. The vignette is available at the
+the future forest cover in 2050. The notebook is available at the
 following web adress: https://ghislainv.github.io/deforestprob
 
 ## Reference
@@ -86,5 +86,5 @@ Map of the probability of deforestation in Madagascar for the year
 2010 obtained with deforestprob. Dark red: high probability of
 deforestation, Dark green: low probability of deforestation.
 
-<img src="docs/images/pred_hSDM.png" width=350"/>
+<img src="notebook/images/pred_binomial_iCAR.png" width=350"/>
 
