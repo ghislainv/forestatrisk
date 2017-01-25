@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# data and output from vignette
+data
+output
+
 # C extensions
 C/build
 *.so
