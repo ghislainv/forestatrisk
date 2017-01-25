@@ -3,10 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# data and output from vignette
-data
-data_raw
-output
+# data and output from notebook
+notebook/data
+notebook/data_raw
+notebook/output
 
 # C extensions
 C/build
