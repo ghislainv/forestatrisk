@@ -76,7 +76,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
-        progress_bar(nblock, b+1)
+        progress_bar(nblock, b + 1)
         # Position in 1D-arrays
         px = b % nblock_x
         py = b / nblock_x
@@ -115,7 +115,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
-        progress_bar(nblock, b+1)
+        progress_bar(nblock, b + 1)
         # nbdraw
         nbdraw_d = nblock_draw_d[b]
         nbdraw_f = nblock_draw_f[b]
@@ -215,7 +215,6 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     output_vrt = var_dir + "/var.vrt"
     param = ["gdalbuildvrt", "-overwrite", "-separate",
              "-resolution user",
-             "-r nearest",
              "-te", str(Xmin), str(Ymin), str(Xmax), str(Ymax),
              "-tr", str(gt[1]), str(-gt[5]),
              output_vrt, input_var]
@@ -244,7 +243,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     print("Extract raster values for selected pixels")
     for i in range(nobs):
         # Progress bar
-        progress_bar(nobs, i+1)
+        progress_bar(nobs, i + 1)
         # ReadArray for extract
         extract = stack.ReadAsArray(xOffset[i], yOffset[i], 1, 1)
         val[i, :] = extract.reshape(nband,)

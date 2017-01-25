@@ -100,7 +100,6 @@ def predict(model, var_dir="data",
     output_vrt = var_dir + "/var.vrt"
     param = ["gdalbuildvrt", "-overwrite", "-separate",
              "-resolution user",
-             "-r nearest",
              "-te", str(Xmin), str(Ymin), str(Xmax), str(Ymax),
              "-tr", str(gt[1]), str(-gt[5]),
              output_vrt, input_var]
@@ -149,7 +148,7 @@ def predict(model, var_dir="data",
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
-        progress_bar(nblock, b+1)
+        progress_bar(nblock, b + 1)
         # Position in 1D-arrays
         px = b % nblock_x
         py = b / nblock_x
@@ -218,9 +217,9 @@ def predict(model, var_dir="data",
     cmax = 255.0  # float for division
     vmax = 65535.0  # float for division
     colors.append((0, (0, 0, 0, 0)))  # transparent
-    colors.append((1/vmax, (34/cmax, 139/cmax, 34/cmax, 1)))  # green
-    colors.append((45000/vmax, (1, 165/cmax, 0, 1)))  # red
-    colors.append((55000/vmax, (1, 0, 0, 1)))  # orange
+    colors.append((1 / vmax, (34 / cmax, 139 / cmax, 34 / cmax, 1)))  # green
+    colors.append((45000 / vmax, (1, 165 / cmax, 0, 1)))  # red
+    colors.append((55000 / vmax, (1, 0, 0, 1)))  # orange
     colors.append((1, (0, 0, 0, 1)))  # black
     color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
                                                   N=65535, gamma=1.0)
