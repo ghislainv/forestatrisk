@@ -82,6 +82,8 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     print("Compute statistics")
     rho_B.FlushCache()  # Write cache data to disk
     rho_B.ComputeStatistics(False)
+    rho_min, rho_max = rho_B.ComputeRasterMinMax()
+    rho_bound = np.max(-rho_min, rho_max)
 
     # Build overviews
     print("Build overview")
@@ -117,7 +119,7 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     # Plot raster and save
     fig = plt.figure(figsize=figsize, dpi=dpi)
     plt.subplot(111)
-    plt.imshow(ov_arr, cmap="RdYlGn", vmin=-5, vmax=5)
+    plt.imshow(ov_arr, cmap="RdYlGn_r", vmin=-rho_bound, vmax=rho_bound)
     plt.colorbar()
     plt.close(fig)
     fig_img = figure_as_image(fig, fig_name, dpi=dpi)
