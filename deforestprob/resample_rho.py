@@ -110,7 +110,7 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     os.system(command)
 
     # Plot
-    print("Plot spatial random effect map")
+    print("Make figure")
     # Figure name
     fig_name = output_file
     index_dot = output_file.index(".")

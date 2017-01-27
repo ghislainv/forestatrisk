@@ -225,7 +225,7 @@ def predict(model, var_dir="data",
                                                   N=65535, gamma=1.0)
 
     # Plot
-    print("Plot map")
+    print("Make figure")
     # Figure name
     fig_name = output_file
     index_dot = output_file.index(".")

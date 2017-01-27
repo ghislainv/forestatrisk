@@ -184,7 +184,7 @@ def deforest(input_raster,
     color_map = ListedColormap(colors)
 
     # Plot
-    print("Plot map")
+    print("Make figure")
     # Figure name
     fig_name = output_file
     index_dot = output_file.index(".")
