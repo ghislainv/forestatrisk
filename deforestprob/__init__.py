@@ -16,6 +16,6 @@ from cellneigh import cellneigh
 from predict import predict
 from resample_rho import resample_rho
 from deforest import deforest
-from validation import accuracy_indices
+from validation import accuracy_indices, validation
 
 # End
