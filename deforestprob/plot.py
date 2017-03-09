@@ -185,7 +185,7 @@ def forest(input_forest_raster,
     """Plot the forest map.
 
     This function plots the forest map. Green is the remaining forest
-    (value 1), red is the deforestation (value 0).
+    (value 1), the color specified is for deforestation (value 0).
 
     :param input_forest_raster: path to forest raster.
     :param output_file: name of the plot file.
@@ -238,7 +238,8 @@ def forest(input_forest_raster,
     ax1.set_xticks([])
     ax1.set_yticks([])
     plt.imshow(ov_arr, cmap=color_map, extent=extent)
-    plot_layer(borders, symbol="k-")
+    if borders is not None:
+        plot_layer(borders, symbol="k-")
     plt.axis("off")
     if zoom is not None:
         z = Rectangle(
