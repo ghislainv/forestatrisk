@@ -12,12 +12,81 @@
 import sys
 import os
 from glob import glob
-from osgeo import gdal
+from osgeo import gdal, ogr
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from matplotlib.patches import Rectangle
 from matplotlib.backends.backend_pdf import PdfPages
+
+
+# Plot vector objects
+# (https://github.com/cgarrard/osgeopy-code/blob/master/Chapter13/listing13_3.py)
+def plot_polygon(poly, symbol='k-', **kwargs):
+    """Plots a polygon using the given symbol."""
+    for i in range(poly.GetGeometryCount()):
+        subgeom = poly.GetGeometryRef(i)
+        x, y = zip(*subgeom.GetPoints())
+        plt.plot(x, y, symbol, **kwargs)
+
+
+# Use this function to fill polygons.
+# Uncomment this one and comment out the one above.
+# def plot_polygon(poly, symbol='w', **kwargs):
+#     """Plots a polygon using the given symbol."""
+#     for i in range(poly.GetGeometryCount()):
+#         x, y = zip(*poly.GetGeometryRef(i).GetPoints())
+#         plt.fill(x, y, symbol, **kwargs)
+
+
+def plot_line(line, symbol='k-', **kwargs):
+    """Plots a line using the given symbol."""
+    x, y = zip(*line.GetPoints())
+    plt.plot(x, y, symbol, **kwargs)
+
+
+def plot_point(point, symbol='ko', **kwargs):
+    """Plots a point using the given symbol."""
+    x, y = point.GetX(), point.GetY()
+    plt.plot(x, y, symbol, **kwargs)
+
+
+def plot_layer(filename, symbol, layer_index=0, **kwargs):
+    """Plots an OGR layer using the given symbol."""
+    ds = ogr.Open(filename)
+    for row in ds.GetLayer(layer_index):
+        geom = row.geometry()
+        geom_type = geom.GetGeometryType()
+
+        # Polygons
+        if geom_type == ogr.wkbPolygon:
+            plot_polygon(geom, symbol, **kwargs)
+
+        # Multipolygons
+        elif geom_type == ogr.wkbMultiPolygon:
+            for i in range(geom.GetGeometryCount()):
+                subgeom = geom.GetGeometryRef(i)
+                plot_polygon(subgeom, symbol, **kwargs)
+
+        # Lines
+        elif geom_type == ogr.wkbLineString:
+            plot_line(geom, symbol, **kwargs)
+
+        # Multilines
+        elif geom_type == ogr.wkbMultiLineString:
+            for i in range(geom.GetGeometryCount()):
+                subgeom = geom.GetGeometryRef(i)
+                plot_line(subgeom, symbol, **kwargs)
+
+        # Points
+        elif geom_type == ogr.wkbPoint:
+            plot_point(geom, symbol, **kwargs)
+
+        # Multipoints
+        elif geom_type == ogr.wkbMultiPoint:
+            for i in range(geom.GetGeometryCount()):
+                subgeom = geom.GetGeometryRef(i)
+                plot_point(subgeom, symbol, **kwargs)
 
 
 # plot.correlation
@@ -108,6 +177,7 @@ def correlation(y, data,
 # plot.forest
 def forest(input_forest_raster,
            output_file="output/forest.png",
+           borders=None,
            zoom=None,
            col=(255, 0, 0, 255),
            figsize=(11.69, 8.27),
@@ -119,6 +189,7 @@ def forest(input_forest_raster,
 
     :param input_forest_raster: path to forest raster.
     :param output_file: name of the plot file.
+    :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param col: rgba color for deforestation.
     :param figsize: figure size in inches.
@@ -167,6 +238,7 @@ def forest(input_forest_raster,
     ax1.set_xticks([])
     ax1.set_yticks([])
     plt.imshow(ov_arr, cmap=color_map, extent=extent)
+    plot_layer(borders, symbol="k-")
     plt.axis("off")
     if zoom is not None:
         z = Rectangle(
