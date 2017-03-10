@@ -35,7 +35,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     :param csize: spatial cell size in km.
     :param var_dir: directory with raster data.
     :param input_forest_raster: name of the forest raster file (1=forest, \
-    0=deforested).
+    0=deforested) in the var_dir directory
     :param output_file: path to file to save sample points.
     :param blk_rows: if > 0, number of lines per block.
     :return: a pandas DataFrame, each row being one observation.
@@ -53,7 +53,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
 
     # Read defor raster
     forest_raster_file = input_forest_raster
-    forestR = gdal.Open(forest_raster_file)
+    forestR = os.path.join(var_dir, input_forest_raster)
     forestB = forestR.GetRasterBand(1)
 
     # Make blocks
