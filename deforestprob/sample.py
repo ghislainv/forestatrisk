@@ -52,7 +52,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     print("Sample 2x" + str(nsamp) + " pixels (deforested vs. forest)")
 
     # Read defor raster
-    forest_raster_file = os.path.join(var_dir, input_forest_raster)
+    forest_raster_file = input_forest_raster
     forestR = gdal.Open(forest_raster_file)
     forestB = forestR.GetRasterBand(1)
 
