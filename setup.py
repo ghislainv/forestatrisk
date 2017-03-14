@@ -42,6 +42,6 @@ setup(name="deforestprob",
       risk Bayesian spatial autocorrelation",
       ext_modules=[hSDM_module],
       packages=["deforestprob"],
-      install_requires=["numpy", "sklearn", "patsy", "matplotlib", "pandas", "osgeo"],
+      install_requires=["numpy", "sklearn", "patsy", "matplotlib", "pandas", "gdal"],
       include_dirs=numpy.distutils.misc_util.get_numpy_include_dirs(),
       zip_safe=False)
