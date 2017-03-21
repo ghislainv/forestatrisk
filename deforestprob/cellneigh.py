@@ -63,13 +63,13 @@ def cellneigh(raster=None, region=None, csize=10, rank=1):
     for i in range(ncell_bycol):
         for j in range(ncell_byrow):
             I = i + around
-            I = I[(I >= 0) & (I < ncell_bycol)]
+            Iprim = I[(I >= 0) & (I < ncell_bycol)]
             J = j + around
-            J = J[(J >= 0) & (J < ncell_byrow)]
+            Jprim = J[(J >= 0) & (J < ncell_byrow)]
             # Disregard the center cell
-            nneigh.append(len(I) * len(J) - 1)
-            for cy in I:
-                for cx in J:
+            nneigh.append(len(Iprim) * len(Jprim) - 1)
+            for cy in Iprim:
+                for cx in Jprim:
                     if not (cy == i and cx == j):
                         adj.append(cy * ncell_byrow + cx)
     nneigh = np.array(nneigh)
