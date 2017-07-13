@@ -42,8 +42,10 @@ def data_country(iso3, proj):
     # Identify continent and country from iso3
     file_countrycode = pkg_resources.resource_filename("deforestprob",
                                                        "data/countrycode.csv")
-    data_countrycode = pd.read_csv(file_countrycode)
-    continent = data_countrycode["continent"]
+    data_countrycode = pd.read_csv(file_countrycode, sep=";", header=0)
+    continent = data_countrycode["continent"][
+        data_countrycode["iso3c"] == iso3]
+    continent = str(continent)
     country = "cameroon"
 
     # Download the zipfile from gadm.org
