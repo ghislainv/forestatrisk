@@ -66,21 +66,21 @@ ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' -progress \
 ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs $proj -f 'ESRI Shapefile' \
         -lco ENCODING=UTF-8 towns_PROJ.shp towns.shp
 gdal_rasterize -te $extent -tap -burn 1 \
-               -co "COMPRESS=LZW" -co "PREDICTOR=2" -ot Byte \
+               -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" -ot Byte \
                -a_nodata 255 \
                -tr 150 150 -l towns_PROJ towns_PROJ.shp towns.tif
 # roads
 ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs $proj -f 'ESRI Shapefile' \
         -lco ENCODING=UTF-8 roads_PROJ.shp roads.shp
 gdal_rasterize -te $extent -tap -burn 1 \
-               -co "COMPRESS=LZW" -co "PREDICTOR=2" -ot Byte \
+               -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" -ot Byte \
                -a_nodata 255 \
                -tr 150 150 -l roads_PROJ roads_PROJ.shp roads.tif
 # rivers
 ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs $proj -f 'ESRI Shapefile' \
         -lco ENCODING=UTF-8 rivers_PROJ.shp rivers.shp
 gdal_rasterize -te $extent -tap -burn 1 \
-               -co "COMPRESS=LZW" -co "PREDICTOR=2" -ot Byte \
+               -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" -ot Byte \
                -a_nodata 255 \
                -tr 150 150 -l rivers_PROJ rivers_PROJ.shp rivers.tif
 
@@ -91,17 +91,20 @@ gdal_rasterize -te $extent -tap -burn 1 \
 # ogr2ogr -f 'KML' rivers.kml rivers_PROJ.shp
 
 # Compute distances
-gdal_proximity.py roads.tif _dist_road.tif -co "COMPRESS=LZW" -co "PREDICTOR=2" \
+gdal_proximity.py roads.tif _dist_road.tif \
+                  -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                   -values 1 -ot UInt32 -distunits GEO
-gdal_proximity.py towns.tif _dist_town.tif -co "COMPRESS=LZW" -co "PREDICTOR=2" \
+gdal_proximity.py towns.tif _dist_town.tif \
+                  -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                   -values 1 -ot UInt32 -distunits GEO
-gdal_proximity.py rivers.tif _dist_river.tif -co "COMPRESS=LZW" -co "PREDICTOR=2" \
+gdal_proximity.py rivers.tif _dist_river.tif \
+                  -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                   -values 1 -ot UInt32 -distunits GEO
 
 # Add nodata
-gdal_translate -a_nodata 4294967295 -co "COMPRESS=LZW" -co "PREDICTOR=2" _dist_road.tif dist_road.tif
-gdal_translate -a_nodata 4294967295 -co "COMPRESS=LZW" -co "PREDICTOR=2" _dist_town.tif dist_town.tif
-gdal_translate -a_nodata 4294967295 -co "COMPRESS=LZW" -co "PREDICTOR=2" _dist_river.tif dist_river.tif
+gdal_translate -a_nodata 4294967295 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" _dist_road.tif dist_road.tif
+gdal_translate -a_nodata 4294967295 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" _dist_town.tif dist_town.tif
+gdal_translate -a_nodata 4294967295 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" _dist_river.tif dist_river.tif
 
 # ===========================
 # SRTM
@@ -126,16 +129,16 @@ gdalbuildvrt srtm.vrt */*.tif
 
 # Merge and reproject
 gdalwarp -overwrite -t_srs $proj -te $extent -r bilinear \
-         -co "COMPRESS=LZW" -co "PREDICTOR=2" \
+         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -tr 90 90 srtm.vrt altitude.tif
 
 # Compute slope and aspect
-gdaldem slope altitude.tif slope_.tif -co "COMPRESS=LZW" -co "PREDICTOR=2"
-gdaldem aspect altitude.tif aspect_.tif -co "COMPRESS=LZW" -co "PREDICTOR=2"
+gdaldem slope altitude.tif slope_.tif -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
+gdaldem aspect altitude.tif aspect_.tif -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
 
 # Convert to Int16
-gdal_translate -ot Int16 -co "COMPRESS=LZW" -co "PREDICTOR=2" slope_.tif slope.tif
-gdal_translate -ot Int16 -co "COMPRESS=LZW" -co "PREDICTOR=2" aspect_.tif aspect.tif
+gdal_translate -ot Int16 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" slope_.tif slope.tif
+gdal_translate -ot Int16 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" aspect_.tif aspect.tif
 
 # ===========================
 # SAPM
@@ -161,7 +164,7 @@ ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' -progress \
 
 # Rasterize
 gdal_rasterize -te $extent -tap -burn 1 \
-               -co "COMPRESS=LZW" -co "PREDICTOR=2" \
+               -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                -init 0 \
                -a_nodata 255 \
                -ot Byte -tr 30 30 -l pa_PROJ pa_PROJ.shp pa.tif
@@ -179,7 +182,7 @@ wget -O Avitabile_AGB_Map.tif $url
 
 # Resample
 gdalwarp -overwrite -s_srs EPSG:4326 -t_srs $proj -te $extent -r bilinear \
-         -co "COMPRESS=LZW" -co "PREDICTOR=2" \
+         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -tr 1000 1000 Avitabile_AGB_Map.tif AGB.tif
 
 # # ===========================
