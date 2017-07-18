@@ -185,12 +185,12 @@ gdalwarp -overwrite -s_srs EPSG:4326 -t_srs $proj -te $extent -r bilinear \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -tr 1000 1000 Avitabile_AGB_Map.tif AGB.tif
 
-# # ===========================
-# # Forest
-# # ===========================
+# ===========================
+# Forest
+# ===========================
 
-# # Message
-# echo "Forest from Global Forest Watch\n"
+# Message
+echo "Forest obtained with Google EarthEngine\n"
 
 # # Execute python script to obtain map from Google Earth Engine
 # # python ../scripts/forest.py TO BE CONTINUED

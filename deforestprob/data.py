@@ -12,12 +12,12 @@
 import numpy as np
 import os
 from osgeo import ogr
+import ee_hansen  # To compute fcc with Google EarthEngine
 from zipfile import ZipFile  # To unzip files
 from urllib import urlretrieve  # To download files from internet
 import pandas as pd
 import pkg_resources
 from miscellaneous import make_dir
-from ee_hansen import ee_hansen
 
 # File with African projection information
 file_proj = pkg_resources.resource_filename("deforestprob",
@@ -56,16 +56,53 @@ def extent_shp(inShapefile):
     return(extent)  # xmin, xmax, ymin, ymax
 
 
-# data_ctry
-def data_country(iso3, proj=file_proj, monthyear="July2017"):
+# carbon
+def carbon(proj, extent):
+    # Message
+    print("AGB from Avitabile's map")
+
+    # Download
+    url = "https://bioscenemada.cirad.fr/FileTransfer/JRC/\
+    Avitabile_AGB_Map.tif"
+    fname = "Avitabile_AGB_Map.tif"
+    urlretrieve(url, fname)
+
+    # Resample
+    args = ["gdalwarp -overwrite -s_srs EPSG:4326",
+            "-t_srs", proj,
+            "-te", extent,
+            "-r bilinear",
+            "-co \"COMPRESS=LZW\" -co \"PREDICTOR=2\" -co \"BIGTIFF=YES\"",
+            "-tr 1000 1000 Avitabile_AGB_Map.tif AGB.tif"]
+    cmd = " ".join(args)
+    os.system(cmd)
+
+
+# country
+def country(iso3, proj=file_proj, monthyear="July2017",
+            fcc_source="gfc", perc=50,
+            gdrive_folder=None):
 
     """Function formating the country data.
 
     This function downloads, computes and formats the country data.
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
+
     :param proj: Coordinate system as in GDAL/OGR (e.g. 'EPSG:4326').
-    :param monthyear: Date (month and year) for WDPA data(e.g. "July2017")
+
+    :param monthyear: Date (month and year) for WDPA
+    data(e.g. "July2017").
+
+    :param fcc_source: Source for forest-cover change data. Can be
+    "gfc" (Global Forest Change 2015 Hansen data) or
+    "roadless". Default to "gfc".
+
+    :param perc: Tree cover percentage threshold to define forest
+    (online used if fcc_source="gcf").
+
+    :param gdrive_folder: Name of a unique folder in your Drive
+    account to export into. Defaults to the root of the drive.
 
     """
 
@@ -134,7 +171,13 @@ def data_country(iso3, proj=file_proj, monthyear="July2017"):
     tiles_long = str(tile_left) + "-" + str(tile_right)
     tiles_lat = str(tile_top) + "-" + str(tile_bottom)
 
-    # Call data.sh
+    # Run Google Earth Engine tasks
+    if (fcc_source == "gcb"):
+        tasks = ee_hansen.run_tasks(perc=perc, iso3=iso3,
+                                    extent=extent, proj=proj,
+                                    gdrive_folder="deforestprob")
+    
+    # Call data_country.sh
     script = pkg_resources.resource_filename("deforestprob",
                                              "shell/data_country.sh")
     args = ["sh ", script, continent, ctry_link_geofab, iso3, "'" + proj + "'",

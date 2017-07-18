@@ -17,30 +17,32 @@ import os
 ee.Initialize()
 
 
-# ee_hansen
-def ee_hansen(perc=50, iso3, extent, proj=None, gdrive_folder=None):
+# ee_hansen.run_tasks
+def run_tasks(perc=50, iso3, extent, proj=None, gdrive_folder=None):
 
     """Compute forest-cover change with Google EarthEngine.
 
     Compute the forest-cover change from Global Forest Change data
     with Python and GEE API. Export the results to user's Google
-    Drive. Download the data in the current working directory.
-    Notes:
-    1. GOOGLE EARTH ENGINE (abbreviated GEE)
+    Drive.
+
+    Notes for GOOGLE EARTH ENGINE (abbreviated GEE):
     - GEE account is needed: https://earthengine.google.com.
     - GEE API Python client is needed: \
     https://developers.google.com/earth-engine/python_install.
-    2. GOOGLE DRIVE CLIENT
-    - gdrive software is needed: https://github.com/prasmussen/gdrive.
 
     :param perc: Tree cover percentage threshold to define forest.
-    :param iso3: Country ISO 3166-1 alpha-3 code.
-    :param extent: List/tuple of region coordinates (xmin, ymin, xmax, ymax).
-    :param proj: The projection of the region.
-    :param gdrive_folder: Name of a unique folder in your Drive account \
-    to export into. Defaults to the root of the drive.
 
-    :return: The commands to download the results using gdrive.
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :param extent: List/tuple of region coordinates (xmin, ymin, xmax, ymax).
+
+    :param proj: The projection of the region.
+
+    :param gdrive_folder: Name of a unique folder in your Drive
+    account to export into. Defaults to the root of the drive.
+
+    :return: List of Google EarthEngine tasks.
 
     """
 
@@ -83,7 +85,6 @@ def ee_hansen(perc=50, iso3, extent, proj=None, gdrive_folder=None):
         folder=gdrive_folder,
         fileNamePrefix='fcc05_10_' + iso3)
     task0.start()
-    t0_status = str(task0.status()[u'state'])
 
     # Export loss00_05 to drive
     task1 = ee.batch.Export.image.toDrive(
@@ -96,7 +97,6 @@ def ee_hansen(perc=50, iso3, extent, proj=None, gdrive_folder=None):
         folder=gdrive_folder,
         fileNamePrefix='loss00_05_' + iso3)
     task1.start()
-    t1_status = str(task1.status()[u'state'])
 
     # Export forest2014 to drive
     task2 = ee.batch.Export.image.toDrive(
@@ -109,9 +109,37 @@ def ee_hansen(perc=50, iso3, extent, proj=None, gdrive_folder=None):
         folder=gdrive_folder,
         fileNamePrefix='forest2014_' + iso3)
     task2.start()
-    t2_status = str(task2.status()[u'state'])
 
-    # Check tasks status
+    # Return list of tasks
+    return([task0, task1, task2])    
+
+
+# ee_hansen.download
+def download(tasks):
+
+    """Download forest-cover change data from Google Drive after.
+
+    Check that GEE tasks are completed. Download forest-cover change
+    data from Google Drive in the current working directory.
+
+    Notes for GOOGLE DRIVE CLIENT: 
+    - gdrive software is needed: https://github.com/prasmussen/gdrive.
+
+    :param tasks: List of Google EarthEngine tasks.
+
+    """
+
+    # Tasks
+    task0 = tasks[0]
+    task1 = tasks[1]
+    task2 = tasks[2]
+
+    # Task status
+    t0_status = str(task0.status()[u'state'])
+    t1_status = str(task1.status()[u'state'])
+    t2_status = str(task2.status()[u'state'])
+    
+    # Check task status
     while ((t0_status != "COMPLETED") or
            (t1_status != "COMPLETED") or
            (t2_status != "COMPLETED")):
@@ -123,28 +151,12 @@ def ee_hansen(perc=50, iso3, extent, proj=None, gdrive_folder=None):
         t2_status = str(task2.status()[u'state'])
 
     # Commands to download results with gdrive
-    # cmd0
-    cmd0_query = "\"trashed = false and name contains 'fcc05_10_" + iso3 + "'\""
-    cmd0_args = ["gdrive", "download", "query", "-f", "--recursive",
-                 cmd0_query]
-    cmd0 = " ".join(cmd0_args)
-    # cmd1
-    cmd1_query = "\"trashed = false and name contains 'loss00_05_" + iso3 + "'\""
-    cmd1_args = ["gdrive", "download", "query", "-f", "--recursive",
-             cmd1_query]
-    cmd1 = " ".join(cmd1_args)
-    # cmd2
-    cmd2_query = "\"trashed = false and name contains 'forest2014_" + iso3 + "'\""
-    cmd2_args = ["gdrive", "download", "query", "-f", "--recursive",
-                 cmd2_query]
-    cmd2 = " ".join(cmd2_args)
-
-    # Download the results with gdrive
-    os.system(cmd0)
-    os.system(cmd1)
-    os.system(cmd2)
-
-    # Return the commands
-    return({'cmd0': cmd0, 'cmd1': cmd1, 'cmd2': cmd2})
+    files = ["fcc05_10_", "loss00_05_", "forest2014_"]
+    for f in files:
+        query = "\"trashed = false and name contains '" + f + iso3 + "'\""
+        args = ["gdrive", "download", "query", "-f", "--recursive", query]
+        cmd = " ".join(args)
+        # Download the results with gdrive
+        os.system(cmd)
 
 # End
