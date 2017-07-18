@@ -17,14 +17,14 @@ from osgeo import gdal
 # cellneigh
 def cellneigh(raster=None, region=None, csize=10, rank=1):
     """
-    Compute number of spatial cells and neighbours
+    Compute number of spatial cells and neighbours.
 
-    :param raster: path to raster file to compute region
-    :param region: list/tuple of region coordinates (east, west, south, north)
-    :param csize: spatial cell size (in km)
-    :param rank: rank of the neighborhood (1 for chess king's move)
-    :return: a list of length 2 with number of neighbours for each cell \
-    and adjacent cells
+    :param raster: Path to raster file to compute region.
+    :param region: List/tuple of region coordinates (east, west, south, north).
+    :param csize: Spatial cell size (in km).
+    :param rank: Rank of the neighborhood (1 for chess king's move).
+    :return: List of length 2 with number of neighbours for each cell \
+    and adjacent cells.
     """
 
     # Region

@@ -17,14 +17,38 @@ from urllib import urlretrieve  # To download files from internet
 import pandas as pd
 import pkg_resources
 from miscellaneous import make_dir
+from ee_hansen import ee_hansen
 
 # File with African projection information
 file_proj = pkg_resources.resource_filename("deforestprob",
                                             "data/proj.prj")
 
+# proj = 'PROJCS["Africa_Albers_Equal_Area_Conic", GEOGCS["GCS_WGS_1984", \
+# DATUM["WGS_1984", SPHEROID["WGS_1984", 6378137, 298.257223563]], \
+# PRIMEM["Greenwich", 0], UNIT["Degree", 0.017453292519943295]], \
+# PROJECTION["Albers_Conic_Equal_Area"], \
+# PARAMETER["False_Easting", 0], PARAMETER["False_Northing", 0], \
+# PARAMETER["longitude_of_center", 25], \
+# PARAMETER["Standard_Parallel_1", 20], \
+# PARAMETER["Standard_Parallel_2", -23], \
+# PARAMETER["latitude_of_center", 0], UNIT["Meter", 1], \
+# AUTHORITY["EPSG", "102022"]]'  # WKT string
+
 
 # Extent of a shapefile
 def extent_shp(inShapefile):
+
+    """Compute the extent of a shapefile.
+
+    This function computes the extent (xmin, xmax, ymin, ymax) of a
+    shapefile.
+
+    :param inShapefile: Path to the input shapefile.
+
+    :return: The extent as a list (xmin, xmax, ymin, ymax)
+
+    """
+
     inDriver = ogr.GetDriverByName("ESRI Shapefile")
     inDataSource = inDriver.Open(inShapefile, 0)
     inLayer = inDataSource.GetLayer()
@@ -39,9 +63,9 @@ def data_country(iso3, proj=file_proj, monthyear="July2017"):
 
     This function downloads, computes and formats the country data.
 
-    :param iso3: country ISO 3166-1 alpha-3 code.
-    :param proj: coordinate system as in GDAL/OGR (e.g. 'EPSG:4326').
-    :param monthyear: date (month and year) for WDPA data(e.g. "July2017")
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+    :param proj: Coordinate system as in GDAL/OGR (e.g. 'EPSG:4326').
+    :param monthyear: Date (month and year) for WDPA data(e.g. "July2017")
 
     """
 
@@ -118,6 +142,4 @@ def data_country(iso3, proj=file_proj, monthyear="July2017"):
     cmd = " ".join(args)
     os.system(cmd)
 
-# ============================================================================
-# End of country.py
-# ============================================================================
+# End
