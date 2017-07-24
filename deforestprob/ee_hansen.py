@@ -65,7 +65,7 @@ def run_tasks(perc, iso3, extent, proj=None, gdrive_folder=None):
 
     # Forest
     forest2005 = forest2000.where(loss00_05.eq(1), 0)
-    forest2010 = forest2000.where(loss00_10.eq(1), 0)
+    # forest2010 = forest2000.where(loss00_10.eq(1), 0)
     forest2014 = forest2000.where(lossyear.gte(1), 0)
 
     # Forest-cover change 2005-2010
@@ -111,23 +111,25 @@ def run_tasks(perc, iso3, extent, proj=None, gdrive_folder=None):
     task2.start()
 
     # Return list of tasks
-    return([task0, task1, task2])    
+    return([task0, task1, task2])
 
 
 # ee_hansen.download
-def download(tasks, path):
+def download(tasks, path, iso3):
 
     """Download forest-cover change data from Google Drive after.
 
     Check that GEE tasks are completed. Download forest-cover change
     data from Google Drive in the current working directory.
 
-    Notes for GOOGLE DRIVE CLIENT: 
+    Notes for GOOGLE DRIVE CLIENT:
     - gdrive software is needed: https://github.com/prasmussen/gdrive.
 
     :param tasks: List of Google EarthEngine tasks.
 
     :param path: Download path.
+
+    :param iso3: Country ISO 3166-1 alpha-3 code.
 
     """
 
@@ -140,7 +142,7 @@ def download(tasks, path):
     t0_status = str(task0.status()[u'state'])
     t1_status = str(task1.status()[u'state'])
     t2_status = str(task2.status()[u'state'])
-    
+
     # Check task status
     while ((t0_status != "COMPLETED") or
            (t1_status != "COMPLETED") or
