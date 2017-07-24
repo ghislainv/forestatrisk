@@ -8,7 +8,7 @@
 # license         :GPLv3
 # ==============================================================================
 
-from data_country import data_country
+from data import country
 from miscellaneous import invlogit, make_dir
 import plot
 from model_binomial_iCAR import model_binomial_iCAR
