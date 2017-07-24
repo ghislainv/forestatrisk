@@ -18,7 +18,7 @@ ee.Initialize()
 
 
 # ee_hansen.run_tasks
-def run_tasks(perc, iso3, proj=None, extent, gdrive_folder=None):
+def run_tasks(perc, iso3, extent, proj=None, gdrive_folder=None):
 
     """Compute forest-cover change with Google EarthEngine.
 
@@ -35,9 +35,9 @@ def run_tasks(perc, iso3, proj=None, extent, gdrive_folder=None):
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
-    :param proj: The projection of the region.
-
     :param extent: List/tuple of region coordinates (xmin, ymin, xmax, ymax).
+
+    :param proj: The projection of the region.
 
     :param gdrive_folder: Name of a unique folder in your Drive
     account to export into. Defaults to the root of the drive.
