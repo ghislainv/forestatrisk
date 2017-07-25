@@ -22,6 +22,9 @@ echo "Forest obtained with Google EarthEngine\n"
 # 0. Mosaicing
 # =====
 
+# Message
+echo "Mosaicing\n"
+#
 gdalbuildvrt fcc05_10_gfc.vrt fcc05_10_*.tif
 gdal_translate -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                fcc05_10_gfc.vrt fcc05_10_gfc.tif
@@ -38,6 +41,9 @@ gdal_translate -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
 # 1. Compute distance to forest edge in 2005
 # =====
 
+# Message
+echo "Distance to forest edge\n"
+#
 gdal_proximity.py fcc05_10_gfc.tif _dist_edge.tif \
                   -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                   -values 0 -ot UInt32 -distunits GEO
@@ -49,6 +55,9 @@ gdal_translate -a_nodata 0 \
 # 2. Compute distance to past deforestation (loss00_05)
 # =====
 
+# Message
+echo "Distance to past deforestation\n"
+
 # Set nodata different from 255
 gdal_translate -a_nodata 99 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
@@ -57,17 +66,16 @@ gdal_translate -a_nodata 99 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                loss00_05_gfc.tif _loss00_05.tif
 
-# Create raster _fcc00_05.tif  with 1:for2005, 0:loss00_05
+# Create raster _fcc00_05.tif with 1:for2005, 0:loss00_05
 gdal_calc.py --overwrite -A _fcc05_10.tif -B _loss00_05.tif \
              --outfile=_fcc00_05.tif --type=Byte \
              --calc="255-254*(A>=1)*(B==0)-255*(A==0)*(B==1)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=255
 
-# Mask with country border
+# Mask with country border (-co does not work with cutline !) !! problem here (projections ?)
 gdalwarp -overwrite -srcnodata 255 -dstnodata 255 \
-         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -cutline 'ctry_proj.shp' \
+         -cutline ctry_proj.shp \
          _fcc00_05.tif fcc00_05_mask.tif
 gdal_translate -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                fcc00_05_mask.tif fcc00_05.tif
@@ -91,10 +99,9 @@ gdal_calc.py --overwrite -A _fcc05_10.tif \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=255
 
-# Mask with country border
+# Mask with country border (-co does not work with cutline !)
 gdalwarp -overwrite -srcnodata 255 -dstnodata 255 \
-         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -cutline 'ctry_proj.shp' \
+         -cutline ctry_proj.shp \
           fcc05_10_reclass.tif fcc05_10_mask.tif
 gdal_translate -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                fcc05_10_mask.tif fcc05_10.tif
