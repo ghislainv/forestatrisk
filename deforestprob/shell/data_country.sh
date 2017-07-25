@@ -16,7 +16,7 @@ cd data_raw
 continent=$1
 country=$2
 iso=$3
-proj=$4  # see http://epsg.io 
+proj=\'$4\'  # see http://epsg.io 
 extent=$5  # xmin ymin xmax ymax
 tiles_long=$6  # see http://dwtkns.com/srtm/
 tiles_lat=$7
