@@ -52,21 +52,21 @@ ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' -progress \
 
 # Rasterize after reprojection
 # towns
-ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs '$proj' -f 'ESRI Shapefile' \
+ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs "$proj" -f 'ESRI Shapefile' \
         -lco ENCODING=UTF-8 towns_PROJ.shp towns.shp
 gdal_rasterize -te $extent -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" -ot Byte \
                -a_nodata 255 \
                -tr 150 150 -l towns_PROJ towns_PROJ.shp towns.tif
 # roads
-ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs '$proj' -f 'ESRI Shapefile' \
+ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs "$proj" -f 'ESRI Shapefile' \
         -lco ENCODING=UTF-8 roads_PROJ.shp roads.shp
 gdal_rasterize -te $extent -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" -ot Byte \
                -a_nodata 255 \
                -tr 150 150 -l roads_PROJ roads_PROJ.shp roads.tif
 # rivers
-ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs '$proj' -f 'ESRI Shapefile' \
+ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs "$proj" -f 'ESRI Shapefile' \
         -lco ENCODING=UTF-8 rivers_PROJ.shp rivers.shp
 gdal_rasterize -te $extent -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" -ot Byte \
@@ -117,7 +117,7 @@ done
 gdalbuildvrt srtm.vrt */*.tif
 
 # Merge and reproject
-gdalwarp -overwrite -t_srs '$proj' -te $extent -r bilinear \
+gdalwarp -overwrite -t_srs "$proj" -te $extent -r bilinear \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -tr 90 90 srtm.vrt altitude.tif
 
@@ -145,7 +145,7 @@ unzip pa.zip
 # Reproject
 input_file="WDPA_"$monthyear"_"$iso"-shapefile-polygons.shp"
 ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' -progress \
-        -s_srs EPSG:4326 -t_srs '$proj' \
+        -s_srs EPSG:4326 -t_srs "$proj" \
         -lco ENCODING=UTF-8 pa_PROJ.shp $input_file
 
 # # Convert to kml
@@ -170,7 +170,7 @@ url="https://bioscenemada.cirad.fr/FileTransfer/JRC/Avitabile_AGB_Map.tif"
 wget -O Avitabile_AGB_Map.tif $url
 
 # Resample
-gdalwarp -overwrite -s_srs EPSG:4326 -t_srs '$proj' -te $extent -r bilinear \
+gdalwarp -overwrite -s_srs EPSG:4326 -t_srs "$proj" -te $extent -r bilinear \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -tr 1000 1000 Avitabile_AGB_Map.tif AGB.tif
 
