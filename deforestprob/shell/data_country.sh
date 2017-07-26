@@ -117,7 +117,7 @@ done
 gdalbuildvrt srtm.vrt */*.tif
 
 # Merge and reproject
-gdalwarp -overwrite -t_srs "$proj" -te $extent -r bilinear \
+gdalwarp -overwrite -t_srs "$proj" -te $extent -tap -r bilinear \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -tr 90 90 srtm.vrt altitude.tif
 
@@ -148,9 +148,6 @@ ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' -progress \
         -s_srs EPSG:4326 -t_srs "$proj" \
         -lco ENCODING=UTF-8 pa_PROJ.shp $input_file
 
-# # Convert to kml
-# ogr2ogr -f 'KML' pa.kml pa.shp 
-
 # Rasterize
 gdal_rasterize -te $extent -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
@@ -170,7 +167,8 @@ url="https://bioscenemada.cirad.fr/FileTransfer/JRC/Avitabile_AGB_Map.tif"
 wget -O Avitabile_AGB_Map.tif $url
 
 # Resample
-gdalwarp -overwrite -s_srs EPSG:4326 -t_srs "$proj" -te $extent -r bilinear \
+gdalwarp -overwrite -s_srs EPSG:4326 -t_srs "$proj" \
+         -te $extent -tap -r bilinear \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -tr 1000 1000 Avitabile_AGB_Map.tif AGB.tif
 

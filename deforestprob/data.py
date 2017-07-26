@@ -30,7 +30,7 @@ def extent_shp(inShapefile):
 
     :param inShapefile: Path to the input shapefile.
 
-    :return: The extent as a list (xmin, xmax, ymin, ymax)
+    :return: The extent as a tuple (xmin, ymin, xmax, ymax)
 
     """
 
@@ -38,11 +38,12 @@ def extent_shp(inShapefile):
     inDataSource = inDriver.Open(inShapefile, 0)
     inLayer = inDataSource.GetLayer()
     extent = inLayer.GetExtent()
-    return(extent)  # xmin, xmax, ymin, ymax
+    extent = (extent[0], extent[2], extent[1], extent[3])
+    return(extent)  # (xmin, ymin, xmax, ymax)
 
 
 # country
-def country(iso3, monthyear="July2017", proj="EPSG:3857",
+def country(iso3, monthyear="July2017", proj="EPSG:3395",
             fcc_source="gfc", perc=50,
             gdrive_folder=None):
 
@@ -52,8 +53,8 @@ def country(iso3, monthyear="July2017", proj="EPSG:3857",
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
-    :param proj: Projection as EPSG code or WKT string. Projection
-    must be recognized by GDAL and GEE. Default to "EPSG:3857".
+    :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
+    GDAL/OGR. Default to "EPSG:3395" (World Mercator).
 
     :param monthyear: Date (month and year) for WDPA
     data(e.g. "July2017").
@@ -116,8 +117,8 @@ def country(iso3, monthyear="July2017", proj="EPSG:3857",
     # Region with buffer of 5km
     print("Region with buffer of 5km")
     xmin_reg = np.floor(extent_proj[0] - 5000)
-    xmax_reg = np.ceil(extent_proj[1] + 5000)
-    ymin_reg = np.floor(extent_proj[2] - 5000)
+    ymin_reg = np.floor(extent_proj[1] - 5000)
+    xmax_reg = np.ceil(extent_proj[2] + 5000)
     ymax_reg = np.ceil(extent_proj[3] + 5000)
     extent_reg = (xmin_reg, ymin_reg, xmax_reg, ymax_reg)
     extent = " ".join(map(str, extent_reg))
@@ -128,8 +129,8 @@ def country(iso3, monthyear="July2017", proj="EPSG:3857",
     # x: -180/+180
     # y: +60/-60
     xmin_latlong = np.floor(extent_latlong[0])
-    xmax_latlong = np.ceil(extent_latlong[1])
-    ymin_latlong = np.floor(extent_latlong[2])
+    ymin_latlong = np.floor(extent_latlong[1])
+    xmax_latlong = np.ceil(extent_latlong[2])
     ymax_latlong = np.ceil(extent_latlong[3])
     # Compute SRTM tile numbers
     tile_left = np.int(np.ceil((xmin_latlong + 180.0) / 5.0))
@@ -144,8 +145,9 @@ def country(iso3, monthyear="July2017", proj="EPSG:3857",
     print("Run Google Earth Engine tasks")
     if (fcc_source == "gfc"):
         tasks = ee_hansen.run_tasks(perc=perc, iso3=iso3,
-                                    extent=extent_reg,
-                                    proj=proj,
+                                    extent=extent_latlong,
+                                    scale=30,
+                                    proj="EPSG:4326",
                                     gdrive_folder="deforestprob")
 
     # Call data_country.sh
@@ -172,7 +174,7 @@ def country(iso3, monthyear="July2017", proj="EPSG:3857",
         print("Forest computations")
         script = pkg_resources.resource_filename("deforestprob",
                                                  "shell/forest_country_gfc.sh")
-        args = ["sh ", script]
+        args = ["sh ", script, "'" + proj + "'", "'" + extent + "'"]
         cmd = " ".join(args)
         os.system(cmd)
 

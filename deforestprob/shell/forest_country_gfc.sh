@@ -18,6 +18,10 @@ cd data_raw
 # Message
 echo "Forest data obtained with Google EarthEngine\n"
 
+# Variables
+proj=$1
+extent=$2
+
 # =====
 # 0. Mosaicing
 # =====
@@ -26,15 +30,21 @@ echo "Forest data obtained with Google EarthEngine\n"
 echo "Mosaicing and reprojecting\n"
 #
 gdalbuildvrt fcc05_10_gfc.vrt fcc05_10_*.tif
-gdal_translate -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+gdalwarp -te $extent -tap -t_srs "$proj" \
+         -tr 30 30 -r near \
+         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          fcc05_10_gfc.vrt fcc05_10_gfc.tif
 
 gdalbuildvrt loss00_05_gfc.vrt loss00_05_*.tif
-gdal_translate -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+gdalwarp -te $extent -tap -t_srs "$proj" \
+         -tr 30 30 -r near \
+         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          loss00_05_gfc.vrt loss00_05_gfc.tif
 
 gdalbuildvrt forest2014.vrt forest2014_*.tif
-gdal_translate -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+gdalwarp -te $extent -tap -t_srs "$proj" \
+         -tr 30 30 -r near \
+         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          forest2014.vrt forest2014.tif
 
 # =====

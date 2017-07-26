@@ -18,7 +18,7 @@ ee.Initialize()
 
 
 # ee_hansen.run_tasks
-def run_tasks(perc, iso3, extent, proj=None, gdrive_folder=None):
+def run_tasks(perc, iso3, extent, scale=30, proj=None, gdrive_folder=None):
 
     """Compute forest-cover change with Google EarthEngine.
 
@@ -37,6 +37,8 @@ def run_tasks(perc, iso3, extent, proj=None, gdrive_folder=None):
 
     :param extent: List/tuple of region coordinates (xmin, ymin, xmax, ymax).
 
+    :param scale: Resolution in meters per pixel. Default to 30.
+
     :param proj: The projection of the region.
 
     :param gdrive_folder: Name of a unique folder in your Drive
@@ -48,6 +50,7 @@ def run_tasks(perc, iso3, extent, proj=None, gdrive_folder=None):
 
     # Region
     region = ee.Geometry.Rectangle(extent, proj, geodesic=False)
+    region = region.buffer(10000)
 
     # Hansen map
     gfc = ee.Image('UMD/hansen/global_forest_change_2015').clip(region)
@@ -79,7 +82,7 @@ def run_tasks(perc, iso3, extent, proj=None, gdrive_folder=None):
         image=fcc05_10,
         description='export_fcc',
         region=region.getInfo()['coordinates'],
-        scale=30,
+        scale=scale,
         maxPixels=maxPix,
         crs=proj,
         folder=gdrive_folder,
@@ -91,7 +94,7 @@ def run_tasks(perc, iso3, extent, proj=None, gdrive_folder=None):
         image=loss00_05,
         description='export_loss',
         region=region.getInfo()['coordinates'],
-        scale=30,
+        scale=scale,
         maxPixels=maxPix,
         crs=proj,
         folder=gdrive_folder,
@@ -103,7 +106,7 @@ def run_tasks(perc, iso3, extent, proj=None, gdrive_folder=None):
         image=forest2014,
         description='export_forest',
         region=region.getInfo()['coordinates'],
-        scale=30,
+        scale=scale,
         maxPixels=maxPix,
         crs=proj,
         folder=gdrive_folder,
