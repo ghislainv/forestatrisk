@@ -19,27 +19,6 @@ import pandas as pd
 import pkg_resources
 from miscellaneous import make_dir
 
-# # File with African projection information
-# proj_EPSG_102022 = pkg_resources.resource_filename("deforestprob",
-#                                                    "data/proj.prj")
-
-# # PROJ.4
-# proj_EPSG_102022 = "+proj=aea +lat_1=20 +lat_2=-23 +lat_0=0 \
-# +lon_0=25 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
-
-# Projection as WKT string for Africa
-proj_EPSG_102022 = 'PROJCS["Africa_Albers_Equal_Area_Conic", \
-GEOGCS["GCS_WGS_1984", \
-DATUM["WGS_1984", SPHEROID["WGS_1984", 6378137, 298.257223563]], \
-PRIMEM["Greenwich", 0], UNIT["Degree", 0.017453292519943295]], \
-PROJECTION["Albers_Conic_Equal_Area"], \
-PARAMETER["False_Easting", 0], PARAMETER["False_Northing", 0], \
-PARAMETER["longitude_of_center", 25], \
-PARAMETER["Standard_Parallel_1", 20], \
-PARAMETER["Standard_Parallel_2", -23], \
-PARAMETER["latitude_of_center", 0], UNIT["Meter", 1], \
-AUTHORITY["EPSG", "102022"]]'
-
 
 # Extent of a shapefile
 def extent_shp(inShapefile):
@@ -63,7 +42,7 @@ def extent_shp(inShapefile):
 
 
 # country
-def country(iso3, monthyear="July2017", proj=proj_EPSG_102022,
+def country(iso3, monthyear="July2017", proj="EPSG:3857",
             fcc_source="gfc", perc=50,
             gdrive_folder=None):
 
@@ -73,7 +52,8 @@ def country(iso3, monthyear="July2017", proj=proj_EPSG_102022,
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
-    :param proj: Coordinate system as in GDAL/OGR (e.g. 'EPSG:4326').
+    :param proj: Projection as EPSG code or WKT string. Projection
+    must be recognized by GDAL and GEE. Default to "EPSG:3857".
 
     :param monthyear: Date (month and year) for WDPA
     data(e.g. "July2017").
@@ -91,6 +71,7 @@ def country(iso3, monthyear="July2017", proj=proj_EPSG_102022,
     """
 
     # Identify continent and country from iso3
+    print("Identify continent and country from iso3")
     # Continent
     file_countrycode = pkg_resources.resource_filename("deforestprob",
                                                        "data/countrycode.csv")
@@ -105,32 +86,35 @@ def country(iso3, monthyear="July2017", proj=proj_EPSG_102022,
     ctry_link_geofab = ctry_link_geofab.iloc[0]
 
     # Create data_raw directory
+    print("Create data_raw directory")
     make_dir("data_raw")
 
     # Download the zipfile from gadm.org
-    print "Download data"
+    print("Download data")
     url = "http://biogeo.ucdavis.edu/data/gadm2.8/shp/" + iso3 + "_adm_shp.zip"
     fname = "data_raw/" + iso3 + "_adm_shp.zip"
     urlretrieve(url, fname)
 
     # Extract files from zip
-    print "Extract files from zip"
+    print("Extract files from zip")
     destDir = "data_raw"
     f = ZipFile(fname)
     f.extractall(destDir)
     f.close()
-    print "Files extracted"
+    print("Files extracted")
 
     # Reproject
     cmd = "ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs '" + proj + "' -f 'ESRI Shapefile' \
     -lco ENCODING=UTF-8 data_raw/ctry_proj.shp data_raw/" + iso3 + "_adm0.shp"
     os.system(cmd)
 
-    # Computing extents
+    # Compute extent
+    print("Compute extent")
     extent_latlong = extent_shp("data_raw/" + iso3 + "_adm0.shp")
     extent_proj = extent_shp("data_raw/ctry_proj.shp")
 
     # Region with buffer of 5km
+    print("Region with buffer of 5km")
     xmin_reg = np.floor(extent_proj[0] - 5000)
     xmax_reg = np.ceil(extent_proj[1] + 5000)
     ymin_reg = np.floor(extent_proj[2] - 5000)
@@ -139,6 +123,7 @@ def country(iso3, monthyear="July2017", proj=proj_EPSG_102022,
     extent = " ".join(map(str, extent_reg))
 
     # Tiles for SRTM data (see http://dwtkns.com/srtm/)
+    print("Tiles for SRTM data")
     # SRTM tiles are 5x5 degrees
     # x: -180/+180
     # y: +60/-60
@@ -155,10 +140,12 @@ def country(iso3, monthyear="July2017", proj=proj_EPSG_102022,
     tiles_long = str(tile_left) + "-" + str(tile_right)
     tiles_lat = str(tile_top) + "-" + str(tile_bottom)
 
-    # Run Google Earth Engine tasks
+    # Run Google EarthEngine tasks
+    print("Run Google Earth Engine tasks")
     if (fcc_source == "gfc"):
         tasks = ee_hansen.run_tasks(perc=perc, iso3=iso3,
-                                    extent=extent_reg, proj=proj,
+                                    extent=extent_reg,
+                                    proj=proj,
                                     gdrive_folder="deforestprob")
 
     # Call data_country.sh
@@ -176,11 +163,13 @@ def country(iso3, monthyear="July2017", proj=proj_EPSG_102022,
     # sapm(iso3, monthyear, proj, extent)
     # carbon(proj, extent)
 
-    # Forest function
+    # Forest computations
     if (fcc_source == "gfc"):
-        # Download Google Earth Engine results
+        # Download Google EarthEngine results
+        print("Download Google Earth Engine results")
         ee_hansen.download(tasks, path="data_raw", iso3=iso3)
         # Call forest_country.sh
+        print("Forest computations")
         script = pkg_resources.resource_filename("deforestprob",
                                                  "shell/forest_country_gfc.sh")
         args = ["sh ", script]

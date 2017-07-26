@@ -16,26 +16,26 @@ cd data_raw
 # ===========================
 
 # Message
-echo "Forest obtained with Google EarthEngine\n"
+echo "Forest data obtained with Google EarthEngine\n"
 
 # =====
 # 0. Mosaicing
 # =====
 
 # Message
-echo "Mosaicing\n"
+echo "Mosaicing and reprojecting\n"
 #
 gdalbuildvrt fcc05_10_gfc.vrt fcc05_10_*.tif
 gdal_translate -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               fcc05_10_gfc.vrt fcc05_10_gfc.tif
+         fcc05_10_gfc.vrt fcc05_10_gfc.tif
 
 gdalbuildvrt loss00_05_gfc.vrt loss00_05_*.tif
 gdal_translate -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               loss00_05_gfc.vrt loss00_05_gfc.tif
+         loss00_05_gfc.vrt loss00_05_gfc.tif
 
 gdalbuildvrt forest2014.vrt forest2014_*.tif
 gdal_translate -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               forest2014.vrt forest2014.tif
+         forest2014.vrt forest2014.tif
 
 # =====
 # 1. Compute distance to forest edge in 2005
@@ -73,7 +73,7 @@ gdal_calc.py --overwrite -A _fcc05_10.tif -B _loss00_05.tif \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=255
 
-# Mask with country border (-co does not work with cutline !) !! problem here (projections ?)
+# Mask with country border (-co does not work with cutline !)
 gdalwarp -overwrite -srcnodata 255 -dstnodata 255 \
          -cutline ctry_proj.shp \
          _fcc00_05.tif fcc00_05_mask.tif
