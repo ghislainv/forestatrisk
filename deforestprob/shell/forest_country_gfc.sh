@@ -83,17 +83,16 @@ gdal_calc.py --overwrite -A _fcc05_10.tif -B _loss00_05.tif \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=255
 
-# Mask with country border (-co does not work with cutline !)
+# Mask with country border
 gdalwarp -overwrite -srcnodata 255 -dstnodata 255 \
+         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -cutline ctry_proj.shp \
-         _fcc00_05.tif fcc00_05_mask.tif
-gdal_translate -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               fcc00_05_mask.tif fcc00_05.tif
+         _fcc00_05.tif fcc00_05.tif
 
-# Compute distance (with option -use_input_nodata YES, it is much more efficient)
+# Compute distance
 gdal_proximity.py fcc00_05.tif _dist_defor.tif \
                   -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-                  -values 0 -ot UInt32 -distunits GEO -use_input_nodata YES
+                  -values 0 -ot UInt32 -distunits GEO
 gdal_translate -a_nodata 65535 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                _dist_defor.tif dist_defor.tif
@@ -111,10 +110,9 @@ gdal_calc.py --overwrite -A _fcc05_10.tif \
 
 # Mask with country border (-co does not work with cutline !)
 gdalwarp -overwrite -srcnodata 255 -dstnodata 255 \
+         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -cutline ctry_proj.shp \
-          fcc05_10_reclass.tif fcc05_10_mask.tif
-gdal_translate -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               fcc05_10_mask.tif fcc05_10.tif
+          fcc05_10_reclass.tif fcc05_10.tif
 
 # ===========================
 # Cleaning
