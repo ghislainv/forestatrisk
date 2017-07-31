@@ -57,7 +57,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     forestB = forestR.GetRasterBand(1)
 
     # Make blocks
-    blockinfo = makeblock(forest_raster_file, blk_rows=0)
+    blockinfo = makeblock(forest_raster_file, blk_rows=blk_rows)
     nblock = blockinfo[0]
     nblock_x = blockinfo[1]
     x = blockinfo[3]
