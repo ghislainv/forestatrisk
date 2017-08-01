@@ -61,6 +61,7 @@ def run_tasks(perc, iso3, extent, scale=30, proj=None, gdrive_folder=None):
 
     # Forest in 2000
     forest2000 = treecover.gte(perc)
+    forest2000 = forest2000.toByte()
 
     # Deforestation
     loss00_05 = lossyear.gte(1).And(lossyear.lte(5))
@@ -72,7 +73,7 @@ def run_tasks(perc, iso3, extent, scale=30, proj=None, gdrive_folder=None):
     forest2014 = forest2000.where(lossyear.gte(1), 0)
 
     # maxPixels
-    maxPix = 10000000000
+    maxPix = 1e9
 
     # Export forest2000 to drive
     task0 = ee.batch.Export.image.toDrive(

@@ -8,6 +8,10 @@ notebook/data
 notebook/data_raw
 notebook/output
 
+# test
+test/data
+test/data_raw
+
 # C extensions
 C/build
 *.so
