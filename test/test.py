@@ -11,6 +11,6 @@ countries = ["Senegal", "Gambia", "Guinea-Bissau", "Guinea", "Sierra-Leone",
 
 # Country data
 proj_africa = "EPSG:3395"
-dfp.data.country(iso3="COD", proj=proj_africa)
+dfp.data.country(iso3="SLE", proj=proj_africa)
 
 # End

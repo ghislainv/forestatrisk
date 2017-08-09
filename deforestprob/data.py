@@ -145,21 +145,21 @@ def country(iso3, monthyear="July2017", proj="EPSG:3395",
     print("Run Google Earth Engine tasks")
     if (fcc_source == "gfc"):
         tasks = ee_hansen.run_tasks(perc=perc, iso3=iso3,
-                                    extent=extent_latlong,
+                                    extent_latlong=extent_latlong,
                                     scale=30,
-                                    proj="EPSG:4326",
+                                    proj=proj,
                                     gdrive_folder="deforestprob")
         print("GEE tasks running on the following extent:")
         print(str(extent_latlong))
 
-    # # Call data_country.sh
-    # script = pkg_resources.resource_filename("deforestprob",
-    #                                          "shell/data_country.sh")
-    # args = ["sh ", script, continent, ctry_link_geofab, iso3,
-    #         "'" + proj + "'",
-    #         "'" + extent + "'", tiles_long, tiles_lat, monthyear]
-    # cmd = " ".join(args)
-    # os.system(cmd)
+    # Call data_country.sh
+    script = pkg_resources.resource_filename("deforestprob",
+                                             "shell/data_country.sh")
+    args = ["sh ", script, continent, ctry_link_geofab, iso3,
+            "'" + proj + "'",
+            "'" + extent + "'", tiles_long, tiles_lat, monthyear]
+    cmd = " ".join(args)
+    os.system(cmd)
 
     # # Data function
     # osm(continent, country=ctry_link_geofab, proj, extent)

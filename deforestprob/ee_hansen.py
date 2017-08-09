@@ -18,7 +18,7 @@ ee.Initialize()
 
 
 # ee_hansen.run_tasks
-def run_tasks(perc, iso3, extent, scale=30, proj=None, gdrive_folder=None):
+def run_tasks(perc, iso3, extent_latlong, scale=30, proj=None, gdrive_folder=None):
 
     """Compute forest-cover change with Google EarthEngine.
 
@@ -35,11 +35,12 @@ def run_tasks(perc, iso3, extent, scale=30, proj=None, gdrive_folder=None):
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
-    :param extent: List/tuple of region coordinates (xmin, ymin, xmax, ymax).
+    :param extent_latlong: List/tuple of region extent in lat/long
+    (xmin, ymin, xmax, ymax).
 
     :param scale: Resolution in meters per pixel. Default to 30.
 
-    :param proj: The projection of the region.
+    :param proj: The projection for the export.
 
     :param gdrive_folder: Name of a unique folder in your Drive
     account to export into. Defaults to the root of the drive.
@@ -49,8 +50,10 @@ def run_tasks(perc, iso3, extent, scale=30, proj=None, gdrive_folder=None):
     """
 
     # Region
-    region = ee.Geometry.Rectangle(extent, proj, geodesic=False)
-    region = region.buffer(10000)
+    region = ee.Geometry.Rectangle(extent_latlong, proj="EPSG:4326",
+                                   geodesic=False)
+    region = region.buffer(10000).bounds()
+    export_coord = region.getInfo()['coordinates']
 
     # Hansen map
     gfc = ee.Image('UMD/hansen/global_forest_change_2015').clip(region)
@@ -73,13 +76,14 @@ def run_tasks(perc, iso3, extent, scale=30, proj=None, gdrive_folder=None):
     forest2014 = forest2000.where(lossyear.gte(1), 0)
 
     # maxPixels
-    maxPix = 1e9
+    maxPix = 1e10
 
     # Export forest2000 to drive
+    # ! region must be lat/long coordinates with Python API.
     task0 = ee.batch.Export.image.toDrive(
         image=forest2000,
         description='export_forest2000',
-        region=region.getInfo()['coordinates'],
+        region=export_coord,
         scale=scale,
         maxPixels=maxPix,
         crs=proj,
@@ -91,7 +95,7 @@ def run_tasks(perc, iso3, extent, scale=30, proj=None, gdrive_folder=None):
     task1 = ee.batch.Export.image.toDrive(
         image=forest2005,
         description='export_forest2005',
-        region=region.getInfo()['coordinates'],
+        region=export_coord,
         scale=scale,
         maxPixels=maxPix,
         crs=proj,
@@ -103,7 +107,7 @@ def run_tasks(perc, iso3, extent, scale=30, proj=None, gdrive_folder=None):
     task2 = ee.batch.Export.image.toDrive(
         image=forest2010,
         description='export_forest2010',
-        region=region.getInfo()['coordinates'],
+        region=export_coord,
         scale=scale,
         maxPixels=maxPix,
         crs=proj,
@@ -115,7 +119,7 @@ def run_tasks(perc, iso3, extent, scale=30, proj=None, gdrive_folder=None):
     task3 = ee.batch.Export.image.toDrive(
         image=forest2014,
         description='export_forest2014',
-        region=region.getInfo()['coordinates'],
+        region=export_coord,
         scale=scale,
         maxPixels=maxPix,
         crs=proj,

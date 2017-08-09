@@ -91,7 +91,7 @@ gdalwarp -overwrite -srcnodata 255 -dstnodata 255 \
 gdal_proximity.py fcc01.tif _dist_defor.tif \
                   -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                   -values 0 -ot UInt32 -distunits GEO -use_input_nodata YES
-                  -nodata=0 \
+
 gdal_translate -a_nodata 65535 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                _dist_defor.tif dist_defor.tif
@@ -103,7 +103,7 @@ gdal_translate -a_nodata 65535 \
 # Message
 echo "Computing forest-cover change raster\n"
 
-# Create raster fcc12.tif
+# Create raster fcc12_gfc.tif
 gdal_calc.py --overwrite -A forest_t1_gfc.tif -B forest_t2_gfc.tif \
              --outfile=fcc12_gfc.tif --type=Byte \
              --calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" \
