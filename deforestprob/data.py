@@ -43,7 +43,7 @@ def extent_shp(inShapefile):
 
 
 # country
-def country(iso3, monthyear="July2017", proj="EPSG:3395",
+def country(iso3, monthyear, proj="EPSG:3395",
             fcc_source="gfc", perc=50,
             gdrive_folder=None):
 
@@ -56,8 +56,8 @@ def country(iso3, monthyear="July2017", proj="EPSG:3395",
     :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
     GDAL/OGR. Default to "EPSG:3395" (World Mercator).
 
-    :param monthyear: Date (month and year) for WDPA
-    data(e.g. "July2017").
+    :param monthyear: Date (month and year) for WDPA data
+    (e.g. "Aug2017").
 
     :param fcc_source: Source for forest-cover change data. Can be
     "gfc" (Global Forest Change 2015 Hansen data) or
