@@ -63,6 +63,7 @@ echo "Computing distance to forest edge\n"
 gdal_proximity.py forest_t1_gfc.tif _dist_edge.tif \
                   -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                   -values 0 -ot UInt32 -distunits GEO
+
 gdal_translate -a_nodata 0 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                _dist_edge.tif dist_edge.tif
@@ -74,27 +75,28 @@ gdal_translate -a_nodata 0 \
 # Message
 echo "Computing distance to past deforestation\n"
 
-# Create raster fcc01.tif
+# Create raster fcc01_gfc.tif
 gdal_calc.py --overwrite -A forest_t0_gfc.tif -B forest_t1_gfc.tif \
              --outfile=fcc01_gfc.tif --type=Byte \
              --calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=255
 
-# Mask with country border
-gdalwarp -overwrite -srcnodata 255 -dstnodata 255 \
-         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -cutline ctry_proj.shp \
-         fcc01_gfc.tif fcc01.tif
-
 # Compute distance
-gdal_proximity.py fcc01.tif _dist_defor.tif \
+gdal_proximity.py fcc01_gfc.tif _dist_defor_gfc.tif \
                   -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-                  -values 0 -ot UInt32 -distunits GEO -use_input_nodata YES
+                  -values 0 -ot UInt32 -distunits GEO
 
-gdal_translate -a_nodata 65535 \
-               -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               _dist_defor.tif dist_defor.tif
+# Mask with forest_t1_gfc.tif
+gdal_calc.py --overwrite -A _dist_defor_gfc.tif -B forest_t1_gfc.tif \
+             --outfile=dist_defor.tif --type=UInt32 \
+             --calc="A*(B==1)" \
+             --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
+             --NoDataValue=255
+
+# gdal_translate -a_nodata 0 \
+#                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+#                _dist_defor.tif dist_defor.tif
 
 # =====
 # 3. Forest-cover change raster

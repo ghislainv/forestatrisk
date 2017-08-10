@@ -179,7 +179,7 @@ def forest(input_forest_raster,
            output_file="output/forest.png",
            borders=None,
            zoom=None,
-           col=(255, 0, 0, 255),
+           col=(227, 26, 28, 255),
            figsize=(11.69, 8.27),
            dpi=200):
     """Plot the forest map.
@@ -226,7 +226,7 @@ def forest(input_forest_raster,
     cmax = 255.0  # float for division
     col = tuple(np.array(col)/cmax)
     colors.append(col)  # default is red
-    colors.append((34/cmax, 139/cmax, 34/cmax, 1))  # forest green
+    colors.append((50/cmax, 160/cmax, 44/cmax, 1))  # forest green
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
@@ -315,8 +315,8 @@ def obs(sample,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    colors.append((1, 0, 0, 1))  # red
-    colors.append((34/cmax, 139/cmax, 34/cmax, 1))  # forest green
+    colors.append((227/cmax, 26/cmax, 28/cmax, 1))  # red
+    colors.append((50/cmax, 160/cmax, 44/cmax, 1))  # forest green
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
