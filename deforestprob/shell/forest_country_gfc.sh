@@ -28,30 +28,26 @@ extent=$2
 
 # Message
 echo "Mosaicing and reprojecting\n"
-#
-gdalbuildvrt forest2000.vrt forest2000_*.tif
+# Mosaicing
+gdalbuildvrt forest.vrt forest_*.tif
+# Remove RGBA interpretation of the four bands
+gdal_translate -co "PHOTOMETRIC=MINISBLACK" -co "ALPHA=NO" forest.vrt forest_norgba.tif
+# Reprojecting
 gdalwarp -te $extent -tap -t_srs "$proj" \
          -tr 30 30 -r near \
+         -co "PHOTOMETRIC=MINISBLACK" -co "ALPHA=NO" \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         forest2000.vrt forest_t0_gfc.tif
+         forest_norgba.tif forest_gfc.tif
 
-gdalbuildvrt forest2005.vrt forest2005_*.tif
-gdalwarp -te $extent -tap -t_srs "$proj" \
-         -tr 30 30 -r near \
-         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         forest2005.vrt forest_t1_gfc.tif
-
-gdalbuildvrt forest2010.vrt forest2010_*.tif
-gdalwarp -te $extent -tap -t_srs "$proj" \
-         -tr 30 30 -r near \
-         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         forest2010.vrt forest_t2_gfc.tif
-
-gdalbuildvrt forest2014.vrt forest2014_*.tif
-gdalwarp -te $extent -tap -t_srs "$proj" \
-         -tr 30 30 -r near \
-         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         forest2014.vrt forest_t3_gfc.tif
+# Separate bands
+gdal_translate -mask none -b 1 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+               forest_gfc.tif forest_t0_gfc.tif
+gdal_translate -mask none -b 2 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+               forest_gfc.tif forest_t1_gfc.tif
+gdal_translate -mask none -b 3 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+               forest_gfc.tif forest_t2_gfc.tif
+gdal_translate -mask none -b 4 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+               forest_gfc.tif forest_t3_gfc.tif
 
 # =====
 # 1. Compute distance to forest edge at t1
@@ -92,7 +88,7 @@ gdal_calc.py --overwrite -A _dist_defor_gfc.tif -B forest_t1_gfc.tif \
              --outfile=dist_defor.tif --type=UInt32 \
              --calc="A*(B==1)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=255
+             --NoDataValue=0
 
 # gdal_translate -a_nodata 0 \
 #                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
