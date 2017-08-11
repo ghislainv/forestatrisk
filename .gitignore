@@ -11,6 +11,7 @@ notebook/output
 # test
 test/data
 test/data_raw
+test/output
 
 # C extensions
 C/build

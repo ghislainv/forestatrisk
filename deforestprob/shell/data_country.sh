@@ -51,26 +51,28 @@ ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' -progress \
         -lco ENCODING=UTF-8 rivers.shp rivers.osm
 
 # Rasterize after reprojection
+# We need to use -a_srs for gdal_rasterize because reprojection 
+# with ogr2ogr can lead to different projection definition (see WKT)
 # towns
 ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs "$proj" -f 'ESRI Shapefile' \
         -lco ENCODING=UTF-8 towns_PROJ.shp towns.shp
 gdal_rasterize -te $extent -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" -ot Byte \
-               -a_nodata 255 \
+               -a_nodata 255 -a_srs "$proj" \
                -tr 150 150 -l towns_PROJ towns_PROJ.shp towns.tif
 # roads
 ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs "$proj" -f 'ESRI Shapefile' \
         -lco ENCODING=UTF-8 roads_PROJ.shp roads.shp
 gdal_rasterize -te $extent -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" -ot Byte \
-               -a_nodata 255 \
+               -a_nodata 255 -a_srs "$proj" \
                -tr 150 150 -l roads_PROJ roads_PROJ.shp roads.tif
 # rivers
 ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs "$proj" -f 'ESRI Shapefile' \
         -lco ENCODING=UTF-8 rivers_PROJ.shp rivers.shp
 gdal_rasterize -te $extent -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" -ot Byte \
-               -a_nodata 255 \
+               -a_nodata 255 -a_srs "$proj" \
                -tr 150 150 -l rivers_PROJ rivers_PROJ.shp rivers.tif
 
 # Compute distances
@@ -152,7 +154,7 @@ ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' -progress \
 gdal_rasterize -te $extent -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                -init 0 \
-               -a_nodata 255 \
+               -a_nodata 255 -a_srs "$proj" \
                -ot Byte -tr 30 30 -l pa_PROJ pa_PROJ.shp pa.tif
 
 # ===========================
