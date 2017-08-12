@@ -9,9 +9,8 @@ notebook/data_raw
 notebook/output
 
 # test
-test/data
-test/data_raw
-test/output
+test/*
+!test/test.py
 
 # C extensions
 C/build
