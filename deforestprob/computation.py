@@ -8,9 +8,18 @@
 # license         :GPLv3
 # ==============================================================================
 
+import matplotlib
+if os.environ.get('DISPLAY','') == '':
+    print('no display found. Using non-interactive Agg backend')
+    matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 import numpy as np
 from patsy import dmatrices
 import deforestprob as dfp
+
+# Working directory
+# os.chdir("/home/ghislain/Code/deforestprob/test/CIV")
+# check with os.getcwd()
 
 # Make output directory
 dfp.make_dir("output")
@@ -24,6 +33,8 @@ dataset = dfp.sample(nsamp=10000, Seed=1234, csize=10,
                      input_forest_raster="fcc12.tif",
                      output_file="output/sample.txt",
                      blk_rows=0)
+
+dataset.head(5)
 
 # Descriptive statistics
 # Model formulas
@@ -84,6 +95,10 @@ mod_binomial_iCAR = dfp.model_binomial_iCAR(
 
 # Summary
 print(mod_binomial_iCAR)
+# Write summary in file
+f = open("output/summary_hSDM.txt", "w") 
+f.write(str(mod_binomial_iCAR))
+f.close()
 
 # Plot
 traces_fig = mod_binomial_iCAR.plot(output_file="output/mcmc.pdf",
@@ -121,24 +136,33 @@ fig_pred = dfp.predict(mod_binomial_iCAR, var_dir="data",
 # Mean annual deforestation rate on 2000-2010
 # ========================================================
 
+# Forest cover
 fc = list()
 for i in range(4):
     rast = "data/forest/forest_t" + str(i) + ".tif"
     val = dfp.countpix(input_raster=rast,
                        value=1)
-    fc.append(val[""])
+    fc.append(val["area"])
+# Save results to disk
+f = open("output/forest_cover.txt", "w")
+for i in fc:
+    f.write(str(i) + "\n")
+f.close()
 
-annual_defor = (fc[0]["area"]-fc[2]["area"])/10
+# Annual deforestation
+annual_defor = (fc[0]-fc[2])/10
+# Amount of deforestation (ha) for 40 years
 defor_40yr = np.rint(annual_defor * 40)
 
 # ========================================================
 # Predicting forest cover
 # ========================================================
 
-forest_cover = dfp.deforest(input_raster="output/pred_binomial_iCAR.tif",
-                            hectares=defor_40yr,
-                            output_file="output/forest_cover_2050.tif",
-                            blk_rows=128)
+# Compute future forest cover
+dfp.deforest(input_raster="output/pred_binomial_iCAR.tif",
+             hectares=defor_40yr,
+             output_file="output/forest_cover_2050.tif",
+             blk_rows=128)
 
 # Plot future forest cover
 dfp.plot.forest(input_forest_raster="output/forest_cover_2050.tif",
