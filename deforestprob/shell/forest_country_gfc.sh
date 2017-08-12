@@ -31,7 +31,9 @@ echo "Mosaicing and reprojecting\n"
 # Mosaicing
 gdalbuildvrt forest.vrt forest_*.tif
 # Remove RGBA interpretation of the four bands
-gdal_translate -co "PHOTOMETRIC=MINISBLACK" -co "ALPHA=NO" forest.vrt forest_norgba.tif
+gdal_translate -co "PHOTOMETRIC=MINISBLACK" -co "ALPHA=NO" \
+               -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+               forest.vrt forest_norgba.tif
 # Reprojecting
 gdalwarp -te $extent -tap -t_srs "$proj" \
          -tr 30 30 -r near \

@@ -1,3 +1,14 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# ==============================================================================
+# author          :Ghislain Vieilledent
+# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+# web             :https://ghislainv.github.io
+# python_version  :2.7
+# license         :GPLv3
+# ==============================================================================
+
 import os
 import deforestprob as dfp
 import pandas as pd
@@ -29,6 +40,7 @@ for i in range(nctry):
 
 # Only two countries for test
 iso3 = ["CIV", "COD"]
+nctry = len(iso3)
 
 # Projection for Africa (World Mercator)
 proj_africa = "EPSG:3395"
@@ -36,7 +48,7 @@ proj_africa = "EPSG:3395"
 # Loop on countries
 for i in range(nctry):
     
-    i = 0
+    # i = 0
     
     # Make new directory for country
     dfp.make_dir(iso3[i])
