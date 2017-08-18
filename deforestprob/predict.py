@@ -51,6 +51,7 @@ def predict(model, var_dir="data",
             blk_rows=128,
             figsize=(11.69, 8.27),
             dpi=200):
+
     """Predict the spatial probability of deforestation from a model.
 
     This function predicts the spatial probability of deforestation
@@ -65,6 +66,7 @@ def predict(model, var_dir="data",
     :param blk_rows: if > 0, number of rows for computation by block.
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
+
     :return: a Matplotlib figure of the probability map.
 
     """

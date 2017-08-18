@@ -39,25 +39,52 @@ for i in range(nctry):
     iso3.append(code.iloc[0])
 
 # Only two countries for test
-iso3 = ["CIV", "COD"]
+iso3 = ["CIV", "GHA"]
 nctry = len(iso3)
 
 # Projection for Africa (World Mercator)
 proj_africa = "EPSG:3395"
 
+# Original working directory
+owd = os.getcwd()
+
 # Loop on countries
 for i in range(nctry):
     
-    # i = 0
+    i = 1
     
     # Make new directory for country
     dfp.make_dir(iso3[i])
     os.chdir(iso3[i])
     
-    # 
+    # Data
     dfp.data.country(iso3=iso3[i], monthyear="Aug2017", proj=proj_africa)
+
+    # Computation
+    dfp.computation()
     
-    # Get out of directory
-    os.chdir("../")
+    # Return to original working directory
+    os.chdir(owd)
+
+# Combine results
+
+# For spatial probability
+os.system("find -type f -name *pred_binomial_iCAR.tif > list_pred.txt")
+os.system("gdalbuildvrt -input_file_list list_pred.txt pred.vrt")
+os.system("gdal_merge.py -co 'COMPRESS=LZW' -co 'PREDICTOR=2' -co 'BIGTIFF=YES' \
+-o pred.tif pred.vrt")
+
+# For forest cover in 2050 
+os.system("find -type f -name *forest_cover_2050.tif > list_fc2050.txt")
+os.system("gdalbuildvrt -input_file_list list_fc2050.txt fc2050.vrt")
+os.system("gdal_merge -co 'COMPRESS=LZW' -co 'PREDICTOR=2' -co 'BIGTIFF=YES' \
+-o fc2050.tif fc2050.vrt")
+
+# Upload results to Google Drive with gdrive
+os.system("gdrive list --query 'name=\"deforestprob\"' > id_deforestprob.txt")
+dat = pd.read_table("id_deforestprob.txt", sep="\t", index_col=False)
+dat
+os.system("gdrive upload --parent " + id + " --share pred.tif")
+os.system("gdrive upload --parent " + id + " --share fc2050.tif")
 
 # End

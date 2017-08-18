@@ -21,7 +21,9 @@ from miscellaneous import progress_bar, makeblock
 def deforest(input_raster,
              hectares,
              output_file="output/forest_cover.tif",
-             blk_rows=128):
+             blk_rows=128,
+             figsize=(11.69, 8.27),
+             dpi=200):
 
     """Function to map the future forest cover.
 
@@ -31,12 +33,11 @@ def deforest(input_raster,
 
     :param input_raster: raster of probability of deforestation (1 to 65535
     with 0 as nodata value).
-
     :param hectares: number of hectares to deforest.
-
     :param output_file: name of the raster file for forest cover map.
-
     :param blk_rows: if > 0, number of rows for block (else 256x256).
+    :param figsize: figure size in inches.
+    :param dpi: resolution for output image.
 
     :return: a dictionary with two items, 1) a Matplotlib figure of
     the forest cover, 2) a tuple of statistics (hectares, frequence,
@@ -178,8 +179,8 @@ def deforest(input_raster,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    colors.append((1, 0, 0, 1))  # red
-    colors.append((34/cmax, 139/cmax, 34/cmax, 1))  # forest green
+    colors.append((227/cmax, 26/cmax, 28/cmax, 1))  # red
+    colors.append((51/cmax, 160/cmax, 44/cmax, 1))  # forest green
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
@@ -191,11 +192,11 @@ def deforest(input_raster,
     fig_name = fig_name[:index_dot]
     fig_name = fig_name + ".png"
     # Plot raster and save
-    fig = plt.figure()
+    fig = plt.figure(figsize=figsize)
     plt.subplot(111)
     plt.imshow(ov_arr, cmap=color_map)
     plt.close(fig)
-    fig_img = figure_as_image(fig, fig_name, dpi=200)
+    fig_img = figure_as_image(fig, fig_name, dpi=dpi)
 
     # Return results
     return {"figure": fig_img, "statistics": (counts, threshold,

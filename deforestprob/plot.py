@@ -226,7 +226,7 @@ def forest(input_forest_raster,
     cmax = 255.0  # float for division
     col = tuple(np.array(col)/cmax)
     colors.append(col)  # default is red
-    colors.append((50/cmax, 160/cmax, 44/cmax, 1))  # forest green
+    colors.append((51/cmax, 160/cmax, 44/cmax, 1))  # forest green
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
@@ -316,7 +316,7 @@ def obs(sample,
     colors = []
     cmax = 255.0  # float for division
     colors.append((227/cmax, 26/cmax, 28/cmax, 1))  # red
-    colors.append((50/cmax, 160/cmax, 44/cmax, 1))  # forest green
+    colors.append((51/cmax, 160/cmax, 44/cmax, 1))  # forest green
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
