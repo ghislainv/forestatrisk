@@ -45,6 +45,5 @@ setup(name="deforestprob",
       package_dir={"deforestprob": "deforestprob"},
       package_data={"deforestprob": ["data/*.csv", "shell/data_country.sh", "shell/forest_country_gfc.sh"]},
       install_requires=["numpy", "sklearn", "patsy", "matplotlib", "pandas"],
-      setup_requires=["numpy"],
       include_dirs=numpy.distutils.misc_util.get_numpy_include_dirs(),
       zip_safe=False)
