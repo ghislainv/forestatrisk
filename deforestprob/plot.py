@@ -94,7 +94,7 @@ def correlation(y, data,
                 output_file="output/correlation.pdf",
                 plots_per_page=4,
                 figsize=(8.27, 11.69),
-                dpi=100):
+                dpi=300):
     """
     Correlation between variables and the probability of deforestation.
 
@@ -181,7 +181,7 @@ def forest(input_forest_raster,
            zoom=None,
            col=(227, 26, 28, 255),
            figsize=(11.69, 8.27),
-           dpi=200):
+           dpi=300):
     """Plot the forest map.
 
     This function plots the forest map. Green is the remaining forest
@@ -194,6 +194,7 @@ def forest(input_forest_raster,
     :param col: rgba color for deforestation.
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
+
     :return: a Matplotlib figure of the forest map.
 
     """
@@ -255,7 +256,6 @@ def forest(input_forest_raster,
         plt.ylim(zoom[2], zoom[3])
         ax2.set_xticks([])
         ax2.set_yticks([])
-    plt.close(fig)
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
@@ -270,7 +270,7 @@ def obs(sample,
         zoom=None,
         s=20,
         figsize=(11.69, 8.27),
-        dpi=200):
+        dpi=300):
     """Plot the sample points over the forest map.
 
     This function plots the sample points over the forest map. Green
@@ -321,7 +321,7 @@ def obs(sample,
     color_map = ListedColormap(colors)
 
     # Plot raster and save
-    fig = plt.figure(dpi=dpi)
+    fig = plt.figure(figsize=figsize, dpi=dpi)
     ax1 = plt.subplot(111)
     # No frame
     ax1.set_frame_on(False)
@@ -343,7 +343,6 @@ def obs(sample,
     if zoom is not None:
         plt.xlim(zoom[0], zoom[1])
         plt.ylim(zoom[2], zoom[3])
-    plt.close(fig)
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
@@ -355,7 +354,7 @@ def var(var_dir,
         output_file="output/var.pdf",
         gridsize=(3, 3),
         figsize=(11.69, 8.27),
-        dpi=200):
+        dpi=300):
     """Plot variable maps.
 
     This function plots variable maps.

@@ -20,7 +20,7 @@ from miscellaneous import figure_as_image
 def resample_rho(rho, input_raster, output_file="output/rho.tif",
                  csize_orig=10, csize_new=1,
                  figsize=(11.69, 8.27),
-                 dpi=200):
+                 dpi=300):
     """Resample rho values with interpolation.
 
     This function resamples the spatial random effects (rho values)
@@ -35,6 +35,7 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     interpolation (in km).
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
+
     :return: a Matplotlib figure of the spatial random effects.
 
     """
@@ -121,7 +122,6 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     plt.subplot(111)
     plt.imshow(ov_arr, cmap="RdYlGn_r", vmin=-rho_bound, vmax=rho_bound)
     plt.colorbar()
-    plt.close(fig)
     fig_img = figure_as_image(fig, fig_name, dpi=dpi)
 
     # Return figure

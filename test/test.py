@@ -13,6 +13,8 @@ import os
 import deforestprob as dfp
 import pandas as pd
 import pkg_resources
+import psutil
+import multiprocessing as mp
 
 # List of countries to process
 countries = ["Senegal", "Gambia (Islamic Republic of the)", "Guinea Bissau",
@@ -48,23 +50,35 @@ proj_africa = "EPSG:3395"
 # Original working directory
 owd = os.getcwd()
 
-# Loop on countries
-for i in range(nctry):
-    
-    i = 1
-    
+# Number of cpu
+total_cpu = psutil.cpu_count()
+num_cpu = int(total_cpu * 0.75) if total_cpu > 2 else 1
+
+
+# Function for multiprocessing
+def compute(iso3):
+
     # Make new directory for country
-    dfp.make_dir(iso3[i])
-    os.chdir(iso3[i])
-    
+    os.chdir(owd)
+    dfp.make_dir(iso3)
+    os.chdir(os.path.join(owd, iso3))
+
     # Data
-    dfp.data.country(iso3=iso3[i], monthyear="Aug2017", proj=proj_africa)
+    dfp.data.country(iso3=iso3, monthyear="Aug2017", proj=proj_africa)
 
     # Computation
     dfp.computation()
-    
-    # Return to original working directory
-    os.chdir(owd)
+
+    # Return country iso code
+    return(iso3)
+
+# Parallel computation
+pool = mp.Pool(processes=num_cpu)
+results = [pool.apply_async(compute, args=(x,)) for x in iso3]
+output = [p.get() for p in results]
+print(output)
+
+# Note: Terminate pool with something like pool.join()...
 
 # Combine results
 
@@ -74,7 +88,7 @@ os.system("gdalbuildvrt -input_file_list list_pred.txt pred.vrt")
 os.system("gdal_merge.py -co 'COMPRESS=LZW' -co 'PREDICTOR=2' -co 'BIGTIFF=YES' \
 -o pred.tif pred.vrt")
 
-# For forest cover in 2050 
+# For forest cover in 2050
 os.system("find -type f -name *forest_cover_2050.tif > list_fc2050.txt")
 os.system("gdalbuildvrt -input_file_list list_fc2050.txt fc2050.vrt")
 os.system("gdal_merge -co 'COMPRESS=LZW' -co 'PREDICTOR=2' -co 'BIGTIFF=YES' \

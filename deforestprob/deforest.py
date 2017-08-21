@@ -23,7 +23,7 @@ def deforest(input_raster,
              output_file="output/forest_cover.tif",
              blk_rows=128,
              figsize=(11.69, 8.27),
-             dpi=200):
+             dpi=300):
 
     """Function to map the future forest cover.
 
@@ -192,10 +192,9 @@ def deforest(input_raster,
     fig_name = fig_name[:index_dot]
     fig_name = fig_name + ".png"
     # Plot raster and save
-    fig = plt.figure(figsize=figsize)
+    fig = plt.figure(figsize=figsize, dpi=dpi)
     plt.subplot(111)
     plt.imshow(ov_arr, cmap=color_map)
-    plt.close(fig)
     fig_img = figure_as_image(fig, fig_name, dpi=dpi)
 
     # Return results

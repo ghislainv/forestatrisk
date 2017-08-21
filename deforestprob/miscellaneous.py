@@ -18,12 +18,14 @@ import matplotlib.pyplot as plt
 
 # Invlogit
 def invlogit(x):
+
     """Compute the inverse-logit of a numpy array.
 
     We differenciate the positive and negative values to avoid
     under/overflow with the use of exp().
 
     :param x: numpy array.
+
     :return: return the inverse-logit of the array.
 
     """
@@ -36,12 +38,15 @@ def invlogit(x):
 
 # Function to make a directory
 def make_dir(directory):
-    """
-    Make new directory
+
+    """ Make new directory
 
     :param directory: path to be created.
+
     :return: this function does not return any value.
+
     """
+
     if not os.path.exists(directory):
         os.mkdir(directory)
 
@@ -50,6 +55,7 @@ def make_dir(directory):
 
 # Makeblock
 def makeblock(rasterfile, blk_rows=128):
+
     """Compute block information.
 
     This function computes block information from the caracteristics
@@ -57,7 +63,6 @@ def makeblock(rasterfile, blk_rows=128):
     consider.
 
     :param rasterfile: path to a raster file.
-
     :param blk_rows: if > 0, number of rows for block. If <=0, the
     block size will be 256 x 256.
 
@@ -103,13 +108,16 @@ def makeblock(rasterfile, blk_rows=128):
 
 # Progress_bar
 def progress_bar(niter, i):
-    """
-    Draw progress_bar
+
+    """ Draw progress_bar
 
     :param niter: total number of iterations.
     :param i: current number of iteration (starts at 1).
+
     :return: this function does not return any value.
+
     """
+
     step = 1 if niter <= 100 else niter/100
     if i == 1:
         sys.stdout.write("0%")
@@ -125,6 +133,7 @@ def progress_bar(niter, i):
 
 # Rescale
 def rescale(value):
+
     """Rescale probability values to 1-65534.
 
     This function rescales probability values (float in [0, 1]) to
@@ -132,6 +141,7 @@ def rescale(value):
     UInt16 with 0 as nodata value.
 
     :param value: float value in [0, 1].
+
     :return: integer value in [1, 65534].
 
     """
@@ -140,12 +150,14 @@ def rescale(value):
 
 
 # Saving a matplotlib.pyplot figure as a border-less frame-less image
-def figure_as_image(fig, output_file, dpi=200):
+def figure_as_image(fig, output_file, dpi=300):
+
     """Remove borders and frames of a Matplotlib figure and save.
 
     :param fig: Matplotlib figure you want to save as the image.
     :param output_file: path to the output image file.
     :param dpi: dpi of the output image.
+
     :return: figure without borders and frame.
 
     """
