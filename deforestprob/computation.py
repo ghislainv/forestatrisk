@@ -173,33 +173,33 @@ def computation():
     # ========================================================
 
     # Forest in 2010
-    dfp.plot.forest("CIV/data/forest/forest_t2.tif",
-                    borders="CIV/data/ctry_PROJ.shp",
-                    output_file="CIV/output/forest_t2.png")
+    dfp.plot.forest("data/forest/forest_t2.tif",
+                    borders="data/ctry_PROJ.shp",
+                    output_file="output/forest_t2.png")
 
     # Forest-cover change 2005-2010
-    dfp.plot.fcc("CIV/data/fcc12.tif",
-                 borders="CIV/data/ctry_PROJ.shp",
-                 output_file="CIV/output/fcc12.png")
+    dfp.plot.fcc("data/fcc12.tif",
+                 borders="data/ctry_PROJ.shp",
+                 output_file="output/fcc12.png")
 
     # Original spatial random effects
-    dfp.plot.rho("CIV/output/rho.tif",
-                 borders="CIV/data/ctry_PROJ.shp",
-                 output_file="CIV/output/rho.png")
+    dfp.plot.rho("output/rho_orig.tif",
+                 borders="data/ctry_PROJ.shp",
+                 output_file="output/rho_orig.png")
 
     # Interpolated spatial random effects
-    dfp.plot.rho("CIV/output/rho.tif",
-                 borders="CIV/data/ctry_PROJ.shp",
-                 output_file="CIV/output/rho.png")
+    dfp.plot.rho("output/rho.tif",
+                 borders="data/ctry_PROJ.shp",
+                 output_file="output/rho.png")
 
     # Spatial probability of deforestation
-    dfp.plot.prob("CIV/output/pred_binomial_iCAR.tif",
-                  borders="CIV/data/ctry_PROJ.shp",
-                  output_file="CIV/output/prob.png")
+    dfp.plot.prob("output/pred_binomial_iCAR.tif",
+                  borders="data/ctry_PROJ.shp",
+                  output_file="output/prob.png")
 
     # Forest-cover change 2010-2050
-    dfp.plot.fcc("CIV/output/fcc_40yr.tif",
-                 borders="CIV/data/ctry_PROJ.shp",
-                 output_file="CIV/output/fcc_40yr.png")
+    dfp.plot.fcc("output/fcc_40yr.tif",
+                 borders="data/ctry_PROJ.shp",
+                 output_file="output/fcc_40yr.png")
 
 # End

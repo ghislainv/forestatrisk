@@ -404,7 +404,7 @@ def prob(input_prob_raster,
     if rasterB.GetOverviewCount() == 0:
         # Build overviews
         print("Build overview")
-        rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
+        rasterR.BuildOverviews("average", [4, 8, 16, 32])
 
     # Get data from finest overview
     ov_band = rasterB.GetOverview(0)
@@ -430,6 +430,8 @@ def prob(input_prob_raster,
     fig = plt.figure(figsize=figsize, dpi=dpi)
     plt.subplot(111)
     plt.imshow(ov_arr, cmap=color_map, extent=extent)
+    if borders is not None:
+        plot_layer(borders, symbol="k-")
     fig_img = figure_as_image(fig, output_file, dpi=dpi)
 
     # Return figure
@@ -686,6 +688,8 @@ def rho(input_rho_raster,
     plt.subplot(111)
     plt.imshow(ov_arr, cmap="RdYlGn_r", extent=extent,
                vmin=-rho_bound, vmax=rho_bound)
+    if borders is not None:
+        plot_layer(borders, symbol="k-")
     plt.colorbar()
     fig_img = figure_as_image(fig, output_file, dpi=dpi)
 

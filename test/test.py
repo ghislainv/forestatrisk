@@ -101,40 +101,4 @@ dat
 os.system("gdrive upload --parent " + id + " --share pred.tif")
 os.system("gdrive upload --parent " + id + " --share fc2050.tif")
 
-
-# Forest in 2010
-dfp.plot.forest("CIV/data/forest/forest_t2.tif",
-                borders="CIV/data/ctry_PROJ.shp",
-                output_file="CIV/output/forest_t2.png")
-
-# Forest-cover change 2005-2010
-dfp.plot.fcc("CIV/data/fcc12.tif",
-             borders="CIV/data/ctry_PROJ.shp",
-             output_file="CIV/output/fcc12.png")
-
-# Original spatial random effects
-dfp.plot.rho("CIV/output/rho.tif",
-             borders="CIV/data/ctry_PROJ.shp",
-             output_file="CIV/output/rho.png")
-
-# Interpolated spatial random effects
-dfp.plot.rho("CIV/output/rho.tif",
-             borders="CIV/data/ctry_PROJ.shp",
-             output_file="CIV/output/rho.png")
-
-# Spatial probability of deforestation
-dfp.plot.prob("CIV/output/pred_binomial_iCAR.tif",
-              borders="CIV/data/ctry_PROJ.shp",
-              output_file="CIV/output/prob.png")
-
-# Forest-cover change 2010-2050
-dfp.plot.fcc("CIV/output/fcc_40yr.tif",
-             borders="CIV/data/ctry_PROJ.shp",
-             output_file="CIV/output/fcc_40yr.png")
-
-# Frequences of spatial probabilities
-stats = 
-dfp.plot.freq_prob(stats,
-                   output_file="output/freq_prob.png")
-
 # End

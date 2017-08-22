@@ -162,16 +162,16 @@ def figure_as_image(fig, output_file, dpi=300):
 
     """
 
-    fig_size = fig.get_size_inches()
-    w, h = fig_size[0], fig_size[1]
+    # fig_size = fig.get_size_inches()
+    # w, h = fig_size[0], fig_size[1]
     fig.patch.set_alpha(0)
     a = fig.gca()
     a.set_frame_on(False)
     a.set_xticks([])
     a.set_yticks([])
     plt.axis("off")
-    plt.xlim(0, h)
-    plt.ylim(w, 0)
+    # plt.xlim(0, h)
+    # plt.ylim(w, 0)
     fig.savefig(output_file, transparent=True, bbox_inches="tight",
                 pad_inches=0, dpi=dpi)
     return(fig)
