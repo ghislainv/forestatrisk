@@ -16,9 +16,7 @@ import numpy as np
 import pandas as pd
 from patsy import build_design_matrices
 from osgeo import gdal
-import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
-from miscellaneous import invlogit, rescale, figure_as_image
+from miscellaneous import invlogit, rescale
 from miscellaneous import progress_bar, makeblock
 
 
@@ -48,9 +46,7 @@ def predict(model, var_dir="data",
             input_cell_raster="output/rho.tif",
             input_forest_raster="data/forest.tif",
             output_file="output/pred_binomial_iCAR.tif",
-            blk_rows=128,
-            figsize=(11.69, 8.27),
-            dpi=300):
+            blk_rows=128):
 
     """Predict the spatial probability of deforestation from a model.
 
@@ -64,10 +60,6 @@ def predict(model, var_dir="data",
     :param input_forest_raster: path to forest raster (1 for forest).
     :param output_file: name of the raster file to output the probability map.
     :param blk_rows: if > 0, number of rows for computation by block.
-    :param figsize: figure size in inches.
-    :param dpi: resolution for output image.
-
-    :return: a Matplotlib figure of the probability map.
 
     """
 
@@ -138,7 +130,7 @@ def predict(model, var_dir="data",
     driver = gdal.GetDriverByName("GTiff")
     Pdrv = driver.Create(output_file, ncol, nrow, 1,
                          gdal.GDT_UInt16,
-                         ["COMPRESS=LZW", "PREDICTOR=2"])
+                         ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"])
     Pdrv.SetGeoTransform(gt)
     Pdrv.SetProjection(proj)
     Pband = Pdrv.GetRasterBand(1)
@@ -203,43 +195,11 @@ def predict(model, var_dir="data",
     Pband.ComputeStatistics(False)
 
     # Build overviews
-    print("Build overview")
-    Pdrv.BuildOverviews("average", [8, 16, 32])
-
-    # Get data from finest overview
-    ov_band = Pband.GetOverview(0)
-    ov_arr = ov_band.ReadAsArray()
+    print("Build overviews")
+    Pdrv.BuildOverviews("average", [2, 4, 8, 16, 32])
 
     # Dereference driver
     Pband = None
     del(Pdrv)
-
-    # Colormap
-    colors = []
-    cmax = 255.0  # float for division
-    vmax = 65535.0  # float for division
-    colors.append((0, (0, 0, 0, 0)))  # transparent
-    colors.append((1 / vmax, (34 / cmax, 139 / cmax, 34 / cmax, 1)))  # green
-    colors.append((45000 / vmax, (1, 165 / cmax, 0, 1)))  # red
-    colors.append((55000 / vmax, (1, 0, 0, 1)))  # orange
-    colors.append((1, (0, 0, 0, 1)))  # black
-    color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
-                                                  N=65535, gamma=1.0)
-
-    # Plot
-    print("Make figure")
-    # Figure name
-    fig_name = output_file
-    index_dot = output_file.index(".")
-    fig_name = fig_name[:index_dot]
-    fig_name = fig_name + ".png"
-    # Plot raster and save
-    fig = plt.figure(figsize=figsize, dpi=dpi)
-    plt.subplot(111)
-    plt.imshow(ov_arr, cmap=color_map)
-    fig_img = figure_as_image(fig, fig_name, dpi=dpi)
-
-    # Return figure
-    return(fig_img)
 
 # End

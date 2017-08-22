@@ -113,7 +113,7 @@ gdal_calc.py --overwrite -A forest_t1_gfc.tif -B forest_t2_gfc.tif \
 # Mask with country border
 gdalwarp -overwrite -srcnodata 255 -dstnodata 255 \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -cutline ctry_proj.shp \
+         -cutline ctry_PROJ.shp \
          fcc12_gfc.tif fcc12.tif
 
 # =====
@@ -126,22 +126,22 @@ echo "Cropping forest rasters\n"
 # Mask with country border
 gdalwarp -overwrite -srcnodata 0 -dstnodata 255 \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -cutline ctry_proj.shp \
+         -cutline ctry_PROJ.shp \
          forest_t0_gfc.tif forest_t0.tif
 
 gdalwarp -overwrite -srcnodata 0 -dstnodata 255 \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -cutline ctry_proj.shp \
+         -cutline ctry_PROJ.shp \
          forest_t1_gfc.tif forest_t1.tif
 
 gdalwarp -overwrite -srcnodata 0 -dstnodata 255 \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -cutline ctry_proj.shp \
+         -cutline ctry_PROJ.shp \
          forest_t2_gfc.tif forest_t2.tif
 
 gdalwarp -overwrite -srcnodata 0 -dstnodata 255 \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -cutline ctry_proj.shp \
+         -cutline ctry_PROJ.shp \
          forest_t3_gfc.tif forest_t3.tif
 
 # ===========================
@@ -160,6 +160,5 @@ cp -t ../data/forest forest_t0.tif forest_t1.tif forest_t2.tif forest_t3.tif
 # Remove raw data directory
 cd ../
 # rm -R data_raw
-
 
 # End

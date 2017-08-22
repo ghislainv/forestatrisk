@@ -15,9 +15,10 @@ from glob import glob
 from osgeo import gdal, ogr
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 from matplotlib.patches import Rectangle
 from matplotlib.backends.backend_pdf import PdfPages
+from miscellaneous import figure_as_image
 
 
 # Plot vector objects
@@ -91,10 +92,11 @@ def plot_layer(filename, symbol, layer_index=0, **kwargs):
 
 # plot.correlation
 def correlation(y, data,
-                output_file="output/correlation.pdf",
+                output_file="correlation.pdf",
                 plots_per_page=4,
                 figsize=(8.27, 11.69),
                 dpi=300):
+
     """
     Correlation between variables and the probability of deforestation.
 
@@ -108,7 +110,9 @@ def correlation(y, data,
     :param plots_per_page: number of plots (lines) per page.
     :param figsize: figure size.
     :param dpi: resolution for output image.
+
     :return: list of Matplotlib figures.
+
     """
 
     # Data
@@ -171,23 +175,25 @@ def correlation(y, data,
             pdf_pages.savefig(fig)
     # Write the PDF document to the disk
     pdf_pages.close()
-    return (figures)
+    return(figures)
 
 
-# plot.forest
-def forest(input_forest_raster,
-           output_file="output/forest.png",
-           borders=None,
-           zoom=None,
-           col=(227, 26, 28, 255),
-           figsize=(11.69, 8.27),
-           dpi=300):
-    """Plot the forest map.
+# plot.fcc
+def fcc(input_fcc_raster,
+        output_file="fcc.png",
+        borders=None,
+        zoom=None,
+        col=(227, 26, 28, 255),
+        figsize=(11.69, 8.27),
+        dpi=300):
 
-    This function plots the forest map. Green is the remaining forest
-    (value 1), the color specified is for deforestation (value 0).
+    """Plot forest-cover change (fcc) map.
 
-    :param input_forest_raster: path to forest raster.
+    This function plots the forest-cover change map. Green is the
+    remaining forest (value 1 in raster), the color specified is for
+    deforestation (value 0 in raster).
+
+    :param input_fcc_raster: path to fcc raster.
     :param output_file: name of the plot file.
     :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
@@ -200,12 +206,12 @@ def forest(input_forest_raster,
     """
 
     # Load raster and band
-    forestR = gdal.Open(input_forest_raster)
-    forestB = forestR.GetRasterBand(1)
-    forestND = forestB.GetNoDataValue()
-    gt = forestR.GetGeoTransform()
-    ncol = forestR.RasterXSize
-    nrow = forestR.RasterYSize
+    rasterR = gdal.Open(input_fcc_raster)
+    rasterB = rasterR.GetRasterBand(1)
+    rasterND = rasterB.GetNoDataValue()
+    gt = rasterR.GetGeoTransform()
+    ncol = rasterR.RasterXSize
+    nrow = rasterR.RasterYSize
     Xmin = gt[0]
     Xmax = gt[0] + gt[1] * ncol
     Ymin = gt[3] + gt[5] * nrow
@@ -213,14 +219,19 @@ def forest(input_forest_raster,
     extent = [Xmin, Xmax, Ymin, Ymax]
 
     # Overviews
-    if forestB.GetOverviewCount() == 0:
+    if rasterB.GetOverviewCount() == 0:
         # Build overviews
         print("Build overview")
-        forestR.BuildOverviews("nearest", [8, 16, 32])
+        rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
+
     # Get data from finest overview
-    ov_band = forestB.GetOverview(0)
+    ov_band = rasterB.GetOverview(0)
     ov_arr = ov_band.ReadAsArray()
-    ov_arr[ov_arr == forestND] = 2
+    ov_arr[ov_arr == rasterND] = 2
+
+    # Dereference driver
+    rasterB = None
+    del(rasterR)
 
     # Colormap
     colors = []
@@ -231,7 +242,7 @@ def forest(input_forest_raster,
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
-    # Plot raster and save
+    # Plot raster
     place = 111 if zoom is None else 121
     fig = plt.figure(figsize=figsize, dpi=dpi)
     ax1 = plt.subplot(place)
@@ -256,21 +267,185 @@ def forest(input_forest_raster,
         plt.ylim(zoom[2], zoom[3])
         ax2.set_xticks([])
         ax2.set_yticks([])
+
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
     return(fig)
 
 
+# plot.forest
+def forest(input_forest_raster,
+           output_file="forest.png",
+           borders=None,
+           zoom=None,
+           figsize=(11.69, 8.27),
+           dpi=300):
+
+    """Plot forest map.
+
+    This function plots the forest map in green value 1 in raster.
+
+    :param input_forest_raster: path to forest raster.
+    :param output_file: name of the plot file.
+    :param borders: vector file to be plotted.
+    :param zoom: zoom to region (xmin, xmax, ymin, ymax).
+    :param figsize: figure size in inches.
+    :param dpi: resolution for output image.
+
+    :return: a Matplotlib figure of the forest map.
+
+    """
+
+    # Load raster and band
+    rasterR = gdal.Open(input_forest_raster)
+    rasterB = rasterR.GetRasterBand(1)
+    rasterND = rasterB.GetNoDataValue()
+    gt = rasterR.GetGeoTransform()
+    ncol = rasterR.RasterXSize
+    nrow = rasterR.RasterYSize
+    Xmin = gt[0]
+    Xmax = gt[0] + gt[1] * ncol
+    Ymin = gt[3] + gt[5] * nrow
+    Ymax = gt[3]
+    extent = [Xmin, Xmax, Ymin, Ymax]
+
+    # Overviews
+    if rasterB.GetOverviewCount() == 0:
+        # Build overviews
+        print("Build overview")
+        rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
+
+    # Get data from finest overview
+    ov_band = rasterB.GetOverview(0)
+    ov_arr = ov_band.ReadAsArray()
+    ov_arr[ov_arr == rasterND] = 2
+
+    # Dereference driver
+    rasterB = None
+    del(rasterR)
+
+    # Colormap
+    colors = []
+    cmax = 255.0  # float for division
+    colors.append((51/cmax, 160/cmax, 44/cmax, 1))  # forest green
+    colors.append((0, 0, 0, 0))  # transparent
+    color_map = ListedColormap(colors)
+
+    # Plot raster
+    place = 111 if zoom is None else 121
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    ax1 = plt.subplot(place)
+    ax1.set_frame_on(False)
+    ax1.set_xticks([])
+    ax1.set_yticks([])
+    plt.imshow(ov_arr, cmap=color_map, extent=extent)
+    if borders is not None:
+        plot_layer(borders, symbol="k-")
+    plt.axis("off")
+    if zoom is not None:
+        z = Rectangle(
+            (zoom[0], zoom[2]),
+            zoom[1]-zoom[0],
+            zoom[3]-zoom[2],
+            fill=False
+        )
+        ax1.add_patch(z)
+        ax2 = plt.subplot(222)
+        plt.imshow(ov_arr, cmap=color_map, extent=extent)
+        plt.xlim(zoom[0], zoom[1])
+        plt.ylim(zoom[2], zoom[3])
+        ax2.set_xticks([])
+        ax2.set_yticks([])
+
+    # Save and return figure
+    fig.tight_layout()
+    fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
+    return(fig)
+
+
+# plot.prob
+def prob(input_prob_raster,
+         output_file="prob.png",
+         borders=None,
+         zoom=None,
+         figsize=(11.69, 8.27),
+         dpi=300):
+
+    """Plot map of spatial probability of deforestation.
+
+    This function plots the spatial probability of deforestation.
+
+    :param input_prob_raster: path to raster of probabilities.
+    :param output_file: name of the plot file.
+    :param borders: vector file to be plotted.
+    :param zoom: zoom to region (xmin, xmax, ymin, ymax).
+    :param figsize: figure size in inches.
+    :param dpi: resolution for output image.
+
+    :return: a Matplotlib figure of the map of spatial probability of
+    deforestation.
+
+    """
+
+    # Load raster and band
+    rasterR = gdal.Open(input_prob_raster)
+    rasterB = rasterR.GetRasterBand(1)
+    gt = rasterR.GetGeoTransform()
+    ncol = rasterR.RasterXSize
+    nrow = rasterR.RasterYSize
+    Xmin = gt[0]
+    Xmax = gt[0] + gt[1] * ncol
+    Ymin = gt[3] + gt[5] * nrow
+    Ymax = gt[3]
+    extent = [Xmin, Xmax, Ymin, Ymax]
+
+    # Overviews
+    if rasterB.GetOverviewCount() == 0:
+        # Build overviews
+        print("Build overview")
+        rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
+
+    # Get data from finest overview
+    ov_band = rasterB.GetOverview(0)
+    ov_arr = ov_band.ReadAsArray()
+
+    # Dereference driver
+    rasterB = None
+    del(rasterR)
+
+    # Colormap
+    colors = []
+    cmax = 255.0  # float for division
+    vmax = 65535.0  # float for division
+    colors.append((0, (0, 0, 0, 0)))  # transparent
+    colors.append((1 / vmax, (34 / cmax, 139 / cmax, 34 / cmax, 1)))  # green
+    colors.append((45000 / vmax, (1, 165 / cmax, 0, 1)))  # red
+    colors.append((55000 / vmax, (1, 0, 0, 1)))  # orange
+    colors.append((1, (0, 0, 0, 1)))  # black
+    color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
+                                                  N=65535, gamma=1.0)
+
+    # Plot raster and save
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    plt.subplot(111)
+    plt.imshow(ov_arr, cmap=color_map, extent=extent)
+    fig_img = figure_as_image(fig, output_file, dpi=dpi)
+
+    # Return figure
+    return(fig_img)
+
+
 # plot.obs
 def obs(sample,
         name_forest_var,
-        input_forest_raster,
-        output_file="output/obs.png",
+        input_fcc_raster,
+        output_file="obs.png",
         zoom=None,
         s=20,
         figsize=(11.69, 8.27),
         dpi=300):
+
     """Plot the sample points over the forest map.
 
     This function plots the sample points over the forest map. Green
@@ -279,23 +454,24 @@ def obs(sample,
 
     :param sample: pandas DataFrame with observation coordinates (X, Y).
     :param name_forest_var: name of the forest variable in sample DataFrame.
-    :param input_forest_raster: path to forest raster.
+    :param input_fcc_raster: path to forest-cover change raster.
     :param output_file: name of the plot file.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param s: marker size for sample points.
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
+
     :return: a Matplotlib figure of the sample points.
 
     """
 
     # Load raster and band
-    forestR = gdal.Open(input_forest_raster)
-    forestB = forestR.GetRasterBand(1)
-    forestND = forestB.GetNoDataValue()
-    gt = forestR.GetGeoTransform()
-    ncol = forestR.RasterXSize
-    nrow = forestR.RasterYSize
+    rasterR = gdal.Open(input_fcc_raster)
+    rasterB = rasterR.GetRasterBand(1)
+    rasterND = rasterB.GetNoDataValue()
+    gt = rasterR.GetGeoTransform()
+    ncol = rasterR.RasterXSize
+    nrow = rasterR.RasterYSize
     Xmin = gt[0]
     Xmax = gt[0] + gt[1] * ncol
     Ymin = gt[3] + gt[5] * nrow
@@ -303,14 +479,19 @@ def obs(sample,
     extent = [Xmin, Xmax, Ymin, Ymax]
 
     # Overviews
-    if forestB.GetOverviewCount() == 0:
+    if rasterB.GetOverviewCount() == 0:
         # Build overviews
         print("Build overview")
-        forestR.BuildOverviews("nearest", [8, 16, 32])
+        rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
+
     # Get data from finest overview
-    ov_band = forestB.GetOverview(0)
+    ov_band = rasterB.GetOverview(0)
     ov_arr = ov_band.ReadAsArray()
-    ov_arr[ov_arr == forestND] = 2
+    ov_arr[ov_arr == rasterND] = 2
+
+    # Dereference driver
+    rasterB = None
+    del(rasterR)
 
     # Colormap
     colors = []
@@ -320,7 +501,7 @@ def obs(sample,
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
-    # Plot raster and save
+    # Plot raster
     fig = plt.figure(figsize=figsize, dpi=dpi)
     ax1 = plt.subplot(111)
     # No frame
@@ -343,6 +524,7 @@ def obs(sample,
     if zoom is not None:
         plt.xlim(zoom[0], zoom[1])
         plt.ylim(zoom[2], zoom[3])
+
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
@@ -351,7 +533,7 @@ def obs(sample,
 
 # plot.var
 def var(var_dir,
-        output_file="output/var.pdf",
+        output_file="var.pdf",
         gridsize=(3, 3),
         figsize=(11.69, 8.27),
         dpi=300):
@@ -442,6 +624,108 @@ def var(var_dir,
 
     # Write the PDF document to the disk
     pdf_pages.close()
-    return (figures)
+    return(figures)
+
+
+# plot.rho
+def rho(input_rho_raster,
+        output_file="rho.png",
+        borders=None,
+        zoom=None,
+        figsize=(11.69, 8.27),
+        dpi=300):
+
+    """Plot map of spatial random effects (rho).
+
+    This function plots the spatial random effects.
+
+    :param input_rho_raster: path to raster of random effects.
+    :param output_file: name of the plot file.
+    :param borders: vector file to be plotted.
+    :param zoom: zoom to region (xmin, xmax, ymin, ymax).
+    :param figsize: figure size in inches.
+    :param dpi: resolution for output image.
+
+    :return: a Matplotlib figure of the map of spatial random effects.
+
+    """
+
+    # Load raster and band
+    rasterR = gdal.Open(input_rho_raster)
+    rasterB = rasterR.GetRasterBand(1)
+    gt = rasterR.GetGeoTransform()
+    ncol = rasterR.RasterXSize
+    nrow = rasterR.RasterYSize
+    Xmin = gt[0]
+    Xmax = gt[0] + gt[1] * ncol
+    Ymin = gt[3] + gt[5] * nrow
+    Ymax = gt[3]
+    extent = [Xmin, Xmax, Ymin, Ymax]
+
+    # Overviews
+    if rasterB.GetOverviewCount() == 0:
+        # Build overviews
+        print("Build overview")
+        rasterR.BuildOverviews("average", [2, 4, 8, 16, 32])
+
+    # Compute min and max
+    rho_min, rho_max = rasterB.ComputeRasterMinMax()
+    rho_bound = np.max((-rho_min, rho_max))
+
+    # Get data from finest overview
+    # ov_band = rasterB.GetOverview(0)
+    ov_band = rasterB
+    ov_arr = ov_band.ReadAsArray()
+
+    # Dereference driver
+    rasterB = None
+    del(rasterR)
+
+    # Plot raster and save
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    plt.subplot(111)
+    plt.imshow(ov_arr, cmap="RdYlGn_r", extent=extent,
+               vmin=-rho_bound, vmax=rho_bound)
+    plt.colorbar()
+    fig_img = figure_as_image(fig, output_file, dpi=dpi)
+
+    # Return figure
+    return(fig_img)
+
+
+# freq_prob
+def freq_prob(stats,
+              output_file="freq_prob.png",
+              figsize=None,
+              dpi=300):
+
+    """Plot distribution of probability values.
+
+    This function plots the distribution of the probability values.
+
+    :param stats: tuple of statistics (counts, threshold, error,
+    hectares) returned by deforestprob.deforest().
+    :param output_file: name of the plot file.
+    :param figsize: figure size in inches.
+    :param dpi: resolution for output image.
+
+    :return: a Matplotlib figure of the distribution of the probability values.
+
+    """
+
+    # Get data from stats
+    frequences = stats[0]
+    threshold = stats[1]
+
+    # Plot figure and save
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    plt.subplot(111)
+    plt.plot(frequences, "bo")
+    plt.title("Frequencies of deforestation probabilities")
+    plt.axvline(x=threshold, color='k', linestyle='--')
+
+    # Save and return figure
+    fig.savefig(output_file)
+    return(fig)
 
 # End

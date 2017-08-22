@@ -11,21 +11,16 @@
 # Import
 import numpy as np
 from osgeo import gdal
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
-from miscellaneous import figure_as_image
 from miscellaneous import progress_bar, makeblock
 
 
 # deforest
 def deforest(input_raster,
              hectares,
-             output_file="output/forest_cover.tif",
-             blk_rows=128,
-             figsize=(11.69, 8.27),
-             dpi=300):
+             output_file="output/fcc.tif",
+             blk_rows=128):
 
-    """Function to map the future forest cover.
+    """Function to map the future forest-cover change.
 
     This function computes the future forest cover map based on (i) a
     raster of probability of deforestation (rescaled from 1 to 65535),
@@ -39,8 +34,7 @@ def deforest(input_raster,
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
 
-    :return: a dictionary with two items, 1) a Matplotlib figure of
-    the forest cover, 2) a tuple of statistics (hectares, frequence,
+    :return: a tuple of statistics (hectares, frequence,
     threshold, error).
 
     """
@@ -123,18 +117,18 @@ def deforest(input_raster,
         threshold = index+1
 
     # Raster of predictions
-    print("Create a raster file on disk for forest cover")
+    print("Create a raster file on disk for forest-cover change")
     driver = gdal.GetDriverByName("GTiff")
-    forestR = driver.Create(output_file, ncol, nrow, 1,
-                            gdal.GDT_Byte,
-                            ["COMPRESS=LZW", "PREDICTOR=2"])
-    forestR.SetGeoTransform(gt)
-    forestR.SetProjection(proj)
-    forestB = forestR.GetRasterBand(1)
-    forestB.SetNoDataValue(255)
+    fccR = driver.Create(output_file, ncol, nrow, 1,
+                         gdal.GDT_Byte,
+                         ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"])
+    fccR.SetGeoTransform(gt)
+    fccR.SetProjection(proj)
+    fccB = fccR.GetRasterBand(1)
+    fccB.SetNoDataValue(255)
 
-    # Write raster of forest cover
-    print("Write raster of forest cover")
+    # Write raster of future fcc
+    print("Write raster of future forest-cover change")
     ndc = 0
     # Loop on blocks of data
     for b in range(nblock):
@@ -148,57 +142,31 @@ def deforest(input_raster,
         # Number of pixels that are really deforested
         deforpix = np.nonzero(prob_data >= threshold)
         ndc += len(deforpix[0])
-        # Forest cover
+        # Forest-cover change
         for_data = np.ones(shape=prob_data.shape, dtype=np.int8)
         for_data = for_data*255  # nodata
         for_data[prob_data != 0] = 1
         for_data[deforpix] = 0
-        forestB.WriteArray(for_data, x[px], y[py])
-
-    # Estimates of error on deforested hectares
-    error = (ndc*surface_pixel/10000)-hectares
+        fccB.WriteArray(for_data, x[px], y[py])
 
     # Compute statistics
     print("Compute statistics")
-    forestB.FlushCache()  # Write cache data to disk
-    forestB.ComputeStatistics(False)
+    fccB.FlushCache()  # Write cache data to disk
+    fccB.ComputeStatistics(False)
 
     # Build overviews
     print("Build overview")
-    forestR.BuildOverviews("nearest", [8, 16, 32])
-
-    # Get data from finest overview
-    ov_band = forestB.GetOverview(0)
-    ov_arr = ov_band.ReadAsArray()
-    ov_arr[ov_arr == 255] = 2
+    fccR.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Dereference driver
-    forestB = None
-    del(forestR)
+    fccB = None
+    del(fccR)
 
-    # Colormap
-    colors = []
-    cmax = 255.0  # float for division
-    colors.append((227/cmax, 26/cmax, 28/cmax, 1))  # red
-    colors.append((51/cmax, 160/cmax, 44/cmax, 1))  # forest green
-    colors.append((0, 0, 0, 0))  # transparent
-    color_map = ListedColormap(colors)
-
-    # Plot
-    print("Make figure")
-    # Figure name
-    fig_name = output_file
-    index_dot = output_file.index(".")
-    fig_name = fig_name[:index_dot]
-    fig_name = fig_name + ".png"
-    # Plot raster and save
-    fig = plt.figure(figsize=figsize, dpi=dpi)
-    plt.subplot(111)
-    plt.imshow(ov_arr, cmap=color_map)
-    fig_img = figure_as_image(fig, fig_name, dpi=dpi)
+    # Estimates of error on deforested hectares
+    error = (ndc*surface_pixel/10000.0)-hectares
 
     # Return results
-    return {"figure": fig_img, "statistics": (counts, threshold,
-                                              error, hectares)}
+    stats = (counts, threshold, error, hectares)
+    return(stats)
 
 # End

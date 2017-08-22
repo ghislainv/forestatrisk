@@ -106,13 +106,13 @@ def country(iso3, monthyear, proj="EPSG:3395",
 
     # Reproject
     cmd = "ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs '" + proj + "' -f 'ESRI Shapefile' \
-    -lco ENCODING=UTF-8 data_raw/ctry_proj.shp data_raw/" + iso3 + "_adm0.shp"
+    -lco ENCODING=UTF-8 data_raw/ctry_PROJ.shp data_raw/" + iso3 + "_adm0.shp"
     os.system(cmd)
 
     # Compute extent
     print("Compute extent")
     extent_latlong = extent_shp("data_raw/" + iso3 + "_adm0.shp")
-    extent_proj = extent_shp("data_raw/ctry_proj.shp")
+    extent_proj = extent_shp("data_raw/ctry_PROJ.shp")
 
     # Region with buffer of 5km
     print("Region with buffer of 5km")

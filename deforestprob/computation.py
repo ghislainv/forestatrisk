@@ -11,6 +11,7 @@
 import numpy as np
 from patsy import dmatrices
 import deforestprob as dfp
+import pickle
 
 
 # computation
@@ -129,7 +130,7 @@ def computation():
                 dpi=200)
 
     # ========================================================
-    # Mean annual deforestation rate on 2000-2014
+    # Mean annual deforestation rate (ha.yr-1)
     # ========================================================
 
     # Forest cover
@@ -146,18 +147,59 @@ def computation():
     f.close()
 
     # Annual deforestation
-    annual_defor = (fc[0]-fc[3])/14
+    annual_defor = (fc[0]-fc[3])/14.0
     # Amount of deforestation (ha) for 40 years
     defor_40yr = np.rint(annual_defor * 40)
 
     # ========================================================
-    # Predicting forest cover
+    # Predicting forest cover change
     # ========================================================
 
     # Compute future forest cover
-    dfp.deforest(input_raster="output/pred_binomial_iCAR.tif",
-                 hectares=defor_40yr,
-                 output_file="output/forest_cover_2050.tif",
-                 blk_rows=128)
+    stats = dfp.deforest(input_raster="output/pred_binomial_iCAR.tif",
+                         hectares=defor_40yr,
+                         output_file="output/fcc_40yr.tif",
+                         blk_rows=128)
+
+    # Save stats to disk with pickle
+    pickle.dump(stats, open("output/stats.pickle", "wb"))
+
+    # Plot histograms of probabilities
+    dfp.plot.freq_prob(stats,
+                       output_file="output/freq_prob.png")
+
+    # ========================================================
+    # Additional figures
+    # ========================================================
+
+    # Forest in 2010
+    dfp.plot.forest("CIV/data/forest/forest_t2.tif",
+                    borders="CIV/data/ctry_PROJ.shp",
+                    output_file="CIV/output/forest_t2.png")
+
+    # Forest-cover change 2005-2010
+    dfp.plot.fcc("CIV/data/fcc12.tif",
+                 borders="CIV/data/ctry_PROJ.shp",
+                 output_file="CIV/output/fcc12.png")
+
+    # Original spatial random effects
+    dfp.plot.rho("CIV/output/rho.tif",
+                 borders="CIV/data/ctry_PROJ.shp",
+                 output_file="CIV/output/rho.png")
+
+    # Interpolated spatial random effects
+    dfp.plot.rho("CIV/output/rho.tif",
+                 borders="CIV/data/ctry_PROJ.shp",
+                 output_file="CIV/output/rho.png")
+
+    # Spatial probability of deforestation
+    dfp.plot.prob("CIV/output/pred_binomial_iCAR.tif",
+                  borders="CIV/data/ctry_PROJ.shp",
+                  output_file="CIV/output/prob.png")
+
+    # Forest-cover change 2010-2050
+    dfp.plot.fcc("CIV/output/fcc_40yr.tif",
+                 borders="CIV/data/ctry_PROJ.shp",
+                 output_file="CIV/output/fcc_40yr.png")
 
 # End

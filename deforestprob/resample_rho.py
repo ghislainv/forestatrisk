@@ -12,8 +12,6 @@
 import os
 import numpy as np
 from osgeo import gdal
-import matplotlib.pyplot as plt
-from miscellaneous import figure_as_image
 
 
 # Resample_rho
@@ -21,6 +19,7 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
                  csize_orig=10, csize_new=1,
                  figsize=(11.69, 8.27),
                  dpi=300):
+
     """Resample rho values with interpolation.
 
     This function resamples the spatial random effects (rho values)
@@ -35,8 +34,6 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     interpolation (in km).
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
-
-    :return: a Matplotlib figure of the spatial random effects.
 
     """
 
@@ -83,17 +80,10 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     print("Compute statistics")
     rho_B.FlushCache()  # Write cache data to disk
     rho_B.ComputeStatistics(False)
-    rho_min, rho_max = rho_B.ComputeRasterMinMax()
-    rho_bound = np.max((-rho_min, rho_max))
 
     # Build overviews
     print("Build overview")
     rho_R.BuildOverviews("average", [2, 4, 8, 16, 32])
-
-    # Get data from finest overview
-    # ov_band = rho_B.GetOverview(0)
-    ov_band = rho_B
-    ov_arr = ov_band.ReadAsArray()
 
     # Dereference driver
     rho_B = None
@@ -106,25 +96,9 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
              "-r bilinear",
              "-ot Float32",
              "-co 'COMPRESS=LZW'", "-co 'PREDICTOR=3'",
+             "-co 'BIGTIFF=YES'",
              rho_orig_filename, output_file]
     command = " ".join(param)
     os.system(command)
-
-    # Plot
-    print("Make figure")
-    # Figure name
-    fig_name = output_file
-    index_dot = output_file.index(".")
-    fig_name = fig_name[:index_dot]
-    fig_name = fig_name + ".png"
-    # Plot raster and save
-    fig = plt.figure(figsize=figsize, dpi=dpi)
-    plt.subplot(111)
-    plt.imshow(ov_arr, cmap="RdYlGn_r", vmin=-rho_bound, vmax=rho_bound)
-    plt.colorbar()
-    fig_img = figure_as_image(fig, fig_name, dpi=dpi)
-
-    # Return figure
-    return(fig_img)
 
 # End
