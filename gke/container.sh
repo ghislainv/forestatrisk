@@ -9,7 +9,8 @@
 
 # For help
 # - https://scotch.io/tutorials/google-cloud-platform-i-deploy-a-docker-app-to-google-container-engine-with-kubernetes
-# 
+# Kubernetes: https://kubernetes.io/docs/user-guide/kubectl
+# - https://medium.com/bitnami-perspectives/jupyter-notebooks-for-kubernetes-via-google-summer-of-code-dfdc6e413b8a
 
 ## gcloud SDK
 
@@ -55,3 +56,10 @@ kubectl run deforestprob-dep --image=ghislainv/docker-debian-jupyter --port=8888
 # Deployment and created pods
 kubectl get deployments  # -w # Uncomment -w if you want to see how it is created
 kubectl get pods  # -w
+
+## Services
+kubectl create -f gke/service.yml
+kubectl get services
+
+## Delete container
+gcloud container clusters delete deforestprob-cluster --async
