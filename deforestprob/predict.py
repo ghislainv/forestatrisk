@@ -196,7 +196,7 @@ def predict(model, var_dir="data",
 
     # Build overviews
     print("Build overviews")
-    Pdrv.BuildOverviews("average", [2, 4, 8, 16, 32])
+    Pdrv.BuildOverviews("nearest", [2, 4, 8, 16, 32])
 
     # Dereference driver
     Pband = None

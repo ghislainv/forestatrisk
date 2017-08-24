@@ -11,6 +11,7 @@
 # - https://scotch.io/tutorials/google-cloud-platform-i-deploy-a-docker-app-to-google-container-engine-with-kubernetes
 # Kubernetes: https://kubernetes.io/docs/user-guide/kubectl
 # - https://medium.com/bitnami-perspectives/jupyter-notebooks-for-kubernetes-via-google-summer-of-code-dfdc6e413b8a
+# - Persistent Storage: http://spr.com/configuring-persistence-storage-docker-kubernetes/
 
 ## gcloud SDK
 
@@ -27,6 +28,9 @@ gcloud components list
 
 #  Set default project
 gcloud config set project ee-deforestprob
+
+## Permanent disk
+# gcloud compute disks create --size 250GB deforestprob-disk
 
 ## Cluster
 
@@ -45,15 +49,15 @@ gcloud config list
 # Getting the cluster credentials
 gcloud container clusters get-credentials deforestprob-cluster --zone europe-west1-d --project ee-deforestprob
 
-# Start a proxy to connect to Kubernetes control plane
-kubectl proxy
+# Start a proxy to connect to Kubernetes control panel with browser 
+# kubectl proxy
 
 # Open the Dashboard interface by navigating to the following location in the browser: http://127.0.0.1:8001/ui
 
 ## Deploy Docker image
 kubectl run deforestprob-dep --image=ghislainv/docker-debian-jupyter --port=8888
 
-# Deployment and created pods
+# Get Deployment and created pods
 kubectl get deployments  # -w # Uncomment -w if you want to see how it is created
 kubectl get pods  # -w
 
