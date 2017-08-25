@@ -65,5 +65,8 @@ kubectl get pods  # -w
 kubectl create -f gke/service.yml
 kubectl get services
 
+# Increase the number of CPU and memory
+
+
 ## Delete container
-gcloud container clusters delete deforestprob-cluster --async
+# gcloud container clusters delete deforestprob-cluster --async
