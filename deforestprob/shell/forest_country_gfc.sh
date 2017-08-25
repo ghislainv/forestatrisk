@@ -159,6 +159,6 @@ cp -t ../data dist_defor.tif dist_edge.tif fcc12.tif
 cp -t ../data/forest forest_t0.tif forest_t1.tif forest_t2.tif forest_t3.tif
 # Remove raw data directory
 cd ../
-# rm -R data_raw
+rm -R data_raw
 
 # End

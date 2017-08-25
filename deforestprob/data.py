@@ -171,7 +171,7 @@ def country(iso3, monthyear, proj="EPSG:3395",
         # Download Google EarthEngine results
         print("Download Google Earth Engine results")
         ee_hansen.download(task, gs_bucket,
-                           path="data_raw/", iso3)
+                           path="data_raw/", iso3=iso3)
         # Call forest_country.sh
         print("Forest computations")
         script = pkg_resources.resource_filename("deforestprob",

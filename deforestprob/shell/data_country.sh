@@ -187,8 +187,7 @@ mkdir -p ../data/emissions
 # Copy files
 cp -t ../data dist_*.tif *_PROJ.* altitude.tif slope.tif aspect.tif pa.tif
 cp -t ../data/emissions AGB.tif
-# Remove raw data directory
+# Return to working director
 cd ../
-# rm -R data_raw
 
 # End
