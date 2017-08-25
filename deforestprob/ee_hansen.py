@@ -101,7 +101,7 @@ def run_tasks(perc, iso3, extent_latlong, scale=30, proj=None,
 
 
 # ee_hansen.download
-def download(task, path, iso3):
+def download(task, gs_bucket, path, iso3):
 
     """Download forest-cover data from Google Cloud Storage.
 
@@ -112,9 +112,8 @@ def download(task, path, iso3):
     - gdrive software is needed: https://github.com/prasmussen/gdrive.
 
     :param task: Google EarthEngine task.
-
-    :param path: Download path.
-
+    :param gs_bucket: Name of the google storage bucket to download from.
+    :param path: Path to download files to.
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
     """
@@ -130,7 +129,9 @@ def download(task, path, iso3):
         t_status = str(task.status()[u'state'])
 
     # Commands to download results with gsutil
-    cmd = "gsutil cp gs://deforestprob/forest_" + iso3 + "*.tif"
+    cmd = ["gsutil cp gs://", gs_bucket,
+           "/input/forest_", iso3, "*.tif ", path]
+    "".join(cmd)
     os.system(cmd)
 
 # End

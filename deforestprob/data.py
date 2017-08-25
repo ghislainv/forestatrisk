@@ -45,7 +45,7 @@ def extent_shp(inShapefile):
 # country
 def country(iso3, monthyear, proj="EPSG:3395",
             fcc_source="gfc", perc=50,
-            gdrive_folder=None):
+            gs_bucket=None):
 
     """Function formating the country data.
 
@@ -66,8 +66,7 @@ def country(iso3, monthyear, proj="EPSG:3395",
     :param perc: Tree cover percentage threshold to define forest
     (online used if fcc_source="gcf").
 
-    :param gdrive_folder: Name of a unique folder in your Drive
-    account to export into. Defaults to the root of the drive.
+    :param gs_bucket: Name of the google storage bucket to use.
 
     """
 
@@ -141,14 +140,14 @@ def country(iso3, monthyear, proj="EPSG:3395",
     tiles_long = str(tile_left) + "-" + str(tile_right)
     tiles_lat = str(tile_top) + "-" + str(tile_bottom)
 
-    # Run Google EarthEngine tasks
+    # Run Google EarthEngine task
     print("Run Google Earth Engine tasks")
     if (fcc_source == "gfc"):
-        tasks = ee_hansen.run_tasks(perc=perc, iso3=iso3,
-                                    extent_latlong=extent_latlong,
-                                    scale=30,
-                                    proj=proj,
-                                    gdrive_folder="deforestprob")
+        task = ee_hansen.run_tasks(perc=perc, iso3=iso3,
+                                   extent_latlong=extent_latlong,
+                                   scale=30,
+                                   proj=proj,
+                                   gs_bucket=gs_bucket)
         print("GEE tasks running on the following extent:")
         print(str(extent_latlong))
 
@@ -171,7 +170,8 @@ def country(iso3, monthyear, proj="EPSG:3395",
     if (fcc_source == "gfc"):
         # Download Google EarthEngine results
         print("Download Google Earth Engine results")
-        ee_hansen.download(tasks, path="data_raw", iso3=iso3)
+        ee_hansen.download(task, gs_bucket,
+                           path="data_raw/", iso3)
         # Call forest_country.sh
         print("Forest computations")
         script = pkg_resources.resource_filename("deforestprob",

@@ -9,6 +9,10 @@
 # license         :GPLv3
 # ==============================================================================
 
+# PRIOR TO EXECUTING THE FOLLOWING SCRIPT, AUTHENTICATE TO
+# 1. Google Earth Engine: earthengine authenticate
+# 2. Google Cloud Storage: gcloud auth application-default login
+
 import os
 import deforestprob as dfp
 import pandas as pd
@@ -64,7 +68,9 @@ def compute(iso3):
     os.chdir(os.path.join(owd, iso3))
 
     # Data
-    dfp.data.country(iso3=iso3, monthyear="Aug2017", proj=proj_africa)
+    dfp.data.country(iso3=iso3, monthyear="Aug2017",
+                     proj=proj_africa,
+                     gs_bucket="deforestprob")
 
     # Computation
     dfp.computation()
