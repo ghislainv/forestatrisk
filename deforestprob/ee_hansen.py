@@ -17,8 +17,8 @@ import os
 ee.Initialize()
 
 
-# ee_hansen.run_tasks
-def run_tasks(perc, iso3, extent_latlong, scale=30, proj=None,
+# ee_hansen.run_task
+def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
               gs_bucket=None):
 
     """Compute forest-cover change with Google EarthEngine.
@@ -106,10 +106,9 @@ def download(task, gs_bucket, path, iso3):
     """Download forest-cover data from Google Cloud Storage.
 
     Check that GEE tasks are completed. Download forest-cover data
-    from Google Cloud Storage in the current working directory.
-
-    Notes for GOOGLE DRIVE CLIENT:
-    - gdrive software is needed: https://github.com/prasmussen/gdrive.
+    from Google Cloud Storage in the current working directory. This
+    function uses the gsutil command
+    (https://cloud.google.com/storage/docs/gsutil)
 
     :param task: Google EarthEngine task.
     :param gs_bucket: Name of the google storage bucket to download from.
@@ -131,7 +130,7 @@ def download(task, gs_bucket, path, iso3):
     # Commands to download results with gsutil
     cmd = ["gsutil cp gs://", gs_bucket,
            "/input/forest_", iso3, "*.tif ", path]
-    "".join(cmd)
+    cmd = "".join(cmd)
     os.system(cmd)
 
 # End

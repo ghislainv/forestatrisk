@@ -13,7 +13,7 @@
 # - https://medium.com/bitnami-perspectives/jupyter-notebooks-for-kubernetes-via-google-summer-of-code-dfdc6e413b8a
 # - Persistent Storage: http://spr.com/configuring-persistence-storage-docker-kubernetes/
 
-## gcloud SDK
+# gcloud SDK
 
 # Configure gcloud
 gcloud init
@@ -29,18 +29,11 @@ gcloud components list
 #  Set default project
 gcloud config set project ee-deforestprob
 
-## Permanent disk
+# Permanent disk
 # gcloud compute disks create --size 250GB deforestprob-disk
 
-## Cluster
-
-# Create cluster
-gcloud container clusters create deforestprob-cluster
-
-# Created [https://container.googleapis.com/v1/projects/ee-deforestprob/zones/europe-west1-d/clusters/deforestprob-cluster].
-# kubeconfig entry generated for deforestprob-cluster.
-# NAME                  ZONE            MASTER_VERSION  MASTER_IP     MACHINE_TYPE   NODE_VERSION  NUM_NODES  STATUS
-# deforestprob-cluster  europe-west1-d  1.6.7           35.195.74.48  n1-standard-1  1.6.7         3          RUNNING
+## Multiprocessing approach on one virtual machine (--num-nodes=1)
+gcloud container clusters create deforestprob-cluster --machine-type=n1-standard-4 --num-nodes=1 --disk-size=250
 
 # Set it as the default cluster
 gcloud config set container/cluster deforestprob-cluster
@@ -49,24 +42,22 @@ gcloud config list
 # Getting the cluster credentials
 gcloud container clusters get-credentials deforestprob-cluster --zone europe-west1-d --project ee-deforestprob
 
-# Start a proxy to connect to Kubernetes control panel with browser 
+# Connect to Kubernetes control panel
 # kubectl proxy
-
 # Open the Dashboard interface by navigating to the following location in the browser: http://127.0.0.1:8001/ui
 
-## Deploy Docker image
-kubectl run deforestprob-dep --image=ghislainv/docker-debian-jupyter --port=8888
+# Deploy the kubernetes configuration onto the cluster
+kubectl create -f gke/deforestprob.yml
 
-# Get Deployment and created pods
-kubectl get deployments  # -w # Uncomment -w if you want to see how it is created
-kubectl get pods  # -w
-
-## Services
-kubectl create -f gke/service.yml
+# See pods and services
+kubectl get deployments
+kubectl get pods
 kubectl get services
 
-# Increase the number of CPU and memory
-
-
-## Delete container
+# Delete container
 # gcloud container clusters delete deforestprob-cluster --async
+
+## Cluster approach with several nodes
+# Create cluster
+# gcloud container clusters create deforestprob-cluster --machine-type=n1-standard-32 --num-nodes=1 --disk-size=250
+
