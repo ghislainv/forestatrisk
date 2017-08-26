@@ -19,7 +19,7 @@ ee.Initialize()
 
 # ee_hansen.run_task
 def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
-              gs_bucket=None):
+             gs_bucket=None):
 
     """Compute forest-cover change with Google EarthEngine.
 
