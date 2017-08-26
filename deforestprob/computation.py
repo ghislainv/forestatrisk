@@ -126,8 +126,7 @@ def computation():
                 input_cell_raster="output/rho.tif",
                 input_forest_raster="data/fcc12.tif",
                 output_file="output/pred_binomial_iCAR.tif",
-                blk_rows=128,
-                dpi=200)
+                blk_rows=128)
 
     # ========================================================
     # Mean annual deforestation rate (ha.yr-1)
