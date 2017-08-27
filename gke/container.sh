@@ -29,11 +29,15 @@ gcloud components list
 #  Set default project
 gcloud config set project ee-deforestprob
 
+# See zone list
+gcloud compute regions list
+
 # Permanent disk
 # gcloud compute disks create --size 250GB deforestprob-disk
 
-## Multiprocessing approach on one virtual machine (--num-nodes=1)
-gcloud container clusters create deforestprob-cluster --machine-type=n1-standard-4 --num-nodes=1 --disk-size=250
+## 1. Multiprocessing approach on one virtual machine (--num-nodes=1)
+# It is better to set up a cluster as you can provide docker images for instances (not yet possible for VM, only in alpha at the moment) 
+gcloud container clusters create deforestprob-cluster --machine-type=custom-24-98304 --num-nodes=1 --disk-size=250
 
 # Set it as the default cluster
 gcloud config set container/cluster deforestprob-cluster
