@@ -45,7 +45,7 @@ for i in range(nctry):
     iso3.append(code.iloc[0])
 
 # Only two countries for test
-iso3 = ["CIV", "GHA"]
+iso3 = ["BEN"]
 nctry = len(iso3)
 
 # Projection for Africa (World Mercator)
@@ -68,9 +68,9 @@ def compute(iso3):
     os.chdir(os.path.join(owd, iso3))
 
     # Data
-    dfp.data.country(iso3=iso3, monthyear="Aug2017",
-                     proj=proj_africa,
-                     gs_bucket="deforestprob")
+    # dfp.data.country(iso3=iso3, monthyear="Aug2017",
+    #                  proj=proj_africa,
+    #                  gs_bucket="deforestprob")
 
     # Computation
     dfp.computation()
