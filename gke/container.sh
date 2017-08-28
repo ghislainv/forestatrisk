@@ -58,6 +58,9 @@ kubectl get deployments
 kubectl get pods
 kubectl get services
 
+# rsync data to google cloud storage
+gsutil -m rsync -r /home/dockeruser/notebooks gs://deforestprob/notebooks
+
 # Delete container
 # gcloud container clusters delete deforestprob-cluster --async
 
