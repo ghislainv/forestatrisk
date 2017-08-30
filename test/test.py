@@ -102,10 +102,7 @@ os.system("gdalbuildvrt -input_file_list list_prob.txt prob.vrt")
 os.system("gdal_translate -co 'COMPRESS=LZW' -co 'PREDICTOR=2' -co 'BIGTIFF=YES' \
 prob.vrt prob.tif")
 # Build overview
-os.system("gdaladdo -ro -r nearest --config COMPRESS_OVERVIEW LZW \
---config PREDICTOR_OVERVIEW 2 \
---config BIGTIFF_OVERVIEW YES \
-prob.tif 16")
+os.system("gdaladdo -ro -r nearest prob.tif 16")
 # Plot
 dfp.plot.prob("prob.tif", output_file="prob.png",
               borders="borders.shp", zoom=None, dpi=300,
@@ -129,7 +126,9 @@ dfp.plot.fcc("fcc_40yr.tif", output_file="fcc_40yr.png",
 # Upload results to Google Cloud Storage with gsutil
 os.system("gsutil -o GSUtil:parallel_composite_upload_threshold=150M \
 cp fcc_40yr.tif gs://deforestprob/output/fcc_40yr.tif")
+os.system("gsutil cp fcc_40yr.png gs://deforestprob/output/fcc_40yr.png")
 os.system("gsutil -o GSUtil:parallel_composite_upload_threshold=150M \
-cp pred.tif gs://deforestprob/output/pred.tif")
+cp prob.tif gs://deforestprob/output/prob.tif")
+os.system("gsutil cp prob.png gs://deforestprob/output/prob.png")
 
 # End
