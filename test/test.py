@@ -45,7 +45,7 @@ for i in range(nctry):
     iso3.append(code.iloc[0])
 
 # Only two countries for test
-iso3 = ["BEN"]
+iso3 = ["RWA"]
 nctry = len(iso3)
 
 # Projection for Africa (World Mercator)
@@ -68,15 +68,19 @@ def compute(iso3):
     os.chdir(os.path.join(owd, iso3))
 
     # Data
-    # dfp.data.country(iso3=iso3, monthyear="Aug2017",
-    #                  proj=proj_africa,
-    #                  gs_bucket="deforestprob")
+    dfp.data.country(iso3=iso3, monthyear="Aug2017",
+                     proj=proj_africa,
+                     gs_bucket="deforestprob")
 
     # Computation
     dfp.computation()
 
     # Return country iso code
     return(iso3)
+
+# # For loop
+# for i in iso3:
+#     compute(i)
 
 # Parallel computation
 pool = mp.Pool(processes=num_cpu)
@@ -88,17 +92,39 @@ print(output)
 
 # Combine results
 
-# For spatial probability
-os.system("find -type f -name *pred_binomial_iCAR.tif > list_pred.txt")
-os.system("gdalbuildvrt -input_file_list list_pred.txt pred.vrt")
-os.system("gdal_translate -co 'COMPRESS=LZW' -co 'PREDICTOR=2' -co 'BIGTIFF=YES' \
-pred.vrt pred.tif")
+# Combine country borders
+os.system("find -type f -name *ctry_PROJ.shp \
+-exec ogr2ogr -update -append borders.shp {} \;")
 
-# For forest cover in 2050
+# Spatial probability
+os.system("find -type f -name *pred_binomial_iCAR.tif > list_prob.txt")
+os.system("gdalbuildvrt -input_file_list list_prob.txt prob.vrt")
+os.system("gdal_translate -co 'COMPRESS=LZW' -co 'PREDICTOR=2' -co 'BIGTIFF=YES' \
+prob.vrt prob.tif")
+# Build overview
+os.system("gdaladdo -ro -r nearest --config COMPRESS_OVERVIEW LZW \
+--config PREDICTOR_OVERVIEW 2 \
+--config BIGTIFF_OVERVIEW YES \
+prob.tif 16")
+# Plot
+dfp.plot.prob("prob.tif", output_file="prob.png",
+              borders="borders.shp", zoom=None, dpi=300,
+              lw=0.5, c="grey")
+
+# Forest cover in 2050
 os.system("find -type f -name *fcc_40yr.tif > list_fcc_40yr.txt")
 os.system("gdalbuildvrt -input_file_list list_fcc_40yr.txt fcc_40yr.vrt")
 os.system("gdal_translate -co 'COMPRESS=LZW' -co 'PREDICTOR=2' -co 'BIGTIFF=YES' \
 fcc_40yr.vrt fcc_40yr.tif")
+# Build overview
+os.system("gdaladdo -ro -r nearest --config COMPRESS_OVERVIEW LZW \
+--config PREDICTOR_OVERVIEW 2 \
+--config BIGTIFF_OVERVIEW YES \
+fcc_40yr.tif 16")
+# Plot
+dfp.plot.fcc("fcc_40yr.tif", output_file="fcc_40yr.png",
+             borders="borders.shp", zoom=None, dpi=300,
+             lw=0.5, c="grey")
 
 # Upload results to Google Cloud Storage with gsutil
 os.system("gsutil -o GSUtil:parallel_composite_upload_threshold=150M \

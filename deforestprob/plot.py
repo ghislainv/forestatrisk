@@ -185,7 +185,7 @@ def fcc(input_fcc_raster,
         zoom=None,
         col=(227, 26, 28, 255),
         figsize=(11.69, 8.27),
-        dpi=300):
+        dpi=300, **kwargs):
 
     """Plot forest-cover change (fcc) map.
 
@@ -251,7 +251,7 @@ def fcc(input_fcc_raster,
     ax1.set_yticks([])
     plt.imshow(ov_arr, cmap=color_map, extent=extent)
     if borders is not None:
-        plot_layer(borders, symbol="k-")
+        plot_layer(borders, symbol="k-", **kwargs)
     plt.axis("off")
     if zoom is not None:
         z = Rectangle(
@@ -280,7 +280,7 @@ def forest(input_forest_raster,
            borders=None,
            zoom=None,
            figsize=(11.69, 8.27),
-           dpi=300):
+           dpi=300, **kwargs):
 
     """Plot forest map.
 
@@ -341,7 +341,7 @@ def forest(input_forest_raster,
     ax1.set_yticks([])
     plt.imshow(ov_arr, cmap=color_map, extent=extent)
     if borders is not None:
-        plot_layer(borders, symbol="k-")
+        plot_layer(borders, symbol="k-", **kwargs)
     plt.axis("off")
     if zoom is not None:
         z = Rectangle(
@@ -370,7 +370,7 @@ def prob(input_prob_raster,
          borders=None,
          zoom=None,
          figsize=(11.69, 8.27),
-         dpi=300):
+         dpi=300, **kwargs):
 
     """Plot map of spatial probability of deforestation.
 
@@ -404,7 +404,7 @@ def prob(input_prob_raster,
     if rasterB.GetOverviewCount() == 0:
         # Build overviews
         print("Build overview")
-        rasterR.BuildOverviews("average", [4, 8, 16, 32])
+        rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Get data from finest overview
     ov_band = rasterB.GetOverview(0)
@@ -431,7 +431,7 @@ def prob(input_prob_raster,
     plt.subplot(111)
     plt.imshow(ov_arr, cmap=color_map, extent=extent)
     if borders is not None:
-        plot_layer(borders, symbol="k-")
+        plot_layer(borders, symbol="k-", **kwargs)
     fig_img = figure_as_image(fig, output_file, dpi=dpi)
 
     # Return figure
