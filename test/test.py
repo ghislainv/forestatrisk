@@ -27,7 +27,8 @@ countries = ["Senegal", "Gambia (Islamic Republic of the)", "Guinea Bissau",
              "Central African Republic", "Equatorial Guinea", "Gabon", "Congo",
              "Democratic Republic of the Congo", "Uganda", "Kenya",
              "United Republic of Tanzania", "Rwanda", "Burundi", "Madagascar",
-             "Mozambique"]
+             "Mozambique", "Angola", "Zambia", "Malawi", "South Sudan",
+             "Ethiopia"]
 
 # Number of countries
 nctry = len(countries)
@@ -44,8 +45,8 @@ for i in range(nctry):
         "country.name.en"] == countries[i]]
     iso3.append(code.iloc[0])
 
-# Only two countries for test
-iso3 = ["RWA"]
+# Only some countries for test
+iso3 = ["MWI"]
 nctry = len(iso3)
 
 # Projection for Africa (World Mercator)
@@ -68,9 +69,9 @@ def compute(iso3):
     os.chdir(os.path.join(owd, iso3))
 
     # Data
-    dfp.data.country(iso3=iso3, monthyear="Aug2017",
-                     proj=proj_africa,
-                     gs_bucket="deforestprob")
+    # dfp.data.country(iso3=iso3, monthyear="Sep2017",
+    #                  proj=proj_africa,
+    #                  gs_bucket="deforestprob")
 
     # Computation
     dfp.computation()
@@ -78,7 +79,7 @@ def compute(iso3):
     # Return country iso code
     return(iso3)
 
-# # For loop
+# For loop
 # for i in iso3:
 #     compute(i)
 

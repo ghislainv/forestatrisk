@@ -17,8 +17,8 @@ import os
 ee.Initialize()
 
 
-# ee_hansen.run_task
-def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
+# ee_roadless.run_task
+def run_task(iso3, extent_latlong, scale=30, proj=None,
              gs_bucket=None):
     """Compute forest-cover change with Google EarthEngine.
 
@@ -31,7 +31,6 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     - GEE API Python client is needed: \
     https://developers.google.com/earth-engine/python_install.
 
-    :param perc: Tree cover percentage threshold to define forest.
     :param iso3: Country ISO 3166-1 alpha-3 code.
     :param extent_latlong: List/tuple of region extent in lat/long
     (xmin, ymin, xmax, ymax).
@@ -49,12 +48,15 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     region = region.buffer(10000).bounds()
     export_coord = region.getInfo()["coordinates"]
 
-    # Hansen map
-    gfc = ee.Image("UMD/hansen/global_forest_change_2015").clip(region)
+    # Roadless annual change map (rac)
+    image_path = ["users/ClassifLandsat072015/Mosaic_v10/",
+                  "collectionPeriod_", "MaskEvergreen_L4578"]
+    image_name = "".join(image_path)
+    rac = ee.ImageCollection(image_name).mosaic().clip(region)
 
-    # Tree cover, loss, and gain
-    treecover = gfc.select(["treecover2000"])
-    lossyear = gfc.select(["lossyear"])
+    # Forest
+    fc2000 = rac.select(["Jan2000"])
+    forest2000 = fc2000.where(fc2000.eq(1), 0)
 
     # Forest in 2000
     forest2000 = treecover.gte(perc)
@@ -71,13 +73,13 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
 
     # Forest raster with four bands
     forest = forest2000.addBands(forest2005).addBands(
-        forest2010).addBands(forest2014)
+        forest2010).addBands(forest2015)
     forest = forest.select([0, 1, 2, 3], ["forest2000",
                                           "forest2005",
-                                          "forest2010", "forest2014"])
+                                          "forest2010", "forest2015"])
     forest = forest.set("system:bandNames", ["forest2000",
                                              "forest2005",
-                                             "forest2010", "forest2014"])
+                                             "forest2010", "forest2015"])
 
     # maxPixels
     maxPix = 1e13
@@ -86,13 +88,13 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     # ! region must be lat/long coordinates with Python API.
     task = ee.batch.Export.image.toCloudStorage(
         image=forest,
-        description="forest_" + iso3,
+        description="roadless_" + iso3,
         bucket=gs_bucket,
         region=export_coord,
         scale=scale,
         maxPixels=maxPix,
         crs=proj,
-        fileNamePrefix="input/forest_" + iso3)
+        fileNamePrefix="roadless/forest_" + iso3)
     task.start()
 
     # Return task
@@ -127,7 +129,7 @@ def download(task, gs_bucket, path, iso3):
 
     # Commands to download results with gsutil
     cmd = ["gsutil cp gs://", gs_bucket,
-           "/input/forest_", iso3, "*.tif ", path]
+           "/roadless/forest_", iso3, "*.tif ", path]
     cmd = "".join(cmd)
     os.system(cmd)
 

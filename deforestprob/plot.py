@@ -420,8 +420,8 @@ def prob(input_prob_raster,
     vmax = 65535.0  # float for division
     colors.append((0, (0, 0, 0, 0)))  # transparent
     colors.append((1 / vmax, (34 / cmax, 139 / cmax, 34 / cmax, 1)))  # green
-    colors.append((45000 / vmax, (1, 165 / cmax, 0, 1)))  # red
-    colors.append((55000 / vmax, (1, 0, 0, 1)))  # orange
+    colors.append((45000 / vmax, (1, 165 / cmax, 0, 1)))  # orange
+    colors.append((55000 / vmax, (1, 0, 0, 1)))  # red
     colors.append((1, (0, 0, 0, 1)))  # black
     color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
                                                   N=65535, gamma=1.0)
