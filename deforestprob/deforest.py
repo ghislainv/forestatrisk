@@ -94,27 +94,35 @@ def deforest(input_raster,
         for i in flat_data_nonzero:
             counts[i-1] += 1.0/nfc
 
-    # Identify threshold
-    print("Identify threshold")
-    quant = ndefor/np.float(nfc)
-    cS = 0.0
-    cumSum = np.zeros(nvalues, dtype=np.float)
-    go_on = True
-    for i in np.arange(nvalues-1, -1, -1):
-        cS += counts[i]
-        cumSum[i] = cS
-        if (cS >= quant) & (go_on is True):
-            go_on = False
-            index = i
+    # If deforestation < forest
+    if (ndefor < nfc):
+
+        # Identify threshold
+        print("Identify threshold")
+        quant = ndefor/np.float(nfc)
+        cS = 0.0
+        cumSum = np.zeros(nvalues, dtype=np.float)
+        go_on = True
+        for i in np.arange(nvalues-1, -1, -1):
+            cS += counts[i]
+            cumSum[i] = cS
+            if (cS >= quant) & (go_on is True):
+                go_on = False
+                index = i
+                threshold = index+1
+
+        # Minimize error
+        print("Minimize error on deforested hectares")
+        diff_inf = ndefor-cumSum[index+1]*nfc
+        diff_sup = cumSum[index]*nfc-ndefor
+        if diff_sup >= diff_inf:
+            index = index+1
             threshold = index+1
 
-    # Minimize error
-    print("Minimize error on deforested hectares")
-    diff_inf = ndefor-cumSum[index+1]*nfc
-    diff_sup = cumSum[index]*nfc-ndefor
-    if diff_sup >= diff_inf:
-        index = index+1
-        threshold = index+1
+    # If deforestation > forest (everything is deforested)
+    else:
+        index = 0
+        threshold = 1
 
     # Raster of predictions
     print("Create a raster file on disk for forest-cover change")

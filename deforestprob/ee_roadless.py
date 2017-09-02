@@ -12,14 +12,13 @@
 import ee
 import time
 import os
-from google.cloud import storage
 
 # Initialize
 ee.Initialize()
 
 
-# ee_hansen.run_task
-def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
+# ee_roadless.run_task
+def run_task(iso3, extent_latlong, scale=30, proj=None,
              gs_bucket=None):
     """Compute forest-cover change with Google EarthEngine.
 
@@ -32,7 +31,6 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     - GEE API Python client is needed: \
     https://developers.google.com/earth-engine/python_install.
 
-    :param perc: Tree cover percentage threshold to define forest.
     :param iso3: Country ISO 3166-1 alpha-3 code.
     :param extent_latlong: List/tuple of region extent in lat/long
     (xmin, ymin, xmax, ymax).
@@ -40,7 +38,7 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     :param proj: The projection for the export.
     :param gs_bucket: Name of the google storage bucket to export to.
 
-    :return: The Google EarthEngine task.
+    :return: Google EarthEngine task.
 
     """
 
@@ -50,12 +48,15 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     region = region.buffer(10000).bounds()
     export_coord = region.getInfo()["coordinates"]
 
-    # Hansen map
-    gfc = ee.Image("UMD/hansen/global_forest_change_2015").clip(region)
+    # Roadless annual change map (rac)
+    image_path = ["users/ClassifLandsat072015/Mosaic_v10/",
+                  "collectionPeriod_", "MaskEvergreen_L4578"]
+    image_name = "".join(image_path)
+    rac = ee.ImageCollection(image_name).mosaic().clip(region)
 
-    # Tree cover, loss, and gain
-    treecover = gfc.select(["treecover2000"])
-    lossyear = gfc.select(["lossyear"])
+    # Forest
+    fc2000 = rac.select(["Jan2000"])
+    forest2000 = fc2000.where(fc2000.eq(1), 0)
 
     # Forest in 2000
     forest2000 = treecover.gte(perc)
@@ -72,13 +73,13 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
 
     # Forest raster with four bands
     forest = forest2000.addBands(forest2005).addBands(
-        forest2010).addBands(forest2014)
+        forest2010).addBands(forest2015)
     forest = forest.select([0, 1, 2, 3], ["forest2000",
                                           "forest2005",
-                                          "forest2010", "forest2014"])
+                                          "forest2010", "forest2015"])
     forest = forest.set("system:bandNames", ["forest2000",
                                              "forest2005",
-                                             "forest2010", "forest2014"])
+                                             "forest2010", "forest2015"])
 
     # maxPixels
     maxPix = 1e13
@@ -87,53 +88,21 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     # ! region must be lat/long coordinates with Python API.
     task = ee.batch.Export.image.toCloudStorage(
         image=forest,
-        description="forest_" + iso3,
+        description="roadless_" + iso3,
         bucket=gs_bucket,
         region=export_coord,
         scale=scale,
         maxPixels=maxPix,
         crs=proj,
-        fileNamePrefix="global_forest_change/forest_" + iso3)
+        fileNamePrefix="roadless/forest_" + iso3)
     task.start()
 
     # Return task
     return(task)
 
 
-# check
-def check(gs_bucket, iso3):
-
-    """Function to check if the forest cover data are already present in
-    the Google Cloud Storage (GCS) bucket.
-
-    :param gs_bucket: the GCS bucket to look in.
-    :param iso3: Country ISO 3166-1 alpha-3 code.
-
-    :return: A boolean indicating the presence (True) of the data in
-    the bucket.
-
-    """
-
-    # Connect to GCS bucket
-    client = storage.Client()
-    bucket = client.get_bucket(gs_bucket)
-    # Filename to find
-    fname = "global_forest_change/forest_" + iso3
-    # Get a list of the blobs
-    iterator = bucket.list_blobs()
-    blobs = list(iterator)
-    # Loop on blobs
-    present_in_bucket = False
-    for b in blobs:
-        if b.name.find(fname) == 0:
-            present_in_bucket = True
-            break
-    # Return
-    return(present_in_bucket)
-
-
 # ee_hansen.download
-def download(gs_bucket, iso3, path):
+def download(task, gs_bucket, path, iso3):
     """Download forest-cover data from Google Cloud Storage.
 
     Check that GEE tasks are completed. Download forest-cover data
@@ -141,25 +110,26 @@ def download(gs_bucket, iso3, path):
     function uses the gsutil command
     (https://cloud.google.com/storage/docs/gsutil)
 
+    :param task: Google EarthEngine task.
     :param gs_bucket: Name of the google storage bucket to download from.
-    :param iso3: Country ISO 3166-1 alpha-3 code.
     :param path: Path to download files to.
+    :param iso3: Country ISO 3166-1 alpha-3 code.
 
     """
 
-    # Data availability
-    data_availability = check(gs_bucket, iso3)
+    # Task status
+    t_status = str(task.status()[u'state'])
 
     # Check task status
-    while data_availability is False:
-            # We wait 1 min
-            time.sleep(60)
-            # We reactualize the status
-            data_availability = check(gs_bucket, iso3)
+    while (t_status != "COMPLETED"):
+        # We wait 1 min
+        time.sleep(60)
+        # We reactualize the status
+        t_status = str(task.status()[u'state'])
 
     # Commands to download results with gsutil
     cmd = ["gsutil cp gs://", gs_bucket,
-           "/global_forest_change/forest_", iso3, "*.tif ", path]
+           "/roadless/forest_", iso3, "*.tif ", path]
     cmd = "".join(cmd)
     os.system(cmd)
 
