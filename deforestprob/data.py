@@ -140,16 +140,20 @@ def country(iso3, monthyear, proj="EPSG:3395",
     tiles_long = str(tile_left) + "-" + str(tile_right)
     tiles_lat = str(tile_top) + "-" + str(tile_bottom)
 
-    # Run Google EarthEngine task
-    print("Run Google Earth Engine tasks")
+    # Google EarthEngine task
     if (fcc_source == "gfc"):
-        task = ee_hansen.run_task(perc=perc, iso3=iso3,
-                                  extent_latlong=extent_latlong,
-                                  scale=30,
-                                  proj=proj,
-                                  gs_bucket=gs_bucket)
-        print("GEE tasks running on the following extent:")
-        print(str(extent_latlong))
+        # Check data availability
+        data_availability = ee_hansen.check(gs_bucket, iso3)
+        # If not available, run GEE
+        if data_availability is False:
+            print("Run Google Earth Engine")
+            task = ee_hansen.run_task(perc=perc, iso3=iso3,
+                                      extent_latlong=extent_latlong,
+                                      scale=30,
+                                      proj=proj,
+                                      gs_bucket=gs_bucket)
+            print("GEE running on the following extent:")
+            print(str(extent_latlong))
 
     # Call data_country.sh
     script = pkg_resources.resource_filename("deforestprob",
@@ -163,9 +167,9 @@ def country(iso3, monthyear, proj="EPSG:3395",
     # Forest computations
     if (fcc_source == "gfc"):
         # Download Google EarthEngine results
-        print("Download Google Earth Engine results")
-        ee_hansen.download(task, gs_bucket,
-                           path="data_raw", iso3=iso3)
+        print("Download Google Earth Engine results locally")
+        ee_hansen.download(gs_bucket, iso3,
+                           path="data_raw")
         # Call forest_country.sh
         print("Forest computations")
         script = pkg_resources.resource_filename("deforestprob",

@@ -61,6 +61,9 @@ kubectl get services
 # Delete container
 # gcloud container clusters delete deforestprob-cluster --async
 
+# Delete service
+# kubectl delete service foo
+
 ## Cluster approach with several nodes
 # Create cluster
 # gcloud container clusters create deforestprob-cluster --machine-type=n1-standard-32 --num-nodes=1 --disk-size=250

@@ -12,6 +12,7 @@
 import ee
 import time
 import os
+from google.cloud import storage
 
 # Initialize
 ee.Initialize()
@@ -40,7 +41,7 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     :param proj: The projection for the export.
     :param gs_bucket: Name of the google storage bucket to export to.
 
-    :return: List of Google EarthEngine tasks.
+    :return: The Google EarthEngine task.
 
     """
 
@@ -81,7 +82,7 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
                                              "forest2010", "forest2014"])
 
     # maxPixels
-    maxPix = 1e10
+    maxPix = 1e13
 
     # Export forest to cloud storage
     # ! region must be lat/long coordinates with Python API.
@@ -93,15 +94,47 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
         scale=scale,
         maxPixels=maxPix,
         crs=proj,
-        fileNamePrefix="input/forest_" + iso3)
+        fileNamePrefix="global_forest_change/forest_" + iso3)
     task.start()
 
     # Return task
     return(task)
 
 
+# check
+def check(gs_bucket, iso3):
+
+    """Function to check if the forest cover data are already present in
+    the Google Cloud Storage (GCS) bucket.
+
+    :param gs_bucket: the GCS bucket to look in.
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :return: A boolean indicating the presence (True) of the data in
+    the bucket.
+
+    """
+
+    # Connect to GCS bucket
+    client = storage.Client()
+    bucket = client.get_bucket(gs_bucket)
+    # Filename to find
+    fname = "global_forest_change/forest_" + iso3
+    # Get a list of the blobs
+    iterator = bucket.list_blobs()
+    blobs = list(iterator)
+    # Loop on blobs
+    present_in_bucket = False
+    for b in blobs:
+        if b.name.find(fname) == 0:
+            present_in_bucket = True
+            break
+    # Return
+    return(present_in_bucket)
+
+
 # ee_hansen.download
-def download(task, gs_bucket, path, iso3):
+def download(gs_bucket, iso3, path):
 
     """Download forest-cover data from Google Cloud Storage.
 
@@ -110,26 +143,25 @@ def download(task, gs_bucket, path, iso3):
     function uses the gsutil command
     (https://cloud.google.com/storage/docs/gsutil)
 
-    :param task: Google EarthEngine task.
     :param gs_bucket: Name of the google storage bucket to download from.
-    :param path: Path to download files to.
     :param iso3: Country ISO 3166-1 alpha-3 code.
+    :param path: Path to download files to.
 
     """
 
-    # Task status
-    t_status = str(task.status()[u'state'])
+    # Data availability
+    data_availability = check(gs_bucket, iso3)
 
     # Check task status
-    while (t_status != "COMPLETED"):
-        # We wait 1 min
-        time.sleep(60)
-        # We reactualize the status
-        t_status = str(task.status()[u'state'])
+    while data_availability is False:
+            # We wait 1 min
+            time.sleep(60)
+            # We reactualize the status
+            data_availability = check(gs_bucket, iso3)
 
     # Commands to download results with gsutil
     cmd = ["gsutil cp gs://", gs_bucket,
-           "/input/forest_", iso3, "*.tif ", path]
+           "/global_forest_change/forest_", iso3, "*.tif ", path]
     cmd = "".join(cmd)
     os.system(cmd)
 
