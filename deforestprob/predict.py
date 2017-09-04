@@ -47,7 +47,6 @@ def predict(model, var_dir="data",
             input_forest_raster="data/forest.tif",
             output_file="output/pred_binomial_iCAR.tif",
             blk_rows=128):
-
     """Predict the spatial probability of deforestation from a model.
 
     This function predicts the spatial probability of deforestation
@@ -196,7 +195,7 @@ def predict(model, var_dir="data",
 
     # Build overviews
     print("Build overviews")
-    Pdrv.BuildOverviews("nearest", [2, 4, 8, 16, 32])
+    Pdrv.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Dereference driver
     Pband = None

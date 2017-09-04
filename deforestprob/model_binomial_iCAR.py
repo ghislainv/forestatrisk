@@ -20,6 +20,7 @@ from miscellaneous import invlogit
 
 # model_binomial_iCAR
 class model_binomial_iCAR(object):
+
     """model_binomial_iCAR class.
 
     model_binomial_iCAR class to estimates the parameters of a Binomial
@@ -99,7 +100,7 @@ class model_binomial_iCAR(object):
         # Initial starting values for M-H
         # ========
 
-        if (beta_start == -99):
+        if (np.size(beta_start) == 1 and beta_start == -99):
             # Use starting coefficient from logistic regression
             print("Using estimates from classic logistic regression as"
                   " starting values for betas")

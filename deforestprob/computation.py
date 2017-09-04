@@ -30,10 +30,9 @@ def computation():
                          output_file="output/sample.txt",
                          blk_rows=0)
 
-    # # To import data as pandas DataFrame if necessary
+    # To import data as pandas DataFrame if necessary
     # import pandas as pd
-    # dataset = pd.read_table("output/sample.txt",
-    #                         delimiter=",")
+    # dataset = pd.read_table("output/sample.txt", delimiter=",")
     # dataset.head(5)
 
     # Descriptive statistics
@@ -46,7 +45,8 @@ def computation():
     scale(altitude) + scale(slope) + scale(aspect) - 1"
     formulas = (formula_1, formula_2)
 
-    # Remove NA from data-set (otherwise scale() doesn't work)
+    # Remove NA from data-set (otherwise scale() and
+    # model_binomial_iCAR doesn't work)
     dataset = dataset.dropna(axis=0)
 
     # Loop on formulas
@@ -73,22 +73,56 @@ def computation():
     # Spatial cells for spatial-autocorrelation
     nneigh, adj = dfp.cellneigh(raster="data/fcc12.tif", csize=10, rank=1)
 
-    # Formula
-    formula = "I(1-fcc12) + trial ~ C(pa) + scale(altitude) + \
-    scale(slope) + scale(aspect) + scale(dist_defor) + \
-    scale(dist_edge) + scale(dist_road) + scale(dist_town) + \
-    scale(dist_river) + cell"
+    # List of variables
+    variables = ["C(pa)", "scale(altitude)", "scale(slope)",
+                 "scale(dist_defor)", "scale(dist_edge)", "scale(dist_road)",
+                 "scale(dist_town)", "scale(dist_river)"]
+    variables = np.array(variables)
 
-    # Model
+    # Run model while there is non-significant variables
+    var_remove = True
+    while(np.any(var_remove)):
+
+        # Formula
+        right_part = " + ".join(variables) + " + cell"
+        left_part = "I(1-fcc12) + trial ~ "
+        formula = left_part + right_part
+
+        # Model
+        mod_binomial_iCAR = dfp.model_binomial_iCAR(
+            # Observations
+            suitability_formula=formula, data=dataset,
+            # Spatial structure
+            n_neighbors=nneigh, neighbors=adj,
+            # Chains
+            burnin=1000, mcmc=1000, thin=1,
+            # Starting values
+            beta_start=-99)
+
+        # Ecological and statistical significance
+        effects = mod_binomial_iCAR.betas[1:]
+        # MCMC = mod_binomial_iCAR.mcmc
+        # CI_low = np.percentile(MCMC, 2.5, axis=0)[1:-2]
+        # CI_high = np.percentile(MCMC, 97.5, axis=0)[1:-2]
+        positive_effects = (effects >= 0)
+        # zero_in_CI = ((CI_low * CI_high) <= 0)
+
+        # Keeping only significant variables
+        var_remove = positive_effects
+        # var_remove = np.logical_or(positive_effects, zero_in_CI)
+        var_keep = np.logical_not(var_remove)
+        variables = variables[var_keep]
+
+    # Re-run the model with longer MCMC and estimated initial values
     mod_binomial_iCAR = dfp.model_binomial_iCAR(
         # Observations
         suitability_formula=formula, data=dataset,
         # Spatial structure
         n_neighbors=nneigh, neighbors=adj,
         # Chains
-        burnin=1000, mcmc=1000, thin=1,
+        burnin=5000, mcmc=5000, thin=5,
         # Starting values
-        beta_start=-99)
+        beta_start=mod_binomial_iCAR.betas)
 
     # Summary
     print(mod_binomial_iCAR)
@@ -146,7 +180,7 @@ def computation():
     f.close()
 
     # Annual deforestation
-    annual_defor = (fc[0]-fc[3])/14.0
+    annual_defor = (fc[0] - fc[3]) / 14.0
     # Amount of deforestation (ha) for 40 years
     defor_40yr = np.rint(annual_defor * 40)
 
