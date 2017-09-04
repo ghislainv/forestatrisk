@@ -11,6 +11,7 @@ notebook/output
 # test
 test/*
 !test/test.py
+!test/niceplot*
 
 # C extensions
 C/build
