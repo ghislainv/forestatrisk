@@ -12,7 +12,8 @@
 import numpy as np
 import os
 from osgeo import ogr
-import ee_hansen  # To compute fcc with Google EarthEngine
+import ee_hansen
+import ee_roadless
 from zipfile import ZipFile  # To unzip files
 from urllib import urlretrieve  # To download files from internet
 import pandas as pd
@@ -22,7 +23,6 @@ from miscellaneous import make_dir
 
 # Extent of a shapefile
 def extent_shp(inShapefile):
-
     """Compute the extent of a shapefile.
 
     This function computes the extent (xmin, xmax, ymin, ymax) of a
@@ -44,9 +44,9 @@ def extent_shp(inShapefile):
 
 # country
 def country(iso3, monthyear, proj="EPSG:3395",
+            data_country=True,
             fcc_source="gfc", perc=50,
             gs_bucket=None):
-
     """Function formating the country data.
 
     This function downloads, computes and formats the country data.
@@ -58,6 +58,9 @@ def country(iso3, monthyear, proj="EPSG:3395",
 
     :param monthyear: Date (month and year) for WDPA data
     (e.g. "Aug2017").
+
+    :param data_country: Boolean for running data_country.sh to
+    compute country landscape variables. Default to "True".
 
     :param fcc_source: Source for forest-cover change data. Can be
     "gfc" (Global Forest Change 2015 Hansen data) or
@@ -160,14 +163,30 @@ def country(iso3, monthyear, proj="EPSG:3395",
             print("GEE running on the following extent:")
             print(str(extent_latlong))
 
+    # Google EarthEngine task
+    if (fcc_source == "roadless"):
+        # Check data availability
+        data_availability = ee_roadless.check(gs_bucket, iso3)
+        # If not available, run GEE
+        if data_availability is False:
+            print("Run Google Earth Engine")
+            task = ee_roadless.run_task(perc=perc, iso3=iso3,
+                                        extent_latlong=extent_latlong,
+                                        scale=30,
+                                        proj=proj,
+                                        gs_bucket=gs_bucket)
+            print("GEE running on the following extent:")
+            print(str(extent_latlong))
+
     # Call data_country.sh
-    script = pkg_resources.resource_filename("deforestprob",
-                                             "shell/data_country.sh")
-    args = ["sh ", script, continent, ctry_link_geofab, iso3,
-            "'" + proj + "'",
-            "'" + extent + "'", tiles_long, tiles_lat, monthyear]
-    cmd = " ".join(args)
-    os.system(cmd)
+    if (data_country):
+        script = pkg_resources.resource_filename("deforestprob",
+                                                 "shell/data_country.sh")
+        args = ["sh ", script, continent, ctry_link_geofab, iso3,
+                "'" + proj + "'",
+                "'" + extent + "'", tiles_long, tiles_lat, monthyear]
+        cmd = " ".join(args)
+        os.system(cmd)
 
     # Forest computations
     if (fcc_source == "gfc"):
@@ -178,7 +197,21 @@ def country(iso3, monthyear, proj="EPSG:3395",
         # Call forest_country.sh
         print("Forest computations")
         script = pkg_resources.resource_filename("deforestprob",
-                                                 "shell/forest_country_gfc.sh")
+                                                 "shell/forest_country.sh")
+        args = ["sh ", script, "'" + proj + "'", "'" + extent + "'"]
+        cmd = " ".join(args)
+        os.system(cmd)
+
+    # Forest computations
+    if (fcc_source == "roadless"):
+        # Download Google EarthEngine results
+        print("Download Google Earth Engine results locally")
+        ee_hansen.download(gs_bucket, iso3,
+                           path="data_raw")
+        # Call forest_country.sh
+        print("Forest computations")
+        script = pkg_resources.resource_filename("deforestprob",
+                                                 "shell/forest_country.sh")
         args = ["sh ", script, "'" + proj + "'", "'" + extent + "'"]
         cmd = " ".join(args)
         os.system(cmd)

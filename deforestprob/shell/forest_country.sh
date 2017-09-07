@@ -39,17 +39,17 @@ gdalwarp -te $extent -tap -t_srs "$proj" \
          -tr 30 30 -r near \
          -co "PHOTOMETRIC=MINISBLACK" -co "ALPHA=NO" \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         forest_norgba.tif forest_gfc.tif
+         forest_norgba.tif forest_src.tif
 
 # Separate bands
 gdal_translate -mask none -b 1 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               forest_gfc.tif forest_t0_gfc.tif
+               forest_src.tif forest_t0_src.tif
 gdal_translate -mask none -b 2 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               forest_gfc.tif forest_t1_gfc.tif
+               forest_src.tif forest_t1_src.tif
 gdal_translate -mask none -b 3 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               forest_gfc.tif forest_t2_gfc.tif
+               forest_src.tif forest_t2_src.tif
 gdal_translate -mask none -b 4 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               forest_gfc.tif forest_t3_gfc.tif
+               forest_src.tif forest_t3_src.tif
 
 # =====
 # 1. Compute distance to forest edge at t1
@@ -58,7 +58,7 @@ gdal_translate -mask none -b 4 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF
 # Message
 echo "Computing distance to forest edge\n"
 #
-gdal_proximity.py forest_t1_gfc.tif _dist_edge.tif \
+gdal_proximity.py forest_t1_src.tif _dist_edge.tif \
                   -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                   -values 0 -ot UInt32 -distunits GEO
 
@@ -73,20 +73,20 @@ gdal_translate -a_nodata 0 \
 # Message
 echo "Computing distance to past deforestation\n"
 
-# Create raster fcc01_gfc.tif
-gdal_calc.py --overwrite -A forest_t0_gfc.tif -B forest_t1_gfc.tif \
-             --outfile=fcc01_gfc.tif --type=Byte \
+# Create raster fcc01_src.tif
+gdal_calc.py --overwrite -A forest_t0_src.tif -B forest_t1_src.tif \
+             --outfile=fcc01_src.tif --type=Byte \
              --calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=255
 
 # Compute distance
-gdal_proximity.py fcc01_gfc.tif _dist_defor_gfc.tif \
+gdal_proximity.py fcc01_src.tif _dist_defor_src.tif \
                   -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                   -values 0 -ot UInt32 -distunits GEO
 
-# Mask with forest_t1_gfc.tif
-gdal_calc.py --overwrite -A _dist_defor_gfc.tif -B forest_t1_gfc.tif \
+# Mask with forest_t1_src.tif
+gdal_calc.py --overwrite -A _dist_defor_src.tif -B forest_t1_src.tif \
              --outfile=dist_defor.tif --type=UInt32 \
              --calc="A*(B==1)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
@@ -103,9 +103,9 @@ gdal_calc.py --overwrite -A _dist_defor_gfc.tif -B forest_t1_gfc.tif \
 # Message
 echo "Computing forest-cover change raster\n"
 
-# Create raster fcc12_gfc.tif
-gdal_calc.py --overwrite -A forest_t1_gfc.tif -B forest_t2_gfc.tif \
-             --outfile=fcc12_gfc.tif --type=Byte \
+# Create raster fcc12_src.tif
+gdal_calc.py --overwrite -A forest_t1_src.tif -B forest_t2_src.tif \
+             --outfile=fcc12_src.tif --type=Byte \
              --calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=255
@@ -114,7 +114,7 @@ gdal_calc.py --overwrite -A forest_t1_gfc.tif -B forest_t2_gfc.tif \
 gdalwarp -overwrite -srcnodata 255 -dstnodata 255 \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -cutline ctry_PROJ.shp \
-         fcc12_gfc.tif fcc12.tif
+         fcc12_src.tif fcc12.tif
 
 # =====
 # 4. Cropping forest rasters
@@ -127,22 +127,22 @@ echo "Cropping forest rasters\n"
 gdalwarp -overwrite -srcnodata 0 -dstnodata 255 \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -cutline ctry_PROJ.shp \
-         forest_t0_gfc.tif forest_t0.tif
+         forest_t0_src.tif forest_t0.tif
 
 gdalwarp -overwrite -srcnodata 0 -dstnodata 255 \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -cutline ctry_PROJ.shp \
-         forest_t1_gfc.tif forest_t1.tif
+         forest_t1_src.tif forest_t1.tif
 
 gdalwarp -overwrite -srcnodata 0 -dstnodata 255 \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -cutline ctry_PROJ.shp \
-         forest_t2_gfc.tif forest_t2.tif
+         forest_t2_src.tif forest_t2.tif
 
 gdalwarp -overwrite -srcnodata 0 -dstnodata 255 \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -cutline ctry_PROJ.shp \
-         forest_t3_gfc.tif forest_t3.tif
+         forest_t3_src.tif forest_t3.tif
 
 # ===========================
 # Cleaning

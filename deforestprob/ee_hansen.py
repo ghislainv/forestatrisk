@@ -100,9 +100,8 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     return(task)
 
 
-# check
+# ee_hansen.check
 def check(gs_bucket, iso3):
-
     """Function to check if the forest cover data are already present in
     the Google Cloud Storage (GCS) bucket.
 

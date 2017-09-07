@@ -8,10 +8,23 @@
 # license         :GPLv3
 # ==============================================================================
 
+# Annual product legend
+# 0 non forest
+# 1 undisturbed forest
+# 2 new change classified as old regrowth in 2017
+# 3 new change classified as young regrowth in 2017
+# 4 new change classified as deforested in 2017
+# 5 new change classified as deforested in 2017
+# 6 new change classified as disturbed in 2017
+# 7 new change classified as loss for water
+# 8 new change classified as loss for plantation
+# 10 nodata
+
 # Imports
 import ee
 import time
 import os
+from google.cloud import storage
 
 # Initialize
 ee.Initialize()
@@ -48,37 +61,55 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     region = region.buffer(10000).bounds()
     export_coord = region.getInfo()["coordinates"]
 
-    # Roadless annual change map (rac)
-    image_path = ["users/ClassifLandsat072015/Mosaic_v10/",
-                  "collectionPeriod_", "MaskEvergreen_L4578"]
-    image_name = "".join(image_path)
-    rac = ee.ImageCollection(image_name).mosaic().clip(region)
+    # Path to roadless products
+    path = "users/ClassifLandsat072015/Mosaic_v10/collectionPeriod_"
 
-    # Forest
-    fc2000 = rac.select(["Jan2000"])
-    forest2000 = fc2000.where(fc2000.eq(1), 0)
+    # Roadless annual product (AP)
+    AP = ee.ImageCollection(path + "MaskEvergreen_L4578")
+    AP = AP.mosaic().toByte().clip(region)
 
-    # Forest in 2000
-    forest2000 = treecover.gte(perc)
-    forest2000 = forest2000.toByte()
+    # Maximal forest extent
+    max_extent = ee.ImageCollection(path + "MaxExtent")
+    max_extent = max_extent.mosaic().toByte().clip(region)
 
-    # Deforestation
-    loss00_05 = lossyear.gte(1).And(lossyear.lte(5))
-    loss00_10 = lossyear.gte(1).And(lossyear.lte(10))
+    # Forest in 2017
+    ap_2017 = AP.select(["Jan2017"])
+    forest2017 = ap_2017.eq(1)
+    forest2017 = forest2017.where(max_extent.lt(1), 0)
 
-    # Forest
-    forest2005 = forest2000.where(loss00_05.eq(1), 0)
-    forest2010 = forest2000.where(loss00_10.eq(1), 0)
-    forest2014 = forest2000.where(lossyear.gte(1), 0)
+    # ap_allYear
+    ap_allYear = AP.where(AP.neq(1), 0)
+
+    # Forest in 2015
+    ap_2015_2017 = ap_allYear.select(range(29, 32))
+    forest2015 = ap_2015_2017.reduce(ee.Reducer.sum())
+    forest2015 = forest2015.gte(1)
+    forest2015 = forest2015.where(max_extent.lt(1), 0)
+
+    # Forest cover 2010
+    ap_2010_2017 = ap_allYear.select(range(24, 32))
+    forest2010 = ap_2010_2017.reduce(ee.Reducer.sum())
+    forest2010 = forest2010.gte(1)
+    forest2010 = forest2010.where(max_extent.lt(1), 0)
+
+    # Forest cover 2005
+    ap_2005_2017 = ap_allYear.select(range(19, 32))
+    forest2005 = ap_2005_2017.reduce(ee.Reducer.sum())
+    forest2005 = forest2005.gte(1)
+    forest2005 = forest2005.where(max_extent.lt(1), 0)
+
+    # Forest cover 2000
+    ap_2000_2017 = ap_allYear.select(range(14, 32))
+    forest2000 = ap_2000_2017.reduce(ee.Reducer.sum())
+    forest2000 = forest2000.gte(1)
+    forest2000 = forest2000.where(max_extent.lt(1), 0)
 
     # Forest raster with four bands
     forest = forest2000.addBands(forest2005).addBands(
         forest2010).addBands(forest2015)
-    forest = forest.select([0, 1, 2, 3], ["forest2000",
-                                          "forest2005",
+    forest = forest.select([0, 1, 2, 3], ["forest2000", "forest2005",
                                           "forest2010", "forest2015"])
-    forest = forest.set("system:bandNames", ["forest2000",
-                                             "forest2005",
+    forest = forest.set("system:bandNames", ["forest2000", "forest2005",
                                              "forest2010", "forest2015"])
 
     # maxPixels
@@ -101,8 +132,39 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     return(task)
 
 
+# ee_roadless.check
+def check(gs_bucket, iso3):
+    """Function to check if the forest cover data are already present in
+    the Google Cloud Storage (GCS) bucket.
+
+    :param gs_bucket: the GCS bucket to look in.
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :return: A boolean indicating the presence (True) of the data in
+    the bucket.
+
+    """
+
+    # Connect to GCS bucket
+    client = storage.Client()
+    bucket = client.get_bucket(gs_bucket)
+    # Filename to find
+    fname = "roadlesss/forest_" + iso3
+    # Get a list of the blobs
+    iterator = bucket.list_blobs()
+    blobs = list(iterator)
+    # Loop on blobs
+    present_in_bucket = False
+    for b in blobs:
+        if b.name.find(fname) == 0:
+            present_in_bucket = True
+            break
+    # Return
+    return(present_in_bucket)
+
+
 # ee_hansen.download
-def download(task, gs_bucket, path, iso3):
+def download(gs_bucket, iso3, path):
     """Download forest-cover data from Google Cloud Storage.
 
     Check that GEE tasks are completed. Download forest-cover data
@@ -110,22 +172,21 @@ def download(task, gs_bucket, path, iso3):
     function uses the gsutil command
     (https://cloud.google.com/storage/docs/gsutil)
 
-    :param task: Google EarthEngine task.
     :param gs_bucket: Name of the google storage bucket to download from.
-    :param path: Path to download files to.
     :param iso3: Country ISO 3166-1 alpha-3 code.
+    :param path: Path to download files to.
 
     """
 
-    # Task status
-    t_status = str(task.status()[u'state'])
+    # Data availability
+    data_availability = check(gs_bucket, iso3)
 
     # Check task status
-    while (t_status != "COMPLETED"):
-        # We wait 1 min
-        time.sleep(60)
-        # We reactualize the status
-        t_status = str(task.status()[u'state'])
+    while data_availability is False:
+            # We wait 1 min
+            time.sleep(60)
+            # We reactualize the status
+            data_availability = check(gs_bucket, iso3)
 
     # Commands to download results with gsutil
     cmd = ["gsutil cp gs://", gs_bucket,
