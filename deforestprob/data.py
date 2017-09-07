@@ -170,7 +170,7 @@ def country(iso3, monthyear, proj="EPSG:3395",
         # If not available, run GEE
         if data_availability is False:
             print("Run Google Earth Engine")
-            task = ee_roadless.run_task(perc=perc, iso3=iso3,
+            task = ee_roadless.run_task(iso3=iso3,
                                         extent_latlong=extent_latlong,
                                         scale=30,
                                         proj=proj,
@@ -206,8 +206,8 @@ def country(iso3, monthyear, proj="EPSG:3395",
     if (fcc_source == "roadless"):
         # Download Google EarthEngine results
         print("Download Google Earth Engine results locally")
-        ee_hansen.download(gs_bucket, iso3,
-                           path="data_raw")
+        ee_roadless.download(gs_bucket, iso3,
+                             path="data_raw")
         # Call forest_country.sh
         print("Forest computations")
         script = pkg_resources.resource_filename("deforestprob",
