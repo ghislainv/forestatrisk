@@ -149,7 +149,7 @@ def check(gs_bucket, iso3):
     client = storage.Client()
     bucket = client.get_bucket(gs_bucket)
     # Filename to find
-    fname = "roadlesss/forest_" + iso3
+    fname = "roadless/forest_" + iso3
     # Get a list of the blobs
     iterator = bucket.list_blobs()
     blobs = list(iterator)
@@ -163,7 +163,7 @@ def check(gs_bucket, iso3):
     return(present_in_bucket)
 
 
-# ee_hansen.download
+# ee_roadless.download
 def download(gs_bucket, iso3, path):
     """Download forest-cover data from Google Cloud Storage.
 
