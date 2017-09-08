@@ -51,7 +51,7 @@ gcloud container clusters get-credentials deforestprob-cluster --zone europe-wes
 # Open the Dashboard interface by navigating to the following location in the browser: http://127.0.0.1:8001/ui
 
 # Deploy the kubernetes configuration onto the cluster
-kubectl create -f gke/deforestprob.yml
+kubectl create -f deforestprob.yml
 
 # See pods and services
 kubectl get deployments
@@ -59,7 +59,7 @@ kubectl get pods
 kubectl get services
 
 # rsync data to google cloud storage
-gsutil -m rsync -r /home/dockeruser/notebooks gs://deforestprob/notebooks
+gsutil -m rsync -r /home/dockeruser/deforestprob gs://deforestprob/notebooks
 
 # Delete container
 # gcloud container clusters delete deforestprob-cluster --async
