@@ -71,12 +71,12 @@ def compute(iso3):
     # Data
     dfp.data.country(iso3=iso3, monthyear="Sep2017",
                      proj=proj_africa,
-                     data_country=False,
+                     data_country=True,
                      fcc_source="roadless",
                      gs_bucket="deforestprob")
 
     # Computation
-    dfp.computation()
+    dfp.computation(fcc_source="roadless")
 
     # Return country iso code
     return(iso3)
@@ -128,10 +128,11 @@ dfp.plot.fcc("fcc_40yr.tif", output_file="fcc_40yr.png",
 
 # Upload results to Google Cloud Storage with gsutil
 os.system("gsutil -o GSUtil:parallel_composite_upload_threshold=150M \
-cp fcc_40yr.tif gs://deforestprob/output/fcc_40yr.tif")
-os.system("gsutil cp fcc_40yr.png gs://deforestprob/output/fcc_40yr.png")
+cp fcc_40yr.tif gs://deforestprob/output_roadless/fcc_40yr.tif")
+os.system("gsutil cp fcc_40yr.png \
+gs://deforestprob/output_roadless/fcc_40yr.png")
 os.system("gsutil -o GSUtil:parallel_composite_upload_threshold=150M \
-cp prob.tif gs://deforestprob/output/prob.tif")
-os.system("gsutil cp prob.png gs://deforestprob/output/prob.png")
+cp prob.tif gs://deforestprob/output_roadless/prob.tif")
+os.system("gsutil cp prob.png gs://deforestprob/output_roadless/prob.png")
 
 # End

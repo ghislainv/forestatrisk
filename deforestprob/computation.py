@@ -15,7 +15,7 @@ import pickle
 
 
 # computation
-def computation():
+def computation(fcc_source="roadless"):
 
     # Make output directory
     dfp.make_dir("output")
@@ -180,7 +180,8 @@ def computation():
     f.close()
 
     # Annual deforestation
-    annual_defor = (fc[0] - fc[3]) / 14.0
+    T = 15.0 if (fcc_source == "roadless") else 14.0
+    annual_defor = (fc[0] - fc[3]) / T
     # Amount of deforestation (ha) for 40 years
     defor_40yr = np.rint(annual_defor * 40)
 
