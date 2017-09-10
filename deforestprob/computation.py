@@ -159,7 +159,7 @@ def computation(fcc_source="roadless"):
     dfp.predict(mod_binomial_iCAR, var_dir="data",
                 input_cell_raster="output/rho.tif",
                 input_forest_raster="data/fcc12.tif",
-                output_file="output/pred_binomial_iCAR.tif",
+                output_file="output/prob.tif",
                 blk_rows=128)
 
     # ========================================================
@@ -190,7 +190,7 @@ def computation(fcc_source="roadless"):
     # ========================================================
 
     # Compute future forest cover
-    stats = dfp.deforest(input_raster="output/pred_binomial_iCAR.tif",
+    stats = dfp.deforest(input_raster="output/prob.tif",
                          hectares=defor_40yr,
                          output_file="output/fcc_40yr.tif",
                          blk_rows=128)
@@ -227,7 +227,7 @@ def computation(fcc_source="roadless"):
                  output_file="output/rho.png")
 
     # Spatial probability of deforestation
-    dfp.plot.prob("output/pred_binomial_iCAR.tif",
+    dfp.plot.prob("output/prob.tif",
                   borders="data/ctry_PROJ.shp",
                   output_file="output/prob.png")
 

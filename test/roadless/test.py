@@ -46,7 +46,7 @@ for i in range(nctry):
     iso3.append(code.iloc[0])
 
 # Only some countries for test
-iso3 = ["GHA"]
+iso3 = ["COG"]
 nctry = len(iso3)
 
 # Projection for Africa (World Mercator)
