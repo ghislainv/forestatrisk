@@ -96,7 +96,6 @@ def correlation(y, data,
                 plots_per_page=4,
                 figsize=(8.27, 11.69),
                 dpi=300):
-
     """
     Correlation between variables and the probability of deforestation.
 
@@ -186,7 +185,6 @@ def fcc(input_fcc_raster,
         col=(227, 26, 28, 255),
         figsize=(11.69, 8.27),
         dpi=300, **kwargs):
-
     """Plot forest-cover change (fcc) map.
 
     This function plots the forest-cover change map. Green is the
@@ -236,9 +234,9 @@ def fcc(input_fcc_raster,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    col = tuple(np.array(col)/cmax)
+    col = tuple(np.array(col) / cmax)
     colors.append(col)  # default is red
-    colors.append((51/cmax, 160/cmax, 44/cmax, 1))  # forest green
+    colors.append((51 / cmax, 160 / cmax, 44 / cmax, 1))  # forest green
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
@@ -256,8 +254,8 @@ def fcc(input_fcc_raster,
     if zoom is not None:
         z = Rectangle(
             (zoom[0], zoom[2]),
-            zoom[1]-zoom[0],
-            zoom[3]-zoom[2],
+            zoom[1] - zoom[0],
+            zoom[3] - zoom[2],
             fill=False
         )
         ax1.add_patch(z)
@@ -281,7 +279,6 @@ def forest(input_forest_raster,
            zoom=None,
            figsize=(11.69, 8.27),
            dpi=300, **kwargs):
-
     """Plot forest map.
 
     This function plots the forest map in green value 1 in raster.
@@ -328,7 +325,7 @@ def forest(input_forest_raster,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    colors.append((51/cmax, 160/cmax, 44/cmax, 1))  # forest green
+    colors.append((51 / cmax, 160 / cmax, 44 / cmax, 1))  # forest green
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
@@ -346,8 +343,8 @@ def forest(input_forest_raster,
     if zoom is not None:
         z = Rectangle(
             (zoom[0], zoom[2]),
-            zoom[1]-zoom[0],
-            zoom[3]-zoom[2],
+            zoom[1] - zoom[0],
+            zoom[3] - zoom[2],
             fill=False
         )
         ax1.add_patch(z)
@@ -361,7 +358,8 @@ def forest(input_forest_raster,
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
-    return(fig)
+    plt.close(fig)
+    # return(fig)
 
 
 # plot.prob
@@ -371,7 +369,6 @@ def prob(input_prob_raster,
          zoom=None,
          figsize=(11.69, 8.27),
          dpi=300, **kwargs):
-
     """Plot map of spatial probability of deforestation.
 
     This function plots the spatial probability of deforestation.
@@ -435,7 +432,9 @@ def prob(input_prob_raster,
     fig_img = figure_as_image(fig, output_file, dpi=dpi)
 
     # Return figure
-    return(fig_img)
+    plt.close(fig)
+    plt.close(fig_img)
+    # return(fig_img)
 
 
 # plot.obs
@@ -447,7 +446,6 @@ def obs(sample,
         s=20,
         figsize=(11.69, 8.27),
         dpi=300):
-
     """Plot the sample points over the forest map.
 
     This function plots the sample points over the forest map. Green
@@ -498,8 +496,8 @@ def obs(sample,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    colors.append((227/cmax, 26/cmax, 28/cmax, 1))  # red
-    colors.append((51/cmax, 160/cmax, 44/cmax, 1))  # forest green
+    colors.append((227 / cmax, 26 / cmax, 28 / cmax, 1))  # red
+    colors.append((51 / cmax, 160 / cmax, 44 / cmax, 1))  # forest green
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
@@ -564,7 +562,7 @@ def var(var_dir,
     gridsize = gridsize
     ny = gridsize[0]
     nx = gridsize[1]
-    nplot_per_page = ny*nx
+    nplot_per_page = ny * nx
     # List of figures to be returned
     figures = []
 
@@ -610,7 +608,7 @@ def var(var_dir,
         mov_arr = np.ma.array(ov_arr, mask=(ov_arr == ND))
         # Plot raster
         ax = plt.subplot2grid(gridsize,
-                              ((i % nplot_per_page)/nx, i % nx))
+                              ((i % nplot_per_page) / nx, i % nx))
         ax.set_frame_on(False)
         ax.set_xticks([])
         ax.set_yticks([])
@@ -636,7 +634,6 @@ def rho(input_rho_raster,
         zoom=None,
         figsize=(11.69, 8.27),
         dpi=300):
-
     """Plot map of spatial random effects (rho).
 
     This function plots the spatial random effects.
@@ -694,7 +691,9 @@ def rho(input_rho_raster,
     fig_img = figure_as_image(fig, output_file, dpi=dpi)
 
     # Return figure
-    return(fig_img)
+    plt.close(fig)
+    plt.close(fig_img)
+    # return(fig_img)
 
 
 # freq_prob
@@ -702,7 +701,6 @@ def freq_prob(stats,
               output_file="freq_prob.png",
               figsize=None,
               dpi=300):
-
     """Plot distribution of probability values.
 
     This function plots the distribution of the probability values.
@@ -730,6 +728,7 @@ def freq_prob(stats,
 
     # Save and return figure
     fig.savefig(output_file)
-    return(fig)
+    plt.close(fig)
+    # return(fig)
 
 # End

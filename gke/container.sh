@@ -37,7 +37,8 @@ gcloud compute regions list
 
 ## 1. Multiprocessing approach on one virtual machine (--num-nodes=1)
 # It is better to set up a cluster as you can provide docker images for instances (not yet possible for VM, only in alpha at the moment) 
-gcloud container clusters create deforestprob-cluster --machine-type=custom-24-98304 --num-nodes=1 --disk-size=250
+## gcloud container clusters create deforestprob-cluster --machine-type=custom-24-98304 --num-nodes=1 --disk-size=250
+gcloud container clusters create deforestprob-cluster --machine-type=custom-8-30720 --num-nodes=1 --disk-size=250
 
 # Set it as the default cluster
 gcloud config set container/cluster deforestprob-cluster
