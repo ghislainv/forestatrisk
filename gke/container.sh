@@ -52,7 +52,7 @@ gcloud container clusters get-credentials deforestprob-cluster --zone europe-wes
 # Open the Dashboard interface by navigating to the following location in the browser: http://127.0.0.1:8001/ui
 
 # Deploy the kubernetes configuration onto the cluster
-kubectl create -f deforestprob.yml
+kubectl create -f gke/deforestprob.yml
 
 # See pods and services
 kubectl get deployments
