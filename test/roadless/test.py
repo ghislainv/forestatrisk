@@ -44,6 +44,7 @@ for i in range(nctry):
     code = data_countrycode.iso3c[data_countrycode[
         "country.name.en"] == countries[i]]
     iso3.append(code.iloc[0])
+iso3.sort()
 
 # Only some countries for test
 iso3 = ["COG"]
@@ -71,7 +72,7 @@ def compute(iso3):
     # Data
     dfp.data.country(iso3=iso3, monthyear="Sep2017",
                      proj=proj_africa,
-                     data_country=True,
+                     data_country=False,
                      fcc_source="roadless",
                      gs_bucket="deforestprob")
 

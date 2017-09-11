@@ -11,6 +11,7 @@
 import numpy as np
 from patsy import dmatrices
 import deforestprob as dfp
+import matplotlib.pyplot as plt
 import pickle
 
 
@@ -209,11 +210,13 @@ def computation(fcc_source="roadless"):
     # Forest in 2010
     dfp.plot.forest("data/forest/forest_t2.tif",
                     borders="data/ctry_PROJ.shp",
+                    overview=True,
                     output_file="output/forest_t2.png")
 
     # Forest-cover change 2005-2010
     dfp.plot.fcc("data/fcc12.tif",
                  borders="data/ctry_PROJ.shp",
+                 overview=True,
                  output_file="output/fcc12.png")
 
     # Original spatial random effects
@@ -235,5 +238,8 @@ def computation(fcc_source="roadless"):
     dfp.plot.fcc("output/fcc_40yr.tif",
                  borders="data/ctry_PROJ.shp",
                  output_file="output/fcc_40yr.png")
+
+    # Close all figures
+    plt.close("all")
 
 # End

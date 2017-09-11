@@ -18,7 +18,6 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 from matplotlib.patches import Rectangle
 from matplotlib.backends.backend_pdf import PdfPages
-from miscellaneous import figure_as_image
 
 
 # Plot vector objects
@@ -88,6 +87,33 @@ def plot_layer(filename, symbol, layer_index=0, **kwargs):
             for i in range(geom.GetGeometryCount()):
                 subgeom = geom.GetGeometryRef(i)
                 plot_point(subgeom, symbol, **kwargs)
+
+
+# Saving a matplotlib.pyplot figure as a border-less frame-less image
+def figure_as_image(fig, output_file, dpi=300):
+    """Remove borders and frames of a Matplotlib figure and save.
+
+    :param fig: Matplotlib figure you want to save as the image.
+    :param output_file: path to the output image file.
+    :param dpi: dpi of the output image.
+
+    :return: figure without borders and frame.
+
+    """
+
+    # fig_size = fig.get_size_inches()
+    # w, h = fig_size[0], fig_size[1]
+    fig.patch.set_alpha(0)
+    a = fig.gca()
+    a.set_frame_on(False)
+    a.set_xticks([])
+    a.set_yticks([])
+    plt.axis("off")
+    # plt.xlim(0, h)
+    # plt.ylim(w, 0)
+    fig.savefig(output_file, transparent=True, bbox_inches="tight",
+                pad_inches=0, dpi=dpi)
+    return(fig)
 
 
 # plot.correlation
@@ -181,6 +207,7 @@ def correlation(y, data,
 def fcc(input_fcc_raster,
         output_file="fcc.png",
         borders=None,
+        overview=True,
         zoom=None,
         col=(227, 26, 28, 255),
         figsize=(11.69, 8.27),
@@ -194,6 +221,7 @@ def fcc(input_fcc_raster,
     :param input_fcc_raster: path to fcc raster.
     :param output_file: name of the plot file.
     :param borders: vector file to be plotted.
+    :param overview: recompute overview if set to True.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param col: rgba color for deforestation.
     :param figsize: figure size in inches.
@@ -217,7 +245,7 @@ def fcc(input_fcc_raster,
     extent = [Xmin, Xmax, Ymin, Ymax]
 
     # Overviews
-    if rasterB.GetOverviewCount() == 0:
+    if (rasterB.GetOverviewCount() == 0) or (overview is True):
         # Build overviews
         print("Build overview")
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
@@ -276,6 +304,7 @@ def fcc(input_fcc_raster,
 def forest(input_forest_raster,
            output_file="forest.png",
            borders=None,
+           overview=True,
            zoom=None,
            figsize=(11.69, 8.27),
            dpi=300, **kwargs):
@@ -286,6 +315,7 @@ def forest(input_forest_raster,
     :param input_forest_raster: path to forest raster.
     :param output_file: name of the plot file.
     :param borders: vector file to be plotted.
+    :param overview: recompute overview if set to True.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
@@ -308,7 +338,7 @@ def forest(input_forest_raster,
     extent = [Xmin, Xmax, Ymin, Ymax]
 
     # Overviews
-    if rasterB.GetOverviewCount() == 0:
+    if (rasterB.GetOverviewCount() == 0) or (overview is True):
         # Build overviews
         print("Build overview")
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
@@ -358,8 +388,7 @@ def forest(input_forest_raster,
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
-    plt.close(fig)
-    # return(fig)
+    return(fig)
 
 
 # plot.prob
@@ -432,9 +461,7 @@ def prob(input_prob_raster,
     fig_img = figure_as_image(fig, output_file, dpi=dpi)
 
     # Return figure
-    plt.close(fig)
-    plt.close(fig_img)
-    # return(fig_img)
+    return(fig_img)
 
 
 # plot.obs
@@ -691,9 +718,7 @@ def rho(input_rho_raster,
     fig_img = figure_as_image(fig, output_file, dpi=dpi)
 
     # Return figure
-    plt.close(fig)
-    plt.close(fig_img)
-    # return(fig_img)
+    return(fig_img)
 
 
 # freq_prob
@@ -728,7 +753,6 @@ def freq_prob(stats,
 
     # Save and return figure
     fig.savefig(output_file)
-    plt.close(fig)
-    # return(fig)
+    return(fig)
 
 # End

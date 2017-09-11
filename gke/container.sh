@@ -62,11 +62,11 @@ kubectl get services
 # rsync data to google cloud storage
 gsutil -m rsync -r /home/dockeruser/deforestprob gs://deforestprob/results_roadless
 
-# Delete container
-# gcloud container clusters delete deforestprob-cluster --async
-
 # Delete service
 # kubectl delete service jupyter-notebook
+
+# Delete container
+# gcloud container clusters delete deforestprob-cluster --async
 
 ## Cluster approach with several nodes
 # Create cluster
