@@ -601,7 +601,7 @@ def var(var_dir,
         if b.GetOverviewCount() == 0:
             # Build overviews
             print("Build overview")
-            r.BuildOverviews("nearest", [8, 16, 32])
+            r.BuildOverviews("nearest", [4, 8, 16, 32])
         # Get data from finest overview
         ov_band = b.GetOverview(0)
         ov_arr = ov_band.ReadAsArray()
