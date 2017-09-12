@@ -15,6 +15,8 @@ test/*
 test/roadless/*
 test/global_forest_change/*
 !test/roadless/test.py
+!test/roadless/test2.py
+!test/roadless/computation2.py
 !test/global_forest_change/test.py
 
 # C extensions

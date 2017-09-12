@@ -48,8 +48,8 @@ for i in range(nctry):
 iso3.sort()
 
 # Only some countries for test
-iso3 = ["COG"]
-nctry = len(iso3)
+# iso3 = ["COG"]
+# nctry = len(iso3)
 
 # Projection for Africa (World Mercator)
 proj_africa = "EPSG:3395"
@@ -60,6 +60,7 @@ owd = os.getcwd()
 # Number of cpu
 total_cpu = psutil.cpu_count()
 num_cpu = int(total_cpu * 0.75) if total_cpu > 2 else 1
+num_cpu = 3
 
 
 # Function for multiprocessing
