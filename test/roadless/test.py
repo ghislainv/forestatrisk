@@ -101,7 +101,7 @@ os.system("find -type f -name *ctry_PROJ.shp \
 -exec ogr2ogr -update -append borders.shp {} \;")
 
 # Spatial probability
-os.system("find -type f -name *pred_binomial_iCAR.tif > list_prob.txt")
+os.system("find -type f -name *prob.tif > list_prob.txt")
 os.system("gdalbuildvrt -input_file_list list_prob.txt prob.vrt")
 os.system("gdal_translate -co 'COMPRESS=LZW' -co 'PREDICTOR=2' -co 'BIGTIFF=YES' \
 prob.vrt prob.tif")
@@ -124,7 +124,7 @@ os.system("gdaladdo -ro -r nearest --config COMPRESS_OVERVIEW LZW \
 fcc_40yr.tif 16")
 # Plot
 dfp.plot.fcc("fcc_40yr.tif", output_file="fcc_40yr.png",
-             borders="borders.shp", zoom=None, dpi=300,
+             borders="borders.shp", overview=False, zoom=None, dpi=300,
              lw=0.5, c="grey")
 
 # Upload results to Google Cloud Storage with gsutil

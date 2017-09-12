@@ -208,38 +208,41 @@ def computation(fcc_source="roadless"):
     # ========================================================
 
     # Forest in 2010
-    dfp.plot.forest("data/forest/forest_t2.tif",
-                    borders="data/ctry_PROJ.shp",
-                    overview=True,
-                    output_file="output/forest_t2.png")
+    fig_forest = dfp.plot.forest("data/forest/forest_t2.tif",
+                                 borders="data/ctry_PROJ.shp",
+                                 overview=True,
+                                 output_file="output/forest_t2.png")
+    plt.close(fig_forest)
 
     # Forest-cover change 2005-2010
-    dfp.plot.fcc("data/fcc12.tif",
-                 borders="data/ctry_PROJ.shp",
-                 overview=True,
-                 output_file="output/fcc12.png")
+    fig_fcc = dfp.plot.fcc("data/fcc12.tif",
+                           borders="data/ctry_PROJ.shp",
+                           overview=True,
+                           output_file="output/fcc12.png")
+    plt.close(fig_fcc)
 
     # Original spatial random effects
-    dfp.plot.rho("output/rho_orig.tif",
-                 borders="data/ctry_PROJ.shp",
-                 output_file="output/rho_orig.png")
+    fig_rho_orig = dfp.plot.rho("output/rho_orig.tif",
+                                borders="data/ctry_PROJ.shp",
+                                output_file="output/rho_orig.png")
+    plt.close(fig_rho_orig)
 
     # Interpolated spatial random effects
-    dfp.plot.rho("output/rho.tif",
-                 borders="data/ctry_PROJ.shp",
-                 output_file="output/rho.png")
+    fig_rho = dfp.plot.rho("output/rho.tif",
+                           borders="data/ctry_PROJ.shp",
+                           output_file="output/rho.png")
+    plt.close(fig_rho)
 
     # Spatial probability of deforestation
-    dfp.plot.prob("output/prob.tif",
-                  borders="data/ctry_PROJ.shp",
-                  output_file="output/prob.png")
+    fig_prob = dfp.plot.prob("output/prob.tif",
+                             borders="data/ctry_PROJ.shp",
+                             output_file="output/prob.png")
+    plt.close(fig_prob)
 
     # Forest-cover change 2010-2050
-    dfp.plot.fcc("output/fcc_40yr.tif",
-                 borders="data/ctry_PROJ.shp",
-                 output_file="output/fcc_40yr.png")
-
-    # Close all figures
-    plt.close("all")
+    fig_fcc_40yr = dfp.plot.fcc("output/fcc_40yr.tif",
+                                borders="data/ctry_PROJ.shp",
+                                output_file="output/fcc_40yr.png")
+    plt.close(fig_fcc_40yr)
 
 # End
