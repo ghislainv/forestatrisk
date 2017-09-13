@@ -58,11 +58,12 @@ def computation(fcc_source="roadless"):
         y, data = dmatrices(formulas[f], data=dataset,
                             return_type="dataframe")
         # Plots
-        dfp.plot.correlation(y=y, data=data,
-                             plots_per_page=3,
-                             figsize=(7, 8),
-                             dpi=100,
-                             output_file=of)
+        figs = dfp.plot.correlation(y=y, data=data,
+                                    plots_per_page=3,
+                                    figsize=(7, 8),
+                                    dpi=100,
+                                    output_file=of)
+        plt.close("all")
 
     # ========================================================
     # hSDM model
@@ -133,10 +134,11 @@ def computation(fcc_source="roadless"):
     f.close()
 
     # Plot
-    mod_binomial_iCAR.plot(output_file="output_2005_2015/mcmc.pdf",
-                           plots_per_page=3,
-                           figsize=(9, 6),
-                           dpi=100)
+    figs = mod_binomial_iCAR.plot(output_file="output_2005_2015/mcmc.pdf",
+                                  plots_per_page=3,
+                                  figsize=(9, 6),
+                                  dpi=100)
+    plt.close("all")
 
     # ========================================================
     # Resampling spatial random effects
@@ -200,8 +202,9 @@ def computation(fcc_source="roadless"):
     pickle.dump(stats, open("output_2005_2015/stats.pickle", "wb"))
 
     # Plot histograms of probabilities
-    dfp.plot.freq_prob(stats,
-                       output_file="output_2005_2015/freq_prob.png")
+    fig_freq = dfp.plot.freq_prob(stats,
+                                  output_file="output_2005_2015/freq_prob.png")
+    plt.close(fig_freq)
 
     # ========================================================
     # Additional figures

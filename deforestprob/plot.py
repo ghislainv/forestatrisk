@@ -207,7 +207,6 @@ def correlation(y, data,
 def fcc(input_fcc_raster,
         output_file="fcc.png",
         borders=None,
-        overview=True,
         zoom=None,
         col=(227, 26, 28, 255),
         figsize=(11.69, 8.27),
@@ -221,7 +220,6 @@ def fcc(input_fcc_raster,
     :param input_fcc_raster: path to fcc raster.
     :param output_file: name of the plot file.
     :param borders: vector file to be plotted.
-    :param overview: recompute overview if set to True.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param col: rgba color for deforestation.
     :param figsize: figure size in inches.
@@ -245,7 +243,7 @@ def fcc(input_fcc_raster,
     extent = [Xmin, Xmax, Ymin, Ymax]
 
     # Overviews
-    if (rasterB.GetOverviewCount() == 0) or (overview is True):
+    if (rasterB.GetOverviewCount() == 0):
         # Build overviews
         print("Build overview")
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
@@ -304,7 +302,6 @@ def fcc(input_fcc_raster,
 def forest(input_forest_raster,
            output_file="forest.png",
            borders=None,
-           overview=True,
            zoom=None,
            figsize=(11.69, 8.27),
            dpi=300, **kwargs):
@@ -315,7 +312,6 @@ def forest(input_forest_raster,
     :param input_forest_raster: path to forest raster.
     :param output_file: name of the plot file.
     :param borders: vector file to be plotted.
-    :param overview: recompute overview if set to True.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
@@ -338,7 +334,7 @@ def forest(input_forest_raster,
     extent = [Xmin, Xmax, Ymin, Ymax]
 
     # Overviews
-    if (rasterB.GetOverviewCount() == 0) or (overview is True):
+    if (rasterB.GetOverviewCount() == 0):
         # Build overviews
         print("Build overview")
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
