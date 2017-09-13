@@ -47,9 +47,9 @@ for i in range(nctry):
     iso3.append(code.iloc[0])
 iso3.sort()
 
-# Only some countries for test
-# iso3 = ["COG"]
-# nctry = len(iso3)
+# Only some countries
+iso3 = ["MOZ", "MWI", "NGA", "RWA", "SEN", "SLE", "SSD", "TGO", "TZA"]
+nctry = len(iso3)
 
 # Projection for Africa (World Mercator)
 proj_africa = "EPSG:3395"

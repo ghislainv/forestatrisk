@@ -210,14 +210,12 @@ def computation(fcc_source="roadless"):
     # Forest in 2010
     fig_forest = dfp.plot.forest("data/forest/forest_t2.tif",
                                  borders="data/ctry_PROJ.shp",
-                                 overview=True,
                                  output_file="output/forest_t2.png")
     plt.close(fig_forest)
 
     # Forest-cover change 2005-2010
     fig_fcc = dfp.plot.fcc("data/fcc12.tif",
                            borders="data/ctry_PROJ.shp",
-                           overview=True,
                            output_file="output/fcc12.png")
     plt.close(fig_fcc)
 
