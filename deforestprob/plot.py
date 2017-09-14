@@ -90,30 +90,23 @@ def plot_layer(filename, symbol, layer_index=0, **kwargs):
 
 
 # Saving a matplotlib.pyplot figure as a border-less frame-less image
-def figure_as_image(fig, output_file, dpi=300):
+def figure_as_image(fig, output_file):
     """Remove borders and frames of a Matplotlib figure and save.
 
     :param fig: Matplotlib figure you want to save as the image.
     :param output_file: path to the output image file.
-    :param dpi: dpi of the output image.
 
     :return: figure without borders and frame.
 
     """
 
-    # fig_size = fig.get_size_inches()
-    # w, h = fig_size[0], fig_size[1]
-    fig.patch.set_alpha(0)
+    fig.tight_layout()
     a = fig.gca()
     a.set_frame_on(False)
     a.set_xticks([])
     a.set_yticks([])
     plt.axis("off")
-    # plt.xlim(0, h)
-    # plt.ylim(w, 0)
-    fig.savefig(output_file, transparent=True, bbox_inches="tight",
-                pad_inches=0, dpi=dpi)
-    return(fig)
+    fig.savefig(output_file, dpi="figure", bbox_inches="tight")
 
 
 # plot.correlation
@@ -294,7 +287,7 @@ def fcc(input_fcc_raster,
 
     # Save and return figure
     fig.tight_layout()
-    fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
+    fig.savefig(output_file, dpi="figure", bbox_inches="tight")
     return(fig)
 
 
@@ -383,7 +376,7 @@ def forest(input_forest_raster,
 
     # Save and return figure
     fig.tight_layout()
-    fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
+    fig.savefig(output_file, dpi="figure", bbox_inches="tight")
     return(fig)
 
 
@@ -454,10 +447,12 @@ def prob(input_prob_raster,
     plt.imshow(ov_arr, cmap=color_map, extent=extent)
     if borders is not None:
         plot_layer(borders, symbol="k-", **kwargs)
-    fig_img = figure_as_image(fig, output_file, dpi=dpi)
+
+    # Save image
+    figure_as_image(fig, output_file)
 
     # Return figure
-    return(fig_img)
+    return(fig)
 
 
 # plot.obs
@@ -711,10 +706,10 @@ def rho(input_rho_raster,
     if borders is not None:
         plot_layer(borders, symbol="k-")
     plt.colorbar()
-    fig_img = figure_as_image(fig, output_file, dpi=dpi)
+    figure_as_image(fig, output_file)
 
     # Return figure
-    return(fig_img)
+    return(fig)
 
 
 # freq_prob

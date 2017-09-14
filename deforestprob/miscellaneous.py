@@ -13,7 +13,6 @@ import os
 import sys
 import numpy as np
 from osgeo import gdal
-import matplotlib.pyplot as plt
 
 
 # Invlogit
@@ -36,19 +35,24 @@ def invlogit(x):
 
 
 # Function to make a directory
-def make_dir(directory):
-    """ Make new directory
-
-    :param directory: path to be created.
-
-    :return: this function does not return any value.
-
+def make_dir(newdir):
+    """Make new directory
+        - already exists, silently complete
+        - regular file in the way, raise an exception
+        - parent directory(ies) does not exist, make them as well
     """
-
-    if not os.path.exists(directory):
-        os.mkdir(directory)
-
-    return None
+    if os.path.isdir(newdir):
+        pass
+    elif os.path.isfile(newdir):
+        raise OSError("a file with the same name as the desired \
+                      dir, '%s', already exists." % newdir)
+    else:
+        head, tail = os.path.split(newdir)
+        if head and not os.path.isdir(head):
+            make_dir(head)
+        # print "_mkdir %s" % repr(newdir)
+        if tail:
+            os.mkdir(newdir)
 
 
 # Makeblock
