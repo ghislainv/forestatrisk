@@ -83,7 +83,7 @@ but you can also install it executing the `setup.py` file:
 ## Figure
 
 Map of the probability of deforestation in Madagascar for the year
-2010 obtained with deforestprob. Dark red: high probability of
+2010 obtained with `deforestprob`. Dark red: high probability of
 deforestation, Dark green: low probability of deforestation.
 
 <img src="notebook/images/pred_binomial_iCAR.png" width=350>
