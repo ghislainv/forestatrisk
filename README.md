@@ -9,7 +9,7 @@ spatial environmental variables.
 Spatial environmental variables can be derived from topography
 (altitude, slope, and aspect), accessibility (distance to roads,
 towns, and forest edge), deforestation history (distance to previous
-deforestation) or landscape policy (location inside a protected area)
+deforestation) or landscape management (location inside a protected area)
 for example.
 
 ### Sampling
@@ -44,7 +44,7 @@ with a high spatial resolution (e.g. 30m).
 
 Function `.deforest()` predicts the future forest cover map based on a
 raster of probability of deforestation (rescaled from 1 to 65535),
-which is obtained from function `.predict()`, and a surface (in
+which is obtained from function `.predict()`, and an area (in
 hectares) to be deforested.
 
 ## Tutorial
