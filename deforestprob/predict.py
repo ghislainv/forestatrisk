@@ -78,6 +78,8 @@ def predict(model, var_dir="data",
     # Raster list
     var_tif = var_dir + "/*.tif"
     raster_list = glob(var_tif)
+    # We remove aspect with NA values where slope=0
+    raster_list.remove("aspect.tif")
     raster_list.sort()  # Sort names
     raster_list.append(input_cell_raster)
     raster_names = []
