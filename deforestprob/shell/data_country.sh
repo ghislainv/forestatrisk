@@ -124,8 +124,8 @@ gdalwarp -overwrite -t_srs "$proj" -te $extent -tap -r bilinear \
          -tr 90 90 srtm.vrt altitude.tif
 
 # Compute slope and aspect
-gdaldem slope altitude.tif slope_.tif -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
-gdaldem aspect altitude.tif aspect_.tif -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
+gdaldem slope altitude.tif slope_.tif -compute_edges -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
+gdaldem aspect altitude.tif aspect_.tif -compute_edges -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
 
 # Convert to Int16
 gdal_translate -ot Int16 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" slope_.tif slope.tif

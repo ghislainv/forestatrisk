@@ -7,15 +7,6 @@ __pycache__/
 notebook/data
 notebook/data_raw
 notebook/output
-git add
-# test
-test/*
-!test/roadless
-!test/global_forest_change
-test/roadless/*
-test/global_forest_change/*
-!test/roadless/test.py
-!test/global_forest_change/test.py
 
 # C extensions
 C/build

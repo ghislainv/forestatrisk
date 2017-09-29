@@ -16,21 +16,18 @@ from osgeo import gdal
 
 # Resample_rho
 def resample_rho(rho, input_raster, output_file="output/rho.tif",
-                 csize_orig=10, csize_new=1,
-                 figsize=(11.69, 8.27),
-                 dpi=300):
-
+                 csize_orig=10, csize_new=1):
     """Resample rho values with interpolation.
 
     This function resamples the spatial random effects (rho values)
-    obtained from an iCAR model. It performs a bilinear interpolation
+    obtained from an iCAR model. It performs a cubicspline interpolation
     at a finer resolution and smoothens the rho values.
 
     :param rho: original rho values estimates with the iCAR model.
     :param input_raster: path to input raster defining the region.
     :output_file: path to output raster file with resampled rho values.
     :csize_orig: original size of the spatial cells (in km).
-    :csize_new: new size of the spatial cells for bilinear \
+    :csize_new: new size of the spatial cells for cubicspline \
     interpolation (in km).
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
@@ -89,11 +86,11 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     rho_B = None
     del rho_R
 
-    # Bilinear interpolation to csize_new*1000 km
+    # Cubicspline interpolation to csize_new*1000 km
     print("Resampling spatial random effects to file " + output_file)
     param = ["gdalwarp", "-overwrite",
              "-tr", str(csize_new * 1000), str(csize_new * 1000),
-             "-r bilinear",
+             "-r cubicspline",
              "-ot Float32",
              "-co 'COMPRESS=LZW'", "-co 'PREDICTOR=3'",
              "-co 'BIGTIFF=YES'",

@@ -273,6 +273,8 @@ class model_binomial_iCAR(object):
         :param figsize: figure size in inches.
         :param dpi: resolution for output image.
 
+        :return: list of Matplotlib figures
+
         """
 
         # Message

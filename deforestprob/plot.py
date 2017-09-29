@@ -18,7 +18,6 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 from matplotlib.patches import Rectangle
 from matplotlib.backends.backend_pdf import PdfPages
-from miscellaneous import figure_as_image
 
 
 # Plot vector objects
@@ -88,6 +87,26 @@ def plot_layer(filename, symbol, layer_index=0, **kwargs):
             for i in range(geom.GetGeometryCount()):
                 subgeom = geom.GetGeometryRef(i)
                 plot_point(subgeom, symbol, **kwargs)
+
+
+# Saving a matplotlib.pyplot figure as a border-less frame-less image
+def figure_as_image(fig, output_file):
+    """Remove borders and frames of a Matplotlib figure and save.
+
+    :param fig: Matplotlib figure you want to save as the image.
+    :param output_file: path to the output image file.
+
+    :return: figure without borders and frame.
+
+    """
+
+    fig.tight_layout()
+    a = fig.gca()
+    a.set_frame_on(False)
+    a.set_xticks([])
+    a.set_yticks([])
+    plt.axis("off")
+    fig.savefig(output_file, dpi="figure", bbox_inches="tight")
 
 
 # plot.correlation
@@ -217,7 +236,7 @@ def fcc(input_fcc_raster,
     extent = [Xmin, Xmax, Ymin, Ymax]
 
     # Overviews
-    if rasterB.GetOverviewCount() == 0:
+    if (rasterB.GetOverviewCount() == 0):
         # Build overviews
         print("Build overview")
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
@@ -268,7 +287,7 @@ def fcc(input_fcc_raster,
 
     # Save and return figure
     fig.tight_layout()
-    fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
+    fig.savefig(output_file, dpi="figure", bbox_inches="tight")
     return(fig)
 
 
@@ -308,7 +327,7 @@ def forest(input_forest_raster,
     extent = [Xmin, Xmax, Ymin, Ymax]
 
     # Overviews
-    if rasterB.GetOverviewCount() == 0:
+    if (rasterB.GetOverviewCount() == 0):
         # Build overviews
         print("Build overview")
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
@@ -357,9 +376,8 @@ def forest(input_forest_raster,
 
     # Save and return figure
     fig.tight_layout()
-    fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
-    plt.close(fig)
-    # return(fig)
+    fig.savefig(output_file, dpi="figure", bbox_inches="tight")
+    return(fig)
 
 
 # plot.prob
@@ -367,6 +385,7 @@ def prob(input_prob_raster,
          output_file="prob.png",
          borders=None,
          zoom=None,
+         legend=False,
          figsize=(11.69, 8.27),
          dpi=300, **kwargs):
     """Plot map of spatial probability of deforestation.
@@ -377,6 +396,7 @@ def prob(input_prob_raster,
     :param output_file: name of the plot file.
     :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
+    :param legend: add colorbar if True.
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
 
@@ -414,7 +434,7 @@ def prob(input_prob_raster,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    vmax = 65535.0  # float for division
+    vmax = 65534.0  # float for division
     colors.append((0, (0, 0, 0, 0)))  # transparent
     colors.append((1 / vmax, (34 / cmax, 139 / cmax, 34 / cmax, 1)))  # green
     colors.append((45000 / vmax, (1, 165 / cmax, 0, 1)))  # orange
@@ -423,18 +443,27 @@ def prob(input_prob_raster,
     color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
                                                   N=65535, gamma=1.0)
 
-    # Plot raster and save
+    # Plot raster
     fig = plt.figure(figsize=figsize, dpi=dpi)
     plt.subplot(111)
-    plt.imshow(ov_arr, cmap=color_map, extent=extent)
+    plt.imshow(ov_arr, cmap=color_map, extent=extent,
+               vmin=0, vmax=65534)
     if borders is not None:
         plot_layer(borders, symbol="k-", **kwargs)
-    fig_img = figure_as_image(fig, output_file, dpi=dpi)
+
+    # Legend
+    if legend is True:
+        t = np.linspace(0, 65534, 5, endpoint=True)
+        cbar = plt.colorbar(ticks=t, orientation="vertical",
+                            shrink=0.5, aspect=20)
+        vl = np.linspace(0, 1, 5, endpoint=True)
+        cbar.ax.set_yticklabels(vl)
+
+    # Save image
+    figure_as_image(fig, output_file)
 
     # Return figure
-    plt.close(fig)
-    plt.close(fig_img)
-    # return(fig_img)
+    return(fig)
 
 
 # plot.obs
@@ -601,7 +630,7 @@ def var(var_dir,
         if b.GetOverviewCount() == 0:
             # Build overviews
             print("Build overview")
-            r.BuildOverviews("nearest", [8, 16, 32])
+            r.BuildOverviews("nearest", [4, 8, 16, 32])
         # Get data from finest overview
         ov_band = b.GetOverview(0)
         ov_arr = ov_band.ReadAsArray()
@@ -688,12 +717,10 @@ def rho(input_rho_raster,
     if borders is not None:
         plot_layer(borders, symbol="k-")
     plt.colorbar()
-    fig_img = figure_as_image(fig, output_file, dpi=dpi)
+    figure_as_image(fig, output_file)
 
     # Return figure
-    plt.close(fig)
-    plt.close(fig_img)
-    # return(fig_img)
+    return(fig)
 
 
 # freq_prob
@@ -728,7 +755,6 @@ def freq_prob(stats,
 
     # Save and return figure
     fig.savefig(output_file)
-    plt.close(fig)
-    # return(fig)
+    return(fig)
 
 # End

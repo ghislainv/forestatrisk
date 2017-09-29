@@ -9,16 +9,17 @@
 # ==============================================================================
 
 # Annual product legend
-# 0 non forest
-# 1 undisturbed forest
-# 2 new change classified as old regrowth in 2017
-# 3 new change classified as young regrowth in 2017
-# 4 new change classified as deforested in 2017
-# 5 new change classified as deforested in 2017
-# 6 new change classified as disturbed in 2017
-# 7 new change classified as loss for water
-# 8 new change classified as loss for plantation
-# 10 nodata
+# 0. Other land-cover
+# 1. Undisturbed forest at the beginning of the archive (1985-2007)
+# 2. Old regrowth
+# 3. Young regrowth
+# 4. Deforested in 1986-2013
+# 5. Deforested in 2014-2016
+# 6. Disturbed in 2014-2016
+# 7. Loss for water
+# 8. Loss for plantation
+# 9. NoData and Forest at the beginning of the archive
+# 10. NoData and NonForest at the beginning of the archive
 
 # Imports
 import ee
@@ -68,14 +69,9 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     AP = ee.ImageCollection(path + "MaskEvergreen_L4578")
     AP = AP.mosaic().toByte().clip(region)
 
-    # Maximal forest extent
-    max_extent = ee.ImageCollection(path + "MaxExtent")
-    max_extent = max_extent.mosaic().toByte().clip(region)
-
     # Forest in 2017
-    ap_2017 = AP.select(["Jan2017"])
-    forest2017 = ap_2017.eq(1)
-    forest2017 = forest2017.where(max_extent.lt(1), 0)
+    # ap_2017 = AP.select(["Jan2017"])
+    # forest2017 = ap_2017.eq(1)
 
     # ap_allYear
     ap_allYear = AP.where(AP.neq(1), 0)
@@ -84,25 +80,21 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     ap_2015_2017 = ap_allYear.select(range(29, 32))
     forest2015 = ap_2015_2017.reduce(ee.Reducer.sum())
     forest2015 = forest2015.gte(1)
-    forest2015 = forest2015.where(max_extent.lt(1), 0)
 
     # Forest cover 2010
     ap_2010_2017 = ap_allYear.select(range(24, 32))
     forest2010 = ap_2010_2017.reduce(ee.Reducer.sum())
     forest2010 = forest2010.gte(1)
-    forest2010 = forest2010.where(max_extent.lt(1), 0)
 
     # Forest cover 2005
     ap_2005_2017 = ap_allYear.select(range(19, 32))
     forest2005 = ap_2005_2017.reduce(ee.Reducer.sum())
     forest2005 = forest2005.gte(1)
-    forest2005 = forest2005.where(max_extent.lt(1), 0)
 
     # Forest cover 2000
     ap_2000_2017 = ap_allYear.select(range(14, 32))
     forest2000 = ap_2000_2017.reduce(ee.Reducer.sum())
     forest2000 = forest2000.gte(1)
-    forest2000 = forest2000.where(max_extent.lt(1), 0)
 
     # Forest raster with four bands
     forest = forest2000.addBands(forest2005).addBands(
