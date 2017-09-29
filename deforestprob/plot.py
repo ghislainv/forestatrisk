@@ -385,6 +385,7 @@ def prob(input_prob_raster,
          output_file="prob.png",
          borders=None,
          zoom=None,
+         legend=False,
          figsize=(11.69, 8.27),
          dpi=300, **kwargs):
     """Plot map of spatial probability of deforestation.
@@ -395,6 +396,7 @@ def prob(input_prob_raster,
     :param output_file: name of the plot file.
     :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
+    :param legend: add colorbar if True.
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
 
@@ -432,7 +434,7 @@ def prob(input_prob_raster,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    vmax = 65535.0  # float for division
+    vmax = 65534.0  # float for division
     colors.append((0, (0, 0, 0, 0)))  # transparent
     colors.append((1 / vmax, (34 / cmax, 139 / cmax, 34 / cmax, 1)))  # green
     colors.append((45000 / vmax, (1, 165 / cmax, 0, 1)))  # orange
@@ -441,12 +443,21 @@ def prob(input_prob_raster,
     color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
                                                   N=65535, gamma=1.0)
 
-    # Plot raster and save
+    # Plot raster
     fig = plt.figure(figsize=figsize, dpi=dpi)
     plt.subplot(111)
-    plt.imshow(ov_arr, cmap=color_map, extent=extent)
+    plt.imshow(ov_arr, cmap=color_map, extent=extent,
+               vmin=0, vmax=65534)
     if borders is not None:
         plot_layer(borders, symbol="k-", **kwargs)
+
+    # Legend
+    if legend is True:
+        t = np.linspace(0, 65534, 5, endpoint=True)
+        cbar = plt.colorbar(ticks=t, orientation="vertical",
+                            shrink=0.5, aspect=20)
+        vl = np.linspace(0, 1, 5, endpoint=True)
+        cbar.ax.set_yticklabels(vl)
 
     # Save image
     figure_as_image(fig, output_file)
