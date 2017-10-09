@@ -178,10 +178,6 @@ def predict(model, var_dir="data",
             p = predict_binomial_iCAR(model,
                                       new_data=df,
                                       rhos=data[:, -2])
-            # Avoid nodata value (0) for low proba
-            p[p < 1e-06] = 1e-06
-            # np.rint: round to nearest integer
-            p = np.rint(1000000 * p)
             # Rescale and return to pred
             pred[w] = rescale(p)
         # Assign prediction to raster
