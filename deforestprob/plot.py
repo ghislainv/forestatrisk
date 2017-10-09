@@ -434,26 +434,26 @@ def prob(input_prob_raster,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    vmax = 65534.0  # float for division
+    vmax = 65535.0  # float for division
     colors.append((0, (0, 0, 0, 0)))  # transparent
     colors.append((1 / vmax, (34 / cmax, 139 / cmax, 34 / cmax, 1)))  # green
-    colors.append((45000 / vmax, (1, 165 / cmax, 0, 1)))  # orange
-    colors.append((55000 / vmax, (1, 0, 0, 1)))  # red
+    colors.append((39322 / vmax, (1, 165 / cmax, 0, 1)))  # orange, p=0.60
+    colors.append((52429 / vmax, (1, 0, 0, 1)))  # red, p=0.80
     colors.append((1, (0, 0, 0, 1)))  # black
     color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
-                                                  N=65535, gamma=1.0)
+                                                  N=65536, gamma=1.0)
 
     # Plot raster
     fig = plt.figure(figsize=figsize, dpi=dpi)
     plt.subplot(111)
     plt.imshow(ov_arr, cmap=color_map, extent=extent,
-               vmin=0, vmax=65534)
+               vmin=0, vmax=65535)
     if borders is not None:
         plot_layer(borders, symbol="k-", **kwargs)
 
     # Legend
     if legend is True:
-        t = np.linspace(0, 65534, 5, endpoint=True)
+        t = np.linspace(0, 65535, 5, endpoint=True)
         cbar = plt.colorbar(ticks=t, orientation="vertical",
                             shrink=0.5, aspect=20)
         vl = np.linspace(0, 1, 5, endpoint=True)

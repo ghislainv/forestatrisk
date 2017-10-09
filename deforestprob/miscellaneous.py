@@ -133,18 +133,18 @@ def progress_bar(niter, i):
 
 # Rescale
 def rescale(value):
-    """Rescale probability values to 1-65534.
+    """Rescale probability values to 1-65535.
 
-    This function rescales probability values (float in [0, 1]) to
-    integer values in [1, 65534]. Raster data can then be of type
+    This function rescales probability values (integer in [0, 1e6]) to
+    integer values in [1, 65535]. Raster data can then be of type
     UInt16 with 0 as nodata value.
 
     :param value: float value in [0, 1].
 
-    :return: integer value in [1, 65534].
+    :return: integer value in [1, 65535].
 
     """
 
-    return (((value - 1) * 65534 / 999999) + 1)
+    return (((value - 1) * 65535 / 999999) + 1)
 
 # End
