@@ -1,57 +1,96 @@
-"ctry_name";"ctry_link";"iso3"
-"Algeria";"algeria";"DZA"
-"Angola";"angola";"AGO"
-"Benin";"benin";"BEN"
-"Botswana";"botswana";"BWA"
-"Burkina Faso";"burkina-faso";"BFA"
-"Burundi";"burundi";"BDI"
-"Cameroon";"cameroon";"CMR"
-"Canary Islands";"canary-islands";"NA_CAI"
-"Cape Verde";"cape-verde";"CPV"
-"Central African Republic";"central-african-republic";"CAF"
-"Chad";"chad";"TCD"
-"Comores";"comores";"COM"
-"Congo (Republic/Brazzaville)";"congo-brazzaville";"COG"
-"Congo (Democratic Republic/Kinshasa)";"congo-democratic-republic";"COD"
-"Djibouti";"djibouti";"DJI"
-"Egypt";"egypt";"EGY"
-"Equatorial Guinea";"equatorial-guinea";"GNQ"
-"Eritrea";"eritrea";"ERI"
-"Ethiopia";"ethiopia";"ETH"
-"Gambia";"senegal-and-gambia";"GMB"
-"Gabon";"gabon";"GAB"
-"Ghana";"ghana";"GHA"
-"Guinea";"guinea";"GIN"
-"Guinea-Bissau";"guinea-bissau";"GNB"
-"Ivory Coast";"ivory-coast";"CIV"
-"Kenya";"kenya";"KEN"
-"Lesotho";"lesotho";"LSO"
-"Liberia";"liberia";"LBR"
-"Libya";"libya";"LBY"
-"Madagascar";"madagascar";"MDG"
-"Malawi";"malawi";"MWI"
-"Mali";"mali";"MLI"
-"Mauritania";"mauritania";"MRT"
-"Mauritius";"mauritius";"MUS"
-"Morocco";"morocco";"MAR"
-"Mozambique";"mozambique";"MOZ"
-"Namibia";"namibia";"NAM"
-"Niger";"niger";"NER"
-"Nigeria";"nigeria";"NGA"
-"Rwanda";"rwanda";"RWA"
-"Saint Helena, Ascension, and Tristan da Cunha";"saint-helena-ascension-and-tristan-da-cunha";"SHN"
-"Sao Tome and Principe";"sao-tome-and-principe";"STP"
-"Senegal and Gambia";"senegal-and-gambia";"SEN"
-"Seychelles";"seychelles";"SYC"
-"Sierra Leone";"sierra-leone";"SLE"
-"Somalia";"somalia";"SOM"
-"South Africa";"south-africa";"ZAF"
-"South Sudan";"south-sudan";"SSD"
-"Sudan";"sudan";"SDN"
-"Swaziland";"swaziland";"SWZ"
-"Tanzania";"tanzania";"TZA"
-"Togo";"togo";"TGO"
-"Tunisia";"tunisia";"TUN"
-"Uganda";"uganda";"UGA"
-"Zambia";"zambia";"ZMB"
-"Zimbabwe";"zimbabwe";"ZWE"
+ctry_name;ctry_link;iso3;continent
+Algeria;algeria;DZA;Africa
+Angola;angola;AGO;Africa
+Benin;benin;BEN;Africa
+Botswana;botswana;BWA;Africa
+Burkina Faso;burkina-faso;BFA;Africa
+Burundi;burundi;BDI;Africa
+Cameroon;cameroon;CMR;Africa
+Canary Islands;canary-islands;NA_CAI;Africa
+Cape Verde;cape-verde;CPV;Africa
+Central African Republic;central-african-republic;CAF;Africa
+Chad;chad;TCD;Africa
+Comores;comores;COM;Africa
+Congo (Republic/Brazzaville);congo-brazzaville;COG;Africa
+Congo (Democratic Republic/Kinshasa);congo-democratic-republic;COD;Africa
+Djibouti;djibouti;DJI;Africa
+Egypt;egypt;EGY;Africa
+Equatorial Guinea;equatorial-guinea;GNQ;Africa
+Eritrea;eritrea;ERI;Africa
+Ethiopia;ethiopia;ETH;Africa
+Gambia;senegal-and-gambia;GMB;Africa
+Gabon;gabon;GAB;Africa
+Ghana;ghana;GHA;Africa
+Guinea;guinea;GIN;Africa
+Guinea-Bissau;guinea-bissau;GNB;Africa
+Ivory Coast;ivory-coast;CIV;Africa
+Kenya;kenya;KEN;Africa
+Lesotho;lesotho;LSO;Africa
+Liberia;liberia;LBR;Africa
+Libya;libya;LBY;Africa
+Madagascar;madagascar;MDG;Africa
+Malawi;malawi;MWI;Africa
+Mali;mali;MLI;Africa
+Mauritania;mauritania;MRT;Africa
+Mauritius;mauritius;MUS;Africa
+Morocco;morocco;MAR;Africa
+Mozambique;mozambique;MOZ;Africa
+Namibia;namibia;NAM;Africa
+Niger;niger;NER;Africa
+Nigeria;nigeria;NGA;Africa
+Rwanda;rwanda;RWA;Africa
+Saint Helena, Ascension, and Tristan da Cunha;saint-helena-ascension-and-tristan-da-cunha;SHN;Africa
+Sao Tome and Principe;sao-tome-and-principe;STP;Africa
+Senegal and Gambia;senegal-and-gambia;SEN;Africa
+Seychelles;seychelles;SYC;Africa
+Sierra Leone;sierra-leone;SLE;Africa
+Somalia;somalia;SOM;Africa
+South Africa;south-africa;ZAF;Africa
+South Sudan;south-sudan;SSD;Africa
+Sudan;sudan;SDN;Africa
+Swaziland;swaziland;SWZ;Africa
+Tanzania;tanzania;TZA;Africa
+Togo;togo;TGO;Africa
+Tunisia;tunisia;TUN;Africa
+Uganda;uganda;UGA;Africa
+Zambia;zambia;ZMB;Africa
+Zimbabwe;zimbabwe;ZWE;Africa
+Afghanistan;afghanistan;AFG;Asia
+Azerbaijan;azerbaijan;AZE;Asia
+Bangladesh;bangladesh;BGD;Asia
+Bhutan;NA;BTN;Asia
+Cambodia;cambodia;KHM;Asia
+China;china;CHN;Asia
+GCC States;gcc-states;NA_GCC;Asia
+India;india;IND;Asia
+Indonesia;indonesia;IDN;Asia
+Iran;iran;IRN;Asia
+Iraq;iraq;IRQ;Asia
+Israel;israel-and-palestine;ISR;Asia
+Palestine;israel-and-palestine;PSE;Asia
+Japan;japan;JPN;Asia
+Jordan;jordan;JOR;Asia
+Kazakhstan;kazakhstan;KAZ;Asia
+Kyrgyzstan;kyrgyzstan;KGZ;Asia
+Lebanon;lebanon;LBN;Asia
+Malaysia;malaysia-singapore-brunei;MAL;Asia
+Singapore;malaysia-singapore-brunei;SGP;Asia
+Brunei;malaysia-singapore-brunei;BRU;Asia
+Maldives;maldives;MDV;Asia
+Mongolia;mongolia;MNG;Asia
+Myanmar (a.k.a. Burma);myanmar;MMR;Asia
+Nepal;nepal;NPL;Asia
+North Korea;north-korea;PRK;Asia
+Pakistan;pakistan;PAK;Asia
+Philippines;philippines;PHL;Asia
+Russian Federation;russia;RUS;Asia
+South Korea;south-korea;ROK;Asia
+Sri Lanka;sri-lanka;LKA;Asia
+Syria;syria;SYR;Asia
+Taiwan;taiwan;TWN;Asia
+Tajikistan;tajikistan;TJK;Asia
+Thailand;thailand;THA;Asia
+Turkmenistan;turkmenistan;TKM;Asia
+Uzbekistan;uzbekistan;UZB;Asia
+Vietnam;vietnam;VNM;Asia
+Yemen;yemen;YEM;Asia
