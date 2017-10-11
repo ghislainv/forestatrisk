@@ -19,7 +19,6 @@ def deforest(input_raster,
              hectares,
              output_file="output/fcc.tif",
              blk_rows=128):
-
     """Function to map the future forest-cover change.
 
     This function computes the future forest cover map based on (i) a
@@ -48,8 +47,8 @@ def deforest(input_raster,
     nrow = probR.RasterYSize
 
     # Number of pixels to deforest
-    surface_pixel = -gt[1]*gt[5]
-    ndefor = np.around((hectares*10000)/surface_pixel).astype(np.int)
+    surface_pixel = -gt[1] * gt[5]
+    ndefor = np.around((hectares * 10000) / surface_pixel).astype(np.int)
 
     # Make blocks
     blockinfo = makeblock(input_raster, blk_rows=blk_rows)
@@ -67,7 +66,7 @@ def deforest(input_raster,
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
-        progress_bar(nblock, b+1)
+        progress_bar(nblock, b + 1)
         # Position in 1D-arrays
         px = b % nblock_x
         py = b / nblock_x
@@ -77,47 +76,50 @@ def deforest(input_raster,
         nfc += len(forpix[0])
 
     # Compute the histogram of values
-    print("Compute the histogram of values")
-    nvalues = 65635
-    counts = np.zeros(nvalues, dtype=np.float)
+    # print("Compute the histogram of values")
+    # nvalues = 65635
+    # counts = np.zeros(nvalues, dtype=np.float)
     # Loop on blocks of data
-    for b in range(nblock):
-        # Progress bar
-        progress_bar(nblock, b+1)
-        # Position in 1D-arrays
-        px = b % nblock_x
-        py = b / nblock_x
-        # Data for one block
-        data = probB.ReadAsArray(x[px], y[py], nx[px], ny[py])
-        flat_data = data.flatten()
-        flat_data_nonzero = flat_data[flat_data != 0]
-        for i in flat_data_nonzero:
-            counts[i-1] += 1.0/nfc
+    # for b in range(nblock):
+    # Progress bar
+    #     progress_bar(nblock, b+1)
+    # Position in 1D-arrays
+    #     px = b % nblock_x
+    #     py = b / nblock_x
+    # Data for one block
+    #     data = probB.ReadAsArray(x[px], y[py], nx[px], ny[py])
+    #     flat_data = data.flatten()
+    #     flat_data_nonzero = flat_data[flat_data != 0]
+    #     for i in flat_data_nonzero:
+    #         counts[i-1] += 1.0/nfc
+
+    # Compute the histogram of values
+    counts = probB.GetHistogram(-0.5, 65535.5, 65536, 0, 0)
 
     # If deforestation < forest
     if (ndefor < nfc):
 
         # Identify threshold
         print("Identify threshold")
-        quant = ndefor/np.float(nfc)
+        quant = ndefor / np.float(nfc)
         cS = 0.0
         cumSum = np.zeros(nvalues, dtype=np.float)
         go_on = True
-        for i in np.arange(nvalues-1, -1, -1):
+        for i in np.arange(nvalues - 1, -1, -1):
             cS += counts[i]
             cumSum[i] = cS
             if (cS >= quant) & (go_on is True):
                 go_on = False
                 index = i
-                threshold = index+1
+                threshold = index + 1
 
         # Minimize error
         print("Minimize error on deforested hectares")
-        diff_inf = ndefor-cumSum[index+1]*nfc
-        diff_sup = cumSum[index]*nfc-ndefor
+        diff_inf = ndefor - cumSum[index + 1] * nfc
+        diff_sup = cumSum[index] * nfc - ndefor
         if diff_sup >= diff_inf:
-            index = index+1
-            threshold = index+1
+            index = index + 1
+            threshold = index + 1
 
     # If deforestation > forest (everything is deforested)
     else:
@@ -141,7 +143,7 @@ def deforest(input_raster,
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
-        progress_bar(nblock, b+1)
+        progress_bar(nblock, b + 1)
         # Position in 1D-arrays
         px = b % nblock_x
         py = b / nblock_x
@@ -152,7 +154,7 @@ def deforest(input_raster,
         ndc += len(deforpix[0])
         # Forest-cover change
         for_data = np.ones(shape=prob_data.shape, dtype=np.int8)
-        for_data = for_data*255  # nodata
+        for_data = for_data * 255  # nodata
         for_data[prob_data != 0] = 1
         for_data[deforpix] = 0
         fccB.WriteArray(for_data, x[px], y[py])
@@ -171,7 +173,7 @@ def deforest(input_raster,
     del(fccR)
 
     # Estimates of error on deforested hectares
-    error = (ndc*surface_pixel/10000.0)-hectares
+    error = (ndc * surface_pixel / 10000.0) - hectares
 
     # Return results
     stats = (counts, threshold, error, hectares)
