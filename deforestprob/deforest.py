@@ -94,7 +94,8 @@ def deforest(input_raster,
     #         counts[i-1] += 1.0/nfc
 
     # Compute the histogram of values
-    counts = probB.GetHistogram(-0.5, 65535.5, 65536, 0, 0)
+    nvalues = 65635
+    counts = probB.GetHistogram(0.5, 65535.5, nvalues, 0, 0)
 
     # If deforestation < forest
     if (ndefor < nfc):
