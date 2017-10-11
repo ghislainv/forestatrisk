@@ -62,7 +62,7 @@ def deforest(input_raster,
 
     # Compute the total number of forest pixels
     print("Compute the total number of forest pixels")
-    nfc = 0
+    nfp = 0
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
@@ -73,7 +73,7 @@ def deforest(input_raster,
         # Data for one block
         data = probB.ReadAsArray(x[px], y[py], nx[px], ny[py])
         forpix = np.nonzero(data != 0)
-        nfc += len(forpix[0])
+        nfp += len(forpix[0])
 
     # Compute the histogram of values
     # print("Compute the histogram of values")
@@ -91,23 +91,23 @@ def deforest(input_raster,
     #     flat_data = data.flatten()
     #     flat_data_nonzero = flat_data[flat_data != 0]
     #     for i in flat_data_nonzero:
-    #         counts[i-1] += 1.0/nfc
+    #         counts[i-1] += 1.0/nfp
 
     # Compute the histogram of values
     nvalues = 65635
     counts = probB.GetHistogram(0.5, 65535.5, nvalues, 0, 0)
 
     # If deforestation < forest
-    if (ndefor < nfc):
+    if (ndefor < nfp):
 
         # Identify threshold
         print("Identify threshold")
-        quant = ndefor / np.float(nfc)
+        quant = ndefor / (nfp * 1.0)
         cS = 0.0
         cumSum = np.zeros(nvalues, dtype=np.float)
         go_on = True
         for i in np.arange(nvalues - 1, -1, -1):
-            cS += counts[i]
+            cS += counts[i] / (nfp * 1.0)
             cumSum[i] = cS
             if (cS >= quant) & (go_on is True):
                 go_on = False
@@ -116,8 +116,8 @@ def deforest(input_raster,
 
         # Minimize error
         print("Minimize error on deforested hectares")
-        diff_inf = ndefor - cumSum[index + 1] * nfc
-        diff_sup = cumSum[index] * nfc - ndefor
+        diff_inf = ndefor - cumSum[index + 1] * nfp
+        diff_sup = cumSum[index] * nfp - ndefor
         if diff_sup >= diff_inf:
             index = index + 1
             threshold = index + 1
