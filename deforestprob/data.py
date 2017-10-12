@@ -144,9 +144,9 @@ def country(iso3, monthyear, proj="EPSG:3395",
     tile_bottom = np.int(np.ceil((-ymin_latlong + 60.0) / 5.0))
     if (tile_bottom == tile_top):
         tile_bottom = tile_top + 1
-    # Format variables
-    tiles_long = str(tile_left) + "-" + str(tile_right)
-    tiles_lat = str(tile_top) + "-" + str(tile_bottom)
+    # Format variables, zfill is for having 01 and not 1
+    tiles_long = str(tile_left).zfill(2) + "-" + str(tile_right).zfill(2)
+    tiles_lat = str(tile_top).zfill(2) + "-" + str(tile_bottom).zfill(2)
 
     # Google EarthEngine task
     if (fcc_source == "gfc"):
