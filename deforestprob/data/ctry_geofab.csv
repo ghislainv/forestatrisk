@@ -58,7 +58,7 @@ Zimbabwe;zimbabwe;ZWE;Africa
 Afghanistan;afghanistan;AFG;Asia
 Azerbaijan;azerbaijan;AZE;Asia
 Bangladesh;bangladesh;BGD;Asia
-Bhutan;NA;BTN;Asia
+Bhutan;bhutan;BTN;Asia
 Cambodia;cambodia;KHM;Asia
 China;china;CHN;Asia
 GCC States;gcc-states;NA_GCC;Asia
@@ -82,6 +82,7 @@ Myanmar (a.k.a. Burma);myanmar;MMR;Asia
 Nepal;nepal;NPL;Asia
 North Korea;north-korea;PRK;Asia
 Pakistan;pakistan;PAK;Asia
+Papua New Guinea;papua-new-guinea;PNG;Asia
 Philippines;philippines;PHL;Asia
 Russian Federation;russia;RUS;Asia
 South Korea;south-korea;ROK;Asia
