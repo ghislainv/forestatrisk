@@ -31,7 +31,7 @@ echo "Borders, roads, towns and rivers from OSM\n"
 
 # Download OSM data from Geofabrik
 url="http://download.geofabrik.de/"$continent"/"$country"-latest.osm.pbf"
-wget -O country.osm.pbf $url
+wget -N -O country.osm.pbf $url
 osmconvert country.osm.pbf -o=country.o5m
 
 # Main roads
