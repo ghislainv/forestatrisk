@@ -75,18 +75,16 @@ def country(iso3, monthyear, proj="EPSG:3395",
 
     # Identify continent and country from iso3
     print("Identify continent and country from iso3")
-    # Continent
-    file_countrycode = pkg_resources.resource_filename("deforestprob",
-                                                       "data/countrycode.csv")
-    data_countrycode = pd.read_csv(file_countrycode, sep=";", header=0)
-    continent = data_countrycode.continent[data_countrycode.iso3c == iso3]
-    continent = continent.iloc[0].lower()
-    # Country
+    # Geofabrik data
     file_geofab = pkg_resources.resource_filename("deforestprob",
                                                   "data/ctry_geofab.csv")
     data_geofab = pd.read_csv(file_geofab, sep=";", header=0)
+    # Country
     ctry_link_geofab = data_geofab.ctry_link[data_geofab.iso3 == iso3]
     ctry_link_geofab = ctry_link_geofab.iloc[0]
+    # Continent
+    continent = data_geofab.continent[data_geofab.iso3 == iso3]
+    continent = continent.iloc[0].lower()
 
     # Create data_raw directory
     print("Create data_raw directory")
