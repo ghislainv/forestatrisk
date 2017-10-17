@@ -45,6 +45,7 @@ def extent_shp(inShapefile):
 # country
 def country(iso3, monthyear, proj="EPSG:3395",
             data_country=True,
+	    keep_data_raw=False,
             fcc_source="gfc", perc=50,
             gs_bucket=None):
     """Function formating the country data.
@@ -61,6 +62,9 @@ def country(iso3, monthyear, proj="EPSG:3395",
 
     :param data_country: Boolean for running data_country.sh to
     compute country landscape variables. Default to "True".
+    
+    :param keep_data_raw: Boolean to keep the data_raw folder. Default
+    to "False".
 
     :param fcc_source: Source for forest-cover change data. Can be
     "gfc" (Global Forest Change 2015 Hansen data) or
@@ -213,5 +217,13 @@ def country(iso3, monthyear, proj="EPSG:3395",
         args = ["sh ", script, "'" + proj + "'", "'" + extent + "'"]
         cmd = " ".join(args)
         os.system(cmd)
+
+    # Delete data_raw
+    if (keep_data_raw is False):
+        for root, dirs, files in os.walk("data_raw", topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
+            for name in dirs:
+                os.rmdir(os.path.join(root, name))
 
 # End

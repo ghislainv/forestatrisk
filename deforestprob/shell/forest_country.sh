@@ -172,8 +172,5 @@ mkdir -p ../data/forest
 # Copy files
 cp -t ../data dist_defor.tif dist_edge.tif fcc23.tif
 cp -t ../data/forest forest_t0.tif forest_t1.tif forest_t2.tif forest_t3.tif fcc13.tif
-# Remove raw data directory
-cd ../
-rm -R data_raw
 
 # End
