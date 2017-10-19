@@ -82,8 +82,8 @@ gdal_calc.py --overwrite -A forest_t1_src.tif -B forest_t2_src.tif \
 
 # Compute distance
 gdal_proximity.py fcc12_src.tif _dist_defor_src.tif \
-                  -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-                  -values 0 -ot UInt32 -distunits GEO
+                  -values 0 -ot UInt32 -distunits GEO -use_input_nodata YES \
+                  -nodata 4294967295
 
 # Mask with forest_t2_src.tif
 gdal_calc.py --overwrite -A _dist_defor_src.tif -B forest_t2_src.tif \
