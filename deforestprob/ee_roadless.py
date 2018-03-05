@@ -63,15 +63,18 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     export_coord = region.getInfo()["coordinates"]
 
     # Path to roadless products
-    path = "users/ClassifLandsat072015/Mosaic_v10/collectionPeriod_"
+    path = "users/vancuch/"
 
     # Roadless annual product (AP)
-    AP = ee.ImageCollection(path + "MaskEvergreen_L4578")
+    AP = ee.ImageCollection(path + "collectionPeriod_AnnualChanges")
     AP = AP.mosaic().toByte().clip(region)
 
     # Forest in 2017
     # ap_2017 = AP.select(["Jan2017"])
     # forest2017 = ap_2017.eq(1)
+
+    # Note to be deleted: with version Janv2018 of Christelle product, forest
+    # at year Y if 1, 13 or 14.
 
     # ap_allYear
     ap_allYear = AP.where(AP.neq(1), 0)
