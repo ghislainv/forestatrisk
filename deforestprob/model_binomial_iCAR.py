@@ -29,13 +29,15 @@ class model_binomial_iCAR(object):
     """
 
     def __init__(self,  # Observations
-                 suitability_formula, data, eval_env=0,
+                 suitability_formula, data,
                  # Spatial structure
                  n_neighbors, neighbors,
                  # NA action
                  NA_action="drop",
                  # Predictions
                  data_pred=None,
+                 # Environment
+                 eval_env=0,
                  # Chains
                  burnin=1000, mcmc=1000, thin=1,
                  # Starting values
