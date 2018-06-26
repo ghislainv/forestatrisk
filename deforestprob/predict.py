@@ -14,39 +14,15 @@ import sys
 from glob import glob
 import numpy as np
 import pandas as pd
-from patsy import build_design_matrices
 from osgeo import gdal
-from miscellaneous import invlogit, rescale
-from miscellaneous import progress_bar, makeblock
-
-
-# predict_binomial_iCAR
-def predict_binomial_iCAR(model, new_data, rhos):
-    """Function to return the predictions of a model_binomial_iCAR model.
-
-    Function to return the predictions of a model_binomial_iCAR model
-    for a new data-set. In this function, rho values for spatial cells
-    are directly provided and not obtained from the model.
-
-    :param model: model_binomial_iCAR model to predict from.
-    :param new_data: pandas DataFrame including explicative variables.
-    :param rhos: spatial random effects for each observation (row) in new_data.
-    :return: prediction (a probability).
-
-    """
-
-    (new_x,) = build_design_matrices([model._x_design_info],
-                                     new_data)
-    new_X = new_x[:, :-1]
-    return (invlogit(np.dot(new_X, model.betas) + rhos))
+from miscellaneous import progress_bar, makeblock, rescale
 
 
 # predict
 def predict(model, var_dir="data",
-            input_cell_raster="output/rho.tif",
             input_forest_raster="data/forest.tif",
-            output_file="output/pred_binomial_iCAR.tif",
-            blk_rows=128):
+            output_file="predictions.tif",
+            blk_rows=128, **kwargs):
     """Predict the spatial probability of deforestation from a model.
 
     This function predicts the spatial probability of deforestation
@@ -55,10 +31,12 @@ def predict(model, var_dir="data",
 
     :param model: model_binomial_iCAR model to predict from.
     :param var_dir: directory with rasters (.tif) of explicative variables.
-    :param input_cell_raster: path to raster of rho values for spatial cells.
     :param input_forest_raster: path to forest raster (1 for forest).
     :param output_file: name of the raster file to output the probability map.
     :param blk_rows: if > 0, number of rows for computation by block.
+    :param **kwargs: additional arguments to be passed to model.predict().
+
+    :return: a raster of predictions.
 
     """
 
@@ -79,7 +57,6 @@ def predict(model, var_dir="data",
     var_tif = var_dir + "/*.tif"
     raster_list = glob(var_tif)
     raster_list.sort()  # Sort names
-    raster_list.append(input_cell_raster)
     raster_names = []
     for i in range(len(raster_list)):
         fname = os.path.basename(raster_list[i])
@@ -169,15 +146,11 @@ def predict(model, var_dir="data",
         # Transform into a pandas DataFrame
         df = pd.DataFrame(data)
         df.columns = raster_names
-        # Add fake "cell" column
-        df["cell"] = 0
-        # Predict with binomial iCAR model
+        # Predict
         pred = np.zeros(npix)  # Initialize with nodata value (0)
         if len(w[0]) > 0:
             # Get predictions into an array
-            p = predict_binomial_iCAR(model,
-                                      new_data=df,
-                                      rhos=data[:, -2])
+            p = model.predict(new_data=df, **kwargs)
             # Rescale and return to pred
             pred[w] = rescale(p)
         # Assign prediction to raster

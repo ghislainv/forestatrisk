@@ -58,6 +58,34 @@ class model_binomial_iCAR(object):
         in a hierarchical Bayesian framework.
         """
 
+        # ====================
+        # Model specifications
+        # ====================
+
+        self.model_type = "binomial_iCAR"
+        self.suitability_formula = suitability_formula
+        self.data = data
+        self.n_neighbors = n_neighbors
+        self.neighbors = neighbors
+        self.NA_action = NA_action
+        self.data_pred = data_pred
+        self.eval_env = eval_env
+        self.burnin = burnin
+        self.mcmc = mcmc
+        self.thin = thin
+        self.beta_start = beta_start
+        self.Vrho_start = Vrho_start
+        self.mubeta = mubeta
+        self.Vbeta = Vbeta
+        self.priorVrho = priorVrho
+        self.shape = shape
+        self.rate = rate
+        self.Vrho_max = Vrho_max
+        self.seed = seed
+        self.verbose = verbose
+        self.save_rho = save_rho
+        self.save_p = save_p
+
         # ========
         # Form response, covariate matrices and model parameters
         # ========
@@ -241,7 +269,7 @@ class model_binomial_iCAR(object):
                                                               CI_high[i])
         return (summary)
 
-    def predict(self, new_data):
+    def predict(self, new_data, input_rho_raster=None):
         """Function to return the predictions of a model_binomial_iCAR model.
 
         Function to return the predictions of a model_binomial_iCAR model
@@ -256,12 +284,16 @@ class model_binomial_iCAR(object):
 
         (new_x,) = build_design_matrices([self._x_design_info],
                                          new_data)
-        new_X = new_x[:, :-1]
-        new_cell = new_x[:, -1].astype(np.int)
-        if (len(self.rho.shape) == 1):
-            new_rho = self.rho[new_cell]
+        if (input_rho_raster is None):
+            new_X = new_x[:, :-1]
+            new_cell = new_x[:, -1].astype(np.int)
+            if (len(self.rho.shape) == 1):
+                new_rho = self.rho[new_cell]
+            else:
+                new_rho = np.mean(self.rho, axis=0)[new_cell]
         else:
-            new_rho = np.mean(self.rho, axis=0)[new_cell]
+
+            new_rho = rho_pred
         return (invlogit(np.dot(new_X, self.betas) + new_rho))
 
     def plot(self, output_file="mcmc.pdf", plots_per_page=5,
@@ -276,7 +308,7 @@ class model_binomial_iCAR(object):
         :param figsize: figure size in inches.
         :param dpi: resolution for output image.
 
-        :return: list of Matplotlib figures
+        :return: list of Matplotlib figures.
 
         """
 
