@@ -29,7 +29,7 @@ class model_binomial_iCAR(object):
     """
 
     def __init__(self,  # Observations
-                 suitability_formula, data,
+                 suitability_formula, data, eval_env=0,
                  # Spatial structure
                  n_neighbors, neighbors,
                  # NA action
@@ -61,8 +61,9 @@ class model_binomial_iCAR(object):
         # ========
 
         # Patsy
+        eval_env = EvalEnvironment.capture(eval_env, reference=1)
         y, x = dmatrices(suitability_formula, data,
-                         eval_env=1, NA_action=NA_action)
+                         eval_env, NA_action)
         self._y_design_info = y.design_info
         self._x_design_info = x.design_info
 
