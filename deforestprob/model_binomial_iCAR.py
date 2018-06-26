@@ -10,7 +10,7 @@
 
 # Import
 import numpy as np
-from patsy import dmatrices, build_design_matrices
+from patsy import dmatrices, build_design_matrices, EvalEnvironment
 import hsdm
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
