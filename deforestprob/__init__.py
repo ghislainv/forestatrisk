@@ -21,12 +21,12 @@ import plot
 from model_binomial_iCAR import model_binomial_iCAR
 from sample import sample
 from cellneigh import cellneigh
-from predict import predict
+from predict_raster import predict_raster
+from predict_raster_binomial_iCAR import predict_raster_binomial_iCAR
 from resample_rho import resample_rho
 from deforest import deforest
 from validation import accuracy_indices, validation
 from emissions import emissions
 from countpix import countpix
-from computation import computation
 
 # End

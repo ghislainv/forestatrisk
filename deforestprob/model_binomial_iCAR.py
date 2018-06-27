@@ -212,7 +212,7 @@ class model_binomial_iCAR(object):
         posterior_means = np.mean(MCMC, axis=0)
         self.betas = posterior_means[:-2]
         self.Vrho = posterior_means[-2]
-        self.Deviance = posterior_means[-1]
+        self.deviance = posterior_means[-1]
 
         # Save rho
         if (save_rho == 0):
@@ -269,8 +269,8 @@ class model_binomial_iCAR(object):
                                                               CI_high[i])
         return (summary)
 
-    def predict(self, new_data, input_rho_raster=None):
-        """Function to return the predictions of a model_binomial_iCAR model.
+    def predict(self, new_data=None):
+        """Function returning the predictions of a model_binomial_iCAR model.
 
         Function to return the predictions of a model_binomial_iCAR model
         for a new data-set.
@@ -282,19 +282,22 @@ class model_binomial_iCAR(object):
 
         """
 
-        (new_x,) = build_design_matrices([self._x_design_info],
-                                         new_data)
-        if (input_rho_raster is None):
-            new_X = new_x[:, :-1]
-            new_cell = new_x[:, -1].astype(np.int)
-            if (len(self.rho.shape) == 1):
-                new_rho = self.rho[new_cell]
-            else:
-                new_rho = np.mean(self.rho, axis=0)[new_cell]
+        # Data
+        if (new_data is None):
+            (new_x,) = build_design_matrices([self._x_design_info],
+                                             self.data)
         else:
+            (new_x,) = build_design_matrices([self._x_design_info],
+                                             new_data)
+        X = new_x[:, :-1]
+        cell = new_x[:, -1].astype(np.int)
 
-            new_rho = rho_pred
-        return (invlogit(np.dot(new_X, self.betas) + new_rho))
+        # Rho
+        if (len(self.rho.shape) == 1):
+            rho = self.rho[cell]
+        else:
+            rho = np.mean(self.rho, axis=0)[cell]
+        return (invlogit(np.dot(X, self.betas) + rho))
 
     def plot(self, output_file="mcmc.pdf", plots_per_page=5,
              figsize=(8.27, 11.69), dpi=100):
