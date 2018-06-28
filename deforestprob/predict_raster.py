@@ -15,7 +15,8 @@ from glob import glob
 import numpy as np
 import pandas as pd
 from osgeo import gdal
-from miscellaneous import progress_bar, makeblock, rescale
+from miscellaneous import rescale
+from miscellaneous import progress_bar, makeblock
 
 
 # predict
