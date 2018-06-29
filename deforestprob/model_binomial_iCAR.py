@@ -345,7 +345,7 @@ class model_binomial_iCAR(object):
                      transform=ax.transAxes)
             # Posterior distribution
             plt.subplot2grid(grid_size, (i % plots_per_page, 1))
-            plt.hist(MCMC[:, i], normed=1, bins=20, color="#808080")
+            plt.hist(MCMC[:, i], density=1, bins=20, color="#808080")
             plt.axvline(x=posterior_means[i], linewidth=1, color="r")
             # Close the page if needed
             if (i + 1) % plots_per_page == 0 or (i + 1) == nb_plots:
