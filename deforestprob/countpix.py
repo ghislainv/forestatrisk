@@ -57,7 +57,7 @@ def countpix(input_raster, value=1, blk_rows=0):
         py = b / nblock_x
         # Read the data
         rasterA = rasterB.ReadAsArray(x[px], y[py], nx[px], ny[py])
-        # Identify pixels (x/y coordinates) which are deforested
+        # Identify pixels (x/y coordinates) equal to value
         pix = np.nonzero(rasterA == value)
         npix += len(pix[0])
 

@@ -9,7 +9,8 @@
 # ==============================================================================
 
 # Import
-from distutils.core import setup, Extension
+from setuptools import setup
+from distutils.core import Extension
 import numpy.distutils.misc_util
 
 
