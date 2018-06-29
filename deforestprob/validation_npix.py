@@ -130,9 +130,8 @@ def validation_npix(r_pred, r_obs, value_f=1, value_d=0,
     print("Export results to file " + output_file)
 
     # Export to file
-    npix_arr = np.concatenate((npix_obs_f, npix_pred_f,
-                               npix_obs_d, npix_pred_d),
-                              axis=1)
+    npix_arr = np.column_stack((npix_obs_f, npix_pred_f,
+                                npix_obs_d, npix_pred_d))
     varname_str = "obs_f, pred_f, obs_d, pred_d"
     np.savetxt(output_file, npix_arr, header=varname_str,
                fmt="%s", delimiter=",", comments="")
