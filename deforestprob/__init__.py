@@ -26,7 +26,7 @@ from predict_raster_binomial_iCAR import predict_raster_binomial_iCAR
 from resample_rho import resample_rho
 from deforest import deforest
 from validation import accuracy_indices, validation
-from validation_pix import validation_pix
+from validation_npix import validation_npix
 from emissions import emissions
 from countpix import countpix
 
