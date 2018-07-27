@@ -40,15 +40,16 @@ def accuracy_indices(pred, obs):
     n11 = np.float(sum((df["pred"] == 1) & (df["obs"] == 1)))
 
     # Accuracy indices
-    OA = (n11+n00)/(n11+n10+n00+n01)
-    FOM = n11/(n11+n10+n01)
-    Sensitivity = n11/(n11+n01)
-    Specificity = n00/(n00+n10)
-    TSS = Sensitivity+Specificity-1
-    N = n11+n10+n00+n01
-    Observed_accuracy = (n11+n00)/N
-    Expected_accuracy = ((n11+n10)*((n11+n01)/N) + (n00+n01)*((n00+n10)/N)) / N
-    Kappa = (Observed_accuracy-Expected_accuracy)/(1-Expected_accuracy)
+    OA = (n11 + n00) / (n11 + n10 + n00 + n01)
+    FOM = n11 / (n11 + n10 + n01)
+    Sensitivity = n11 / (n11 + n01)
+    Specificity = n00 / (n00 + n10)
+    TSS = Sensitivity + Specificity - 1
+    N = n11 + n10 + n00 + n01
+    Observed_accuracy = (n11 + n00) / N
+    Expected_accuracy = (
+        (n11 + n10) * ((n11 + n01) / N) + (n00 + n01) * ((n00 + n10) / N)) / N
+    Kappa = (Observed_accuracy - Expected_accuracy) / (1 - Expected_accuracy)
 
     r = {"OA": round(OA, 2), "FOM": round(FOM, 2),
          "Sen": round(Sensitivity, 2),
@@ -102,15 +103,15 @@ def validation(pred, obs, blk_rows=128):
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
-        progress_bar(nblock, b+1)
+        progress_bar(nblock, b + 1)
         # Position in 1D-arrays
         px = b % nblock_x
         py = b / nblock_x
         # Data for one block
         df_pred = predB.ReadAsArray(x[px], y[py], nx[px], ny[py])
-        df_pred = 1-df_pred
+        df_pred = 1 - df_pred
         df_obs = obsB.ReadAsArray(x[px], y[py], nx[px], ny[py])
-        df_obs = 1-df_obs
+        df_obs = 1 - df_obs
         # Update confusion matrix
         n00 = n00 + np.sum((df_pred == 0) & (df_obs == 0))
         n10 = n10 + np.sum((df_pred == 1) & (df_obs == 0))
@@ -132,15 +133,16 @@ def validation(pred, obs, blk_rows=128):
 
     # Accuracy indices
     print("Compute accuracy indices")
-    OA = (n11+n00)/(n11+n10+n00+n01)
-    FOM = n11/(n11+n10+n01)
-    Sensitivity = n11/(n11+n01)
-    Specificity = n00/(n00+n10)
-    TSS = Sensitivity+Specificity-1
-    N = n11+n10+n00+n01
-    Observed_accuracy = (n11+n00)/N
-    Expected_accuracy = ((n11+n10)*((n11+n01)/N) + (n00+n01)*((n00+n10)/N)) / N
-    Kappa = (Observed_accuracy-Expected_accuracy)/(1-Expected_accuracy)
+    OA = (n11 + n00) / (n11 + n10 + n00 + n01)
+    FOM = n11 / (n11 + n10 + n01)
+    Sensitivity = n11 / (n11 + n01)
+    Specificity = n00 / (n00 + n10)
+    TSS = Sensitivity + Specificity - 1
+    N = n11 + n10 + n00 + n01
+    Observed_accuracy = (n11 + n00) / N
+    Expected_accuracy = (
+        (n11 + n10) * ((n11 + n01) / N) + (n00 + n01) * ((n00 + n10) / N)) / N
+    Kappa = (Observed_accuracy - Expected_accuracy) / (1 - Expected_accuracy)
 
     r = {"OA": round(OA, 2), "FOM": round(FOM, 2),
          "Sen": round(Sensitivity, 2),
