@@ -166,11 +166,11 @@ def sample(nsamp=10000, Seed=1234, csize=10,
 
     # Landscape variables from forest raster
     gt = forestR.GetGeoTransform()
-    ncol = forestR.RasterXSize
-    nrow = forestR.RasterYSize
+    ncol_r = forestR.RasterXSize
+    nrow_r = forestR.RasterYSize
     Xmin = gt[0]
-    Xmax = gt[0] + gt[1] * ncol
-    Ymin = gt[3] + gt[5] * nrow
+    Xmax = gt[0] + gt[1] * ncol_r
+    Ymin = gt[3] + gt[5] * nrow_r
     Ymax = gt[3]
 
     # Concatenate selected pixels
@@ -189,15 +189,15 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # Cell number from region
     print("Compute number of %d x %d km spatial cells" % (csize, csize))
     csize = csize * 1000  # Transform km in m
-    ncell_byrow = np.int(np.ceil((Xmax - Xmin) / csize))
-    ncell_bycol = np.int(np.ceil((Ymax - Ymin) / csize))
-    ncell = ncell_byrow * ncell_bycol
-    print("... %d cells (%d x %d)" % (ncell, ncell_bycol, ncell_byrow))
+    ncol = np.int(np.ceil((Xmax - Xmin) / csize))
+    nrow = np.int(np.ceil((Ymax - Ymin) / csize))
+    ncell = ncol * nrow
+    print("... %d cells (%d x %d)" % (ncell, nrow, ncol))
     # I and J are the coordinates of the cells and start at zero
     print("Identify cell number from XY coordinates")
     J = ((pts_x - Xmin) / csize).astype(np.int)
     I = ((Ymax - pts_y) / csize).astype(np.int)
-    cell = I * ncell_byrow + J  # Cell number starts at zero
+    cell = I * ncol + J  # Cell number starts at zero
 
     # =============================================
     # Extract values from rasters
@@ -247,7 +247,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
         # ReadArray for extract
         extract = stack.ReadAsArray(xOffset[i], yOffset[i], 1, 1)
         val[i, :] = extract.reshape(nband,)
-        # # Using gdallocationinfo for extract is slow
+        # Using gdallocationinfo for extract is slow
         # cmd_gdallocation = "gdallocationinfo -valonly \
         #                    -geoloc %s %f %f" % (outputfile,
         #                                         pts_x[i], pts_y[i])
