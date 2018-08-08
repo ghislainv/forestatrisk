@@ -124,14 +124,15 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
     # Cells within country borders (rasterizing method)
     cb_ds = ogr.Open(vector)
     cb_layer = cb_ds.GetLayer()
-    ds = gdal.Rasterize("/vsimem/tmpfile", cb_layer, xRes=csize, yRes=-csize,
-                        allTouched=True,
-                        outputBounds=[Xmin, Ymin, Xmax, Ymax],
-                        burnValues=1, noData=0,
-                        outputType=gdal.GDT_Byte)
+    rOptions = gdal.RasterizeOptions(xRes=csize, yRes=-csize,
+                                     allTouched=True,
+                                     outputBounds=[Xmin, Ymin, Xmax, Ymax],
+                                     burnValues=1, noData=0)
+    outfile = "/vsimem/tmpfile"
+    ds = gdal.Rasterize(outfile, cb_layer, options=rOptions)
     mask = ds.ReadAsArray()
     ds = None
-    gdal.Unlink("/vsimem/tmpfile")
+    gdal.Unlink(outfile)
     y_in, x_in = np.where(mask == 1)
     cell_in = y_in * ncol + x_in
 
