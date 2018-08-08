@@ -11,7 +11,7 @@
 # Import
 import numpy as np
 import sys
-from osgeo import gdal, ogr
+from osgeo import gdal
 
 
 # cellneigh
@@ -122,14 +122,13 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
     print("... %d cells (%d x %d)" % (ncell, nrow, ncol))
 
     # Cells within country borders (rasterizing method)
-    cb_ds = ogr.Open(vector)
-    cb_layer = cb_ds.GetLayer()
+    cb_ds = gdal.OpenEx(vector, gdal.OF_VECTOR)
     rOptions = gdal.RasterizeOptions(xRes=csize, yRes=-csize,
                                      allTouched=True,
                                      outputBounds=[Xmin, Ymin, Xmax, Ymax],
                                      burnValues=1, noData=0)
     outfile = "/vsimem/tmpfile"
-    ds = gdal.Rasterize(outfile, cb_layer, options=rOptions)
+    ds = gdal.Rasterize(outfile, cb_ds, options=rOptions)
     mask = ds.ReadAsArray()
     ds = None
     gdal.Unlink(outfile)
