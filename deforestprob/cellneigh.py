@@ -47,7 +47,6 @@ def cellneigh(raster=None, region=None, csize=10, rank=1):
         sys.exit(1)
 
     # Cell number from region
-    csize = csize
     print("Compute number of %d x %d km spatial cells" % (csize, csize))
     csize = csize * 1000  # Transform km in m
     ncol = np.int(np.ceil((Xmax - Xmin) / csize))
@@ -113,11 +112,12 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
         sys.exit(1)
 
     # Cell number from region
-    csize = csize
     print("Compute number of %d x %d km spatial cells" % (csize, csize))
     csize = csize * 1000  # Transform km in m
     ncol = np.int(np.ceil((Xmax - Xmin) / csize))
     nrow = np.int(np.ceil((Ymax - Ymin) / csize))
+    Xmax_new = Xmin + ncol * csize
+    Ymin_new = Ymax + nrow * (-csize)
     ncell = ncol * nrow
     print("... %d cells (%d x %d)" % (ncell, nrow, ncol))
 
@@ -125,7 +125,8 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
     cb_ds = gdal.OpenEx(vector, gdal.OF_VECTOR)
     rOptions = gdal.RasterizeOptions(xRes=csize, yRes=-csize,
                                      allTouched=True,
-                                     outputBounds=[Xmin, Ymin, Xmax, Ymax],
+                                     outputBounds=[Xmin, Ymin_new,
+                                                   Xmax_new, Ymax],
                                      burnValues=1, noData=0)
     outfile = "/vsimem/tmpfile"
     ds = gdal.Rasterize(outfile, cb_ds, options=rOptions)
@@ -151,13 +152,13 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
                 nneighbors = 0
                 for cy in Iprim:
                     for cx in Jprim:
-                        if (not (cy == i and cx == j)) and (mask[cx, cy] == 1):
+                        if (not (cy == i and cx == j)) and (mask[cy, cx] == 1):
                             adj.append(cy * ncol + cx)
                             nneighbors += 1
                 nneigh.append(nneighbors)
     nneigh = np.array(nneigh)
     adj = np.array(adj)
-    adj_rank = [cell_in.index(i) for i in adj]
+    adj_rank = [cell_in.tolist().index(i) for i in adj]
 
     return(nneigh, adj_rank, cell_in)
 
