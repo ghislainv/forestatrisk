@@ -140,6 +140,7 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
     print("Identify adjacent cells and compute number of neighbors")
     nneigh = []
     adj = []
+    adj_sort = []
     around = np.arange(-rank, rank + 1)
     for i in range(nrow):
         for j in range(ncol):
@@ -158,8 +159,10 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
                 nneigh.append(nneighbors)
     nneigh = np.array(nneigh)
     adj = np.array(adj)
-    adj_rank = [cell_in.tolist().index(i) for i in adj]
+    for i in adj:
+        adj_sort.append(np.flatnonzero(cell_in == i)[0])
+    adj_sort = np.array(adj_sort)
 
-    return(nneigh, adj_rank, cell_in)
+    return(nneigh, adj_sort, cell_in)
 
 # End
