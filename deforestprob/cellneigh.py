@@ -163,6 +163,6 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
         adj_sort.append(np.flatnonzero(cell_in == i)[0])
     adj_sort = np.array(adj_sort)
 
-    return(nneigh, adj_sort, cell_in)
+    return(nneigh, adj_sort, cell_in, ncell)
 
 # End
