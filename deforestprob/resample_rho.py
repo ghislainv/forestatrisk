@@ -52,6 +52,7 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     ncell_Y = np.ceil((Ymax - Ymin) / csize_orig).astype(int)
 
     # NumpyArray
+    rho = np.array(rho)
     rho_arr = rho.reshape(ncell_Y, ncell_X)
 
     # Create .tif file
