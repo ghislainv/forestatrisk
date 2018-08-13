@@ -696,14 +696,15 @@ def rho(input_rho_raster,
         print("Build overview")
         rasterR.BuildOverviews("average", [2, 4, 8, 16, 32])
 
-    # Compute min and max
-    rho_min, rho_max = rasterB.ComputeRasterMinMax()
-    rho_bound = np.max((-rho_min, rho_max))
-
-    # Get data from finest overview
+    # Get data
     # ov_band = rasterB.GetOverview(0)
     ov_band = rasterB
     ov_arr = ov_band.ReadAsArray()
+    ov_arr[ov_arr == -9999] = np.nan
+
+    # Compute 95% quantiles
+    rho_min, rho_max = np.percentile(ov_arr, [2.5, 97.5])
+    rho_bound = np.max((-rho_min, rho_max))
 
     # Dereference driver
     rasterB = None
