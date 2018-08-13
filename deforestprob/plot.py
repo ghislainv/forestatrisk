@@ -703,7 +703,7 @@ def rho(input_rho_raster,
     ov_arr[ov_arr == -9999] = np.nan
 
     # Compute 95% quantiles
-    rho_min, rho_max = np.percentile(ov_arr, [2.5, 97.5])
+    rho_min, rho_max = np.nanpercentile(ov_arr, [0.25, 97.5])
     rho_bound = np.max((-rho_min, rho_max))
 
     # Dereference driver

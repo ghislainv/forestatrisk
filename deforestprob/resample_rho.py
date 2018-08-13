@@ -90,6 +90,7 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
     # Cubicspline interpolation to csize_new*1000 km
     print("Resampling spatial random effects to file " + output_file)
     param = ["gdalwarp", "-overwrite",
+             "-srcnodata", str(-9999),
              "-tr", str(csize_new * 1000), str(csize_new * 1000),
              "-r cubicspline",
              "-ot Float32",
