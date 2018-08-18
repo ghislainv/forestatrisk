@@ -208,20 +208,10 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     raster_list = glob(var_tif)
     raster_list.sort()  # Sort names
 
-    # Make vrt with gdalbuildvrt
+    # Make vrt with gdal.BuildVRT
     # Note: Extent and resolution from forest raster!
     print("Make virtual raster with variables as raster bands")
     output_vrt = var_dir + "/var.vrt"
-    # With os.system (deprecated)
-    # input_var = " ".join(raster_list)
-    # param = ["gdalbuildvrt", "-overwrite", "-separate",
-    #          "-resolution user",
-    #          "-te", str(Xmin), str(Ymin), str(Xmax), str(Ymax),
-    #          "-tr", str(gt[1]), str(-gt[5]),
-    #          output_vrt, input_var]
-    # cmd_gdalbuildvrt = " ".join(param)
-    # os.system(cmd_gdalbuildvrt)
-    # With gdal Python bindings
     param = gdal.BuildVRTOptions(resolution="user",
                                  outputBounds=(Xmin, Ymin, Xmax, Ymax),
                                  xRes=gt[1], yRes=-gt[5],
