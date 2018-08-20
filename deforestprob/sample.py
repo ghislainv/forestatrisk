@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
@@ -211,15 +212,12 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # Make vrt with gdal.BuildVRT
     # Note: Extent and resolution from forest raster!
     print("Make virtual raster with variables as raster bands")
-    output_vrt = var_dir + "/var.vrt"
     param = gdal.BuildVRTOptions(resolution="user",
                                  outputBounds=(Xmin, Ymin, Xmax, Ymax),
                                  xRes=gt[1], yRes=-gt[5],
                                  separate=True)
-    gdal.BuildVRT(output_vrt, raster_list, options=param)
-
-    # Load vrt file
-    stack = gdal.Open(output_vrt)
+    gdal.BuildVRT("/vsimem/var.vrt", raster_list, options=param)
+    stack = gdal.Open("/vsimem/var.vrt")
 
     # List of nodata values
     nband = stack.RasterCount
@@ -244,12 +242,6 @@ def sample(nsamp=10000, Seed=1234, csize=10,
         # ReadArray for extract
         extract = stack.ReadAsArray(xOffset[i], yOffset[i], 1, 1)
         val[i, :] = extract.reshape(nband,)
-        # Using gdallocationinfo for extract is slow
-        # cmd_gdallocation = "gdallocationinfo -valonly \
-        #                    -geoloc %s %f %f" % (outputfile,
-        #                                         pts_x[i], pts_y[i])
-        # extract = os.popen(cmd_gdallocation).read()
-        # val[i, :] = np.array(extract.split("\n")[:-1]).astype(np.float32)
 
     # Close stack
     del stack

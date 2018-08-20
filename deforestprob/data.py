@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
@@ -45,7 +46,7 @@ def extent_shp(inShapefile):
 # country
 def country(iso3, monthyear, proj="EPSG:3395",
             data_country=True,
-	    keep_data_raw=False,
+            keep_data_raw=False,
             fcc_source="gfc", perc=50,
             gs_bucket=None):
     """Function formating the country data.
@@ -62,7 +63,7 @@ def country(iso3, monthyear, proj="EPSG:3395",
 
     :param data_country: Boolean for running data_country.sh to
     compute country landscape variables. Default to "True".
-    
+
     :param keep_data_raw: Boolean to keep the data_raw folder. Default
     to "False".
 

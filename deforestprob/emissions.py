@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
@@ -9,7 +10,6 @@
 # ==============================================================================
 
 # Import
-import os
 import numpy as np
 from osgeo import gdal
 from miscellaneous import progress_bar, makeblock
@@ -47,26 +47,19 @@ def emissions(input_stocks="data/AGB.tif",
     # Make vrt
     print("Make virtual raster")
     raster_list = [input_forest, input_stocks]
-    input_var = " ".join(raster_list)
-    dirname = os.path.dirname(input_forest)
-    output_vrt = os.path.join(dirname, "var.vrt")
-    param = ["gdalbuildvrt", "-overwrite", "-separate",
-             "-resolution user",
-             "-te", str(Xmin), str(Ymin), str(Xmax), str(Ymax),
-             "-tr", str(gt[1]), str(-gt[5]),
-             output_vrt, input_var]
-    cmd_gdalbuildvrt = " ".join(param)
-    os.system(cmd_gdalbuildvrt)
+    param = gdal.BuildVRTOptions(resolution="user",
+                                 outputBounds=(Xmin, Ymin, Xmax, Ymax),
+                                 xRes=gt[1], yRes=-gt[5],
+                                 separate=True)
+    gdal.BuildVRT("/vsimem/var.vrt", raster_list, options=param)
+    stack = gdal.Open("/vsimem/var.vrt")
 
-    # Load vrt file
-    stack = gdal.Open(output_vrt)
-
-    # # NoData value for stocks
+    # NoData value for stocks
     # stocksB = stack.GetRasterBand(2)
     # stocksND = stocksB.GetNoDataValue()
 
     # Make blocks
-    blockinfo = makeblock(output_vrt, blk_rows=blk_rows)
+    blockinfo = makeblock("/vsimem/var.vrt", blk_rows=blk_rows)
     nblock = blockinfo[0]
     nblock_x = blockinfo[1]
     x = blockinfo[3]
@@ -98,7 +91,7 @@ def emissions(input_stocks="data/AGB.tif",
         # Sum of emitted stocks
         sum_Stocks = sum_Stocks + np.sum(data_Stocks[data_Forest == 0])
     # Pixel area (in ha)
-    Area = gt[1]*(-gt[5])/10000
+    Area = gt[1] * (-gt[5]) / 10000
     # Carbon emissions in Mg
     Carbon = sum_Stocks * coefficient * Area
     Carbon = np.int(np.rint(Carbon))

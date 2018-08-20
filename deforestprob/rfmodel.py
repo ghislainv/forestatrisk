@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # =============================================================================
 #
@@ -79,7 +80,7 @@ target = target[w]
 
 # Create and train Random Forest
 # For Multi-core CPUs, use n_jobs argument
-njobs = max(1, psutil.cpu_count()-2)
+njobs = max(1, psutil.cpu_count() - 2)
 rf = RandomForestClassifier(n_estimators=500, n_jobs=njobs)
 print ("Run Random Forest on " + str(njobs) + " CPU")
 rf.fit(train, target)
@@ -134,13 +135,13 @@ nrow = stack.RasterYSize
 nband = stack.RasterCount
 gt = stack.GetGeoTransform()
 Xmin = gt[0]
-Xmax = gt[0]+gt[1]*ncol
+Xmax = gt[0] + gt[1] * ncol
 proj = stack.GetProjection()
 
 # List of nodata values
 bandND = np.zeros(nband)
 for k in range(nband):
-    band = stack.GetRasterBand(k+1)
+    band = stack.GetRasterBand(k + 1)
     if band is None:
         print ("NoData value is not specified for input raster file %d" % k)
         sys.exit(1)
@@ -177,7 +178,7 @@ for b in tqdm(range(nblock)):
     px = b % nblock_x
     py = b / nblock_x
     # Number of pixels
-    npix = nx[px]*ny[py]
+    npix = nx[px] * ny[py]
     # Data for one block of the stack (shape = (nband,nrow,ncol))
     data = stack.ReadAsArray(x[px], y[py], nx[px], ny[py])
     # Replace ND values with nan
@@ -200,7 +201,7 @@ for b in tqdm(range(nblock)):
     del X, Y, fmaskA
     # Transpose and reshape to 2D array
     data = data.transpose(1, 2, 0)
-    data = data.reshape(npix, nband+3)
+    data = data.reshape(npix, nband + 3)
     # Observations without NA
     w = np.nonzero(~(data == -9999).any(axis=1))
     # Remove observations with NA for Random Forest
@@ -214,7 +215,7 @@ for b in tqdm(range(nblock)):
         # Avoid nodata value (0) for low proba
         rfp[rfp < 1e-06] = 1e-06
         # np.rint: round to nearest integer
-        rfp = np.rint(1000000*rfp)
+        rfp = np.rint(1000000 * rfp)
         # Rescale and return to pred
         pred[w] = rescale(rfp)
     pred = pred.reshape(ny[py], nx[px])

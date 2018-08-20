@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
@@ -74,24 +75,6 @@ def deforest(input_raster,
         data = probB.ReadAsArray(x[px], y[py], nx[px], ny[py])
         forpix = np.nonzero(data != 0)
         nfp += len(forpix[0])
-
-    # Compute the histogram of values
-    # print("Compute the histogram of values")
-    # nvalues = 65635
-    # counts = np.zeros(nvalues, dtype=np.float)
-    # Loop on blocks of data
-    # for b in range(nblock):
-    # Progress bar
-    #     progress_bar(nblock, b+1)
-    # Position in 1D-arrays
-    #     px = b % nblock_x
-    #     py = b / nblock_x
-    # Data for one block
-    #     data = probB.ReadAsArray(x[px], y[py], nx[px], ny[py])
-    #     flat_data = data.flatten()
-    #     flat_data_nonzero = flat_data[flat_data != 0]
-    #     for i in flat_data_nonzero:
-    #         counts[i-1] += 1.0/nfp
 
     # Compute the histogram of values
     nvalues = 65635

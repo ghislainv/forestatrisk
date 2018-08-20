@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
@@ -89,18 +90,12 @@ def predict_raster_binomial_iCAR(model, var_dir="data",
 
     # Make vrt with gdalbuildvrt
     print("Make virtual raster with variables as raster bands")
-    input_var = " ".join(raster_list)
-    output_vrt = var_dir + "/var.vrt"
-    param = ["gdalbuildvrt", "-overwrite", "-separate",
-             "-resolution user",
-             "-te", str(Xmin), str(Ymin), str(Xmax), str(Ymax),
-             "-tr", str(gt[1]), str(-gt[5]),
-             output_vrt, input_var]
-    cmd_gdalbuildvrt = " ".join(param)
-    os.system(cmd_gdalbuildvrt)
-
-    # Load vrt file
-    stack = gdal.Open(output_vrt)
+    param = gdal.BuildVRTOptions(resolution="user",
+                                 outputBounds=(Xmin, Ymin, Xmax, Ymax),
+                                 xRes=gt[1], yRes=-gt[5],
+                                 separate=True)
+    gdal.BuildVRT("/vsimem/var.vrt", raster_list, options=param)
+    stack = gdal.Open("/vsimem/var.vrt")
     nband = stack.RasterCount
     proj = stack.GetProjection()
 
@@ -115,7 +110,7 @@ def predict_raster_binomial_iCAR(model, var_dir="data",
     bandND = bandND.astype(np.float32)
 
     # Make blocks
-    blockinfo = makeblock(output_vrt, blk_rows=blk_rows)
+    blockinfo = makeblock("/vsimem/var.vrt", blk_rows=blk_rows)
     nblock = blockinfo[0]
     nblock_x = blockinfo[1]
     x = blockinfo[3]
