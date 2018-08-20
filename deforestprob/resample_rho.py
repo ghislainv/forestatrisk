@@ -89,15 +89,12 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
 
     # Cubicspline interpolation to csize_new*1000 km
     print("Resampling spatial random effects to file " + output_file)
-    param = ["gdalwarp", "-overwrite",
-             "-srcnodata", str(-9999),
-             "-tr", str(csize_new * 1000), str(csize_new * 1000),
-             "-r cubicspline",
-             "-ot Float32",
-             "-co 'COMPRESS=LZW'", "-co 'PREDICTOR=3'",
-             "-co 'BIGTIFF=YES'",
-             rho_orig_filename, output_file]
-    command = " ".join(param)
-    os.system(command)
+    param = gdal.WarpOptions(srcNodata=-9999, xRes=csize_new * 1000,
+                             yRes=csize_new * 1000,
+                             resampleAlg=gdal.GRA_CubicSpline,
+                             outputType=gdal.GDT_Float32,
+                             creationOptions=["COMPRESS=LZW", "PREDICTOR=3",
+                                              "BIGTIFF=YES"])
+    gdal.Warp(output_file, rho_orig_filename, options=param)
 
 # End
