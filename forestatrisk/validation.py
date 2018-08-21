@@ -1,19 +1,20 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
-# python_version  :2.7
+# python_version  :>=2.7
 # license         :GPLv3
 # ==============================================================================
 
 # Import
+from __future__ import division, print_function  # Python 3 compatibility
 import numpy as np
 import pandas as pd
 from osgeo import gdal
-from miscellaneous import progress_bar, makeblock
+from .miscellaneous import progress_bar, makeblock
 
 
 # Accuracy_indices
@@ -57,7 +58,7 @@ def accuracy_indices(pred, obs):
          "Spe": round(Specificity, 2),
          "TSS": round(TSS, 2), "K": round(Kappa, 2)}
 
-    return (r)
+    return(r)
 
 
 # Validation
@@ -91,7 +92,7 @@ def validation(pred, obs, blk_rows=128):
     y = blockinfo[4]
     nx = blockinfo[5]
     ny = blockinfo[6]
-    print("Divide region in " + str(nblock) + " blocks")
+    print("Divide region in {} blocks".format(nblock))
 
     # Initialize the confusion matrix
     n00 = 0.0
@@ -150,6 +151,6 @@ def validation(pred, obs, blk_rows=128):
          "Spe": round(Specificity, 2),
          "TSS": round(TSS, 2), "K": round(Kappa, 2)}
 
-    return (r)
+    return(r)
 
 # End

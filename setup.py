@@ -1,10 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
-# python_version  :2.7
+# python_version  :>=2.7
 # license         :GPLv3
 # ==============================================================================
 
@@ -25,7 +26,7 @@ hSDM_module = Extension("hsdm",
                         extra_compile_args=['-std=c99'])
 
 # Setup
-setup(name="deforestprob",
+setup(name="forestatrisk",
       version="0.1",
       author="Ghislain Vieilledent",
       author_email="ghislain.vieilledent@cirad.fr",
@@ -33,18 +34,17 @@ setup(name="deforestprob",
       license="GPLv3",
       description="This is the Python 'deforestprob' package",
       long_description=readme(),
-      classifiers=[
-        "Development Status :: 3 - Alpha",
-        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Programming Language :: Python :: 2.7",
-        "Topic :: Scientific/Engineering :: Bio-Informatics",
-      ],
+      classifiers=["Development Status :: 3 - Alpha",
+                   "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+                   "Programming Language :: Python :: 2",
+                   "Programming Language :: Python :: 3",
+                   "Topic :: Scientific/Engineering :: Bio-Informatics"],
       keywords="deforestation hsdm hierarchical logistic model probability \
       risk Bayesian spatial autocorrelation",
       ext_modules=[hSDM_module],
-      packages=["deforestprob"],
-      package_dir={"deforestprob": "deforestprob"},
-      package_data={"deforestprob": ["data/*.csv", "shell/data_country.sh",
+      packages=["forestatrisk"],
+      package_dir={"forestatrisk": "forestatrisk"},
+      package_data={"forestatrisk": ["data/*.csv", "shell/data_country.sh",
                                      "shell/forest_country.sh"]},
       install_requires=["numpy", "sklearn", "patsy", "matplotlib", "pandas"],
       include_dirs=numpy.distutils.misc_util.get_numpy_include_dirs(),

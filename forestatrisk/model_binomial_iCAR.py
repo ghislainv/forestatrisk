@@ -1,22 +1,23 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
-# python_version  :2.7
+# python_version  :>=2.7
 # license         :GPLv3
 # ==============================================================================
 
 # Import
+from __future__ import division, print_function  # Python 3 compatibility
 import numpy as np
 from patsy import dmatrices, build_design_matrices, EvalEnvironment
-import hsdm
+from . import hsdm
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
-from miscellaneous import invlogit
+from .miscellaneous import invlogit
 
 
 # model_binomial_iCAR
@@ -355,6 +356,6 @@ class model_binomial_iCAR(object):
                 pdf_pages.savefig(fig)
         # Write the PDF document to the disk
         pdf_pages.close()
-        return (figures)
+        return(figures)
 
 # End

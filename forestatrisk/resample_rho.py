@@ -1,15 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
-# python_version  :2.7
+# python_version  :>=2.7
 # license         :GPLv3
 # ==============================================================================
 
 # Import
+from __future__ import division, print_function  # Python 3 compatibility
 import os
 import numpy as np
 from osgeo import gdal

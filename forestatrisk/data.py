@@ -1,15 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
-# python_version  :2.7
+# python_version  :>=2.7
 # license         :GPLv3
 # ==============================================================================
 
 # Import
+from __future__ import division, print_function  # Python 3 compatibility
 import numpy as np
 import os
 from osgeo import ogr
@@ -19,7 +20,7 @@ from zipfile import ZipFile  # To unzip files
 from urllib import urlretrieve  # To download files from internet
 import pandas as pd
 import pkg_resources
-from miscellaneous import make_dir
+from .miscellaneous import make_dir
 
 
 # Extent of a shapefile

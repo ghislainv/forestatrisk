@@ -1,8 +1,8 @@
-# deforestprob Python module
+# forestatrisk Python package
 
-## Estimating the spatial probability of deforestation in tropical countries
+## Estimating the risk of deforestation in tropical countries
 
-`deforestprob` is a Python module for estimating the spatial
+`forestatrisk` is a Python package for estimating the spatial
 probability of deforestation in the tropics depending on various
 spatial environmental variables.
 
@@ -50,11 +50,11 @@ hectares) to be deforested.
 ## Tutorial
 
 We wrote a tutorial using a Jupyter/IPython notebook to show how to
-use the `deforestprob` Python module. We took Madagascar as a case
+use the `forestatrisk` Python package. We took Madagascar as a case
 study considering past deforestation on the period 2000-2010,
 estimating deforestation probability for the year 2010, and projecting
 the future forest cover in 2050. The notebook is available at the
-following web adress: https://ghislainv.github.io/deforestprob
+following web adress: https://ghislainv.github.io/forestatrisk
 
 ## Reference
 
@@ -66,24 +66,24 @@ doi: [10.5281/zenodo.48470](http://doi.org/10.5281/zenodo.48470)
 
 ## Installation
 
-The easiest way to install the `deforestprob` Python module is via [pip](https://pip.pypa.io/en/stable/):
+The easiest way to install the `forestatrisk` Python package is via [pip](https://pip.pypa.io/en/stable/):
 
 ```
-~$ sudo pip install --upgrade https://github.com/ghislainv/deforestprob/archive/master.zip
+~$ sudo pip install --upgrade https://github.com/ghislainv/forestatrisk/archive/master.zip
 ```
 
 but you can also install it executing the `setup.py` file:
 
 ```
-~$ git clone https://github.com/ghislainv/deforestprob
-~$ cd deforestprob
-~/deforestprob$ sudo python setup.py install
+~$ git clone https://github.com/ghislainv/forestatrisk
+~$ cd forestatrisk
+~/forestatrisk$ sudo python setup.py install
 ```
 
 ## Figure
 
 Map of the probability of deforestation in Madagascar for the year
-2010 obtained with `deforestprob`. Dark red: high probability of
+2010 obtained with `forestatrisk`. Dark red: high probability of
 deforestation, Dark green: low probability of deforestation.
 
 <img src="notebook/images/pred_binomial_iCAR.png" width=350>

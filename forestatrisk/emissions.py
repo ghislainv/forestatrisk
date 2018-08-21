@@ -1,18 +1,19 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
-# python_version  :2.7
+# python_version  :>=2.7
 # license         :GPLv3
 # ==============================================================================
 
 # Import
+from __future__ import division, print_function  # Python 3 compatibility
 import numpy as np
 from osgeo import gdal
-from miscellaneous import progress_bar, makeblock
+from .miscellaneous import progress_bar, makeblock
 
 
 # emissions
@@ -66,7 +67,7 @@ def emissions(input_stocks="data/AGB.tif",
     y = blockinfo[4]
     nx = blockinfo[5]
     ny = blockinfo[6]
-    print("Divide region in " + str(nblock) + " blocks")
+    print("Divide region in {} blocks".format(nblock))
 
     # Computation by block
     # Total sum
@@ -79,7 +80,7 @@ def emissions(input_stocks="data/AGB.tif",
         progress_bar(nblock, b + 1)
         # Position in 1D-arrays
         px = b % nblock_x
-        py = b / nblock_x
+        py = b // nblock_x
         # Data for one block of the stack (shape = (nband,nrow,ncol))
         data = stack.ReadAsArray(x[px], y[py], nx[px], ny[py])
         data_Stocks = data[1]

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # =============================================================================
@@ -17,6 +17,7 @@
 # Libraries
 # =============================================
 
+from __future__ import division, print_function  # Python 3 compatibility
 from sklearn.ensemble import RandomForestClassifier
 import cPickle as pickle  # To save objects
 import numpy as np
@@ -52,7 +53,7 @@ def rescale(value):
 # Import and format data
 # =============================================
 
-print "Import training data-set"
+print("Import training data-set")
 
 # Data-set
 dataset = np.genfromtxt("data/sample.txt",
@@ -98,16 +99,16 @@ for v in range(len(varnames)):
     print(sentence % (v + 1, importances[indices[v]]))
 
 # Predict on taining data-set
-print "Predict on the new data-set"
+print("Predict on the new data-set")
 test = train
 pred = rf.predict_proba(test)[:, 1]
 
 # Save results
-print "Save model and output"
+print("Save model and output")
 make_dir("output")  # make output directory
 save_object(rf, "output/rfmodel.pkl")
 np.savetxt("output/predict.txt", pred, delimiter=",", fmt="%f")
-print "Done\n"
+print("Done")
 
 # =============================================
 # Predictions on the whole data-set
@@ -118,11 +119,11 @@ fmaskR = gdal.Open("data/dist_edge.tif")
 fmaskB = fmaskR.GetRasterBand(1)
 fmaskND = fmaskB.GetNoDataValue()
 if fmaskND is None:
-    print "NoData value is not specified for forest raster file"
+    print("NoData value is not specified for forest raster file")
     sys.exit(1)
 
 # Make vrt with gdalbuildvrt
-print "Make virtual raster with variables as raster bands"
+print("Make virtual raster with variables as raster bands")
 inputvar = "data/sapm.tif data/dist_road.tif data/dist_town.tif \
 data/dist_edge.tif data/dist_patch.tif data/altitude.tif"
 outputfile = "data/var.vrt"
@@ -143,7 +144,7 @@ bandND = np.zeros(nband)
 for k in range(nband):
     band = stack.GetRasterBand(k + 1)
     if band is None:
-        print ("NoData value is not specified for input raster file %d" % k)
+        print("NoData value is not specified for input raster file %d" % k)
         sys.exit(1)
     bandND[k] = band.GetNoDataValue()
 bandND = bandND.astype(np.float32)
@@ -157,10 +158,10 @@ x = blockinfo[3]
 y = blockinfo[4]
 nx = blockinfo[5]
 ny = blockinfo[6]
-print ("Divide region in " + str(nblock) + " blocks")
+print("Divide region in " + str(nblock) + " blocks")
 
 # Rasters of predictions
-print "Create a raster file on disk for projections"
+print("Create a raster file on disk for projections")
 driver = gdal.GetDriverByName("GTiff")
 Pdrv = driver.Create("output/proba.tif", ncol, nrow, 1, gdal.GDT_UInt16,
                      ["COMPRESS=LZW", "PREDICTOR=2"])
@@ -171,12 +172,12 @@ Pband.SetNoDataValue(0)
 
 # Predict by block
 # Message
-print "Predict deforestation probability by block"
+print("Predict deforestation probability by block")
 # Loop on blocks of data
 for b in tqdm(range(nblock)):
     # Position in 1D-arrays
     px = b % nblock_x
-    py = b / nblock_x
+    py = b // nblock_x
     # Number of pixels
     npix = nx[px] * ny[py]
     # Data for one block of the stack (shape = (nband,nrow,ncol))
@@ -223,7 +224,7 @@ for b in tqdm(range(nblock)):
     Pband.WriteArray(pred, x[px], y[py])
 
 # Compute statistics after setting NoData
-print "Compute statistics"
+print("Compute statistics")
 Pband.FlushCache()  # Write cache data to disk
 Pband.ComputeStatistics(False)
 
@@ -241,7 +242,7 @@ ct = None
 Pband = None
 
 # Build overviews, save, and close  # Not really necessary, increase file size
-print "Build overview, save, and close"
+print("Build overview, save, and close")
 # Pdrv.BuildOverviews("average", [2, 4, 8, 16, 32])
 del Pdrv  # Dereference: write the data modifications and close
 

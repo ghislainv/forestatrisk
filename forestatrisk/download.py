@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # =============================================================================
@@ -16,6 +16,7 @@
 # Libraries
 # =============================================
 
+from __future__ import division, print_function  # Python 3 compatibility
 import os
 from zipfile import ZipFile  # To unzip files
 from urllib import urlretrieve  # To download files from internet
@@ -30,18 +31,18 @@ if not os.path.exists(destDir):
     os.mkdir(destDir)
 
 # Download the zip file
-print "Download data"
+print("Download data")
 fname = "./data/deforpy_data.zip"
 url = "http://bioscenemada.cirad.fr/githubdata/deforpy/deforpy_data.zip"
 resp = urlretrieve(url, fname)
-print "Data downloaded"
+print("Data downloaded")
 
 # Extract files from zip
-print "Extract files from zip"
+print("Extract files from zip")
 f = ZipFile(fname)
 f.extractall(destDir)
 f.close()
-print "Files extracted\n"
+print("Files extracted")
 
 # ============================================================================
 # End of download.py

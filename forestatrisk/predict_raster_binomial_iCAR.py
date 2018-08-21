@@ -1,15 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
-# python_version  :2.7
+# python_version  :>=2.7
 # license         :GPLv3
 # ==============================================================================
 
 # Import
+from __future__ import division, print_function  # Python 3 compatibility
 import os
 import sys
 from glob import glob
@@ -105,7 +106,8 @@ def predict_raster_binomial_iCAR(model, var_dir="data",
         band = stack.GetRasterBand(k + 1)
         bandND[k] = band.GetNoDataValue()
         if (bandND[k] is None) or (bandND[k] is np.nan):
-            print("NoData value is not specified for input raster file %d" % k)
+            print("NoData value is not specified for"
+                  " input raster file {}".format(k))
             sys.exit(1)
     bandND = bandND.astype(np.float32)
 
@@ -117,7 +119,7 @@ def predict_raster_binomial_iCAR(model, var_dir="data",
     y = blockinfo[4]
     nx = blockinfo[5]
     ny = blockinfo[6]
-    print("Divide region in " + str(nblock) + " blocks")
+    print("Divide region in {} blocks".format(nblock))
 
     # Raster of predictions
     print("Create a raster file on disk for projections")
@@ -139,7 +141,7 @@ def predict_raster_binomial_iCAR(model, var_dir="data",
         progress_bar(nblock, b + 1)
         # Position in 1D-arrays
         px = b % nblock_x
-        py = b / nblock_x
+        py = b // nblock_x
         # Number of pixels
         npix = nx[px] * ny[py]
         # Data for one block of the stack (shape = (nband,nrow,ncol))

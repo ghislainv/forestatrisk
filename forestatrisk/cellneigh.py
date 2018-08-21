@@ -1,15 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
-# python_version  :2.7
+# python_version  :>=2.7
 # license         :GPLv3
 # ==============================================================================
 
 # Import
+from __future__ import division, print_function  # Python 3 compatibility
 import numpy as np
 import sys
 from osgeo import gdal
@@ -48,12 +49,12 @@ def cellneigh(raster=None, region=None, csize=10, rank=1):
         sys.exit(1)
 
     # Cell number from region
-    print("Compute number of %d x %d km spatial cells" % (csize, csize))
+    print("Compute number of {} x {} km spatial cells".format(csize, csize))
     csize = csize * 1000  # Transform km in m
     ncol = np.int(np.ceil((Xmax - Xmin) / csize))
     nrow = np.int(np.ceil((Ymax - Ymin) / csize))
     ncell = ncol * nrow
-    print("... %d cells (%d x %d)" % (ncell, nrow, ncol))
+    print("... {} cells ({} x {})".format(ncell, nrow, ncol))
 
     # Adjacent cells and number of neighbors
     print("Identify adjacent cells and compute number of neighbors")
@@ -113,14 +114,14 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
         sys.exit(1)
 
     # Cell number from region
-    print("Compute number of %d x %d km spatial cells" % (csize, csize))
+    print("Compute number of {} x {} km spatial cells".format(csize, csize))
     csize = csize * 1000  # Transform km in m
     ncol = np.int(np.ceil((Xmax - Xmin) / csize))
     nrow = np.int(np.ceil((Ymax - Ymin) / csize))
     Xmax_new = Xmin + ncol * csize
     Ymin_new = Ymax + nrow * (-csize)
     ncell = ncol * nrow
-    print("... %d cells (%d x %d)" % (ncell, nrow, ncol))
+    print("... {} cells ({} x {})".format(ncell, nrow, ncol))
 
     # Cells within country borders (rasterizing method)
     cb_ds = gdal.OpenEx(vector, gdal.OF_VECTOR)

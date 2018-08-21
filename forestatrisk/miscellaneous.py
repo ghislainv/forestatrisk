@@ -1,15 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
-# python_version  :2.7
+# python_version  :>=2.7
 # license         :GPLv3
 # ==============================================================================
 
 # Import
+from __future__ import division, print_function  # Python 3 compatibility
 import os
 import sys
 import numpy as np
@@ -30,7 +31,7 @@ def invlogit(x):
     """
 
     r = x
-    r[x > 0] = 1. / (1. + np.exp(-x[x > 0]))
+    r[x > 0] = 1.0 / (1.0 + np.exp(-x[x > 0]))
     r[x <= 0] = np.exp(x[x <= 0]) / (1 + np.exp(x[x <= 0]))
     return (r)
 
@@ -46,7 +47,7 @@ def make_dir(newdir):
         pass
     elif os.path.isfile(newdir):
         raise OSError("a file with the same name as the desired \
-                      dir, '%s', already exists." % newdir)
+                      dir, '{}', already exists.".format(newdir))
     else:
         head, tail = os.path.split(newdir)
         if head and not os.path.isdir(head):
@@ -119,12 +120,12 @@ def progress_bar(niter, i):
 
     """
 
-    step = 1 if niter <= 100 else niter / 100
+    step = 1 if niter <= 100 else niter // 100
     if i == 1:
         sys.stdout.write("0%")
         sys.stdout.flush()
     elif i % step == 0:
-        sys.stdout.write("\r%d%%" % ((100 * i) / niter))
+        sys.stdout.write("\r{}%".format((100 * i) // niter))
         sys.stdout.flush()
     if (i == niter):
         sys.stdout.write("\r100%\n")

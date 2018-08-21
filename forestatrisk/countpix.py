@@ -1,18 +1,19 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
-# python_version  :2.7
+# python_version  :>=2.7
 # license         :GPLv3
 # ==============================================================================
 
 # Import
+from __future__ import division, print_function  # Python 3 compatibility
 import numpy as np  # For arrays
 from osgeo import gdal  # GIS libraries
-from miscellaneous import makeblock, progress_bar
+from .miscellaneous import makeblock, progress_bar
 
 
 # Countpix
@@ -43,10 +44,10 @@ def countpix(input_raster, value=1, blk_rows=0):
     y = blockinfo[4]
     nx = blockinfo[5]
     ny = blockinfo[6]
-    print("Divide region in " + str(nblock) + " blocks")
+    print("Divide region in {} blocks".format(nblock))
 
     # Number of pixels with a given value
-    print("Compute the number of pixels with value=" + str(value))
+    print("Compute the number of pixels with value={}".format(value))
     npix = 0
 
     # Loop on blocks of data
@@ -55,7 +56,7 @@ def countpix(input_raster, value=1, blk_rows=0):
         progress_bar(nblock, b + 1)
         # Position in 1D-arrays
         px = b % nblock_x
-        py = b / nblock_x
+        py = b // nblock_x
         # Read the data
         rasterA = rasterB.ReadAsArray(x[px], y[py], nx[px], ny[py])
         # Identify pixels (x/y coordinates) equal to value

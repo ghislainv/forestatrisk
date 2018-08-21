@@ -1,19 +1,20 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
-# python_version  :2.7
+# python_version  :>=2.7
 # license         :GPLv3
 # ==============================================================================
 
 # Import
+from __future__ import division, print_function  # Python 3 compatibility
 import numpy as np
 import pandas as pd
 from osgeo import gdal
-from miscellaneous import progress_bar
+from .miscellaneous import progress_bar
 
 
 # Make
@@ -93,7 +94,7 @@ def validation_npix(r_pred, r_obs, value_f=1, value_d=0,
     y = squareinfo[4]
     nx = squareinfo[5]
     ny = squareinfo[6]
-    print("Divide region in " + str(nsquare) + " squares")
+    print("Divide region in {} squares".format(nsquare))
 
     # Initialize the number of pixels per square
     npix_pred_f = np.zeros(nsquare, dtype=np.int)

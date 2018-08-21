@@ -1,15 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ghislainv.github.io
-# python_version  :2.7
+# python_version  :>=2.7
 # license         :GPLv3
 # ==============================================================================
 
 # Import
+from __future__ import division, print_function  # Python 3 compatibility
 import sys
 import os
 from glob import glob
@@ -609,7 +610,7 @@ def var(var_dir,
         ND = b.GetNoDataValue()
         if ND is None:
             print("NoData value is not specified \
-            for input raster file %s" % raster_list[i])
+            for input raster file " + raster_list[i])
             sys.exit(1)
 
         # Raster name
@@ -638,7 +639,7 @@ def var(var_dir,
         mov_arr = np.ma.array(ov_arr, mask=(ov_arr == ND))
         # Plot raster
         ax = plt.subplot2grid(gridsize,
-                              ((i % nplot_per_page) / nx, i % nx))
+                              ((i % nplot_per_page) // nx, i % nx))
         ax.set_frame_on(False)
         ax.set_xticks([])
         ax.set_yticks([])
