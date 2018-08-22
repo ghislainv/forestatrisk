@@ -16,7 +16,7 @@ from glob import glob  # To explore files in a folder
 import numpy as np  # For arrays
 import pandas as pd  # To export result as a pandas DF
 from osgeo import gdal  # GIS libraries
-from miscellaneous import makeblock, progress_bar
+from .miscellaneous import makeblock, progress_bar
 
 
 # Sample
