@@ -18,8 +18,8 @@ import numpy as np
 import pandas as pd
 from patsy import build_design_matrices
 from osgeo import gdal
-from miscellaneous import invlogit, rescale
-from miscellaneous import progress_bar, makeblock
+from .miscellaneous import invlogit, rescale
+from .miscellaneous import progress_bar, makeblock
 
 
 # predict_binomial_iCAR
