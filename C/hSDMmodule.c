@@ -2,7 +2,7 @@
 // author          :Ghislain Vieilledent
 // email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 // web             :https://ecology.ghislainv.fr
-// python_version  :2.7
+// python_version  :>=2.7
 // license         :GPLv3
 // ==============================================================================
 
@@ -151,7 +151,7 @@ static PyObject *CArray2PyList (double *CArray, int len) {
 /* ************************************************************ */
 /* Gibbs sampler function */
 
-static PyObject *hSDM_binomial_iCAR(PyObject *self, PyObject *args, PyObject *keywds) {
+static PyObject *binomial_iCAR(PyObject *self, PyObject *args, PyObject *keywds) {
 
   // Constants and data
   const int ngibbs; // Number of iterations, burning and samples
@@ -843,22 +843,46 @@ static PyObject *hSDM_binomial_iCAR(PyObject *self, PyObject *args, PyObject *ke
 } // end hSDM_binomial_iCAR function
 
 /* Bind Python function names to our C functions */
-static PyMethodDef hSDM_methods[] = {
+static PyMethodDef hsdm_methods[] = {
   /* The cast of the function is necessary since PyCFunction values
    * only take two PyObject* parameters, and hSDM_binomial_iCAR() takes
    * three.
    */
-  {"binomial_iCAR", (PyCFunction)hSDM_binomial_iCAR, METH_VARARGS | METH_KEYWORDS,
+  {"binomial_iCAR", (PyCFunction)binomial_iCAR, METH_VARARGS | METH_KEYWORDS,
    "Fit a Binomial linear model with iCAR process."},
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
+/* Migrating C extensions */
+/* https://stackoverflow.com/questions/43621948/c-python-module-import-error-undefined-symbol-py-initmodule3-py-initmodu?noredirect=1&lq=1 */
+/* http://python3porting.com/cextensions.html */
+#if PY_MAJOR_VERSION >= 3
+  static struct PyModuleDef hsdm = {
+      PyModuleDef_HEAD_INIT,
+      "hsdm", /* m_name */
+      "hsdm module to fit hierarchical Bayesian models", /* m_doc */
+      -1, /* m_size */
+      hsdm_methods, /* m_methods */
+      NULL, /* m_reload */
+      NULL, /* m_traverse */
+      NULL, /* m_clear */
+      NULL, /* m_free */
+  };
+#endif
 
 /* Python calls this to let us initialize our module */
-PyMODINIT_FUNC inithsdm(void) {
-  (void) Py_InitModule("hsdm", hSDM_methods);
-  /* Load 'numpy' functionality. */
-  import_array();
-}
+#if PY_MAJOR_VERSION < 3
+  PyMODINIT_FUNC inithsdm(void) {
+    (void) Py_InitModule("hsdm", hsdm_methods);
+    /* Load 'numpy' functionality. */
+    import_array();
+  }
+#else
+  PyMODINIT_FUNC PyInit_hsdm(void) {
+    /* Load 'numpy' functionality. */
+    import_array();
+    return PyModule_Create(&hsdm);
+  }
+#endif
 
 // End
