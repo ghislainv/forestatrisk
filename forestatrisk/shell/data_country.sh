@@ -3,7 +3,7 @@
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
-# web             :https://ghislainv.github.io
+# web             :https://ecology.ghislainv.fr
 # GDAL version    :2.1.2 (OGR enabled)
 # osmtools        :https://gitlab.com/osm-c-tools/osmctools
 # license         :GPLv3

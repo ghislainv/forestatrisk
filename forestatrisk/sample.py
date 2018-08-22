@@ -4,7 +4,7 @@
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
-# web             :https://ghislainv.github.io
+# web             :https://ecology.ghislainv.fr
 # python_version  :2.7
 # license         :GPLv3
 # ==============================================================================
