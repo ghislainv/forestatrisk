@@ -97,8 +97,8 @@ def makeblock(rasterfile, blk_rows=128):
     x = np.arange(0, ncol, block_xsize)
     y = np.arange(0, nrow, block_ysize)
     # Size (number of col and row) of each block
-    nx = np.array([block_xsize] * nblock_x)
-    ny = np.array([block_ysize] * nblock_y)
+    nx = np.array([block_xsize] * nblock_x, dtype=np.int)
+    ny = np.array([block_ysize] * nblock_y, dtype=np.int)
     # Modify last values of nx and ny
     if (ncol % block_xsize) > 0:
         nx[-1] = ncol % block_xsize
