@@ -108,7 +108,7 @@ def validation(pred, obs, blk_rows=128):
         progress_bar(nblock, b + 1)
         # Position in 1D-arrays
         px = b % nblock_x
-        py = b / nblock_x
+        py = b // nblock_x
         # Data for one block
         df_pred = predB.ReadAsArray(x[px], y[py], nx[px], ny[py])
         df_pred = 1 - df_pred

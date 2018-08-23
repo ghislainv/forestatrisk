@@ -80,7 +80,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
         progress_bar(nblock, b + 1)
         # Position in 1D-arrays
         px = b % nblock_x
-        py = b / nblock_x
+        py = b // nblock_x
         # Read the data
         forest = forestB.ReadAsArray(x[px], y[py], nx[px], ny[py])
         # Identify pixels (x/y coordinates) which are deforested
@@ -122,7 +122,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
         nbdraw_f = nblock_draw_f[b]
         # Position in 1D-arrays
         px = b % nblock_x
-        py = b / nblock_x
+        py = b // nblock_x
         # Read the data
         forest = forestB.ReadAsArray(x[px], y[py], nx[px], ny[py])
         # Identify pixels (x/y coordinates) which are deforested
