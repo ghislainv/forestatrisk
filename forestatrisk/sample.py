@@ -10,6 +10,7 @@
 # ==============================================================================
 
 # Import
+from __future__ import division, print_function  # Python 3 compatibility
 import os  # Operating system interfaces
 import sys  # To read and write files
 from glob import glob  # To explore files in a folder
@@ -50,7 +51,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # Sampling pixels
     # =============================================
 
-    print("Sample 2x" + str(nsamp) + " pixels (deforested vs. forest)")
+    print("Sample 2x {} pixels (deforested vs. forest)".format(nsamp))
 
     # Read defor raster
     forest_raster_file = os.path.join(var_dir, input_forest_raster)
@@ -65,7 +66,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     y = blockinfo[4]
     nx = blockinfo[5]
     ny = blockinfo[6]
-    print("Divide region in " + str(nblock) + " blocks")
+    print("Divide region in {} blocks".format(nblock))
 
     # Number of defor/forest pixels by block
     print("Compute number of deforested and forest pixels per block")
@@ -188,7 +189,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # ================================================
 
     # Cell number from region
-    print("Compute number of %d x %d km spatial cells" % (csize, csize))
+    print("Compute number of {} x {} km spatial cells".format(csize, csize))
     csize = csize * 1000  # Transform km in m
     ncol = np.int(np.ceil((Xmax - Xmin) / csize))
     nrow = np.int(np.ceil((Ymax - Ymin) / csize))

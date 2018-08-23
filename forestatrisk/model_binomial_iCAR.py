@@ -127,7 +127,7 @@ class model_binomial_iCAR(object):
         ngibbs = mcmc + burnin
         nthin = thin
         nburn = burnin
-        nsamp = mcmc / thin
+        nsamp = mcmc // thin
 
         # ========
         # Initial starting values for M-H

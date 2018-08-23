@@ -90,8 +90,8 @@ def makeblock(rasterfile, blk_rows=128):
         block_xsize = 256
         block_ysize = 256
     # Number of blocks
-    nblock_x = np.int(np.ceil(ncol / np.float(block_xsize)))
-    nblock_y = np.int(np.ceil(nrow / np.float(block_ysize)))
+    nblock_x = np.int(np.ceil(ncol / block_xsize))
+    nblock_y = np.int(np.ceil(nrow / block_ysize))
     nblock = nblock_x * nblock_y
     # Upper-left coordinates of each block
     x = np.arange(0, ncol, block_xsize)
