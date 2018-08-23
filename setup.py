@@ -10,7 +10,7 @@
 # ==============================================================================
 
 # Import
-from setuptools import setup, find_packages
+from setuptools import setup
 from distutils.core import Extension
 import numpy.distutils.misc_util
 
@@ -49,7 +49,7 @@ setup(name="forestatrisk",
       package_dir={"forestatrisk": "forestatrisk"},
       package_data={"forestatrisk": ["data/*.csv", "shell/data_country.sh",
                                      "shell/forest_country.sh"]},
-      install_requires=find_packages(),
+      install_requires=["numpy", "patsy", "sklearn", "pandas", "matplotlib"],
       include_dirs=numpy.distutils.misc_util.get_numpy_include_dirs(),
       zip_safe=False)
 
