@@ -97,9 +97,9 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     proba_block_d = ndc_block.astype(np.float) / ndc
     proba_block_f = nfc_block.astype(np.float) / nfc
     # Draw block number nsamp times
-    block_draw_d = np.random.choice(range(nblock), size=nsamp,
+    block_draw_d = np.random.choice(list(range(nblock)), size=nsamp,
                                     replace=True, p=proba_block_d)
-    block_draw_f = np.random.choice(range(nblock), size=nsamp,
+    block_draw_f = np.random.choice(list(range(nblock)), size=nsamp,
                                     replace=True, p=proba_block_f)
     # Number of times the block is drawn
     nblock_draw_d = np.zeros(nblock, dtype=np.int)
