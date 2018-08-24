@@ -241,7 +241,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
         # Progress bar
         progress_bar(nobs, i + 1)
         # ReadArray for extract
-        extract = stack.ReadAsArray(xOffset[i], yOffset[i], 1, 1)
+        extract = stack.ReadAsArray(int(xOffset[i]), int(yOffset[i]), 1, 1)
         val[i, :] = extract.reshape(nband,)
 
     # Close stack
