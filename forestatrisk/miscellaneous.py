@@ -90,15 +90,15 @@ def makeblock(rasterfile, blk_rows=128):
         block_xsize = 256
         block_ysize = 256
     # Number of blocks
-    nblock_x = np.int(np.ceil(ncol / block_xsize))
-    nblock_y = np.int(np.ceil(nrow / block_ysize))
+    nblock_x = int(np.ceil(ncol / block_xsize))
+    nblock_y = int(np.ceil(nrow / block_ysize))
     nblock = nblock_x * nblock_y
     # Upper-left coordinates of each block
-    x = np.arange(0, ncol, block_xsize)
-    y = np.arange(0, nrow, block_ysize)
+    x = np.arange(0, ncol, block_xsize, dtype=np.int).tolist()
+    y = np.arange(0, nrow, block_ysize, dtype=np.int).tolist()
     # Size (number of col and row) of each block
-    nx = np.array([block_xsize] * nblock_x, dtype=np.int)
-    ny = np.array([block_ysize] * nblock_y, dtype=np.int)
+    nx = [block_xsize] * nblock_x
+    ny = [block_ysize] * nblock_y
     # Modify last values of nx and ny
     if (ncol % block_xsize) > 0:
         nx[-1] = ncol % block_xsize
