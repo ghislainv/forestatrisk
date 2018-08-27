@@ -50,8 +50,8 @@ def resample_rho(rho, input_raster, output_file="output/rho.tif",
 
     # Cell number from region
     csize_orig = csize_orig * 1000  # Transform km in m
-    ncell_X = np.ceil((Xmax - Xmin) / csize_orig).astype(int)
-    ncell_Y = np.ceil((Ymax - Ymin) / csize_orig).astype(int)
+    ncell_X = int(np.ceil((Xmax - Xmin) / csize_orig))
+    ncell_Y = int(np.ceil((Ymax - Ymin) / csize_orig))
 
     # NumpyArray
     rho = np.array(rho)
