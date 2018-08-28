@@ -21,7 +21,7 @@ from .miscellaneous import rescale
 from .miscellaneous import progress_bar, makeblock
 
 
-# predict
+# predict_raster
 def predict_raster(model, var_dir="data",
                    input_forest_raster="data/forest.tif",
                    output_file="predictions.tif",

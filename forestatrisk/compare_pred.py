@@ -11,8 +11,6 @@
 
 # Import
 from __future__ import division, print_function  # Python 3 compatibility
-import os
-import sys
 import numpy as np
 from osgeo import gdal
 from .miscellaneous import progress_bar, makeblock
@@ -82,8 +80,15 @@ def compare_pred(inputA, inputB,
         # Data for one block of the stack (shape = (nband,nrow,ncol))
         data_A = band_A.ReadAsArray(x[px], y[py], nx[px], ny[py])
         data_B = band_B.ReadAsArray(x[px], y[py], nx[px], ny[py])
-
-        band_out.WriteArray(pred, x[px], y[py])
+        # Compute differences
+        data_diff = data_A
+        data_diff[np.where(data_A == 1 and data_B == 1)] = 1
+        data_diff[np.where(data_A == 0 and data_B == 0)] = 0
+        data_diff[np.where(data_A == 255 and data_B == 255)] = 255
+        data_diff[np.where(data_A == 1 and data_B == 0)] = 2
+        data_diff[np.where(data_A == 0 and data_B == 1)] = 3
+        # Write output data
+        band_out.WriteArray(data_diff, x[px], y[py])
 
     # Compute statistics
     print("Compute statistics")
