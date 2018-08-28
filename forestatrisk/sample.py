@@ -194,7 +194,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     ncol = np.int(np.ceil((Xmax - Xmin) / csize))
     nrow = np.int(np.ceil((Ymax - Ymin) / csize))
     ncell = ncol * nrow
-    print("... %d cells (%d x %d)" % (ncell, nrow, ncol))
+    print("... {} cells ({} x {})".format(ncell, nrow, ncol))
     # I and J are the coordinates of the cells and start at zero
     print("Identify cell number from XY coordinates")
     J = ((pts_x - Xmin) / csize).astype(np.int)

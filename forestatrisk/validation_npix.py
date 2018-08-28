@@ -39,15 +39,15 @@ def make_square(rasterfile, square_size=33):
     ncol = r.RasterXSize
     nrow = r.RasterYSize
     # Number of squares
-    nsquare_x = np.int(np.ceil(ncol / np.float(square_size)))
-    nsquare_y = np.int(np.ceil(nrow / np.float(square_size)))
+    nsquare_x = int(np.ceil(ncol / square_size))
+    nsquare_y = int(np.ceil(nrow / square_size))
     nsquare = nsquare_x * nsquare_y
     # Upper-left coordinates of each square
-    x = np.arange(0, ncol, square_size)
-    y = np.arange(0, nrow, square_size)
+    x = np.arange(0, ncol, square_size, dtype=np.int).tolist()
+    y = np.arange(0, nrow, square_size, dtype=np.int).tolist()
     # Size (number of col and row) of each square
-    nx = np.array([square_size] * nsquare_x)
-    ny = np.array([square_size] * nsquare_y)
+    nx = [square_size] * nsquare_x
+    ny = [square_size] * nsquare_y
     # Modify last values of nx and ny
     if (ncol % square_size) > 0:
         nx[-1] = ncol % square_size
