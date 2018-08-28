@@ -110,7 +110,7 @@ def validation_npix(r_pred, r_obs, value_f=1, value_d=0,
         progress_bar(nsquare, s + 1)
         # Position in 1D-arrays
         px = s % nsquare_x
-        py = s / nsquare_x
+        py = s // nsquare_x
         # Data for one square
         array_pred = predB.ReadAsArray(x[px], y[py], nx[px], ny[py])
         array_obs = obsB.ReadAsArray(x[px], y[py], nx[px], ny[py])
