@@ -298,21 +298,17 @@ def comparison(input_raster,
                output_file="comparison.png",
                borders=None,
                zoom=None,
-               col=(227, 26, 28, 255),
                figsize=(11.69, 8.27),
                dpi=300, **kwargs):
     """Plot a map to compare outputs.
 
-    This function plot a map comparing the outputs of two prediction
-    models or the predictions and observations. Green is the remaining
-    forest (value 1 in raster), the color specified is for
-    deforestation (value 0 in raster).
+    This function plots a map for comparing two predictions
+    or predictions vs. observations.
 
-    :param input_raster: path to raster.
+    :param input_raster: path to comparison raster.
     :param output_file: name of the plot file.
     :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
-    :param col: rgba color for deforestation.
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
 
@@ -351,7 +347,6 @@ def comparison(input_raster,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    col = tuple(np.array(col) / cmax)
     # 00: true positive (red)
     colors.append((227 / cmax, 26 / cmax, 28 / cmax, 1))
     # 11: true negative (forest green)
