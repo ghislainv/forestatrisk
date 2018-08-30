@@ -11,7 +11,7 @@
 
 # Import
 from __future__ import division, print_function  # Python 3 compatibility
-import numpy as np
+# import numpy as np
 from osgeo import gdal
 from .miscellaneous import progress_bar, makeblock
 
@@ -78,17 +78,19 @@ def differences(inputA, inputB,
         px = b % nblock_x
         py = b // nblock_x
         # Data for one block of the stack (shape = (nband,nrow,ncol))
-        data_A = band_A.ReadAsArray(x[px], y[py], nx[px], ny[py])
-        data_B = band_B.ReadAsArray(x[px], y[py], nx[px], ny[py])
+        A = band_A.ReadAsArray(x[px], y[py], nx[px], ny[py])
+        B = band_B.ReadAsArray(x[px], y[py], nx[px], ny[py])
         # Compute differences
-        data_diff = data_A
-        data_diff[np.where(np.logical_and(data_A == 0, data_B == 0))] = 0
-        data_diff[np.where(np.logical_and(data_A == 1, data_B == 1))] = 1
+        data_diff = 255 - 254 * (A == 1) * (B == 1) - 255 * (A == 0) * (B == 0)
+        -253 * (A == 1) * (B == 0) - 253 * (A == 0) * (B == 1)
+        # data_diff = data_A
+        # data_diff[np.where(np.logical_and(data_A == 0, data_B == 0))] = 0
+        # data_diff[np.where(np.logical_and(data_A == 1, data_B == 1))] = 1
         # false negative (no pred. deforestation vs. obs. deforestation)
-        data_diff[np.where(np.logical_and(data_A == 1, data_B == 0))] = 2
+        # data_diff[np.where(np.logical_and(data_A == 1, data_B == 0))] = 2
         # false positive (pred. deforestation vs. no obs. deforestation)
-        data_diff[np.where(np.logical_and(data_A == 0, data_B == 1))] = 3
-        data_diff[np.where(np.logical_and(data_A == 255, data_B == 255))] = 255
+        # data_diff[np.where(np.logical_and(data_A == 0, data_B == 1))] = 3
+        # data_diff[np.where(np.logical_and(data_A == 255, data_B == 255))] = 255
         # Write output data
         band_out.WriteArray(data_diff, x[px], y[py])
 
@@ -99,7 +101,7 @@ def differences(inputA, inputB,
 
     # Build overviews
     print("Build overviews")
-    band_out.BuildOverviews("nearest", [4, 8, 16, 32])
+    ds_out.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Dereference driver
     band_out = None
