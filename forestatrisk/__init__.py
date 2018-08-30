@@ -31,6 +31,6 @@ from .validation import accuracy_indices, validation
 from .validation_npix import validation_npix
 from .emissions import emissions
 from .countpix import countpix
-from .compare import compare
+from .comparison import comparison
 
 # End
