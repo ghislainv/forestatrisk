@@ -16,17 +16,17 @@ from osgeo import gdal
 from .miscellaneous import progress_bar, makeblock
 
 
-# compare_pred
-def compare_pred(inputA, inputB,
-                 output_file="predictions.tif",
-                 blk_rows=128):
+# comparison
+def comparison(inputA, inputB,
+               output_file="predictions.tif",
+               blk_rows=128):
     """Compute a raster of differences.
 
     This function compute a raster of differences between two rasters
     of future forest cover. Rasters must have the same extent and resolution.
 
-    :param inputA: path to first raster of predictions.
-    :param inputB: path to second raster of predictions.
+    :param inputA: path to first raster (predictions).
+    :param inputB: path to second raster of (sd. predictions or observations).
     :param output_file: name of the output raster file for differences.
     :param blk_rows: if > 0, number of rows for computation by block.
 
@@ -82,11 +82,13 @@ def compare_pred(inputA, inputB,
         data_B = band_B.ReadAsArray(x[px], y[py], nx[px], ny[py])
         # Compute differences
         data_diff = data_A
-        data_diff[np.where(data_A == 1 and data_B == 1)] = 1
         data_diff[np.where(data_A == 0 and data_B == 0)] = 0
-        data_diff[np.where(data_A == 255 and data_B == 255)] = 255
+        data_diff[np.where(data_A == 1 and data_B == 1)] = 1
+        # false negative (no pred. deforestation vs. obs. deforestation)
         data_diff[np.where(data_A == 1 and data_B == 0)] = 2
+        # false positive (pred. deforestation vs. no obs. deforestation)
         data_diff[np.where(data_A == 0 and data_B == 1)] = 3
+        data_diff[np.where(data_A == 255 and data_B == 255)] = 255
         # Write output data
         band_out.WriteArray(data_diff, x[px], y[py])
 

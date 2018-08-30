@@ -293,6 +293,108 @@ def fcc(input_fcc_raster,
     return(fig)
 
 
+# plot.comparison
+def comparison(input_raster,
+               output_file="compare.png",
+               borders=None,
+               zoom=None,
+               col=(227, 26, 28, 255),
+               figsize=(11.69, 8.27),
+               dpi=300, **kwargs):
+    """Plot a map to compare outputs.
+
+    This function plot a map comparing the outputs of two prediction
+    models or the predictions and observations. Green is the remaining
+    forest (value 1 in raster), the color specified is for
+    deforestation (value 0 in raster).
+
+    :param input_raster: path to raster.
+    :param output_file: name of the plot file.
+    :param borders: vector file to be plotted.
+    :param zoom: zoom to region (xmin, xmax, ymin, ymax).
+    :param col: rgba color for deforestation.
+    :param figsize: figure size in inches.
+    :param dpi: resolution for output image.
+
+    :return: a Matplotlib figure of the forest map.
+
+    """
+
+    # Load raster and band
+    rasterR = gdal.Open(input_raster)
+    rasterB = rasterR.GetRasterBand(1)
+    rasterND = rasterB.GetNoDataValue()
+    gt = rasterR.GetGeoTransform()
+    ncol = rasterR.RasterXSize
+    nrow = rasterR.RasterYSize
+    Xmin = gt[0]
+    Xmax = gt[0] + gt[1] * ncol
+    Ymin = gt[3] + gt[5] * nrow
+    Ymax = gt[3]
+    extent = [Xmin, Xmax, Ymin, Ymax]
+
+    # Overviews
+    if (rasterB.GetOverviewCount() == 0):
+        # Build overviews
+        print("Build overview")
+        rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
+
+    # Get data from finest overview
+    ov_band = rasterB.GetOverview(0)
+    ov_arr = ov_band.ReadAsArray()
+    ov_arr[ov_arr == rasterND] = 4
+
+    # Dereference driver
+    rasterB = None
+    del(rasterR)
+
+    # Colormap
+    colors = []
+    cmax = 255.0  # float for division
+    col = tuple(np.array(col) / cmax)
+    # 00: true positive (red)
+    colors.append((227 / cmax, 26 / cmax, 28 / cmax, 1))
+    # 11: true negative (forest green)
+    colors.append((51 / cmax, 160 / cmax, 44 / cmax, 1))
+    # 10: false negative (light blue)
+    colors.append((65 / cmax, 105 / cmax, 225 / cmax, 1))
+    # 01: false positive (navy blue)
+    colors.append((176 / cmax, 216 / cmax, 230 / cmax, 1))
+    colors.append((0, 0, 0, 0))  # transparent
+    color_map = ListedColormap(colors)
+
+    # Plot raster
+    place = 111 if zoom is None else 121
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    ax1 = plt.subplot(place)
+    ax1.set_frame_on(False)
+    ax1.set_xticks([])
+    ax1.set_yticks([])
+    plt.imshow(ov_arr, cmap=color_map, extent=extent)
+    if borders is not None:
+        plot_layer(borders, symbol="k-", **kwargs)
+    plt.axis("off")
+    if zoom is not None:
+        z = Rectangle(
+            (zoom[0], zoom[2]),
+            zoom[1] - zoom[0],
+            zoom[3] - zoom[2],
+            fill=False
+        )
+        ax1.add_patch(z)
+        ax2 = plt.subplot(222)
+        plt.imshow(ov_arr, cmap=color_map, extent=extent)
+        plt.xlim(zoom[0], zoom[1])
+        plt.ylim(zoom[2], zoom[3])
+        ax2.set_xticks([])
+        ax2.set_yticks([])
+
+    # Save and return figure
+    fig.tight_layout()
+    fig.savefig(output_file, dpi="figure", bbox_inches="tight")
+    return(fig)
+
+
 # plot.forest
 def forest(input_forest_raster,
            output_file="forest.png",
