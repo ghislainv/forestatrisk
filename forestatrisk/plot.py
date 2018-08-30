@@ -295,7 +295,7 @@ def fcc(input_fcc_raster,
 
 # plot.comparison
 def comparison(input_raster,
-               output_file="compare.png",
+               output_file="comparison.png",
                borders=None,
                zoom=None,
                col=(227, 26, 28, 255),
