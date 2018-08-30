@@ -16,11 +16,11 @@ from osgeo import gdal
 from .miscellaneous import progress_bar, makeblock
 
 
-# comparison
-def comparison(inputA, inputB,
-               output_file="predictions.tif",
-               blk_rows=128):
-    """Compute a raster of differences.
+# differences
+def differences(inputA, inputB,
+                output_file="predictions.tif",
+                blk_rows=128):
+    """Compute a raster of differences for comparison.
 
     This function compute a raster of differences between two rasters
     of future forest cover. Rasters must have the same extent and resolution.
@@ -67,9 +67,9 @@ def comparison(inputA, inputB,
     band_out = ds_out.GetRasterBand(1)
     band_out.SetNoDataValue(255)
 
-    # Predict by block
+    # Compute differences
     # Message
-    print("Predict deforestation probability by block")
+    print("Compute differences")
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
@@ -82,13 +82,13 @@ def comparison(inputA, inputB,
         data_B = band_B.ReadAsArray(x[px], y[py], nx[px], ny[py])
         # Compute differences
         data_diff = data_A
-        data_diff[np.where(data_A == 0 and data_B == 0)] = 0
-        data_diff[np.where(data_A == 1 and data_B == 1)] = 1
+        data_diff[np.where(np.logical_and(data_A == 0, data_B == 0))] = 0
+        data_diff[np.where(np.logical_and(data_A == 1, data_B == 1))] = 1
         # false negative (no pred. deforestation vs. obs. deforestation)
-        data_diff[np.where(data_A == 1 and data_B == 0)] = 2
+        data_diff[np.where(np.logical_and(data_A == 1, data_B == 0))] = 2
         # false positive (pred. deforestation vs. no obs. deforestation)
-        data_diff[np.where(data_A == 0 and data_B == 1)] = 3
-        data_diff[np.where(data_A == 255 and data_B == 255)] = 255
+        data_diff[np.where(np.logical_and(data_A == 0, data_B == 1))] = 3
+        data_diff[np.where(np.logical_and(data_A == 255, data_B == 255))] = 255
         # Write output data
         band_out.WriteArray(data_diff, x[px], y[py])
 

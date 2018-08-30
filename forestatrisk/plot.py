@@ -293,19 +293,19 @@ def fcc(input_fcc_raster,
     return(fig)
 
 
-# plot.comparison
-def comparison(input_raster,
-               output_file="comparison.png",
-               borders=None,
-               zoom=None,
-               figsize=(11.69, 8.27),
-               dpi=300, **kwargs):
+# plot.differences
+def differences(input_raster,
+                output_file="differences.png",
+                borders=None,
+                zoom=None,
+                figsize=(11.69, 8.27),
+                dpi=300, **kwargs):
     """Plot a map to compare outputs.
 
-    This function plots a map for comparing two predictions
-    or predictions vs. observations.
+    This function plots a map of differences between two rasters of
+    predictions.
 
-    :param input_raster: path to comparison raster.
+    :param input_raster: path to raster of diffeences.
     :param output_file: name of the plot file.
     :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
