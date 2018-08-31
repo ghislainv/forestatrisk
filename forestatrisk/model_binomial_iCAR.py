@@ -278,8 +278,8 @@ class model_binomial_iCAR(object):
         for a new data-set.
 
         :param model: model_binomial_iCAR to predict from.
-        :param new_data: pandas DataFrame including explicative variables \
-        and cell values.
+        :param new_data: A dict-like object which will be used to look \
+        up data (including explicative variables and cell values).
         :return: prediction (a probability).
 
         """

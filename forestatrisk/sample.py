@@ -191,8 +191,8 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     # Cell number from region
     print("Compute number of {} x {} km spatial cells".format(csize, csize))
     csize = csize * 1000  # Transform km in m
-    ncol = np.int(np.ceil((Xmax - Xmin) / csize))
-    nrow = np.int(np.ceil((Ymax - Ymin) / csize))
+    ncol = int(np.ceil((Xmax - Xmin) / csize))
+    nrow = int(np.ceil((Ymax - Ymin) / csize))
     ncell = ncol * nrow
     print("... {} cells ({} x {})".format(ncell, nrow, ncol))
     # I and J are the coordinates of the cells and start at zero
@@ -228,7 +228,7 @@ def sample(nsamp=10000, Seed=1234, csize=10,
         bandND[k] = band.GetNoDataValue()
         if bandND[k] is None:
             print("NoData value is not specified \
-            for input raster file %s" % raster_list[k])
+            for input raster file " + raster_list[k])
             sys.exit(1)
 
     # Numpy array to store values
