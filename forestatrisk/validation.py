@@ -42,18 +42,19 @@ def accuracy_indices(pred, obs):
     n11 = np.float(sum((df["pred"] == 1) & (df["obs"] == 1)))
 
     # Accuracy indices
-    OA = (n11 + n00) / (n11 + n10 + n00 + n01)
+    N = n11 + n10 + n00 + n01
+    OA = (n11 + n00) / N
     FOM = n11 / (n11 + n10 + n01)
     Sensitivity = n11 / (n11 + n01)
     Specificity = n00 / (n00 + n10)
     TSS = Sensitivity + Specificity - 1
-    N = n11 + n10 + n00 + n01
-    Observed_accuracy = (n11 + n00) / N
-    Expected_accuracy = (
-        (n11 + n10) * ((n11 + n01) / N) + (n00 + n01) * ((n00 + n10) / N)) / N
-    Kappa = (Observed_accuracy - Expected_accuracy) / (1 - Expected_accuracy)
+    Prob_1and1 = (n11 + n10) * (n11 + n01)
+    Prob_0and0 = (n00 + n01) * (n00 + n10)
+    Expected_accuracy = (Prob_1and1 + Prob_0and0) / (N * N)
+    Kappa = (OA - Expected_accuracy) / (1 - Expected_accuracy)
 
-    r = {"OA": round(OA, 2), "FOM": round(FOM, 2),
+    r = {"OA": round(OA, 2), "EA": round(Expected_accuracy, 2),
+         "FOM": round(FOM, 2),
          "Sen": round(Sensitivity, 2),
          "Spe": round(Specificity, 2),
          "TSS": round(TSS, 2), "K": round(Kappa, 2)}
