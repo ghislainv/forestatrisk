@@ -36,10 +36,10 @@ def accuracy_indices(pred, obs):
     df = pd.DataFrame({"pred": pred, "obs": obs})
 
     # Confusion matrix
-    n00 = np.float(sum((df["pred"] == 0) & (df["obs"] == 0)))
-    n10 = np.float(sum((df["pred"] == 1) & (df["obs"] == 0)))
-    n01 = np.float(sum((df["pred"] == 0) & (df["obs"] == 1)))
-    n11 = np.float(sum((df["pred"] == 1) & (df["obs"] == 1)))
+    n00 = sum((df["pred"] == 0) & (df["obs"] == 0))
+    n10 = sum((df["pred"] == 1) & (df["obs"] == 0))
+    n01 = sum((df["pred"] == 0) & (df["obs"] == 1))
+    n11 = sum((df["pred"] == 1) & (df["obs"] == 1))
 
     # Accuracy indices
     N = n11 + n10 + n00 + n01
