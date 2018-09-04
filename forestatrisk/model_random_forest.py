@@ -58,9 +58,6 @@ class model_random_forest(object):
         rf.fit(x, y)
         self.rf = rf
 
-        # Return model
-        return(rf)
-
     def predict(self, new_data=None, **kwargs):
         """Function returning the predictions of a model_random_forest model.
 
