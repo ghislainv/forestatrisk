@@ -21,6 +21,7 @@ import numpy as np
 from .miscellaneous import invlogit, make_dir
 from . import plot
 from .model_binomial_iCAR import model_binomial_iCAR
+from .model_random_forest import model_random_forest
 from .sample import sample
 from .cellneigh import cellneigh, cellneigh_ctry
 from .predict_raster import predict_raster
