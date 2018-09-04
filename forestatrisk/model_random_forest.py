@@ -61,7 +61,7 @@ class model_random_forest(object):
         # Return model
         return(rf)
 
-    def predict(self, new_data=None):
+    def predict(self, new_data=None, **kwargs):
         """Function returning the predictions of a model_random_forest model.
 
         Function to return the predictions of a model_random_forest model
@@ -83,7 +83,7 @@ class model_random_forest(object):
                                              new_data)
 
         # Predictions
-        rf_pred = np.array(self.rf.predict_proba(new_x)[:, 1])
+        rf_pred = np.array(self.rf.predict_proba(new_x, **kwargs)[:, 1])
         return(rf_pred)
 
 # End
