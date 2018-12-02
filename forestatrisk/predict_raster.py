@@ -129,12 +129,14 @@ def predict_raster(model, var_dir="data",
         for i in range(nband):
             data[i][np.nonzero(data[i] == bandND[i])] = -9999
         # Coordinates of the center of the pixels of the block
-        X = gt[0] + x[px] * gt[1] \
+        X_col = gt[0] + x[px] * gt[1] \
             + (np.arange(nx[px]) + 0.5) * gt[1]  # +0.5 for center of pixels
-        print(X.shape)
-        Y = gt[3] + y[py] * gt[5] \
+        X = np.repeat(X_col[np.newaxis, :], ny[py], axis=0)
+        X = X[np.newaxis, :, :]
+        Y_row = gt[3] + y[py] * gt[5] \
             + (np.arange(ny[py]) + 0.5) * gt[5]  # +0.5 for center of pixels
-        print(Y.shape)
+        Y = np.repeat(Y_row[:, np.newaxis], nx[px], axis=1)
+        Y = Y[np.newaxis, :, :]
         # Forest mask
         fmaskA = fmaskB.ReadAsArray(x[px], y[py], nx[px], ny[py])
         fmaskA = fmaskA.astype(np.float32)  # From uint to float
