@@ -65,7 +65,8 @@ def predict_raster(model, var_dir="data",
         fname = os.path.basename(raster_list[i])
         index_dot = fname.index(".")
         raster_names.append(fname[:index_dot])
-    raster_names.append("fmask")
+    var_names = raster_names
+    var_names.extend(["X", "Y", "fmask"])
 
     # Make vrt with gdalbuildvrt
     print("Make virtual raster with variables as raster bands")
@@ -127,23 +128,26 @@ def predict_raster(model, var_dir="data",
         # Replace ND values with -9999
         for i in range(nband):
             data[i][np.nonzero(data[i] == bandND[i])] = -9999
+        # Coordinates of the center of the pixels of the block
+        X = (x[px] + 0.5) * gt[1] + gt[0]   # +0.5 for center of pixels
+        Y = (y[py] + 0.5) * gt[5] + gt[3]   # +0.5 for center of pixels
         # Forest mask
         fmaskA = fmaskB.ReadAsArray(x[px], y[py], nx[px], ny[py])
         fmaskA = fmaskA.astype(np.float32)  # From uint to float
         fmaskA[np.nonzero(fmaskA != 1)] = -9999
         fmaskA = fmaskA[np.newaxis, :, :]
         # Concatenate forest mask with stack
-        data = np.concatenate((data, fmaskA), axis=0)
+        data = np.concatenate((data, X, Y, fmaskA), axis=0)
         # Transpose and reshape to 2D array
         data = data.transpose(1, 2, 0)
-        data = data.reshape(npix, nband + 1)
+        data = data.reshape(npix, nband + 3)
         # Observations without NA
         w = np.nonzero(~(data == -9999).any(axis=1))
         # Remove observations with NA
         data = data[w]
         # Transform into a pandas DataFrame
         df = pd.DataFrame(data)
-        df.columns = raster_names
+        df.columns = var_names
         # Predict
         pred = np.zeros(npix)  # Initialize with nodata value (0)
         if len(w[0]) > 0:
