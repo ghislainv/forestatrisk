@@ -137,7 +137,7 @@ class model_binomial_iCAR(object):
             # Use starting coefficient from logistic regression
             print("Using estimates from classic logistic regression as"
                   " starting values for betas")
-            mod_LR = LogisticRegression()
+            mod_LR = LogisticRegression(solver="lbfgs")
             mod_LR = mod_LR.fit(X_arr, Y)
             beta_start = np.ravel(mod_LR.coef_)
         if (np.size(beta_start) == 1 and beta_start != -99):
