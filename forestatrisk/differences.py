@@ -66,7 +66,7 @@ def differences(inputA, inputB,
     ds_out.SetProjection(proj)
     band_out = ds_out.GetRasterBand(1)
     band_out.SetNoDataValue(255)
-    
+
     # Confusion matrix
     n00 = n11 = n10 = n01 = 0
 
@@ -92,11 +92,11 @@ def differences(inputA, inputB,
         # false positive (pred. deforestation vs. no obs. deforestation)
         data_diff[np.where(np.logical_and(A == 0, B == 1))] = 3
         data_diff[np.where(np.logical_and(A == 255, B == 255))] = 255
-	# Confusion matrix
-	n00 += (data_diff == 0).sum()
-	n11 += (data_diff == 1).sum()
-	n10 += (data_diff == 2).sum()
-	n01 += (data_diff == 3).sum()
+        # Confusion matrix
+        n00 += (data_diff == 0).sum()
+        n11 += (data_diff == 1).sum()
+        n10 += (data_diff == 2).sum()
+        n01 += (data_diff == 3).sum()
         # Write output data
         band_out.WriteArray(data_diff, x[px], y[py])
 
@@ -112,7 +112,7 @@ def differences(inputA, inputB,
     # Dereference driver
     band_out = None
     del(ds_out)
-    
+
     # Return confusion matrix
     conf_mat = np.array([[np00, np01], [np10, np11]])
     return(conf_mat)
