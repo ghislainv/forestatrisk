@@ -114,7 +114,7 @@ def differences(inputA, inputB,
     del(ds_out)
 
     # Return confusion matrix
-    conf_mat = np.array([[np00, np01], [np10, np11]])
+    conf_mat = np.array([[n00, n01], [n10, n11]])
     return(conf_mat)
 
 # End
