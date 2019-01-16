@@ -60,8 +60,7 @@ def countpix(input_raster, value=1, blk_rows=0):
         # Read the data
         rasterA = rasterB.ReadAsArray(x[px], y[py], nx[px], ny[py])
         # Identify pixels (x/y coordinates) equal to value
-        pix = np.nonzero(rasterA == value)
-        npix += len(pix[0])
+        npix += (rasterA == value).sum()
 
     # Compute area
     print("Compute the corresponding area in ha")
