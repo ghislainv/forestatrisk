@@ -18,7 +18,7 @@ from .miscellaneous import progress_bar
 
 
 # Make
-def make_square(rasterfile, square_size=33):
+def make_square(rasterfile, square_size=30):
     """Compute block information.
 
     This function computes block information from the caracteristics
@@ -58,9 +58,39 @@ def make_square(rasterfile, square_size=33):
     return (nsquare, nsquare_x, nsquare_y, x, y, nx, ny)
 
 
-# validation_Dha
-def validation_npix(r_pred, r_obs, value_f=1, value_d=0,
-                    square_size=33, output_file="npix.txt"):
+# Percentage correct in a window
+def perc_correct_w(wobs, wpred, cat):
+    """Compute the percentage of correct pixels in a window.
+
+    This function computes the percentage of correct pixels given one
+    matrix of observations and one matrix of predictions.
+
+    :param wobs: nparray of observations.
+    :param wpred: nparray of predictions.
+    :param cat: categories to consider.
+
+    :return: a tuple with percentage and weight.
+
+    """
+
+    npix = np.isin(wobs, cat).sum()
+    perc = 0.0
+    for k in cat:
+        # Numbers
+        nobs = (wobs == k).sum()
+        npred = (wpred == k).sum()
+        # Proportions
+        prop_obs = nobs / npix
+        prop_pred = npred / npix
+        # Percentage correct
+        perc += min(prop_obs, prop_pred)
+
+    return((perc, npix))
+
+
+# percentage_correct
+def percentage_correct(r_obs, r_pred, categories=[0, 1],
+                       square_size=40, output_file="npix.txt"):
     """Compute non-deforested and deforested pixels per square.
 
     This function computes the number of non-deforested and deforested
@@ -68,10 +98,9 @@ def validation_npix(r_pred, r_obs, value_f=1, value_d=0,
     and a raster of observations. Results can be used to compute
     correlations.
 
-    :param r_pred: path to raster of predictions.
     :param r_obs: path to raster of observations.
-    :param value_f: value of non-deforested pixels in rasters.
-    :param value_d: value of deforested pixels in rasters.
+    :param r_pred: path to raster of predictions.
+    :param categories: categories to consider.
     :param square_size: size of the square side in number of pixels.
     :param output_file: path to result file.
 
@@ -79,14 +108,32 @@ def validation_npix(r_pred, r_obs, value_f=1, value_d=0,
 
     """
 
-    # Load raster and band
-    predR = gdal.Open(r_pred)
-    predB = predR.GetRasterBand(1)
+    # Landscape variables from raster of observations
     obsR = gdal.Open(r_obs)
-    obsB = obsR.GetRasterBand(1)
+    gt = obsR.GetGeoTransform()
+    ncol_r = obsR.RasterXSize
+    nrow_r = obsR.RasterYSize
+    Xmin = gt[0]
+    Xmax = gt[0] + gt[1] * ncol_r
+    Ymin = gt[3] + gt[5] * nrow_r
+    Ymax = gt[3]
 
-    # Make blocks
-    squareinfo = make_square(r_pred, square_size)
+    # Raster list
+    raster_list = [r_obs, r_pred]
+    raster_list.sort()  # Sort names
+
+    # Make vrt with gdal.BuildVRT
+    # Note: Extent and resolution from forest raster!
+    print("Make virtual raster with variables as raster bands")
+    param = gdal.BuildVRTOptions(resolution="user",
+                                 outputBounds=(Xmin, Ymin, Xmax, Ymax),
+                                 xRes=gt[1], yRes=-gt[5],
+                                 separate=True)
+    gdal.BuildVRT("/vsimem/var.vrt", raster_list, options=param)
+    stack = gdal.Open("/vsimem/var.vrt")
+
+    # Make squares
+    squareinfo = make_square(r_obs, square_size)
     nsquare = squareinfo[0]
     nsquare_x = squareinfo[1]
     x = squareinfo[3]
@@ -95,15 +142,21 @@ def validation_npix(r_pred, r_obs, value_f=1, value_d=0,
     ny = squareinfo[6]
     print("Divide region in {} squares".format(nsquare))
 
-    # Initialize the number of pixels per square
-    npix_pred_f = np.zeros(nsquare, dtype=np.int)
-    npix_obs_f = np.zeros(nsquare, dtype=np.int)
-    npix_pred_d = np.zeros(nsquare, dtype=np.int)
-    npix_obs_d = np.zeros(nsquare, dtype=np.int)
+    # Window resolution
+    wres = [1, 2, 3, 4, 5, 10, 20, 40]
+    nres = len(wres)
 
-    # Compute the number of pixels
-    print("Compute the number of pixels per square")
+    # 3D-Array to store the number of pixels per square and category
+    # for observations and predictions
+    ncat = len(categories)
+    square_cat = np.empty(2, nsquare, ncat, dtype=np.int)
+
+    # Arrays to store results by square and wres
+    weighted_perc = np.zeros(shape=(nsquare, nres), dtype=np.float)
+    sum_of_weights = np.zeros(shape=(nsquare, nres), dtype=np.int)
+
     # Loop on squares
+    print("Loop on squares")
     for s in range(nsquare):
         # Progress bar
         progress_bar(nsquare, s + 1)
@@ -111,18 +164,29 @@ def validation_npix(r_pred, r_obs, value_f=1, value_d=0,
         px = s % nsquare_x
         py = s // nsquare_x
         # Data for one square
-        array_pred = predB.ReadAsArray(x[px], y[py], nx[px], ny[py])
-        array_obs = obsB.ReadAsArray(x[px], y[py], nx[px], ny[py])
-        # Identify pixels (x/y coordinates) equal to value
-        pix_pred_f = np.nonzero(array_pred == value_f)
-        pix_obs_f = np.nonzero(array_obs == value_f)
-        npix_pred_f[s] = len(pix_pred_f[0])
-        npix_obs_f[s] = len(pix_obs_f[0])
-        # Identify pixels (x/y coordinates) equal to value
-        pix_pred_d = np.nonzero(array_pred == value_d)
-        pix_obs_d = np.nonzero(array_obs == value_d)
-        npix_pred_d[s] = len(pix_pred_d[0])
-        npix_obs_d[s] = len(pix_obs_d[0])
+        array_stack = stack.ReadAsArray(x[px], y[py], nx[px], ny[py])
+        # Loop on categories
+        for k in range(ncat):
+            c = categories[k]
+            square_cat[:, s, k] = (array_stack == c).sum(
+                axis=2).sum(axis=1)
+        # Loop on window resolution
+        for r in range(nres):
+            wr = wres[r]
+            nw = 40 / wr
+            for j in range(nw):
+                for i in range(nw):
+                    wstack = array_stack[0, (wr * i):(wr * (i + 1)),
+                                         (wr * j):(wr * (j + 1))]
+                    wobs = wstack[0, :, :]
+                    wpred = wstack[1, :, :]
+                    (perc, weight) = perc_correct_w(wobs,
+                                                    wpred,
+                                                    categories)
+                    weighted_perc[s, r] += weight * perc
+                    sum_of_weights[s, r] += weight
+
+    # Summarize results obtained per square
 
     # =============================================
     # Export and return value

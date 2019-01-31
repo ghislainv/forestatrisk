@@ -138,7 +138,7 @@ def mat_diffproj(input_raster,
 
     # Compute differences
     # Message
-    print("Compute differences")
+    print("Compute confusion matrix")
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
