@@ -142,7 +142,7 @@ def percentage_correct(r_obs, r_pred, categories=[0, 1],
     print("Divide region in {} squares".format(nsquare))
 
     # Window resolution
-    wres = [5, 25, 50]
+    wres = [25, 50]
     nres = len(wres)
 
     # 3D-Array to store the number of pixels per square and category
