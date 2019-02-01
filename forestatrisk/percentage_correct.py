@@ -175,7 +175,7 @@ def percentage_correct(r_obs, r_pred, categories=[0, 1],
             nw = 40 // wr
             for j in range(nw):
                 for i in range(nw):
-                    wstack = array_stack[0, (wr * i):(wr * (i + 1)),
+                    wstack = array_stack[:, (wr * i):(wr * (i + 1)),
                                          (wr * j):(wr * (j + 1))]
                     wobs = wstack[0, :, :]
                     wpred = wstack[1, :, :]
