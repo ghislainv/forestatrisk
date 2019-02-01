@@ -142,7 +142,7 @@ def percentage_correct(r_obs, r_pred, categories=[0, 1],
     print("Divide region in {} squares".format(nsquare))
 
     # Window resolution
-    wres = [1, 2, 3, 4, 5, 10, 20, 40]
+    wres = [1, 2, 4, 5, 10, 20, 40]
     nres = len(wres)
 
     # 3D-Array to store the number of pixels per square and category
@@ -172,7 +172,7 @@ def percentage_correct(r_obs, r_pred, categories=[0, 1],
         # Loop on window resolution
         for r in range(nres):
             wr = wres[r]
-            nw = 40 / wr
+            nw = 40 // wr
             for j in range(nw):
                 for i in range(nw):
                     wstack = array_stack[0, (wr * i):(wr * (i + 1)),
