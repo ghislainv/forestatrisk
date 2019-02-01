@@ -148,7 +148,7 @@ def percentage_correct(r_obs, r_pred, categories=[0, 1],
     # 3D-Array to store the number of pixels per square and category
     # for observations and predictions
     ncat = len(categories)
-    square_cat = np.empty(2, nsquare, ncat, dtype=np.int)
+    square_cat = np.empty(shape=(2, nsquare, ncat), dtype=np.int)
 
     # Arrays to store results by square and wres
     weighted_perc = np.zeros(shape=(nsquare, nres), dtype=np.float)
