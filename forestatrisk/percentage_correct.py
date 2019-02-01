@@ -173,10 +173,10 @@ def percentage_correct(r_obs, r_pred, categories=[0, 1],
         for r in range(nres):
             wr = wres[r]
             nw = 40 // wr
-            for j in range(nw):
-                for i in range(nw):
-                    wstack = array_stack[:, (wr * i):(wr * (i + 1)),
-                                         (wr * j):(wr * (j + 1))]
+            for i in range(nw):
+                for j in range(nw):
+                    wstack = array_stack[:, (wr * i):(wr * (i + 1) - 1),
+                                         (wr * j):(wr * (j + 1) - 1)]
                     wobs = wstack[0, :, :]
                     wpred = wstack[1, :, :]
                     (perc, weight) = perc_correct_w(wobs,
