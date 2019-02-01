@@ -194,7 +194,8 @@ def percentage_correct(r_obs, r_pred, categories=[0, 1],
 
     # Export to txt file
     print("Export results to file " + output_file)
-    np.savetxt(output_file, perc_by_res, header=['res' + i for i in wres],
+    np.savetxt(output_file, perc_by_res,
+               header=['res' + str(i) for i in wres],
                fmt="%s", delimiter=",", comments="")
 
     # Return the result
