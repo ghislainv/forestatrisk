@@ -186,9 +186,7 @@ def percentage_correct(r_obs, r_pred, categories=[0, 1],
                     sum_of_weights[s, r] += weight
 
     # Summarize results obtained per wres
-    perc_by_res = np.zeros(nres, dtype=np.float)
-    for r in range(nres):
-        perc_by_res[r] = weighted_perc.sum(axis=1) / sum_of_weights.sum(axis=1)
+    perc_by_res = weighted_perc.sum(axis=1) / sum_of_weights.sum(axis=1)
 
     # =============================================
     # Results
