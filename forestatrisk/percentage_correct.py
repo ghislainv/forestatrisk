@@ -12,7 +12,6 @@
 # Import
 from __future__ import division, print_function  # Python 3 compatibility
 import numpy as np
-import pandas as pd
 from osgeo import gdal
 from .miscellaneous import progress_bar
 
@@ -186,24 +185,21 @@ def percentage_correct(r_obs, r_pred, categories=[0, 1],
                     weighted_perc[s, r] += weight * perc
                     sum_of_weights[s, r] += weight
 
-    # Summarize results obtained per square
+    # Summarize results obtained per wres
+    perc_by_res = np.zeros(nres, dtype=np.float)
+    for r in range(nres):
+        perc_by_res[r] = weighted_perc.sum(axis=1) / sum_of_weights.sum(axis=1)
 
     # =============================================
-    # Export and return value
+    # Results
     # =============================================
 
+    # Export to txt file
     print("Export results to file " + output_file)
-
-    # Export to file
-    npix_arr = np.column_stack((npix_obs_f, npix_pred_f,
-                                npix_obs_d, npix_pred_d))
-    varname_str = "obs_f, pred_f, obs_d, pred_d"
-    np.savetxt(output_file, npix_arr, header=varname_str,
+    np.savetxt(output_file, perc_by_res, header=['res' + i for i in wres],
                fmt="%s", delimiter=",", comments="")
 
-    # Convert to pandas DataFrame and return the result
-    varname_list = ["obs_f", "pred_f", "obs_d", "pred_d"]
-    npix_DF = pd.DataFrame(npix_arr, columns=varname_list)
-    return(npix_DF)
+    # Return the result
+    return(perc_by_res)
 
 # End
