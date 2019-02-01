@@ -17,7 +17,7 @@ from .miscellaneous import progress_bar
 
 
 # Make
-def make_square(rasterfile, square_size=30):
+def make_square(rasterfile, square_size=33):
     """Compute block information.
 
     This function computes block information from the caracteristics
@@ -89,7 +89,7 @@ def perc_correct_w(wobs, wpred, cat):
 
 # percentage_correct
 def percentage_correct(r_obs, r_pred, categories=[0, 1],
-                       square_size=40, output_file="npix.txt"):
+                       square_size=50, output_file="npix.txt"):
     """Compute non-deforested and deforested pixels per square.
 
     This function computes the number of non-deforested and deforested
@@ -142,7 +142,7 @@ def percentage_correct(r_obs, r_pred, categories=[0, 1],
     print("Divide region in {} squares".format(nsquare))
 
     # Window resolution
-    wres = [1, 2, 4, 5, 10, 20, 40]
+    wres = [5, 25, 50]
     nres = len(wres)
 
     # 3D-Array to store the number of pixels per square and category
