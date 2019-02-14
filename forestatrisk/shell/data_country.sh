@@ -125,11 +125,11 @@ gdalwarp -overwrite -t_srs "$proj" -te $extent -tap -r bilinear \
 
 # Compute slope and aspect
 gdaldem slope altitude.tif slope_.tif -compute_edges -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
-gdaldem aspect altitude.tif aspect_.tif -compute_edges -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
+#gdaldem aspect altitude.tif aspect_.tif -compute_edges -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
 
 # Convert to Int16
 gdal_translate -ot Int16 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" slope_.tif slope.tif
-gdal_translate -ot Int16 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" aspect_.tif aspect.tif
+#gdal_translate -ot Int16 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" aspect_.tif aspect.tif
 
 # ===========================
 # SAPM
@@ -185,7 +185,7 @@ echo "Cleaning directory\n"
 mkdir -p ../data
 mkdir -p ../data/emissions
 # Copy files
-cp -t ../data dist_*.tif *_PROJ.* altitude.tif slope.tif aspect.tif pa.tif
+cp -t ../data dist_*.tif *_PROJ.* altitude.tif slope.tif pa.tif
 cp -t ../data/emissions AGB.tif
 # Return to working director
 cd ../
