@@ -109,6 +109,47 @@ def makeblock(rasterfile, blk_rows=128):
     return (nblock, nblock_x, nblock_y, x, y, nx, ny)
 
 
+# Make_square
+def make_square(rasterfile, square_size=33):
+    """Compute square information.
+
+    This function computes block information from the caracteristics
+    of a raster file and an indication on the number of rows to
+    consider.
+
+    :param rasterfile: path to a raster file.
+    :param square_size: pixel number to define square side size.
+
+    :return: a tuple of length 6 including square number, square number
+    on x axis, square number on y axis, square offsets on x axis, square
+    offsets on y axis, square sizes on x axis, square sizes on y axis.
+
+    """
+
+    r = gdal.Open(rasterfile)
+    # Landscape variables
+    ncol = r.RasterXSize
+    nrow = r.RasterYSize
+    # Number of squares
+    nsquare_x = int(np.ceil(ncol / square_size))
+    nsquare_y = int(np.ceil(nrow / square_size))
+    nsquare = nsquare_x * nsquare_y
+    # Upper-left coordinates of each square
+    x = np.arange(0, ncol, square_size, dtype=np.int).tolist()
+    y = np.arange(0, nrow, square_size, dtype=np.int).tolist()
+    # Size (number of col and row) of each square
+    nx = [square_size] * nsquare_x
+    ny = [square_size] * nsquare_y
+    # Modify last values of nx and ny
+    if (ncol % square_size) > 0:
+        nx[-1] = ncol % square_size
+    if (nrow % square_size) > 0:
+        ny[-1] = nrow % square_size
+    # b = None
+    del r
+    return (nsquare, nsquare_x, nsquare_y, x, y, nx, ny)
+
+
 # Progress_bar
 def progress_bar(niter, i):
     """ Draw progress_bar
