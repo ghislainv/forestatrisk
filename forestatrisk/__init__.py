@@ -27,6 +27,7 @@ from .cellneigh import cellneigh, cellneigh_ctry
 from .percentage_correct import percentage_correct
 from .predict_raster import predict_raster
 from .predict_raster_binomial_iCAR import predict_raster_binomial_iCAR
+from .resample import resample_sum
 from .resample_rho import resample_rho
 from .deforest import deforest
 from .validation import accuracy_indices, validation

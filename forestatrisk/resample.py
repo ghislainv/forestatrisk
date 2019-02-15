@@ -13,7 +13,7 @@
 from __future__ import division, print_function  # Python 3 compatibility
 import numpy as np
 from osgeo import gdal
-from .miscellaneous import progress_bar, make_square
+from miscellaneous import progress_bar, make_square
 
 
 # Coarsen
@@ -62,8 +62,9 @@ def resample_sum(input_raster, output_raster, val=0,
 
     # Compute square size as a function of window_size
     print("Compute square size")
-    if window_size <= 1000:
-        square_size = window_size * (1000 // window_size)
+    if window_size <= 5:  # 1000:
+        # square_size = int(window_size * (1000 // window_size))
+        square_size = int(window_size * (5 // window_size))
 
     # Landscape variables from input raster
     ds_in = gdal.Open(input_raster)
@@ -116,7 +117,8 @@ def resample_sum(input_raster, output_raster, val=0,
         data_val = (data_in == val).astype(int)
         # Coarsen data
         data_out = coarsen_sum(data_val, window_size)
-        band_out.WriteArray(data_out, x[px], y[py])
+        band_out.WriteArray(data_out, x[px] // window_size,
+                            y[py] // window_size)
 
     # Compute statistics
     print("Compute statistics")
@@ -124,11 +126,47 @@ def resample_sum(input_raster, output_raster, val=0,
     band_out.ComputeStatistics(False)
 
     # Build overviews
-    print("Build overviews")
-    band_out.BuildOverviews("nearest", [4, 8, 16, 32])
+    # print("Build overviews")
+    # band_out.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Dereference driver
     band_out = None
     del(ds_out)
 
 # End
+
+# Begin test
+
+
+# Raster
+a = np.random.choice([0, 1], 121).reshape(11, 11)
+driver = gdal.GetDriverByName("GTiff")
+ds = driver.Create("test.tif", 11, 11, 1,
+                   gdal.GDT_UInt32,
+                   ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"])
+band = ds.GetRasterBand(1)
+band.WriteArray(a, 0, 0)
+band.FlushCache()
+band.ComputeStatistics(False)
+band = None
+del(ds)
+
+# Call to function
+resample_sum(input_raster="test.tif",
+             output_raster="test_out.tif",
+             val=0,
+             window_size=2)
+
+input_raster = "test.tif"
+output_raster = "test_out.tif"
+val = 0
+window_size = 2
+
+# Results
+ds = gdal.Open("test_out.tif")
+band = ds.GetRasterBand(1)
+b = band.ReadAsArray()
+band = None
+del(ds)
+
+# End test
