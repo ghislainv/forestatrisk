@@ -17,10 +17,13 @@ from osgeo import ogr
 import ee_hansen
 import ee_roadless
 from zipfile import ZipFile  # To unzip files
-from urllib import urlretrieve  # To download files from internet
 import pandas as pd
 import pkg_resources
 from .miscellaneous import make_dir
+try:
+    from urllib.request import urlretrieve  # To download files from internet
+except ImportError:
+    from urllib import urlretrieve  # urllib with Python 2
 
 
 # Extent of a shapefile
