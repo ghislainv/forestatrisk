@@ -10,17 +10,24 @@
 # ==============================================================================
 
 # Annual product legend
-# 0. Other land-cover
-# 1. Undisturbed forest at the beginning of the archive (1985-2007)
-# 2. Old regrowth
-# 3. Young regrowth
-# 4. Deforested in 1986-2013
-# 5. Deforested in 2014-2016
-# 6. Disturbed in 2014-2016
-# 7. Loss for water
-# 8. Loss for plantation
-# 9. NoData and Forest at the beginning of the archive
-# 10. NoData and NonForest at the beginning of the archive
+# 1. Undisturbed moist tropical forest
+# 2. Moist forest within the plantation area
+# 3. NEW degradation
+# 4. Ongoing degradation (disturbances still detected - can be few years after
+#    first degrad if long degrad)
+# 5. Degraded forest (former degradation, no disturbances detected anymore)
+# 6. NEW deforestation (may follow degradation)
+# 7. Ongoing deforestation (disturbances still detected)
+# 8. NEW Regrowth
+# 9. Regrowthing
+# 10. Other land cover (not water)
+# 11. Permanent Water (pekel et al. 2015)
+# 12. Seasonal Water (pekel et al. 2015)
+# 13. Nodata (beginning of the archive) but evergreen forest later
+# 14. Nodata (after the initial period) but evergreen forest later
+# 15. Nodata but other land cover later
+# 16. Nodata within the plantation area (comme val 2 mais nodata)
+# 17. Bamboo dominated forest
 
 # Imports
 from __future__ import division, print_function  # Python 3 compatibility
@@ -65,40 +72,41 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     export_coord = region.getInfo()["coordinates"]
 
     # Path to roadless products
-    path = "users/vancuch/"
+    path = "users/ghislainv/roadless/"
 
     # Roadless annual product (AP)
-    AP = ee.ImageCollection(path + "collectionPeriod_AnnualChanges")
+    AP = ee.ImageCollection(path + "AnnualChanges1982_2018")
     AP = AP.mosaic().toByte().clip(region)
 
-    # Forest in 2017
-    # ap_2017 = AP.select(["Jan2017"])
-    # forest2017 = ap_2017.eq(1)
+    # Forest in 2018
+    # ap_2018 = AP.select(["Jan2018"])
+    # forest2018 = ap_2018.eq(1)
 
-    # Note to be deleted: with version Janv2018 of Christelle product, forest
+    # Note: with version 22May2019 of Christelle product, forest
     # at year Y if 1, 13 or 14.
 
     # ap_allYear
-    ap_allYear = AP.where(AP.neq(1), 0)
+    AP_forest = AP.where(AP.eq(13).Or(AP.eq(14)), 1)
+    ap_allYear = AP_forest.where(AP_forest.neq(1), 0)
 
-    # Forest in 2015
-    ap_2015_2017 = ap_allYear.select(range(29, 32))
-    forest2015 = ap_2015_2017.reduce(ee.Reducer.sum())
+    # Forest in Jan 2015
+    ap_2015_2019 = ap_allYear.select(range(32, 37))
+    forest2015 = ap_2015_2019.reduce(ee.Reducer.sum())
     forest2015 = forest2015.gte(1)
 
-    # Forest cover 2010
-    ap_2010_2017 = ap_allYear.select(range(24, 32))
-    forest2010 = ap_2010_2017.reduce(ee.Reducer.sum())
+    # Forest cover Jan 2010
+    ap_2010_2019 = ap_allYear.select(range(27, 37))
+    forest2010 = ap_2010_2019.reduce(ee.Reducer.sum())
     forest2010 = forest2010.gte(1)
 
-    # Forest cover 2005
-    ap_2005_2017 = ap_allYear.select(range(19, 32))
-    forest2005 = ap_2005_2017.reduce(ee.Reducer.sum())
+    # Forest cover Jan 2005
+    ap_2005_2019 = ap_allYear.select(range(22, 37))
+    forest2005 = ap_2005_2019.reduce(ee.Reducer.sum())
     forest2005 = forest2005.gte(1)
 
-    # Forest cover 2000
-    ap_2000_2017 = ap_allYear.select(range(14, 32))
-    forest2000 = ap_2000_2017.reduce(ee.Reducer.sum())
+    # Forest cover Jan 2000
+    ap_2000_2019 = ap_allYear.select(range(17, 37))
+    forest2000 = ap_2000_2019.reduce(ee.Reducer.sum())
     forest2000 = forest2000.gte(1)
 
     # Forest raster with four bands

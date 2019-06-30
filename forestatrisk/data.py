@@ -82,7 +82,7 @@ def country(iso3, monthyear, proj="EPSG:3395",
     # Identify continent and country from iso3
     print("Identify continent and country from iso3")
     # Geofabrik data
-    file_geofab = pkg_resources.resource_filename("deforestprob",
+    file_geofab = pkg_resources.resource_filename("forestatrisk",
                                                   "data/ctry_geofab.csv")
     data_geofab = pd.read_csv(file_geofab, sep=";", header=0)
     # Country
@@ -184,7 +184,7 @@ def country(iso3, monthyear, proj="EPSG:3395",
 
     # Call data_country.sh
     if (data_country):
-        script = pkg_resources.resource_filename("deforestprob",
+        script = pkg_resources.resource_filename("forestatrisk",
                                                  "shell/data_country.sh")
         args = ["sh ", script, continent, ctry_link_geofab, iso3,
                 "'" + proj + "'",
@@ -200,7 +200,7 @@ def country(iso3, monthyear, proj="EPSG:3395",
                            path="data_raw")
         # Call forest_country.sh
         print("Forest computations")
-        script = pkg_resources.resource_filename("deforestprob",
+        script = pkg_resources.resource_filename("forestatrisk",
                                                  "shell/forest_country.sh")
         args = ["sh ", script, "'" + proj + "'", "'" + extent + "'"]
         cmd = " ".join(args)
@@ -214,7 +214,7 @@ def country(iso3, monthyear, proj="EPSG:3395",
                              path="data_raw")
         # Call forest_country.sh
         print("Forest computations")
-        script = pkg_resources.resource_filename("deforestprob",
+        script = pkg_resources.resource_filename("forestatrisk",
                                                  "shell/forest_country.sh")
         args = ["sh ", script, "'" + proj + "'", "'" + extent + "'"]
         cmd = " ".join(args)

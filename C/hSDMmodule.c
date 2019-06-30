@@ -658,7 +658,7 @@ static PyObject *binomial_iCAR(PyObject *self, PyObject *args, PyObject *keywds)
 
     ///////////////////////////////////////////////////////
     // Adaptive sampling (on the burnin period)
-    const double ropt=0.234;
+    const double ropt=0.44; // 0.234;
     int DIV=0;
     if (NGIBBS >=1000) DIV=100;
     else DIV=NGIBBS/10;
