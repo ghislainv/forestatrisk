@@ -21,8 +21,8 @@ with open("README.md", "r") as fh:
 
 # Informations to compile internal hsdm module
 hSDM_module = Extension("forestatrisk.hsdm",
-                        sources=["C/hSDMmodule.c", "C/useful.c"],
-                        extra_compile_args=['-std=c99'])
+                        sources=["C/hSDMmodule.c", "C/useful.c"])
+                        #extra_compile_args=['-std=c99'])
 
 # Setup
 setup(name="forestatrisk",
@@ -35,14 +35,12 @@ setup(name="forestatrisk",
       long_description=long_description,
       long_description_content_type="text/markdown",
       classifiers=["Development Status :: 4 - Beta",
-                   "License :: OSI Approved :: GNU General Public \
-                   License v3 (GPLv3)",
+                   "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
                    "Programming Language :: Python :: 2",
                    "Programming Language :: Python :: 3",
                    "Operating System :: OS Independent",
                    "Topic :: Scientific/Engineering :: Bio-Informatics"],
-      keywords="deforestation hsdm hierarchical logistic model probability \
-      risk Bayesian spatial autocorrelation",
+      keywords="deforestation hsdm hierarchical logistic model probability risk Bayesian spatial autocorrelation",
       python_requires=">=2.7",
       ext_modules=[hSDM_module],
       packages=["forestatrisk"],
