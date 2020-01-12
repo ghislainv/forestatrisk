@@ -21,7 +21,7 @@ with open("README.md", "r") as fh:
 
 # Informations to compile internal hsdm module
 hSDM_module = Extension("forestatrisk.hsdm",
-                        sources=["C/hSDMmodule.c", "C/useful.c"])
+                        sources=["C/hSDMmodule.c", "C/useful.c"],
                         #extra_compile_args=['-std=c99'])
 
 # Setup
