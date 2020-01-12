@@ -31,8 +31,6 @@ def interpolate_rho(rho, input_raster, output_file="output/rho.tif",
     :csize_orig: original size of the spatial cells (in km).
     :csize_new: new size of the spatial cells for cubicspline \
     interpolation (in km).
-    :param figsize: figure size in inches.
-    :param dpi: resolution for output image.
 
     """
 
