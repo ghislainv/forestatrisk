@@ -35,5 +35,6 @@ from .validation_npix import validation_npix
 from .emissions import emissions
 from .countpix import countpix
 from .diffproj import r_diffproj, mat_diffproj
+from .wrast_rho import wrast_rho
 
 # End
