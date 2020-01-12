@@ -43,9 +43,9 @@ def wrast_rho(rho, input_raster, csize=10, output_file="output/rho_orig.tif"):
     Ymax = gt[3]
 
     # Cell number from region
-    csize_orig = csize_orig * 1000  # Transform km in m
-    ncell_X = int(np.ceil((Xmax - Xmin) / csize_orig))
-    ncell_Y = int(np.ceil((Ymax - Ymin) / csize_orig))
+    csize_m = csize * 1000  # Transform km in m
+    ncell_X = int(np.ceil((Xmax - Xmin) / csize_m))
+    ncell_Y = int(np.ceil((Ymax - Ymin) / csize_m))
 
     # NumpyArray
     rho = np.array(rho)
@@ -59,8 +59,8 @@ def wrast_rho(rho, input_raster, csize=10, output_file="output/rho_orig.tif"):
                           gdal.GDT_Float64)
     rho_R.SetProjection(r.GetProjection())
     gt = list(gt)
-    gt[1] = csize_orig
-    gt[5] = -csize_orig
+    gt[1] = csize_m
+    gt[5] = -csize_m
     rho_R.SetGeoTransform(gt)
 
     # Write data
