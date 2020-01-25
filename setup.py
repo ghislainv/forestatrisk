@@ -48,7 +48,7 @@ setup(name="forestatrisk",
       package_data={"forestatrisk": ["data/*.csv", "shell/data_country.sh",
                                      "shell/forest_country.sh"]},
       install_requires=["numpy", "patsy", "scipy", "sklearn",
-                        "pandas", "matplotlib"],
+                        "pandas", "matplotlib", "earthengine-api"],
       include_dirs=numpy.distutils.misc_util.get_numpy_include_dirs(),
       zip_safe=False)
 
