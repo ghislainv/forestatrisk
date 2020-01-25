@@ -109,7 +109,7 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     forest = forest2000.addBands(forest2005).addBands(
         forest2010).addBands(forest2015).addBands(forest2019)
     forest = forest.select([0, 1, 2, 3, 4], ["forest2000", "forest2005",
-                                             "forest2010", "forest2015"
+                                             "forest2010", "forest2015",
                                              "forest2019"])
     forest = forest.set("system:bandNames", ["forest2000", "forest2005",
                                              "forest2010", "forest2015",
