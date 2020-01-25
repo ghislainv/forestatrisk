@@ -16,7 +16,7 @@ import os
 from osgeo import ogr
 #import ee_hansen_gcs
 #import ee_roadless_gcs
-import ee_jrc
+from . import ee_jrc
 from zipfile import ZipFile  # To unzip files
 import pandas as pd
 import pkg_resources
