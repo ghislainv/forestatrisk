@@ -8,14 +8,6 @@
 # license         :GPLv3
 # ==============================================================================
 
-# PATH to use compiled version of GDAL, see:
-# http://scigeo.org/articles/howto-install-latest-geospatial-software-on-linux.html#gdal
-# https://trac.osgeo.org/gdal/wiki/BuildingOnUnix
-export LD_LIBRARY_PATH="/opt/source/gdal-trunk/build/lib:$LD_LIBRARY_PATH"
-export PATH="/opt/source/gdal-trunk/build/bin:$PATH"
-export PATH="/opt/source/gdal-trunk/swig/python/scripts:$PATH"
-export PYTHONPATH="$PYTHONPATH:/opt/source/gdal-trunk/build/lib/python2.7/site-packages"
-
 # Working directory
 cd data_raw
 
