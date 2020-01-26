@@ -195,8 +195,10 @@ def download(gdrive_remote_rclone, gdrive_folder, iso3, output_path):
                                   iso3)
 
     # Commands to download results with rclone
-    remote_path = gdrive_remote_rclone + ":" + gdrive_folder + "/" + "forest_" + iso3 + ".tif"
-    cmd = ["rclone", "copy", remote_path, output_path]
+    remote_path = gdrive_remote_rclone + ":" + gdrive_folder
+    pattern = "'forest_" + iso3 + "*.tif'"
+    cmd = ["rclone", "copy", "--include", pattern, remote_path, output_path]
+    cmd = " ".join(cmd)
     subprocess.call(cmd, shell=True)
 
 # End
