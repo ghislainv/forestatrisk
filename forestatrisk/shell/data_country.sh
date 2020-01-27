@@ -115,7 +115,7 @@ mkdir $d && unzip $z -d $d
 done
 
 # Build vrt file
-gdalbuildvrt srtm.vrt */*.tif
+gdalbuildvrt srtm.vrt SRTM_*/*.tif
 
 # Merge and reproject
 gdalwarp -overwrite -t_srs "$proj" -te $extent -tap -r bilinear \
@@ -162,8 +162,9 @@ gdal_rasterize -te $extent -tap -burn 1 \
 echo "AGB from Avitabile's map\n"
 
 # Download
-url="https://bioscenemada.cirad.fr/FileTransfer/JRC/Avitabile_AGB_Map.tif"
-wget -O Avitabile_AGB_Map.tif $url
+# url="https://bioscenemada.cirad.fr/FileTransfer/JRC/Avitabile_AGB_Map.tif"
+# wget -O Avitabile_AGB_Map.tif $url
+cp /home/www/bioscenemada/FileTransfer/JRC/Avitabile_AGB_Map.tif ./
 
 # Resample
 gdalwarp -overwrite -s_srs EPSG:4326 -t_srs "$proj" \
