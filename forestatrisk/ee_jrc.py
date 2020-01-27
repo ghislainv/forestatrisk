@@ -75,11 +75,13 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
 
     # JRC annual product (AP)
     #AP = ee.ImageCollection(path + "AnnualChanges1982_2018")
-    AP = ee.ImageCollection('users/ClassifLandsat072015/Roadless36y/AnnualChanges1982_2018')
+    AP = ee.ImageCollection(
+        "users/ClassifLandsat072015/Roadless36y/AnnualChanges1982_2018")
     AP = AP.mosaic().toByte().clip(region)
 
     # ap_allYear: forest if Y = 1, 4, 5, 13 or 14.
-    AP_forest = AP.where(AP.eq(3).Or(AP.eq(4)).Or(AP.eq(5)).Or(AP.eq(13)).Or(AP.eq(14)), 1)
+    AP_forest = AP.where(AP.eq(3).Or(AP.eq(4)).Or(
+        AP.eq(5)).Or(AP.eq(13)).Or(AP.eq(14)), 1)
     ap_allYear = AP_forest.where(AP_forest.neq(1), 0)
 
     # Forest in Jan 2019
@@ -89,7 +91,7 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     ap_2015_2019 = ap_allYear.select(list(range(32, 37)))
     forest2015 = ap_2015_2019.reduce(ee.Reducer.sum())
     forest2015 = forest2015.gte(1)
-    
+
     # Forest cover Jan 2010
     ap_2010_2019 = ap_allYear.select(list(range(27, 37)))
     forest2010 = ap_2010_2019.reduce(ee.Reducer.sum())
@@ -99,7 +101,7 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     ap_2005_2019 = ap_allYear.select(list(range(22, 37)))
     forest2005 = ap_2005_2019.reduce(ee.Reducer.sum())
     forest2005 = forest2005.gte(1)
-    
+
     # Forest cover Jan 2000
     ap_2000_2019 = ap_allYear.select(list(range(17, 37)))
     forest2000 = ap_2000_2019.reduce(ee.Reducer.sum())
@@ -172,7 +174,7 @@ def download(gdrive_remote_rclone, gdrive_folder, iso3, output_path):
     from Google Drive in the current working directory.
 
     RClone program is needed: https://rclone.org.
-    
+
     :param gdrive_remote_rclone: Google Drive remote name in rclone.
     :param gdrive_folder: the Google Drive folder to look in.
     :param iso3: Country ISO 3166-1 alpha-3 code.
