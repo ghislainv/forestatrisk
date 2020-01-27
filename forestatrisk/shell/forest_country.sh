@@ -4,7 +4,7 @@
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ecology.ghislainv.fr
-# GDAL version    :2.1.2 (OGR enabled)
+# GDAL version    :>=2.1.2 (OGR enabled)
 # license         :GPLv3
 # ==============================================================================
 

@@ -4,7 +4,7 @@
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ecology.ghislainv.fr
-# GDAL version    :2.1.2 (OGR enabled)
+# GDAL version    :>=2.1.2 (OGR enabled)
 # osmtools        :https://gitlab.com/osm-c-tools/osmctools
 # license         :GPLv3
 # ==============================================================================
@@ -105,8 +105,7 @@ gdal_translate -a_nodata 4294967295 \
 echo "SRTM data from CGIAR-CSI\n"
 
 # Download SRTM data from CSI CGIAR
-url="http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_V41/SRTM_Data_GeoTiff/srtm_["$tiles_long"]_["$tiles_lat"].zip"
-#url="http://gis-lab.info/data/srtm-tif/srtm_["$tiles_long"]_["$tiles_lat"].zip"
+url="http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_["$tiles_long"]_["$tiles_lat"].zip"
 curl -L $url -o 'SRTM_V41_#1_#2.zip'
 
 # Unzip
@@ -123,13 +122,11 @@ gdalwarp -overwrite -t_srs "$proj" -te $extent -tap -r bilinear \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
          -tr 90 90 srtm.vrt altitude.tif
 
-# Compute slope and aspect
+# Compute slope
 gdaldem slope altitude.tif slope_.tif -compute_edges -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
-#gdaldem aspect altitude.tif aspect_.tif -compute_edges -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
 
 # Convert to Int16
 gdal_translate -ot Int16 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" slope_.tif slope.tif
-#gdal_translate -ot Int16 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" aspect_.tif aspect.tif
 
 # ===========================
 # SAPM

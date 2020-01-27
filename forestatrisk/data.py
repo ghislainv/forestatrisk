@@ -51,6 +51,7 @@ def extent_shp(inShapefile):
 # country
 def country(iso3, monthyear, proj="EPSG:3395",
             data_country=True,
+            data_forest=True,
             keep_data_raw=False,
             fcc_source="jrc", perc=50,
             gdrive_remote_rclone=None,
@@ -70,12 +71,15 @@ def country(iso3, monthyear, proj="EPSG:3395",
     :param data_country: Boolean for running data_country.sh to
     compute country landscape variables. Default to "True".
 
+    :param forest: Boolean for running data_forest.sh to
+    compute forest landscape variables. Default to "True".
+
     :param keep_data_raw: Boolean to keep the data_raw folder. Default
     to "False".
 
     :param fcc_source: Source for forest-cover change data. Can be
-    "gfc" (Global Forest Change 2015 Hansen data) or
-    "jrc" (Joint Research Center). Default to "jrc".
+    "gfc" (Global Forest Change data) or "jrc" (Joint Research Center
+    data). Default to "jrc".
 
     :param perc: Tree cover percentage threshold to define forest
     (online used if fcc_source="gcf").
@@ -159,52 +163,22 @@ def country(iso3, monthyear, proj="EPSG:3395",
     tiles_long = str(tile_left).zfill(2) + "-" + str(tile_right).zfill(2)
     tiles_lat = str(tile_top).zfill(2) + "-" + str(tile_bottom).zfill(2)
 
-    # # Google EarthEngine task
-    # if (fcc_source == "gfc"):
-    #     # Check data availability
-    #     data_availability = ee_hansen.check(gs_bucket, iso3)
-    #     # If not available, run GEE
-    #     if data_availability is False:
-    #         print("Run Google Earth Engine")
-    #         task = ee_hansen.run_task(perc=perc, iso3=iso3,
-    #                                   extent_latlong=extent_latlong,
-    #                                   scale=30,
-    #                                   proj=proj,
-    #                                   gs_bucket=gs_bucket)
-    #         print("GEE running on the following extent:")
-    #         print(str(extent_latlong))
-
-    # # Google EarthEngine task
-    # if (fcc_source == "roadless"):
-    #     # Check data availability
-    #     data_availability = ee_roadless.check(gs_bucket, iso3)
-    #     # If not available, run GEE
-    #     if data_availability is False:
-    #         print("Run Google Earth Engine")
-    #         task = ee_roadless.run_task(iso3=iso3,
-    #                                     extent_latlong=extent_latlong,
-    #                                     scale=30,
-    #                                     proj=proj,
-    #                                     gs_bucket=gs_bucket)
-    #         print("GEE running on the following extent:")
-    #         print(str(extent_latlong))
-
     # Google EarthEngine task
-    if (fcc_source == "jrc"):
-        # Check data availability
-        data_availability = ee_jrc.check(gdrive_remote_rclone,
-                                         gdrive_folder,
-                                         iso3)
-        # If not available, run GEE
-        if data_availability is False:
-            print("Run Google Earth Engine")
-            task = ee_jrc.run_task(iso3=iso3,
-                                   extent_latlong=extent_latlong,
-                                   scale=30,
-                                   proj=proj,
-                                   gdrive_folder=gdrive_folder)
-            print("GEE running on the following extent:")
-            print(str(extent_latlong))
+    if (data_forest):
+        if (fcc_source == "jrc"):
+            # Check data availability
+            data_availability = ee_jrc.check(gdrive_remote_rclone,
+                                             gdrive_folder, iso3)
+            # If not available, run GEE
+            if data_availability is False:
+                print("Run Google Earth Engine")
+                task = ee_jrc.run_task(iso3=iso3,
+                                       extent_latlong=extent_latlong,
+                                       scale=30,
+                                       proj=proj,
+                                       gdrive_folder=gdrive_folder)
+                print("GEE running on the following extent:")
+                print(str(extent_latlong))
 
     # Call data_country.sh
     if (data_country):
@@ -216,49 +190,22 @@ def country(iso3, monthyear, proj="EPSG:3395",
         cmd = " ".join(args)
         os.system(cmd)
 
-    # # Forest computations
-    # if (fcc_source == "gfc"):
-    #     # Download Google EarthEngine results
-    #     print("Download Google Earth Engine results locally")
-    #     ee_hansen.download(gs_bucket, iso3,
-    #                        path="data_raw")
-    #     # Call forest_country.sh
-    #     print("Forest computations")
-    #     script = pkg_resources.resource_filename("forestatrisk",
-    #                                              "shell/forest_country.sh")
-    #     args = ["sh ", script, "'" + proj + "'", "'" + extent + "'"]
-    #     cmd = " ".join(args)
-    #     os.system(cmd)
-
-    # # Forest computations
-    # if (fcc_source == "roadless"):
-    #     # Download Google EarthEngine results
-    #     print("Download Google Earth Engine results locally")
-    #     ee_roadless.download(gs_bucket, iso3,
-    #                          path="data_raw")
-    #     # Call forest_country.sh
-    #     print("Forest computations")
-    #     script = pkg_resources.resource_filename("forestatrisk",
-    #                                              "shell/forest_country.sh")
-    #     args = ["sh ", script, "'" + proj + "'", "'" + extent + "'"]
-    #     cmd = " ".join(args)
-    #     os.system(cmd)
-
     # Forest computations
-    if (fcc_source == "jrc"):
-        # Download Google EarthEngine results
-        print("Download Google Earth Engine results locally")
-        ee_jrc.download(gdrive_remote_rclone,
-                        gdrive_folder,
-                        iso3,
-                        output_path="data_raw")
-        # Call forest_country.sh
-        print("Forest computations")
-        script = pkg_resources.resource_filename("forestatrisk",
-                                                 "shell/forest_country.sh")
-        args = ["sh ", script, "'" + proj + "'", "'" + extent + "'"]
-        cmd = " ".join(args)
-        os.system(cmd)
+    if (data_forest):
+        if (fcc_source == "jrc"):
+            # Download Google EarthEngine results
+            print("Download Google Earth Engine results locally")
+            ee_jrc.download(gdrive_remote_rclone,
+                            gdrive_folder,
+                            iso3,
+                            output_path="data_raw")
+            # Call forest_country.sh
+            print("Forest computations")
+            script = pkg_resources.resource_filename("forestatrisk",
+                                                     "shell/forest_country.sh")
+            args = ["sh ", script, "'" + proj + "'", "'" + extent + "'"]
+            cmd = " ".join(args)
+            os.system(cmd)
 
     # Delete data_raw
     if (keep_data_raw is False):
