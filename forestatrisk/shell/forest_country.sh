@@ -53,6 +53,13 @@ gdal_translate -mask none -b 4 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF
 gdal_translate -mask none -b 5 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                forest_src.tif forest_t3_src.tif
 
+# Rasterize country border
+gdal_rasterize -te $extent -tr 30 30 -tap \
+	       -burn 1 -a_nodata 255 \
+	       -ot Byte \
+	       -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+	       ctry_PROJ.shp ctry_PROJ.tif 
+
 # =====
 # 1. Compute distance to forest edge at t2
 # =====
@@ -144,47 +151,52 @@ echo "Computing forest-cover change rasters\n"
 
 ## fcc23
 # Mask fcc23 with country border
-gdalwarp -overwrite -srcnodata 255 -dstnodata 255 \
-         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -cutline ctry_PROJ.shp \
-         fcc23_src.tif fcc23.tif
+gdal_calc.py --overwrite -A fcc23_src.tif -B ctry_PROJ.tif \
+             --outfile=fcc23.tif --type=Byte \
+             --calc="255-254*(A==1)*(B==1)-255*(A==0)*(B==1)" \
+             --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
+             --NoDataValue=255 --quiet
 
 ## fcc13
 # Create raster fcc13_src.tif
-gdal_calc.py --overwrite -A forest_t1_src.tif -B forest_t3_src.tif \
-             --outfile=fcc13_src.tif --type=Byte \
-             --calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" \
+# Raster is directly masked with country border 
+gdal_calc.py --overwrite -A forest_t1_src.tif -B forest_t3_src.tif -C ctry_PROJ.tif \
+             --outfile=fcc13.tif --type=Byte \
+             --calc="255-254*(A==1)*(B==1)*(C==1)-255*(A==1)*(B==0)*(C==1)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=255
-
-# Mask with country border
-gdalwarp -overwrite -srcnodata 255 -dstnodata 255 \
-         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -cutline ctry_PROJ.shp \
-         fcc13_src.tif fcc13.tif
+             --NoDataValue=255 --quiet
 
 # =====
 # 4. Cropping forest rasters
 # =====
 
 # Message
-echo "Cropping forest raster\n"
+echo "Mask forest rasters with country border\n"
 
-# Mask with country border
-gdalwarp -overwrite -srcnodata 0 -dstnodata 255 \
-         -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -cutline ctry_PROJ.shp \
-         forest_src.tif forest_src_crop.tif
+# Mask forest with country border
+gdal_calc.py --overwrite -A forest_t0_src.tif -B ctry_PROJ.tif \
+             --outfile=forest_t0.tif --type=Byte \
+             --calc="255-254*(A==1)*(B==1)" \
+             --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
+             --NoDataValue=255 --quiet
 
-# Extract bands
-gdal_translate -mask none -b 2 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               forest_src_crop.tif forest_t0.tif
-gdal_translate -mask none -b 3 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               forest_src_crop.tif forest_t1.tif
-gdal_translate -mask none -b 4 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               forest_src_crop.tif forest_t2.tif
-gdal_translate -mask none -b 5 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               forest_src_crop.tif forest_t3.tif
+gdal_calc.py --overwrite -A forest_t1_src.tif -B ctry_PROJ.tif \
+             --outfile=forest_t1.tif --type=Byte \
+             --calc="255-254*(A==1)*(B==1)" \
+             --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
+             --NoDataValue=255 --quiet
+
+gdal_calc.py --overwrite -A forest_t2_src.tif -B ctry_PROJ.tif \
+             --outfile=forest_t2.tif --type=Byte \
+             --calc="255-254*(A==1)*(B==1)" \
+             --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
+             --NoDataValue=255 --quiet
+
+gdal_calc.py --overwrite -A forest_t3_src.tif -B ctry_PROJ.tif \
+             --outfile=forest_t3.tif --type=Byte \
+             --calc="255-254*(A==1)*(B==1)" \
+             --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
+             --NoDataValue=255 --quiet
 
 # ===========================
 # Cleaning
