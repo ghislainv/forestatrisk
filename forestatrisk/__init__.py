@@ -17,7 +17,7 @@ if os.environ.get("DISPLAY", "") == "":
     matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-from .data import country
+from .data import country, country_forest_gdrive
 from .accuracy import confmat, accuracy
 from .interpolate_rho import interpolate_rho
 from .miscellaneous import invlogit, make_dir
