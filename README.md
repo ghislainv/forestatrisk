@@ -14,7 +14,7 @@ spatial environmental variables.
 Spatial environmental variables can be derived from topography
 (altitude, slope, and aspect), accessibility (distance to roads,
 towns, and forest edge), deforestation history (distance to previous
-deforestation) or landscape management (location inside a protected area)
+deforestation) or land status (location inside a protected area)
 for example.
 
 ### Sampling
