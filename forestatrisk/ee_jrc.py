@@ -35,9 +35,6 @@ import ee
 import time
 import subprocess
 
-# Initialize
-# ee.Initialize() # This should be typed before running ee_jrc.* functions
-
 
 # ee_jrc.run_task
 def run_task(iso3, extent_latlong, scale=30, proj=None,
