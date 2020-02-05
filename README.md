@@ -1,4 +1,9 @@
-# forestatrisk Python package
+[![PyPI version](https://badge.fury.io/py/forestatrisk.svg)](http://badge.fury.io/py/forestatrisk)
+[![Travis CI](https://api.travis-ci.org/ghislainv/forestatrisk.svg?branch=master)](https://travis-ci.org/ghislainv/forestatrisk)
+
+# `forestatrisk` Python package
+
+![protected-planet](forestatrisk.jpg)
 
 ## Estimating the risk of deforestation in tropical countries
 
@@ -49,35 +54,64 @@ hectares) to be deforested.
 
 ## Tutorial
 
-We wrote a tutorial using a Jupyter/IPython notebook to show how to
+We wrote a tutorial using a notebook to show how to
 use the `forestatrisk` Python package. We took Madagascar as a case
 study considering past deforestation on the period 2000-2010,
 estimating deforestation probability for the year 2010, and projecting
 the future forest cover in 2050. The notebook is available at the
-following web adress: https://ecology.ghislainv.fr/forestatrisk
-
-## Reference
-
-**Vieilledent G., C. Merow, J. Guélat, A. M. Latimer, M. Kéry,
-A. E. Gelfand, A. M. Wilson, F. Mortier and J. A. Silander
-Jr.** 2014. hSDM CRAN release v1.4 for hierarchical Bayesian species
-distribution models. _Zenodo_.
-doi: [10.5281/zenodo.48470](http://doi.org/10.5281/zenodo.48470)
+following web adress: https://forestatrisk.cirad.fr/tutorial
 
 ## Installation
 
-The easiest way to install the `forestatrisk` Python package is via [pip](https://pip.pypa.io/en/stable/):
+You will need several dependencies to run the `forestatrisk` Python
+package. The best way to install the package is to create a Python
+virtual environment, either through `virtualenv` or `conda`.
 
-```
-~$ sudo pip install --upgrade https://github.com/ghislainv/forestatrisk/archive/master.zip
+### Using `virtualenv`
+
+You first need to have the `virtualenv` package installed (see [here](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)).
+
+Then, create a virtual environment and install the `forestatrisk` package with the following commands:
+
+```shell
+cd ~
+mkdir venvs # Directory for virtual environments
+cd venvs
+virtualenv --python=/usr/bin/python3 venv-far
+source ~/venvs/venv-far/bin/activate
+pip install numpy # Install numpy first
+pip install forestatrisk # For PyPI version, this will install all other dependencies
+pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
+pip install statsmodels # Optional additional packages
 ```
 
-but you can also install it executing the `setup.py` file:
+To deactivate and delete the virtual environment:
 
+```shell
+deactivate
+rm -R ~/venvs/venv-far # Just remove the repository
 ```
-~$ git clone https://github.com/ghislainv/forestatrisk
-~$ cd forestatrisk
-~/forestatrisk$ sudo python setup.py install
+
+### Using `conda`
+
+You first need to have `miniconda3` installed (see [here](https://docs.conda.io/en/latest/miniconda.html)).
+
+Then, create a conda environment (details [here](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html)) and install the `forestatrisk` package with the following commands:
+
+```shell
+conda create --name conda-far python gdal numpy matplotlib pandas patsy pip statsmodels --yes
+conda activate conda-far
+conda install -c conda-forge earthengine-api --yes
+pip install pywdpa sklearn # Packages not available with conda
+pip install forestatrisk # For PyPI version
+# pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
+```
+
+To deactivate and delete the conda environment:
+
+```shell
+conda deactivate
+conda env remove --name conda-far
 ```
 
 ## Figure

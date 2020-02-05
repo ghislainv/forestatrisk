@@ -137,12 +137,10 @@ echo "Protected area network from Protected Planet\n"
 # See protected planet: www.protectedplanet.net
 
 # Download from Protected Planet
-url="https://www.protectedplanet.net/downloads/WDPA_"$monthyear"_"$iso"?type=shapefile"
-wget -O pa.zip $url
-unzip pa.zip
+pywdpa.py $iso
 
 # Reproject
-input_file="WDPA_"$monthyear"_"$iso"-shapefile-polygons.shp"
+input_file="pa_"$iso".shp"
 ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' -progress \
         -s_srs EPSG:4326 -t_srs "$proj" \
         -lco ENCODING=UTF-8 pa_PROJ.shp $input_file

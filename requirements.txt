@@ -1,0 +1,8 @@
+earthengine-api
+gdal
+numpy
+matplotlib
+pandas
+patsy
+pywdpa
+sklearn

@@ -14,7 +14,6 @@ from setuptools import setup
 from distutils.core import Extension
 import numpy.distutils.misc_util
 
-
 # Markdown README file
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -26,7 +25,7 @@ hSDM_module = Extension("forestatrisk.hsdm",
 
 # Setup
 setup(name="forestatrisk",
-      version="0.1",
+      version="0.1.1",
       author="Ghislain Vieilledent",
       author_email="ghislain.vieilledent@cirad.fr",
       url="https://github.com/ghislainv/forestatrisk",
@@ -47,8 +46,8 @@ setup(name="forestatrisk",
       package_dir={"forestatrisk": "forestatrisk"},
       package_data={"forestatrisk": ["data/*.csv", "shell/data_country.sh",
                                      "shell/forest_country.sh"]},
-      install_requires=["numpy", "patsy", "scipy", "sklearn",
-                        "pandas", "matplotlib", "earthengine-api"],
+      install_requires=["earthengine-api", "gdal", "numpy", "matplotlib",
+                        "pandas", "patsy", "pywdpa", "sklearn"],
       include_dirs=numpy.distutils.misc_util.get_numpy_include_dirs(),
       zip_safe=False)
 
