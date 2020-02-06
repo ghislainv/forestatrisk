@@ -154,8 +154,9 @@ def check(gdrive_remote_rclone, gdrive_folder, iso3):
     # RClone command
     remote_path = gdrive_remote_rclone + ":" + gdrive_folder
     pattern = "'forest_" + iso3 + "*.tif'"
-    cmd = ["rclone", "ls", "--include", pattern, remote_path]
-    out = subprocess.check_output(cmd).decode("utf-8")
+    cmd = ["rclone", "lsf", "--include", pattern, remote_path]
+    cmd = " ".join(cmd)
+    out = subprocess.check_output(cmd, shell=True).decode("utf-8")
     # Filename to find
     fname = "forest_" + iso3
     # Check file is present
