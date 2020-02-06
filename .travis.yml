@@ -10,4 +10,4 @@ install:
   - pip install --global-option=build_ext --global-option="-I/usr/include/gdal" gdal==$(gdal-config --version)
   - pip install -r requirements.txt
   - pip install .
-script: build.sh & pytest
+script: pytest
