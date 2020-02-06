@@ -15,12 +15,12 @@ import numpy as np
 import os
 from shutil import rmtree
 from osgeo import ogr
-#import ee_hansen_gcs
-#import ee_roadless_gcs
 from . import ee_jrc
 from zipfile import ZipFile  # To unzip files
+from pywdpa import get_wdpa
 import pandas as pd
 import pkg_resources
+import subprocess
 from .miscellaneous import make_dir
 try:
     from urllib.request import urlretrieve  # To download files from internet
@@ -224,7 +224,7 @@ def country_forest_gdrive(iso3, proj="EPSG:3395",
                           fcc_source="jrc", perc=50,
                           gdrive_remote_rclone=None,
                           gdrive_folder=None):
-    """Function to compute the forest rasters per country and have them
+    """Compute the forest rasters per country with GEE and have them
     ready on Google Drive.
 
     This function downloads, computes and formats the country data.
@@ -252,8 +252,8 @@ def country_forest_gdrive(iso3, proj="EPSG:3395",
 
     """
 
-    # Create temp directory
-    print("Create temp directory")
+    # Create directory
+    print("Create directory")
     make_dir(output_dir)
 
     # Download the zipfile from gadm.org
@@ -293,5 +293,74 @@ def country_forest_gdrive(iso3, proj="EPSG:3395",
                                    gdrive_folder=gdrive_folder)
             print("GEE running on the following extent:")
             print(str(extent_latlong))
+
+
+# country_forest_download
+def country_forest_download(iso3,
+                            gdrive_remote_rclone,
+                            gdrive_folder,
+                            output_dir=os.getcwd()):
+    """Download forest-cover data from Google Drive.
+
+    Download forest-cover data from Google Drive in the current
+    working directory. Print a message if the file is not available.
+
+    RClone program is needed: https://rclone.org.
+
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :param gdrive_remote_rclone: Google Drive remote name in rclone.
+
+    :param gdrive_folder: the Google Drive folder to look in.
+
+    :param output_dir: Output directory to download files to. Default
+    to current working directory.
+
+    """
+
+    # Data availability
+    data_availability = ee_jrc.check(gdrive_remote_rclone,
+                                     gdrive_folder,
+                                     iso3)
+
+    if data_availability is True:
+        # Commands to download results with rclone
+        remote_path = gdrive_remote_rclone + ":" + gdrive_folder
+        pattern = "'forest_" + iso3 + "*.tif'"
+        cmd = ["rclone", "copy", "--include", pattern, remote_path, output_dir]
+        cmd = " ".join(cmd)
+        subprocess.call(cmd, shell=True)
+        print("Data for {0:3s} has been downloaded".format(iso3))
+
+    else:
+        print("Data for {0:3s} is not available".format(iso3))
+
+
+# country_wdpa
+def country_wdpa(iso3, output_dir=os.getcwd()):
+    """Function to dowload the protected areas per country.
+
+    Protected areas comes from the World Database on Protected Areas
+    (<https://www.protectedplanet.net/>). This function uses the
+    pywdpa python package.
+
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :param output_dir: Directory where shapefiles for protected areas
+    are downloaded. Default to current working directory.
+
+    :param gdrive_remote_rclone: Name of the Google Drive remote for rclone.
+
+    :param gdrive_folder: Name of the Google Drive folder to use.
+
+    """
+
+    # Create directory
+    print("Create directory")
+    make_dir(output_dir)
+
+    # Download wdpa
+    get_wdpa(iso3, output_dir)
+
 
 # End

@@ -151,7 +151,9 @@ def check(gdrive_remote_rclone, gdrive_folder, iso3):
     """
 
     # RClone command
-    cmd = ["rclone", "ls", gdrive_remote_rclone + ":" + gdrive_folder]
+    remote_path = gdrive_remote_rclone + ":" + gdrive_folder
+    pattern = "'forest_" + iso3 + "*.tif'"
+    cmd = ["rclone", "ls", "--include", pattern, remote_path]
     out = subprocess.check_output(cmd).decode("utf-8")
     # Filename to find
     fname = "forest_" + iso3
@@ -164,18 +166,26 @@ def check(gdrive_remote_rclone, gdrive_folder, iso3):
 
 
 # ee_jrc.download
-def download(gdrive_remote_rclone, gdrive_folder, iso3, output_path):
+def download(gdrive_remote_rclone,
+             gdrive_folder,
+             iso3,
+             output_dir=os.getcwd()):
     """Download forest-cover data from Google Drive.
 
-    Check that GEE tasks are completed. Download forest-cover data
-    from Google Drive in the current working directory.
+    Check that GEE task is completed. Wait for the task to be
+    completed. Then download forest-cover data from Google Drive in the
+    current working directory.
 
     RClone program is needed: https://rclone.org.
 
     :param gdrive_remote_rclone: Google Drive remote name in rclone.
+
     :param gdrive_folder: the Google Drive folder to look in.
+
     :param iso3: Country ISO 3166-1 alpha-3 code.
-    :param output_path: Path to download files to.
+
+    :param output_dir: Output directory to download files to. Default
+    to current working directory.
 
     """
 
@@ -196,7 +206,7 @@ def download(gdrive_remote_rclone, gdrive_folder, iso3, output_path):
     # Commands to download results with rclone
     remote_path = gdrive_remote_rclone + ":" + gdrive_folder
     pattern = "'forest_" + iso3 + "*.tif'"
-    cmd = ["rclone", "copy", "--include", pattern, remote_path, output_path]
+    cmd = ["rclone", "copy", "--include", pattern, remote_path, output_dir]
     cmd = " ".join(cmd)
     subprocess.call(cmd, shell=True)
 
