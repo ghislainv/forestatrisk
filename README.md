@@ -79,8 +79,8 @@ cd venvs
 virtualenv --python=/usr/bin/python3 venv-far
 source ~/venvs/venv-far/bin/activate
 pip install numpy # Install numpy first
-pip install forestatrisk # For PyPI version, this will install all other dependencies
-# pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
+# pip install forestatrisk # For PyPI version, this will install all other dependencies
+pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
 pip install statsmodels # Optional additional packages
 ```
 
@@ -102,8 +102,8 @@ conda create --name conda-far python gdal numpy matplotlib pandas patsy pip stat
 conda activate conda-far
 conda install -c conda-forge earthengine-api --yes
 pip install pywdpa sklearn # Packages not available with conda
-pip install forestatrisk # For PyPI version
-# pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
+# pip install forestatrisk # For PyPI version
+pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
 ```
 
 To deactivate and delete the conda environment:
