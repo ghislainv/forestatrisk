@@ -338,7 +338,7 @@ def country_forest_download(iso3,
 
 # country_wdpa
 def country_wdpa(iso3, output_dir=os.getcwd()):
-    """Function to dowload the protected areas per country.
+    """Function to download the protected areas per country.
 
     Protected areas comes from the World Database on Protected Areas
     (<https://www.protectedplanet.net/>). This function uses the
@@ -349,17 +349,14 @@ def country_wdpa(iso3, output_dir=os.getcwd()):
     :param output_dir: Directory where shapefiles for protected areas
     are downloaded. Default to current working directory.
 
-    :param gdrive_remote_rclone: Name of the Google Drive remote for rclone.
-
-    :param gdrive_folder: Name of the Google Drive folder to use.
-
     """
 
     # Create directory
-    print("Create directory")
+    print("Create directory if not existing")
     make_dir(output_dir)
 
-    # Download wdpa
+    # Download WDPA
+    print("Download WDPA")
     get_wdpa(iso3, output_dir)
 
 
