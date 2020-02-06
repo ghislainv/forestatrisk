@@ -199,7 +199,7 @@ def country(iso3, monthyear, proj="EPSG:3395",
             ee_jrc.download(gdrive_remote_rclone,
                             gdrive_folder,
                             iso3,
-                            output_path="data_raw")
+                            output_dir="data_raw")
             # Call forest_country.sh
             print("Forest computations")
             script = pkg_resources.resource_filename("forestatrisk",
