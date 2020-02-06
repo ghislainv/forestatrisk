@@ -34,6 +34,7 @@ from __future__ import division, print_function  # Python 3 compatibility
 import ee
 import time
 import subprocess
+from os import getcwd
 
 
 # ee_jrc.run_task
@@ -169,7 +170,7 @@ def check(gdrive_remote_rclone, gdrive_folder, iso3):
 def download(gdrive_remote_rclone,
              gdrive_folder,
              iso3,
-             output_dir=os.getcwd()):
+             output_dir=getcwd()):
     """Download forest-cover data from Google Drive.
 
     Check that GEE task is completed. Wait for the task to be
