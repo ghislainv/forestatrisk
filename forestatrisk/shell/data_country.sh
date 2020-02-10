@@ -13,14 +13,14 @@
 cd data_raw
 
 # Variables
-continent=$1
-country=$2
-iso=$3
-proj=$4  # see http://epsg.io 
-extent=$5  # xmin ymin xmax ymax
-tiles_long=$6  # see http://dwtkns.com/srtm/
-tiles_lat=$7
-monthyear=$8
+db_osm=$1
+continent=$2
+country=$3
+iso=$4
+proj=$5  # see http://epsg.io 
+extent=$7  # xmin ymin xmax ymax
+tiles_long=$7  # see http://dwtkns.com/srtm/
+tiles_lat=$8
 
 # ===========================
 # Borders, roads and town
@@ -30,7 +30,12 @@ monthyear=$8
 echo "Borders, roads, towns and rivers from OSM\n"
 
 # Download OSM data from Geofabrik
-url="http://download.geofabrik.de/"$continent"/"$country"-latest.osm.pbf"
+if [db_osm = "geofab"]
+then
+   url="http://download.geofabrik.de/"$continent"/"$country"-latest.osm.pbf"
+else
+   url="https://download.openstreetmap.fr/extracts/"$continent"/"$country".osm.pbf"
+fi
 wget -nc -O country.osm.pbf $url
 osmconvert country.osm.pbf -o=country.o5m
 
@@ -137,7 +142,7 @@ echo "Protected area network from Protected Planet\n"
 # See protected planet: www.protectedplanet.net
 
 # Download from Protected Planet
-pywdpa.py $iso
+pywdpa $iso
 
 # Reproject
 input_file="pa_"$iso".shp"

@@ -23,9 +23,13 @@ import pkg_resources
 import subprocess
 from .miscellaneous import make_dir
 try:
-    from urllib.request import urlretrieve  # To download files from internet
+    from urllib.request import urlretrieve  # Python 3
 except ImportError:
-    from urllib import urlretrieve  # urllib with Python 2
+    from urllib import urlretrieve  # urlretrieve with Python 2
+try:
+    from urllib.error import HTTPError  # Python 3
+except ImportError:
+    from urllib2 import HTTPError  # HTTPError with Python 2
 
 
 # Extent of a shapefile
@@ -49,8 +53,43 @@ def extent_shp(inShapefile):
     return(extent)  # (xmin, ymin, xmax, ymax)
 
 
+# tiles_srtm
+def tiles_srtm(extent_latlong):
+    """Compute lat/long tiles for SRTM data from an extent.
+
+    This function computes lat/long tiles for SRTM data from an extent
+    in lat/long. See <http://dwtkns.com/srtm/>. SRTM tiles are 5x5
+    degrees. x: -180/+180, y: +60/-60.
+
+    :param extent_latlong: Extent in lat/long: (xmin, ymin, xmax, ymax).
+
+    :return: A tuple of two strings indicating tile numbers for lat and long.
+
+    """
+
+    # Tiles for SRTM data
+    xmin_latlong = np.floor(extent_latlong[0])
+    ymin_latlong = np.floor(extent_latlong[1])
+    xmax_latlong = np.ceil(extent_latlong[2])
+    ymax_latlong = np.ceil(extent_latlong[3])
+    # Compute SRTM tile numbers
+    tile_left = np.int(np.ceil((xmin_latlong + 180.0) / 5.0))
+    tile_right = np.int(np.ceil((xmax_latlong + 180.0) / 5.0))
+    if (tile_right == tile_left):
+        # Trick to make curl globbing work in data_country.sh
+        tile_right = tile_left + 1
+    tile_top = np.int(np.ceil((-ymax_latlong + 60.0) / 5.0))
+    tile_bottom = np.int(np.ceil((-ymin_latlong + 60.0) / 5.0))
+    if (tile_bottom == tile_top):
+        tile_bottom = tile_top + 1
+    # Format variables, zfill is for having 01 and not 1
+    tiles_long = str(tile_left).zfill(2) + "-" + str(tile_right).zfill(2)
+    tiles_lat = str(tile_top).zfill(2) + "-" + str(tile_bottom).zfill(2)
+    return (tiles_long, tiles_lat)
+
+
 # country
-def country(iso3, monthyear, proj="EPSG:3395",
+def country(iso3, proj="EPSG:3395",
             data_country=True,
             data_forest=True,
             keep_data_raw=False,
@@ -65,9 +104,6 @@ def country(iso3, monthyear, proj="EPSG:3395",
 
     :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
     GDAL/OGR. Default to "EPSG:3395" (World Mercator).
-
-    :param monthyear: Date (month and year) for WDPA data
-    (e.g. "Aug2017").
 
     :param data_country: Boolean for running data_country.sh to
     compute country landscape variables. Default to "True".
@@ -92,24 +128,46 @@ def country(iso3, monthyear, proj="EPSG:3395",
     """
 
     # Identify continent and country from iso3
-    print("Identify continent and country from iso3")
+    print("Identify database, continent, and country from iso3")
     # Geofabrik data
-    file_geofab = pkg_resources.resource_filename("forestatrisk",
-                                                  "data/ctry_geofab.csv")
-    data_geofab = pd.read_csv(file_geofab, sep=";", header=0)
-    # Country
-    ctry_link_geofab = data_geofab.ctry_link[data_geofab.iso3 == iso3]
-    ctry_link_geofab = ctry_link_geofab.iloc[0]
-    # Continent
-    continent = data_geofab.continent[data_geofab.iso3 == iso3]
-    continent = continent.iloc[0].lower()
+    file_run = pkg_resources.resource_filename("forestatrisk",
+                                               "data/ctry_run.csv")
+    data_run = pd.read_csv(file_run, sep=";", header=0)
+    if data_run.ctry_geofab[data_run.iso3 == iso3] != "NA":
+        # Database
+        db_osm = "geofab"
+        # Country
+        country = data_run.ctry_geofab[data_run.iso3 == iso3]
+        country = country.iloc[0]
+        # Continent
+        continent = data_run.cont_geofab[data_run.iso3 == iso3]
+        continent = continent.iloc[0]
+        # Download OSM data from Geofabrik
+        url = ["http://download.geofabrik.de/", continent, "/",
+               country, "-latest.osm.pbf"]
+        url = "".join(url)
+        urlretrieve(url, fname)
+    else:
+        # Database
+        db_osm = "osmfr"
+        # Country
+        country = data_run.ctry_osmfr[data_run.iso3 == iso3]
+        country = country.iloc[0]
+        # Continent
+        continent = data_run.cont_osmfr[data_run.iso3 == iso3]
+        continent = continent.iloc[0]
+        # Download OSM data from openstreetmap.fr
+        url = ["https://download.openstreetmap.fr/extracts/", continent, "/",
+               country, ".osm.pbf"]
+        url = "".join(url)
+        urlretrieve(url, fname)
 
     # Create data_raw directory
     print("Create data_raw directory")
     make_dir("data_raw")
 
     # Download the zipfile from gadm.org
-    print("Download data")
+    print("Download GADM data")
     url = "http://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
     fname = "data_raw/" + iso3 + "_shp.zip"
     urlretrieve(url, fname)
@@ -125,7 +183,7 @@ def country(iso3, monthyear, proj="EPSG:3395",
     # Reproject
     cmd = "ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs '" + proj + "' -f 'ESRI Shapefile' \
     -lco ENCODING=UTF-8 data_raw/ctry_PROJ.shp data_raw/gadm36_" + iso3 + "_0.shp"
-    os.system(cmd)
+    subprocess.call(cmd, shell=True)
 
     # Compute extent
     print("Compute extent")
@@ -141,28 +199,9 @@ def country(iso3, monthyear, proj="EPSG:3395",
     extent_reg = (xmin_reg, ymin_reg, xmax_reg, ymax_reg)
     extent = " ".join(map(str, extent_reg))
 
-    # Tiles for SRTM data (see http://dwtkns.com/srtm/)
+    # Tiles for SRTM data
     print("Tiles for SRTM data")
-    # SRTM tiles are 5x5 degrees
-    # x: -180/+180
-    # y: +60/-60
-    xmin_latlong = np.floor(extent_latlong[0])
-    ymin_latlong = np.floor(extent_latlong[1])
-    xmax_latlong = np.ceil(extent_latlong[2])
-    ymax_latlong = np.ceil(extent_latlong[3])
-    # Compute SRTM tile numbers
-    tile_left = np.int(np.ceil((xmin_latlong + 180.0) / 5.0))
-    tile_right = np.int(np.ceil((xmax_latlong + 180.0) / 5.0))
-    if (tile_right == tile_left):
-        # Trick to make curl globbing work in data_country.sh
-        tile_right = tile_left + 1
-    tile_top = np.int(np.ceil((-ymax_latlong + 60.0) / 5.0))
-    tile_bottom = np.int(np.ceil((-ymin_latlong + 60.0) / 5.0))
-    if (tile_bottom == tile_top):
-        tile_bottom = tile_top + 1
-    # Format variables, zfill is for having 01 and not 1
-    tiles_long = str(tile_left).zfill(2) + "-" + str(tile_right).zfill(2)
-    tiles_lat = str(tile_top).zfill(2) + "-" + str(tile_bottom).zfill(2)
+    tiles_long, tiles_lat = tiles_srtm(extent_latlong)
 
     # Google EarthEngine task
     if (data_forest):
@@ -185,11 +224,11 @@ def country(iso3, monthyear, proj="EPSG:3395",
     if (data_country):
         script = pkg_resources.resource_filename("forestatrisk",
                                                  "shell/data_country.sh")
-        args = ["sh ", script, continent, ctry_link_geofab, iso3,
+        args = ["sh ", script, db_osm, continent, country, iso3,
                 "'" + proj + "'",
-                "'" + extent + "'", tiles_long, tiles_lat, monthyear]
+                "'" + extent + "'", tiles_long, tiles_lat]
         cmd = " ".join(args)
-        os.system(cmd)
+        subprocess.call(cmd, shell=True)
 
     # Forest computations
     if (data_forest):
@@ -206,7 +245,7 @@ def country(iso3, monthyear, proj="EPSG:3395",
                                                      "shell/forest_country.sh")
             args = ["sh ", script, "'" + proj + "'", "'" + extent + "'"]
             cmd = " ".join(args)
-            os.system(cmd)
+            subprocess.call(cmd, shell=True)
 
     # Delete data_raw
     if (keep_data_raw is False):
@@ -219,15 +258,13 @@ def country(iso3, monthyear, proj="EPSG:3395",
 
 # country_forest_gdrive
 def country_forest_gdrive(iso3, proj="EPSG:3395",
-                          output_dir="tmp",
-                          keep_dir=False,
+                          output_dir="data_raw",
+                          keep_dir=True,
                           fcc_source="jrc", perc=50,
                           gdrive_remote_rclone=None,
                           gdrive_folder=None):
     """Compute the forest rasters per country with GEE and have them
     ready on Google Drive.
-
-    This function downloads, computes and formats the country data.
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
@@ -237,7 +274,7 @@ def country_forest_gdrive(iso3, proj="EPSG:3395",
     :param output_dir: Directory where shapefile for country border is saved.
 
     :param keep_dir: Boolean to keep the output_dir folder. Default
-    to "False" (directory "tmp" is deleted).
+    to "True" (directory "data_raw" is not deleted).
 
     :param fcc_source: Source for forest-cover change data. Can be
     "gfc" (Global Forest Change data) or "jrc" (Joint Research Center
@@ -257,7 +294,7 @@ def country_forest_gdrive(iso3, proj="EPSG:3395",
     make_dir(output_dir)
 
     # Download the zipfile from gadm.org
-    print("Download data")
+    print("Download GADM data")
     url = "http://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
     fname = output_dir + "/" + iso3 + "_shp.zip"
     urlretrieve(url, fname)
@@ -352,12 +389,121 @@ def country_wdpa(iso3, output_dir=os.getcwd()):
     """
 
     # Create directory
-    print("Create directory if not existing")
     make_dir(output_dir)
 
-    # Download WDPA
-    print("Download WDPA")
-    get_wdpa(iso3, output_dir)
+    # Check for existing data
+    fname = output_dir + "/pa_" + iso3 + ".shp"
+    if os.path.isfile(fname) is not True:
+        # Download WDPA
+        get_wdpa(iso3, output_dir)
 
+
+# country_osm
+def country_osm(iso3, output_dir=os.getcwd()):
+    """Function to download OSM data for a country.
+
+    Function to download OpenStreetMap data from Geofabrik for a
+    specific country.
+
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :param output_dir: Directory where data is downloaded. Default to
+    current working directory.
+
+    """
+
+    # Create directory
+    make_dir(output_dir)
+
+    # Check for existing data
+    fname = output_dir + "/" + "country.osm.pbf"
+    if os.path.isfile(fname) is not True:
+        # Identify continent and country from iso3
+        file_run = pkg_resources.resource_filename("forestatrisk",
+                                                   "data/ctry_run.csv")
+        data_run = pd.read_csv(file_run, sep=";", header=0)
+        #
+        if data_run.ctry_geofab[data_run.iso3 == iso3] != "NA":
+            # Country
+            country = data_run.ctry_geofab[data_run.iso3 == iso3]
+            country = country.iloc[0]
+            # Continent
+            continent = data_run.cont_geofab[data_run.iso3 == iso3]
+            continent = continent.iloc[0]
+            # Download OSM data from Geofabrik
+            url = ["http://download.geofabrik.de/", continent, "/",
+                   country, "-latest.osm.pbf"]
+            url = "".join(url)
+            urlretrieve(url, fname)
+        else:
+            # Country
+            country = data_run.ctry_osmfr[data_run.iso3 == iso3]
+            country = country.iloc[0]
+            # Continent
+            continent = data_run.cont_osmfr[data_run.iso3 == iso3]
+            continent = continent.iloc[0]
+            # Download OSM data from openstreetmap.fr
+            url = ["https://download.openstreetmap.fr/extracts/", continent, "/",
+                   country, ".osm.pbf"]
+            url = "".join(url)
+            urlretrieve(url, fname)
+
+
+# country_srtm
+def country_srtm(iso3, output_dir=os.getcwd()):
+    """Function to download SRTM data for a country.
+
+    Function to download SRTM data (Shuttle Radar Topographic Mission
+    v4.1) from CSI-CGIAR for a specific country.
+
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :param output_dir: Directory where data is downloaded. Default to
+    current working directory.
+
+    """
+
+    # Create directory
+    make_dir(output_dir)
+
+    # Check for existing data
+    shp_name = output_dir + "/gadm36_" + iso3 + "_0.shp"
+    if os.path.isfile(shp_name) is not True:
+
+        # Download the zipfile from gadm.org
+        fname = output_dir + "/" + iso3 + "_shp.zip"
+        url = "http://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
+        urlretrieve(url, fname)
+
+        # Extract files from zip
+        destDir = output_dir
+        f = ZipFile(fname)
+        f.extractall(destDir)
+        f.close()
+
+    # Compute extent and SRTM tiles
+    extent_latlong = extent_shp(shp_name)
+    tiles_long, tiles_lat = tiles_srtm(extent_latlong)
+    tiles_long = tiles_long.split("-")
+    tiles_lat = tiles_lat.split("-")
+
+    # Download SRTM data from CSI CGIAR
+    for tlong in tiles_long:
+        for tlat in tiles_lat:
+            # Check for existing data
+            fname = output_dir + "/SRTM_V41_" + tlong + "_" + tlat + ".zip"
+            if os.path.isfile(fname) is not True:
+                # Download
+                url=["http://srtm.csi.cgiar.org/",
+                     "wp-content/uploads/files/srtm_5x5/TIFF/srtm_", tlong,
+                     "_", tlat, ".zip"]
+                url = "".join(url)
+                try:
+                    urlretrieve(url, fname)
+                except HTTPError as err:
+                    if err.code == 404:
+                        print("SRTM not existing for tile: " + tlong + "_" + tlat)
+                    else:
+                        raise
 
 # End
