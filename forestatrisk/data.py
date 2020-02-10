@@ -290,26 +290,25 @@ def country_forest_gdrive(iso3, proj="EPSG:3395",
     """
 
     # Create directory
-    print("Create directory")
     make_dir(output_dir)
 
-    # Download the zipfile from gadm.org
-    print("Download GADM data")
-    url = "http://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
-    fname = output_dir + "/" + iso3 + "_shp.zip"
-    urlretrieve(url, fname)
+    # Check for existing data
+    shp_name = output_dir + "/gadm36_" + iso3 + "_0.shp"
+    if os.path.isfile(shp_name) is not True:
 
-    # Extract files from zip
-    print("Extract files from zip")
-    destDir = output_dir
-    f = ZipFile(fname)
-    f.extractall(destDir)
-    f.close()
-    print("Files extracted")
+        # Download the zipfile from gadm.org
+        fname = output_dir + "/" + iso3 + "_shp.zip"
+        url = "http://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
+        urlretrieve(url, fname)
+
+        # Extract files from zip
+        destDir = output_dir
+        f = ZipFile(fname)
+        f.extractall(destDir)
+        f.close()
 
     # Compute extent
-    print("Compute extent")
-    extent_latlong = extent_shp(output_dir + "/gadm36_" + iso3 + "_0.shp")
+    extent_latlong = extent_shp(shp_name)
 
     # Keep or remove directory
     if not keep_dir:
