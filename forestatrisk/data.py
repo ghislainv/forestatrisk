@@ -422,8 +422,8 @@ def country_osm(iso3, output_dir=os.getcwd()):
         file_run = pkg_resources.resource_filename("forestatrisk",
                                                    "data/ctry_run.csv")
         data_run = pd.read_csv(file_run, sep=";", header=0)
-        #
-        if data_run.ctry_geofab[data_run.iso3 == iso3] != "NA":
+        # Check if data is available on Geofabrik
+        if not pd.isna(data_run.ctry_geofab[data_run.iso3 == iso3].iloc[0]):
             # Country
             country = data_run.ctry_geofab[data_run.iso3 == iso3]
             country = country.iloc[0]
@@ -435,6 +435,7 @@ def country_osm(iso3, output_dir=os.getcwd()):
                    country, "-latest.osm.pbf"]
             url = "".join(url)
             urlretrieve(url, fname)
+        # Else use openstreetmap.fr
         else:
             # Country
             country = data_run.ctry_osmfr[data_run.iso3 == iso3]
