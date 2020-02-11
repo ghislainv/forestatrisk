@@ -74,7 +74,7 @@ America;Virgin Islands, British;VGB;NA;NA;british_virgin_islands;central-america
 America;Virgin Islands, U.S.;VIR;NA;NA;usa_virgin_islands;central-america
 Asia;Bangladesh;BGD;bangladesh;asia;NA;NA
 Asia;Bhutan;BTN;bhutan;asia;bhutan;asia
-Asia;Brunei Darussalam;BRU;malaysia-singapore-brunei;asia;brunei;asia
+Asia;Brunei Darussalam;BRN;NA;NA;brunei;asia
 Asia;Cambodia;KHM;cambodia;asia;cambodia;asia
 Asia;India;IND;india;asia;india;asia
 Asia;Indonesia;IDN;indonesia;asia;indonesia;asia
@@ -84,7 +84,7 @@ Asia;Myanmar;MMR;myanmar;asia;mayanmar;asia
 Asia;New Caledonia;NCL;new-caledonia;australia-oceania;new_caledonia;oceania
 Asia;Papua New Guinea;PNG;papua-new-guinea;australia-oceania;papua_new_guinea;oceania
 Asia;Philippines;PHL;philippines;asia;NA;NA
-Asia;Singapore;SGP;malaysia-singapore-brunei;asia;singapore;asia
+Asia;Singapore;SGP;NA;NA;singapore;asia
 Asia;Sri Lanka;LKA;sri-lanka;asia;NA;NA
 Asia;Thailand;THA;thailand;asia;NA;NA
 Asia;Viet Nam;VNM;vietnam;asia;NA;NA
