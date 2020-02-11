@@ -15,6 +15,7 @@ import numpy as np
 import os
 from shutil import rmtree
 from osgeo import ogr
+from glob import glob # To explore files in a folder
 from . import ee_jrc
 from zipfile import ZipFile  # To unzip files
 from pywdpa import get_wdpa
@@ -354,22 +355,29 @@ def country_forest_download(iso3,
 
     """
 
-    # Data availability
-    data_availability = ee_jrc.check(gdrive_remote_rclone,
-                                     gdrive_folder,
-                                     iso3)
+    # Check for existing data locally 
+    srtm_tif = output_dir + "/forest_" + iso3 + "*.tif"
+    raster_list = glob(srtm_tif)
 
-    if data_availability is True:
-        # Commands to download results with rclone
-        remote_path = gdrive_remote_rclone + ":" + gdrive_folder
-        pattern = "'forest_" + iso3 + "*.tif'"
-        cmd = ["rclone", "copy", "--include", pattern, remote_path, output_dir]
-        cmd = " ".join(cmd)
-        subprocess.call(cmd, shell=True)
-        print("Data for {0:3s} has been downloaded".format(iso3))
+    # If no data locally check if available in gdrive
+    if len(raster_list) == 0:
+        # Data availability in gdrive
+        data_availability = ee_jrc.check(gdrive_remote_rclone,
+                                         gdrive_folder,
+                                         iso3)
 
-    else:
-        print("Data for {0:3s} is not available".format(iso3))
+        # Donwload if available in gdrive
+        if data_availability is True:
+            # Commands to download results with rclone
+            remote_path = gdrive_remote_rclone + ":" + gdrive_folder
+            pattern = "'forest_" + iso3 + "*.tif'"
+            cmd = ["rclone", "copy", "--include", pattern, remote_path, output_dir]
+            cmd = " ".join(cmd)
+            subprocess.call(cmd, shell=True)
+            print("Data for {0:3s} has been downloaded".format(iso3))
+
+        else:
+            print("Data for {0:3s} is not available".format(iso3))
 
 
 # country_wdpa
