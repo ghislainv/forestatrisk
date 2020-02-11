@@ -76,6 +76,7 @@ Asia;Bangladesh;BGD;bangladesh;asia;NA;NA
 Asia;Bhutan;BTN;bhutan;asia;bhutan;asia
 Asia;Brunei Darussalam;BRN;NA;NA;brunei;asia
 Asia;Cambodia;KHM;cambodia;asia;cambodia;asia
+Asia;Fiji;FJI;fiji;australia-oceania;NA;NA
 Asia;India;IND;india;asia;india;asia
 Asia;Indonesia;IDN;indonesia;asia;indonesia;asia
 Asia;Lao People's Democratic Republic;LAO;laos;asia;laos;asia
@@ -85,10 +86,9 @@ Asia;New Caledonia;NCL;new-caledonia;australia-oceania;new_caledonia;oceania
 Asia;Papua New Guinea;PNG;papua-new-guinea;australia-oceania;papua_new_guinea;oceania
 Asia;Philippines;PHL;philippines;asia;NA;NA
 Asia;Singapore;SGP;NA;NA;singapore;asia
+Asia;Solomon Islands;SLB;NA;NA;solomon_islands;oceania
 Asia;Sri Lanka;LKA;sri-lanka;asia;NA;NA
 Asia;Thailand;THA;thailand;asia;NA;NA
-Asia;Viet Nam;VNM;vietnam;asia;NA;NA
 Asia;Timor-Leste;TLS;NA;NA;east_timor;asia
 Asia;Vanuatu;VUT;NA;NA;vanuatu;oceania
-Asia;Solomon Islands;SLB;NA;NA;solomon_islands;oceania
-Asia;Fiji;FJI;fiji;australia-oceania;NA;NA
+Asia;Viet Nam;VNM;vietnam;asia;NA;NA
