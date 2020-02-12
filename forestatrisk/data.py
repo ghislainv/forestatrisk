@@ -492,12 +492,14 @@ def country_srtm(iso3, output_dir=os.getcwd()):
     # Compute extent and SRTM tiles
     extent_latlong = extent_shp(shp_name)
     tiles_long, tiles_lat = tiles_srtm(extent_latlong)
-    tiles_long = [int(i) for i in tiles_long.split("-")]
-    tiles_lat = [int(i) for i in tiles_lat.split("-")]
+    tiles_long = tiles_long.split("-")
+    tiles_lat = tiles_lat.split("-")
 
     # Download SRTM data from CSI CGIAR
-    for tlong in range(tiles_long[0], tiles_long[1] + 1):
-        for tlat in range(tiles_lat[0], tiles_lat[1] + 1):
+    for i in range(len(tiles_long)):
+        for j in range(len(tiles_lat)):
+            tlong = tiles_long[i]
+            tlat = tiles_lat[j]
             # Check for existing data
             fname = output_dir + "/SRTM_V41_" + tlong + "_" + tlat + ".zip"
             if os.path.isfile(fname) is not True:
