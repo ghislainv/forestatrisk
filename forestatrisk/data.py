@@ -504,8 +504,8 @@ def country_srtm(iso3, output_dir=os.getcwd()):
     for i in range(len(tlong_seq)):
         for j in range(len(tlat_seq)):
             # Convert to string
-            tlong = str(tlong_seq[i])
-            tlat= str(tlat_seq[j])
+            tlong = str(tlong_seq[i]).zfill(2)
+            tlat= str(tlat_seq[j]).zfill(2)
             # Check for existing data
             fname = output_dir + "/SRTM_V41_" + tlong + "_" + tlat + ".zip"
             if os.path.isfile(fname) is not True:
