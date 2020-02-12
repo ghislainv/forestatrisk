@@ -19,8 +19,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 # Informations to compile internal hsdm module
-hSDM_module = Extension("forestatrisk.hsdm",
-                        sources=["C/hSDMmodule.c", "C/useful.c"])
+hsdm_module = Extension("forestatrisk.hsdm",
+                        sources=["C/binomial_iCAR.c", "C/useful.c"])
                         #extra_compile_args=['-std=c99'])
 
 # Setup
@@ -41,7 +41,7 @@ setup(name="forestatrisk",
                    "Topic :: Scientific/Engineering :: Bio-Informatics"],
       keywords="deforestation hsdm hierarchical logistic model probability risk Bayesian spatial autocorrelation",
       python_requires=">=2.7",
-      ext_modules=[hSDM_module],
+      ext_modules=[hsdm_module],
       packages=["forestatrisk"],
       package_dir={"forestatrisk": "forestatrisk"},
       package_data={"forestatrisk": ["data/*.csv", "shell/data_country.sh",

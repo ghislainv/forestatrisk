@@ -496,8 +496,8 @@ def country_srtm(iso3, output_dir=os.getcwd()):
     tiles_lat = tiles_lat.split("-")
 
     # Download SRTM data from CSI CGIAR
-    for tlong in tiles_long:
-        for tlat in tiles_lat:
+    for tlong in range(tiles_long[0], tiles_long[1] + 1):
+        for tlat in range(tiles_lat[0], tiles_lat[1] + 1):
             # Check for existing data
             fname = output_dir + "/SRTM_V41_" + tlong + "_" + tlat + ".zip"
             if os.path.isfile(fname) is not True:
