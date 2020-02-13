@@ -140,6 +140,8 @@ def country(iso3, proj="EPSG:3395",
     data_run = pd.read_csv(file_run, sep=";", header=0)
     # Check if data is available on Geofabrik
     if not pd.isna(data_run.ctry_geofab[data_run.iso3 == iso3].iloc[0]):
+        # Database
+        db_osm = "geofab"
         # Country
         country = data_run.ctry_geofab[data_run.iso3 == iso3]
         country = country.iloc[0]
@@ -153,6 +155,8 @@ def country(iso3, proj="EPSG:3395",
         urlretrieve(url, fname)
     # Else use openstreetmap.fr
     else:
+        # Database
+        db_osm = "osmfr"
         # Country
         country = data_run.ctry_osmfr[data_run.iso3 == iso3]
         country = country.iloc[0]
