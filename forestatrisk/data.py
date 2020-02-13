@@ -257,13 +257,13 @@ def country(iso3, proj="EPSG:3395",
                 os.rmdir(os.path.join(root, name))
 
 
-# country_forest_gdrive
-def country_forest_gdrive(iso3, proj="EPSG:3395",
-                          output_dir="data_raw",
-                          keep_dir=True,
-                          fcc_source="jrc", perc=50,
-                          gdrive_remote_rclone=None,
-                          gdrive_folder=None):
+# country_run_GEE
+def country_run_GEE(iso3, proj="EPSG:3395",
+                    output_dir="data_raw",
+                    keep_dir=True,
+                    fcc_source="jrc", perc=50,
+                    gdrive_remote_rclone=None,
+                    gdrive_folder=None):
     """Compute the forest rasters per country with GEE and have them
     ready on Google Drive.
 
@@ -332,11 +332,11 @@ def country_forest_gdrive(iso3, proj="EPSG:3395",
             print(str(extent_latlong))
 
 
-# country_forest_download
-def country_forest_download(iso3,
-                            gdrive_remote_rclone,
-                            gdrive_folder,
-                            output_dir=os.getcwd()):
+# country_forest_GEE
+def country_forest_GEE(iso3,
+                   gdrive_remote_rclone,
+                   gdrive_folder,
+                   output_dir=os.getcwd()):
     """Download forest-cover data from Google Drive.
 
     Download forest-cover data from Google Drive in the current
@@ -521,5 +521,39 @@ def country_srtm(iso3, output_dir=os.getcwd()):
                         print("SRTM not existing for tile: " + tlong + "_" + tlat)
                     else:
                         raise
+
+
+
+# country_gadm
+def country_gadm(iso3, output_dir=os.getcwd()):
+    """Function to download GADM data for a country.
+
+    Function to download GADM (Global Administrative Areas) for a
+    specific country. See <https://gadm.org>.
+
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :param output_dir: Directory where data is downloaded. Default to
+    current working directory.
+
+    """
+
+    # Create directory
+    make_dir(output_dir)
+
+    # Check for existing data
+    shp_name = output_dir + "/gadm36_" + iso3 + "_0.shp"
+    if os.path.isfile(shp_name) is not True:
+
+        # Download the zipfile from gadm.org
+        fname = output_dir + "/" + iso3 + "_shp.zip"
+        url = "http://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
+        urlretrieve(url, fname)
+
+        # Extract files from zip
+        destDir = output_dir
+        f = ZipFile(fname)
+        f.extractall(destDir)
+        f.close()
 
 # End
