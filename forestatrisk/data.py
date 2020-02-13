@@ -127,16 +127,15 @@ def country(iso3, proj="EPSG:3395",
     :param gdrive_folder: Name of the Google Drive folder to use.
 
     """
-
+   
     # Identify continent and country from iso3
     print("Identify database, continent, and country from iso3")
-    # Geofabrik data
+    # Identify continent and country from iso3
     file_run = pkg_resources.resource_filename("forestatrisk",
                                                "data/ctry_run.csv")
     data_run = pd.read_csv(file_run, sep=";", header=0)
-    if data_run.ctry_geofab[data_run.iso3 == iso3] != "NA":
-        # Database
-        db_osm = "geofab"
+    # Check if data is available on Geofabrik
+    if not pd.isna(data_run.ctry_geofab[data_run.iso3 == iso3].iloc[0]):
         # Country
         country = data_run.ctry_geofab[data_run.iso3 == iso3]
         country = country.iloc[0]
@@ -148,9 +147,8 @@ def country(iso3, proj="EPSG:3395",
                country, "-latest.osm.pbf"]
         url = "".join(url)
         urlretrieve(url, fname)
+    # Else use openstreetmap.fr
     else:
-        # Database
-        db_osm = "osmfr"
         # Country
         country = data_run.ctry_osmfr[data_run.iso3 == iso3]
         country = country.iloc[0]
