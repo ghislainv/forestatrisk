@@ -127,10 +127,14 @@ def country(iso3, proj="EPSG:3395",
     :param gdrive_folder: Name of the Google Drive folder to use.
 
     """
-   
+
+    # Create data_raw directory
+    print("Create data_raw directory")
+    make_dir("data_raw")
+    
     # Identify continent and country from iso3
     print("Identify database, continent, and country from iso3")
-    # Identify continent and country from iso3
+    fname = "data_raw/country.osm.pbf"
     file_run = pkg_resources.resource_filename("forestatrisk",
                                                "data/ctry_run.csv")
     data_run = pd.read_csv(file_run, sep=";", header=0)
@@ -160,10 +164,6 @@ def country(iso3, proj="EPSG:3395",
                country, ".osm.pbf"]
         url = "".join(url)
         urlretrieve(url, fname)
-
-    # Create data_raw directory
-    print("Create data_raw directory")
-    make_dir("data_raw")
 
     # Download the zipfile from gadm.org
     print("Download GADM data")
