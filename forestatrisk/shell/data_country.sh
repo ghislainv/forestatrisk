@@ -18,7 +18,7 @@ continent=$2
 country=$3
 iso=$4
 proj=$5  # see http://epsg.io 
-extent=$7  # xmin ymin xmax ymax
+extent=$6  # xmin ymin xmax ymax
 tiles_long=$7  # see http://dwtkns.com/srtm/
 tiles_lat=$8
 
@@ -30,7 +30,7 @@ tiles_lat=$8
 echo "Borders, roads, towns and rivers from OSM\n"
 
 # Download OSM data from Geofabrik
-if [$db_osm = "geofab"]
+if [ $db_osm=="geofab" ]
 then
    url="http://download.geofabrik.de/"$continent"/"$country"-latest.osm.pbf"
 else
@@ -165,9 +165,9 @@ gdal_rasterize -te $extent -tap -burn 1 \
 echo "AGB from Avitabile's map\n"
 
 # Download
-# url="https://bioscenemada.cirad.fr/FileTransfer/JRC/Avitabile_AGB_Map.tif"
-# wget -O Avitabile_AGB_Map.tif $url
-cp /home/www/bioscenemada/FileTransfer/JRC/Avitabile_AGB_Map.tif ./
+url="https://bioscenemada.cirad.fr/FileTransfer/JRC/Avitabile_AGB_Map.tif"
+wget -O Avitabile_AGB_Map.tif $url
+#cp /home/www/bioscenemada/FileTransfer/JRC/Avitabile_AGB_Map.tif ./
 
 # Resample
 gdalwarp -overwrite -s_srs EPSG:4326 -t_srs "$proj" \
