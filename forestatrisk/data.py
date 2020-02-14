@@ -525,7 +525,6 @@ def country_srtm(iso3, output_dir=os.getcwd()):
                         raise
 
 
-
 # country_gadm
 def country_gadm(iso3, output_dir=os.getcwd()):
     """Function to download GADM data for a country.
