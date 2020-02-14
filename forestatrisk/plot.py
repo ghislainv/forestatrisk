@@ -225,7 +225,7 @@ def fcc(input_fcc_raster,
     """
 
     # Load raster and band
-    rasterR = gdal.Open(input_fcc_raster)
+    rasterR = gdal.Open(input_fcc_raster, gdalconst.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
     rasterND = rasterB.GetNoDataValue()
     gt = rasterR.GetGeoTransform()
@@ -241,6 +241,7 @@ def fcc(input_fcc_raster,
     if (rasterB.GetOverviewCount() == 0):
         # Build overviews
         print("Build overview")
+        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Get data from finest overview
@@ -317,7 +318,7 @@ def differences(input_raster,
     """
 
     # Load raster and band
-    rasterR = gdal.Open(input_raster)
+    rasterR = gdal.Open(input_raster, gdalconst.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
     rasterND = rasterB.GetNoDataValue()
     gt = rasterR.GetGeoTransform()
@@ -333,6 +334,7 @@ def differences(input_raster,
     if (rasterB.GetOverviewCount() == 0):
         # Build overviews
         print("Build overview")
+        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Get data from finest overview
@@ -413,7 +415,7 @@ def forest(input_forest_raster,
     """
 
     # Load raster and band
-    rasterR = gdal.Open(input_forest_raster)
+    rasterR = gdal.Open(input_forest_raster, gdalconst.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
     rasterND = rasterB.GetNoDataValue()
     gt = rasterR.GetGeoTransform()
@@ -429,6 +431,7 @@ def forest(input_forest_raster,
     if (rasterB.GetOverviewCount() == 0):
         # Build overviews
         print("Build overview")
+        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Get data from finest overview
@@ -505,7 +508,7 @@ def prob(input_prob_raster,
     """
 
     # Load raster and band
-    rasterR = gdal.Open(input_prob_raster)
+    rasterR = gdal.Open(input_prob_raster, gdalconst.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
     gt = rasterR.GetGeoTransform()
     ncol = rasterR.RasterXSize
@@ -520,6 +523,7 @@ def prob(input_prob_raster,
     if rasterB.GetOverviewCount() == 0:
         # Build overviews
         print("Build overview")
+        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Get data from finest overview
@@ -594,7 +598,7 @@ def obs(sample,
     """
 
     # Load raster and band
-    rasterR = gdal.Open(input_fcc_raster)
+    rasterR = gdal.Open(input_fcc_raster, gdalconst.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
     rasterND = rasterB.GetNoDataValue()
     gt = rasterR.GetGeoTransform()
@@ -610,6 +614,7 @@ def obs(sample,
     if rasterB.GetOverviewCount() == 0:
         # Build overviews
         print("Build overview")
+        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Get data from finest overview
@@ -702,7 +707,7 @@ def var(var_dir,
             fig = plt.figure(figsize=figsize, dpi=dpi)
 
         # Open raster and get band
-        r = gdal.Open(raster_list[i])
+        r = gdal.Open(raster_list[i], gdalconst.GA_ReadOnly)
         b = r.GetRasterBand(1)
         ND = b.GetNoDataValue()
         if ND is None:
@@ -729,6 +734,7 @@ def var(var_dir,
         if b.GetOverviewCount() == 0:
             # Build overviews
             print("Build overview")
+            gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
             r.BuildOverviews("nearest", [4, 8, 16, 32])
         # Get data from finest overview
         ov_band = b.GetOverview(0)
@@ -778,7 +784,7 @@ def rho(input_rho_raster,
     """
 
     # Load raster and band
-    rasterR = gdal.Open(input_rho_raster)
+    rasterR = gdal.Open(input_rho_raster, gdalconst.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
     gt = rasterR.GetGeoTransform()
     ncol = rasterR.RasterXSize
@@ -793,6 +799,7 @@ def rho(input_rho_raster,
     if rasterB.GetOverviewCount() == 0:
         # Build overviews
         print("Build overview")
+        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
         rasterR.BuildOverviews("average", [2, 4, 8, 16, 32])
 
     # Get data

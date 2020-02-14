@@ -186,9 +186,9 @@ def predict_raster_binomial_iCAR(model, var_dir="data",
     Pband.FlushCache()  # Write cache data to disk
     Pband.ComputeStatistics(False)
 
-    # Build overviews
-    print("Build overviews")
-    Pdrv.BuildOverviews("nearest", [4, 8, 16, 32])
+    # # Build overviews
+    # print("Build overviews")
+    # Pdrv.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Dereference driver
     Pband = None
