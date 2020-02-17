@@ -36,7 +36,7 @@ then
 else
    url="https://download.openstreetmap.fr/extracts/"$continent"/"$country".osm.pbf"
 fi
-wget -nc -O country.osm.pbf $url
+wget -O country.osm.pbf $url
 osmconvert country.osm.pbf -o=country.o5m
 
 # Main roads
@@ -165,15 +165,14 @@ gdal_rasterize -te $extent -tap -burn 1 \
 echo "AGB from Avitabile's map\n"
 
 # Download
-url="https://bioscenemada.cirad.fr/FileTransfer/JRC/Avitabile_AGB_Map.tif"
-wget -O Avitabile_AGB_Map.tif $url
-#cp /home/www/bioscenemada/FileTransfer/JRC/Avitabile_AGB_Map.tif ./
+#url="https://bioscenemada.cirad.fr/FileTransfer/JRC/Avitabile_AGB_Map.tif"
+#wget -O Avitabile_AGB_Map.tif $url
 
 # Resample
 gdalwarp -overwrite -s_srs EPSG:4326 -t_srs "$proj" \
          -te $extent -tap -r bilinear \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -tr 1000 1000 Avitabile_AGB_Map.tif AGB.tif
+         -tr 1000 1000 /home/ghislain/Code/forestatrisk-tropics/AGB/Avitabile_AGB_Map.tif AGB.tif
 
 # ===========================
 # Cleaning
