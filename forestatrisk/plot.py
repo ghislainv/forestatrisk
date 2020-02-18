@@ -225,7 +225,7 @@ def fcc(input_fcc_raster,
     """
 
     # Load raster and band
-    rasterR = gdal.Open(input_fcc_raster, gdalconst.GA_ReadOnly)
+    rasterR = gdal.Open(input_fcc_raster, gdal.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
     rasterND = rasterB.GetNoDataValue()
     gt = rasterR.GetGeoTransform()
@@ -318,7 +318,7 @@ def differences(input_raster,
     """
 
     # Load raster and band
-    rasterR = gdal.Open(input_raster, gdalconst.GA_ReadOnly)
+    rasterR = gdal.Open(input_raster, gdal.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
     rasterND = rasterB.GetNoDataValue()
     gt = rasterR.GetGeoTransform()
@@ -415,7 +415,7 @@ def forest(input_forest_raster,
     """
 
     # Load raster and band
-    rasterR = gdal.Open(input_forest_raster, gdalconst.GA_ReadOnly)
+    rasterR = gdal.Open(input_forest_raster, gdal.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
     rasterND = rasterB.GetNoDataValue()
     gt = rasterR.GetGeoTransform()
@@ -508,7 +508,7 @@ def prob(input_prob_raster,
     """
 
     # Load raster and band
-    rasterR = gdal.Open(input_prob_raster, gdalconst.GA_ReadOnly)
+    rasterR = gdal.Open(input_prob_raster, gdal.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
     gt = rasterR.GetGeoTransform()
     ncol = rasterR.RasterXSize
@@ -598,7 +598,7 @@ def obs(sample,
     """
 
     # Load raster and band
-    rasterR = gdal.Open(input_fcc_raster, gdalconst.GA_ReadOnly)
+    rasterR = gdal.Open(input_fcc_raster, gdal.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
     rasterND = rasterB.GetNoDataValue()
     gt = rasterR.GetGeoTransform()
@@ -707,7 +707,7 @@ def var(var_dir,
             fig = plt.figure(figsize=figsize, dpi=dpi)
 
         # Open raster and get band
-        r = gdal.Open(raster_list[i], gdalconst.GA_ReadOnly)
+        r = gdal.Open(raster_list[i], gdal.GA_ReadOnly)
         b = r.GetRasterBand(1)
         ND = b.GetNoDataValue()
         if ND is None:
@@ -784,7 +784,7 @@ def rho(input_rho_raster,
     """
 
     # Load raster and band
-    rasterR = gdal.Open(input_rho_raster, gdalconst.GA_ReadOnly)
+    rasterR = gdal.Open(input_rho_raster, gdal.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
     gt = rasterR.GetGeoTransform()
     ncol = rasterR.RasterXSize

@@ -188,7 +188,7 @@ mkdir -p ../data/emissions
 cp -t ../data dist_*.tif *_PROJ.* altitude.tif slope.tif pa.tif
 cp -t ../data/emissions AGB.tif
 # Remove AGB to save some space on disk if folder data_raw is not removed
-rm Avitabile_AGB_Map.tif
+#rm Avitabile_AGB_Map.tif
 # Return to working director
 cd ../
 
