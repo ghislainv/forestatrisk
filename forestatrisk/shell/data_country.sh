@@ -172,7 +172,7 @@ echo "AGB from Avitabile's map\n"
 gdalwarp -overwrite -s_srs EPSG:4326 -t_srs "$proj" \
          -te $extent -tap -r bilinear \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -tr 1000 1000 /home/ghislain/Code/forestatrisk-tropics/AGB/Avitabile_AGB_Map.tif AGB.tif
+         -tr 1000 1000 ~/Code/forestatrisk-tropics/AGB/Avitabile_AGB_Map.tif AGB.tif
 
 # ===========================
 # Cleaning
