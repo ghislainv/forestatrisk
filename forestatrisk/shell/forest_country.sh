@@ -16,7 +16,7 @@ cd data_raw
 # ===========================
 
 # Message
-echo "Forest data obtained with Google EarthEngine\n"
+echo "Forest data obtained with Google Earth Engine\n"
 
 # Variables
 proj=$1
@@ -43,12 +43,12 @@ gdalwarp -te $extent -tap -t_srs "$proj" \
 
 # Separate bands
 # b1=2000, b2=2005, b3=2010, b4=2015, b5=2019
-# t0=2005, t1=2010, t2=2015, t3=2019
-gdal_translate -mask none -b 2 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               forest_src.tif forest_t0_src.tif
-gdal_translate -mask none -b 3 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+# t1=2000, t2=2010, t3=2019
+#gdal_translate -mask none -b 2 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+#               forest_src.tif forest_t0_src.tif
+gdal_translate -mask none -b 1 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                forest_src.tif forest_t1_src.tif
-gdal_translate -mask none -b 4 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+gdal_translate -mask none -b 3 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                forest_src.tif forest_t2_src.tif
 gdal_translate -mask none -b 5 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                forest_src.tif forest_t3_src.tif
@@ -174,11 +174,11 @@ gdal_calc.py --overwrite -A forest_t1_src.tif -B forest_t3_src.tif -C ctry_PROJ.
 echo "Mask forest rasters with country border\n"
 
 # Mask forest with country border
-gdal_calc.py --overwrite -A forest_t0_src.tif -B ctry_PROJ.tif \
-             --outfile=forest_t0.tif --type=Byte \
-             --calc="255-254*(A==1)*(B==1)" \
-             --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=255 --quiet
+# gdal_calc.py --overwrite -A forest_t0_src.tif -B ctry_PROJ.tif \
+#              --outfile=forest_t0.tif --type=Byte \
+#              --calc="255-254*(A==1)*(B==1)" \
+#              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
+#              --NoDataValue=255 --quiet
 
 gdal_calc.py --overwrite -A forest_t1_src.tif -B ctry_PROJ.tif \
              --outfile=forest_t1.tif --type=Byte \
@@ -212,6 +212,7 @@ mkdir -p ../data/proj
 # Copy files
 cp -t ../data dist_edge.tif dist_defor.tif fcc23.tif
 cp -t ../data/proj dist_edge_proj.tif dist_defor_proj.tif
-cp -t ../data/forest forest_t0.tif forest_t1.tif forest_t2.tif forest_t3.tif fcc13.tif
+#cp -t ../data/forest forest_t0.tif forest_t1.tif forest_t2.tif forest_t3.tif fcc13.tif
+cp -t ../data/forest forest_t1.tif forest_t2.tif forest_t3.tif fcc13.tif
 
 # End

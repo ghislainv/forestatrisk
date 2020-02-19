@@ -21,7 +21,7 @@ from .miscellaneous import makeblock, progress_bar
 
 
 # Sample
-def sample(nsamp=10000, Seed=1234, csize=10,
+def sample(nsamp=10000, adapt=True, Seed=1234, csize=10,
            var_dir="data",
            input_forest_raster="forest.tif",
            output_file="output/sample.txt",
@@ -33,13 +33,23 @@ def sample(nsamp=10000, Seed=1234, csize=10,
     each spatial point.
 
     :param nsamp: number of random spatial points.
+
+    :param adapt: adapt nsamp to forest area: 1000 for 1 Mha of
+    forest, with min=10000 and max=50000.
+
     :param seed: seed for random number generator.
+
     :param csize: spatial cell size in km.
+
     :param var_dir: directory with raster data.
+
     :param input_forest_raster: name of the forest raster file (1=forest, \
     0=deforested) in the var_dir directory
+
     :param output_file: path to file to save sample points.
+
     :param blk_rows: if > 0, number of lines per block.
+
     :return: a pandas DataFrame, each row being one observation.
 
     """
@@ -93,10 +103,25 @@ def sample(nsamp=10000, Seed=1234, csize=10,
         nfc_block[b] = len(forpix[0])  # Number of forest pixels
         nfc += len(forpix[0])
 
+    # Adapt nsamp to forest area
+    if adapt is True:
+        gt = forestR.GetGeoTransform()
+        pix_area = gt[1] * (-gt[5])
+        farea = pix_area * nfc / 10000  # farea in ha
+        nsamp_prop = 1000 * farea / 1e6  # 1000 per 1Mha
+        if nsamp_prop >= 50000:
+            nsamp = 50000
+        elif nsamp_prop <= 10000:
+            nsamp = 10000
+        else:
+            nsamp = nsamp_prop
+    else:
+        nsamp = nsamp
+    
     # Proba of drawing a block
     print("Draw blocks at random")
-    proba_block_d = ndc_block.astype(np.float) / ndc
-    proba_block_f = nfc_block.astype(np.float) / nfc
+    proba_block_d = ndc_block / ndc
+    proba_block_f = nfc_block / nfc
     # Draw block number nsamp times
     block_draw_d = np.random.choice(list(range(nblock)), size=nsamp,
                                     replace=True, p=proba_block_d)
