@@ -117,7 +117,7 @@ def sample(nsamp=10000, adapt=True, Seed=1234, csize=10,
             nsamp = nsamp_prop
     else:
         nsamp = nsamp
-    
+
     # Proba of drawing a block
     print("Draw blocks at random")
     proba_block_d = ndc_block / ndc
