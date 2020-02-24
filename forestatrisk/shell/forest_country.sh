@@ -76,15 +76,15 @@ gdal_translate -a_nodata 0 \
                _dist_edge.tif dist_edge.tif
 
 # Message
-echo "Computing distance to forest edge at t3 for projections\n"
+echo "Computing distance to forest edge at t3 for forecasting\n"
 #
-gdal_proximity.py forest_t3_src.tif _dist_edge_proj.tif \
+gdal_proximity.py forest_t3_src.tif _dist_edge.tif \
                   -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                   -values 0 -ot UInt32 -distunits GEO
 
 gdal_translate -a_nodata 0 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               _dist_edge_proj.tif dist_edge_proj.tif
+               _dist_edge.tif dist_edge_forecast.tif
 
 # =====
 # 2. Compute distance to past deforestation
@@ -117,7 +117,7 @@ gdal_calc.py --overwrite -A _dist_defor_src.tif -B forest_t2_src.tif \
 #                _dist_defor.tif dist_defor.tif
 
 # Message
-echo "Computing distance to past deforestation at t3 for projections\n"
+echo "Computing distance to past deforestation at t3 for forecasting\n"
 
 # Create raster fcc23_src.tif
 gdal_calc.py --overwrite -A forest_t2_src.tif -B forest_t3_src.tif \
@@ -133,7 +133,7 @@ gdal_proximity.py fcc23_src.tif _dist_defor_src.tif \
 
 # Mask with forest_t3_src.tif
 gdal_calc.py --overwrite -A _dist_defor_src.tif -B forest_t3_src.tif \
-             --outfile=dist_defor_proj.tif --type=UInt32 \
+             --outfile=dist_defor_forecast.tif --type=UInt32 \
              --calc="A*(B==1)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=0
@@ -208,10 +208,10 @@ echo "Cleaning directory\n"
 # Create clean data directory
 mkdir -p ../data
 mkdir -p ../data/forest
-mkdir -p ../data/proj
+mkdir -p ../data/forecast
 # Copy files
 cp -t ../data dist_edge.tif dist_defor.tif fcc23.tif
-cp -t ../data/proj dist_edge_proj.tif dist_defor_proj.tif
+cp -t ../data/forecast dist_edge_forecast.tif dist_defor_forescast.tif
 #cp -t ../data/forest forest_t0.tif forest_t1.tif forest_t2.tif forest_t3.tif fcc13.tif
 cp -t ../data/forest forest_t1.tif forest_t2.tif forest_t3.tif fcc13.tif
 
