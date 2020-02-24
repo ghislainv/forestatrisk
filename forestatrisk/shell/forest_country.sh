@@ -211,7 +211,7 @@ mkdir -p ../data/forest
 mkdir -p ../data/forecast
 # Copy files
 cp -t ../data dist_edge.tif dist_defor.tif fcc23.tif
-cp -t ../data/forecast dist_edge_forecast.tif dist_defor_forescast.tif
+cp -t ../data/forecast dist_edge_forecast.tif dist_defor_forecast.tif
 #cp -t ../data/forest forest_t0.tif forest_t1.tif forest_t2.tif forest_t3.tif fcc13.tif
 cp -t ../data/forest forest_t1.tif forest_t2.tif forest_t3.tif fcc13.tif
 
