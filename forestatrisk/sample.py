@@ -114,7 +114,7 @@ def sample(nsamp=10000, adapt=True, Seed=1234, csize=10,
         elif nsamp_prop <= 10000:
             nsamp = 10000
         else:
-            nsamp = nsamp_prop
+            nsamp = int(np.rint(nsamp_prop))
     else:
         nsamp = nsamp
 
