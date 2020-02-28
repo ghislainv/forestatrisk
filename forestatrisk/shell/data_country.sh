@@ -30,13 +30,13 @@ tiles_lat=$8
 echo "Borders, roads, towns and rivers from OSM\n"
 
 # Download OSM data from Geofabrik
-if [ $db_osm=="geofab" ]
+if [ $db_osm == "geofab" ]
 then
    url="http://download.geofabrik.de/"$continent"/"$country"-latest.osm.pbf"
 else
    url="https://download.openstreetmap.fr/extracts/"$continent"/"$country".osm.pbf"
 fi
-wget -O country.osm.pbf $url
+wget -nc -O country.osm.pbf $url
 osmconvert country.osm.pbf -o=country.o5m
 
 # Main roads
