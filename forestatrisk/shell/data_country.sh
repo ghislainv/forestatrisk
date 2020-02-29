@@ -9,18 +9,15 @@
 # license         :GPLv3
 # ==============================================================================
 
-# Working directory
-cd data_raw
-
 # Variables
-db_osm=$1
-continent=$2
-country=$3
-iso=$4
-proj=$5  # see http://epsg.io 
-extent=$6  # xmin ymin xmax ymax
-tiles_long=$7  # see http://dwtkns.com/srtm/
-tiles_lat=$8
+iso=$1
+proj=$2  # see http://epsg.io 
+extent=$3  # xmin ymin xmax ymax
+temp_dir=$4
+output_dir=$5
+
+# Working directory
+cd $temp_dir
 
 # ===========================
 # Borders, roads and town
@@ -28,15 +25,6 @@ tiles_lat=$8
 
 # Message
 echo "Borders, roads, towns and rivers from OSM\n"
-
-# Download OSM data from Geofabrik
-if [ $db_osm == "geofab" ]
-then
-   url="http://download.geofabrik.de/"$continent"/"$country"-latest.osm.pbf"
-else
-   url="https://download.openstreetmap.fr/extracts/"$continent"/"$country".osm.pbf"
-fi
-wget -nc -O country.osm.pbf $url
 osmconvert country.osm.pbf -o=country.o5m
 
 # Main roads
@@ -109,10 +97,6 @@ gdal_translate -a_nodata 4294967295 \
 # Message
 echo "SRTM data from CGIAR-CSI\n"
 
-# Download SRTM data from CSI CGIAR
-url="http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_["$tiles_long"]_["$tiles_lat"].zip"
-curl -L $url -o 'SRTM_V41_#1_#2.zip'
-
 # Unzip
 for z in SRTM_*.zip; do
 d=$(basename $z .zip)
@@ -128,10 +112,13 @@ gdalwarp -overwrite -t_srs "$proj" -te $extent -tap -r bilinear \
          -tr 90 90 srtm.vrt altitude.tif
 
 # Compute slope
-gdaldem slope altitude.tif slope_.tif -compute_edges -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
+gdaldem slope altitude.tif slope_.tif -compute_edges \
+	-co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
 
 # Convert to Int16
-gdal_translate -ot Int16 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" slope_.tif slope.tif
+gdal_translate -ot Int16 \
+	       -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+	       slope_.tif slope.tif
 
 # ===========================
 # SAPM
@@ -139,10 +126,6 @@ gdal_translate -ot Int16 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" 
 
 # Message
 echo "Protected area network from Protected Planet\n"
-# See protected planet: www.protectedplanet.net
-
-# Download from Protected Planet
-pywdpa $iso
 
 # Reproject
 input_file="pa_"$iso".shp"
@@ -164,10 +147,6 @@ gdal_rasterize -te $extent -tap -burn 1 \
 # Message
 echo "AGB from Avitabile's map\n"
 
-# Download
-#url="https://bioscenemada.cirad.fr/FileTransfer/JRC/Avitabile_AGB_Map.tif"
-#wget -O Avitabile_AGB_Map.tif $url
-
 # Resample
 gdalwarp -overwrite -s_srs EPSG:4326 -t_srs "$proj" \
          -te $extent -tap -r bilinear \
@@ -182,13 +161,11 @@ gdalwarp -overwrite -s_srs EPSG:4326 -t_srs "$proj" \
 echo "Cleaning directory\n"
 
 # Create clean data directory
-mkdir -p ../data
-mkdir -p ../data/emissions
+mkdir -p ../$output_dir
+mkdir -p ../$output_dir/emissions
 # Copy files
-cp -t ../data dist_*.tif *_PROJ.* altitude.tif slope.tif pa.tif
-cp -t ../data/emissions AGB.tif
-# Remove AGB to save some space on disk if folder data_raw is not removed
-#rm Avitabile_AGB_Map.tif
+cp -t ../$output_dir dist_*.tif *_PROJ.* altitude.tif slope.tif pa.tif
+cp -t ../$output_dir/emissions AGB.tif
 # Return to working director
 cd ../
 

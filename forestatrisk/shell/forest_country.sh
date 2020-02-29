@@ -8,8 +8,14 @@
 # license         :GPLv3
 # ==============================================================================
 
+# Variables
+proj=$1
+extent=$2
+temp_dir=$3
+output_dir=$4
+
 # Working directory
-cd data_raw
+cd $temp_dir
 
 # ===========================
 # Forest
@@ -17,10 +23,6 @@ cd data_raw
 
 # Message
 echo "Forest data obtained with Google Earth Engine\n"
-
-# Variables
-proj=$1
-extent=$2
 
 # =====
 # 0. Mosaicing
@@ -206,13 +208,15 @@ gdal_calc.py --overwrite -A forest_t3_src.tif -B ctry_PROJ.tif \
 echo "Cleaning directory\n"
 
 # Create clean data directory
-mkdir -p ../data
-mkdir -p ../data/forest
-mkdir -p ../data/forecast
+mkdir -p ../$output_dir
+mkdir -p ../$output_dir/forest
+mkdir -p ../$output_dir/forecast
 # Copy files
-cp -t ../data dist_edge.tif dist_defor.tif fcc23.tif
-cp -t ../data/forecast dist_edge_forecast.tif dist_defor_forecast.tif
-#cp -t ../data/forest forest_t0.tif forest_t1.tif forest_t2.tif forest_t3.tif fcc13.tif
-cp -t ../data/forest forest_t1.tif forest_t2.tif forest_t3.tif fcc13.tif
+cp -t ../$output_dir dist_edge.tif dist_defor.tif fcc23.tif
+cp -t ../$output_dir/forecast dist_edge_forecast.tif dist_defor_forecast.tif
+#cp -t ../$output_dir/forest forest_t0.tif forest_t1.tif forest_t2.tif forest_t3.tif fcc13.tif
+cp -t ../$output_dir/forest forest_t1.tif forest_t2.tif forest_t3.tif fcc13.tif
+# Return to working director
+cd ../
 
 # End

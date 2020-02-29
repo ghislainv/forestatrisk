@@ -89,185 +89,15 @@ def tiles_srtm(extent_latlong):
     return (tiles_long, tiles_lat)
 
 
-# country
-def country(iso3, proj="EPSG:3395",
-            data_country=True,
-            data_forest=True,
-            keep_data_raw=False,
-            fcc_source="jrc", perc=50,
-            gdrive_remote_rclone=None,
-            gdrive_folder=None):
-    """Function formating the country data.
-
-    This function downloads, computes and formats the country data.
-
-    :param iso3: Country ISO 3166-1 alpha-3 code.
-
-    :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
-    GDAL/OGR. Default to "EPSG:3395" (World Mercator).
-
-    :param data_country: Boolean for running data_country.sh to
-    compute country landscape variables. Default to "True".
-
-    :param data_forest: Boolean for running data_forest.sh to
-    compute forest landscape variables. Default to "True".
-
-    :param keep_data_raw: Boolean to keep the data_raw folder. Default
-    to "False".
-
-    :param fcc_source: Source for forest-cover change data. Can be
-    "gfc" (Global Forest Change data) or "jrc" (Joint Research Center
-    data). Default to "jrc".
-
-    :param perc: Tree cover percentage threshold to define forest
-    (online used if fcc_source="gcf").
-
-    :param gdrive_remote_rclone: Name of the Google Drive remote for rclone.
-
-    :param gdrive_folder: Name of the Google Drive folder to use.
-
-    """
-
-    # Create data_raw directory
-    print("Create data_raw directory")
-    make_dir("data_raw")
-    
-    # Identify continent and country from iso3
-    print("Identify database, continent, and country from iso3")
-    fname = "data_raw/country.osm.pbf"
-    file_run = pkg_resources.resource_filename("forestatrisk",
-                                               "data/ctry_run.csv")
-    data_run = pd.read_csv(file_run, sep=";", header=0)
-    # Check if data is available on Geofabrik
-    if not pd.isna(data_run.ctry_geofab[data_run.iso3 == iso3].iloc[0]):
-        # Database
-        db_osm = "geofab"
-        # Country
-        country = data_run.ctry_geofab[data_run.iso3 == iso3]
-        country = country.iloc[0]
-        # Continent
-        continent = data_run.cont_geofab[data_run.iso3 == iso3]
-        continent = continent.iloc[0]
-        # Download OSM data from Geofabrik
-        url = ["http://download.geofabrik.de/", continent, "/",
-               country, "-latest.osm.pbf"]
-        url = "".join(url)
-        urlretrieve(url, fname)
-    # Else use openstreetmap.fr
-    else:
-        # Database
-        db_osm = "osmfr"
-        # Country
-        country = data_run.ctry_osmfr[data_run.iso3 == iso3]
-        country = country.iloc[0]
-        # Continent
-        continent = data_run.cont_osmfr[data_run.iso3 == iso3]
-        continent = continent.iloc[0]
-        # Download OSM data from openstreetmap.fr
-        url = ["https://download.openstreetmap.fr/extracts/", continent, "/",
-               country, ".osm.pbf"]
-        url = "".join(url)
-        urlretrieve(url, fname)
-
-    # Download the zipfile from gadm.org
-    print("Download GADM data")
-    url = "http://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
-    fname = "data_raw/" + iso3 + "_shp.zip"
-    urlretrieve(url, fname)
-
-    # Extract files from zip
-    print("Extract files from zip")
-    destDir = "data_raw"
-    f = ZipFile(fname)
-    f.extractall(destDir)
-    f.close()
-    print("Files extracted")
-
-    # Reproject
-    cmd = "ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs '" + proj + "' -f 'ESRI Shapefile' \
-    -lco ENCODING=UTF-8 data_raw/ctry_PROJ.shp data_raw/gadm36_" + iso3 + "_0.shp"
-    subprocess.call(cmd, shell=True)
-
-    # Compute extent
-    print("Compute extent")
-    extent_latlong = extent_shp("data_raw/gadm36_" + iso3 + "_0.shp")
-    extent_proj = extent_shp("data_raw/ctry_PROJ.shp")
-
-    # Region with buffer of 5km
-    print("Region with buffer of 5km")
-    xmin_reg = np.floor(extent_proj[0] - 5000)
-    ymin_reg = np.floor(extent_proj[1] - 5000)
-    xmax_reg = np.ceil(extent_proj[2] + 5000)
-    ymax_reg = np.ceil(extent_proj[3] + 5000)
-    extent_reg = (xmin_reg, ymin_reg, xmax_reg, ymax_reg)
-    extent = " ".join(map(str, extent_reg))
-
-    # Tiles for SRTM data
-    print("Tiles for SRTM data")
-    tiles_long, tiles_lat = tiles_srtm(extent_latlong)
-
-    # Google EarthEngine task
-    if (data_forest):
-        if (fcc_source == "jrc"):
-            # Check data availability
-            data_availability = ee_jrc.check(gdrive_remote_rclone,
-                                             gdrive_folder, iso3)
-            # If not available, run GEE
-            if data_availability is False:
-                print("Run Google Earth Engine")
-                task = ee_jrc.run_task(iso3=iso3,
-                                       extent_latlong=extent_latlong,
-                                       scale=30,
-                                       proj=proj,
-                                       gdrive_folder=gdrive_folder)
-                print("GEE running on the following extent:")
-                print(str(extent_latlong))
-
-    # Call data_country.sh
-    if (data_country):
-        script = pkg_resources.resource_filename("forestatrisk",
-                                                 "shell/data_country.sh")
-        args = ["sh ", script, db_osm, continent, country, iso3,
-                "'" + proj + "'",
-                "'" + extent + "'", tiles_long, tiles_lat]
-        cmd = " ".join(args)
-        subprocess.call(cmd, shell=True)
-
-    # Forest computations
-    if (data_forest):
-        if (fcc_source == "jrc"):
-            # Download Google EarthEngine results
-            print("Download Google Earth Engine results locally")
-            ee_jrc.download(gdrive_remote_rclone,
-                            gdrive_folder,
-                            iso3,
-                            output_dir="data_raw")
-            # Call forest_country.sh
-            print("Forest computations")
-            script = pkg_resources.resource_filename("forestatrisk",
-                                                     "shell/forest_country.sh")
-            args = ["sh ", script, "'" + proj + "'", "'" + extent + "'"]
-            cmd = " ".join(args)
-            subprocess.call(cmd, shell=True)
-
-    # Delete data_raw
-    if (keep_data_raw is False):
-        for root, dirs, files in os.walk("data_raw", topdown=False):
-            for name in files:
-                os.remove(os.path.join(root, name))
-            for name in dirs:
-                os.rmdir(os.path.join(root, name))
-
-
-# country_run_GEE
-def country_run_GEE(iso3, proj="EPSG:3395",
-                    output_dir="data_raw",
-                    keep_dir=True,
-                    fcc_source="jrc", perc=50,
-                    gdrive_remote_rclone=None,
-                    gdrive_folder=None):
-    """Compute the forest rasters per country with GEE and have them
-    ready on Google Drive.
+# country_forest_run
+def country_forest_run(iso3, proj="EPSG:3395",
+                       output_dir="data_raw",
+                       keep_dir=True,
+                       fcc_source="jrc", perc=50,
+                       gdrive_remote_rclone=None,
+                       gdrive_folder=None):
+    """Compute forest rasters per country and export them to Google Drive
+    with Google Earth Engine.
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
@@ -284,7 +114,7 @@ def country_run_GEE(iso3, proj="EPSG:3395",
     data). Default to "jrc".
 
     :param perc: Tree cover percentage threshold to define forest
-    (online used if fcc_source="gcf").
+    (online used if fcc_source="gfc").
 
     :param gdrive_remote_rclone: Name of the Google Drive remote for rclone.
 
@@ -334,14 +164,14 @@ def country_run_GEE(iso3, proj="EPSG:3395",
             print(str(extent_latlong))
 
 
-# country_forest_GEE
-def country_forest_GEE(iso3,
-                   gdrive_remote_rclone,
-                   gdrive_folder,
-                   output_dir=os.getcwd()):
-    """Download forest-cover data from Google Drive.
+# country_forest_download
+def country_forest_download(iso3,
+                            gdrive_remote_rclone,
+                            gdrive_folder,
+                            output_dir=os.getcwd()):
+    """Download forest cover data from Google Drive.
 
-    Download forest-cover data from Google Drive in the current
+    Download forest cover data from Google Drive in the current
     working directory. Print a message if the file is not available.
 
     RClone program is needed: https://rclone.org.
@@ -350,7 +180,7 @@ def country_forest_GEE(iso3,
 
     :param gdrive_remote_rclone: Google Drive remote name in rclone.
 
-    :param gdrive_folder: the Google Drive folder to look in.
+    :param gdrive_folder: the Google Drive folder to download from.
 
     :param output_dir: Output directory to download files to. Default
     to current working directory.
@@ -556,5 +386,125 @@ def country_gadm(iso3, output_dir=os.getcwd()):
         f = ZipFile(fname)
         f.extractall(destDir)
         f.close()
+
+
+# country_download
+def country_download(iso3,
+                     gdrive_remote_rclone, gdrive_folder,
+                     output_dir=os.getcwd()):
+    """Function to download data for a specific country.
+
+    Function to download all the data for a specific country. It
+    includes GADM, SRTM, WDPA, OSM and GEE forest data.
+
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :param gdrive_remote_rclone: Google Drive remote name in rclone.
+
+    :param gdrive_folder: the Google Drive folder to download from.
+
+    :param output_dir: Directory where data is downloaded. Default to
+    current working directory.
+
+    """
+
+    # Message
+    print("Downloading data for country " + iso3)
+
+    # Create directory
+    make_dir(output_dir)
+
+    # GADM
+    country_gadm(iso3=iso3, output_dir=output_dir)
+
+    # SRTM
+    country_srtm(iso3=iso3, output_dir=output_dir)
+    
+    # WDPA
+    country_wdpa(iso3=iso3, output_dir=output_dir)
+
+    # OSM
+    country_osm(iso3=iso3, output_dir=output_dir)
+
+    # Forest
+    country_forest_download(iso3=iso3,
+        gdrive_remote_rclone=gdrive_remote_rclone,
+        gdrive_folder=gdrive_folder,
+        output_dir=output_dir)
+
+
+# country_compute
+def country_compute(iso3,
+                    temp_dir="data_raw",
+                    output_dir="data",
+                    proj="EPSG:3395",
+                    data_country=True,
+                    data_forest=True,
+                    keep_temp_dir=False):
+    """Function computing and formatting country data.
+
+    This function computes and formats the country data. Computations
+    are done in a temporary directory where data have been downloaded
+    (default to "data_raw"). Then data are copied to an output
+    directory (default to "data").
+
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :param temp_dir: Temporary directory for computation.
+
+    :param output_dir: Output directory. 
+
+    :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
+    GDAL/OGR. Default to "EPSG:3395" (World Mercator).
+
+    :param data_country: Boolean for running data_country.sh to
+    compute country variables. Default to "True".
+
+    :param data_forest: Boolean for running data_forest.sh to
+    compute forest landscape variables. Default to "True".
+
+    :param keep_temp_dir: Boolean to keep the temporary directory. Default
+    to "False".
+
+    """
+
+    # Reproject GADM
+    cmd = "ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs '" + proj + "' -f 'ESRI Shapefile' \
+    -lco ENCODING=UTF-8 " + temp_dir + "/ctry_PROJ.shp " + temp_dir + "/gadm36_" + iso3 + "_0.shp"
+    subprocess.call(cmd, shell=True)
+
+    # Compute extent
+    print("Compute extent")
+    extent_latlong = extent_shp(temp_dir + "/gadm36_" + iso3 + "_0.shp")
+    extent_proj = extent_shp(temp_dir + "/ctry_PROJ.shp")
+
+    # Region with buffer of 5km
+    print("Region with buffer of 5km")
+    xmin_reg = np.floor(extent_proj[0] - 5000)
+    ymin_reg = np.floor(extent_proj[1] - 5000)
+    xmax_reg = np.ceil(extent_proj[2] + 5000)
+    ymax_reg = np.ceil(extent_proj[3] + 5000)
+    extent_reg = (xmin_reg, ymin_reg, xmax_reg, ymax_reg)
+    extent = " ".join(map(str, extent_reg))
+
+    # Call data_country.sh
+    if (data_country):
+        script = pkg_resources.resource_filename("forestatrisk",
+                                                 "shell/data_country.sh")
+        args = ["sh ", script, iso3, "'" + proj + "'", "'" + extent + "'", temp_dir, output_dir]
+        cmd = " ".join(args)
+        subprocess.call(cmd, shell=True)
+
+    # Call forest_country.sh
+    if (data_forest):
+        script = pkg_resources.resource_filename("forestatrisk",
+                                                 "shell/forest_country.sh")
+        args = ["sh ", script, "'" + proj + "'", "'" + extent + "'", temp_dir, output_dir]
+        cmd = " ".join(args)
+        subprocess.call(cmd, shell=True)
+
+    # Keep or remove directory
+    if not keep_temp_dir:
+        rmtree(temp_dir, ignore_errors=True)
 
 # End
