@@ -168,7 +168,7 @@ def country_forest_run(iso3, proj="EPSG:3395",
 def country_forest_download(iso3,
                             gdrive_remote_rclone,
                             gdrive_folder,
-                            output_dir=os.getcwd()):
+                            output_dir="."):
     """Download forest cover data from Google Drive.
 
     Download forest cover data from Google Drive in the current
@@ -213,7 +213,7 @@ def country_forest_download(iso3,
 
 
 # country_wdpa
-def country_wdpa(iso3, output_dir=os.getcwd()):
+def country_wdpa(iso3, output_dir="."):
     """Function to download the protected areas per country.
 
     Protected areas comes from the World Database on Protected Areas
@@ -238,7 +238,7 @@ def country_wdpa(iso3, output_dir=os.getcwd()):
 
 
 # country_osm
-def country_osm(iso3, output_dir=os.getcwd()):
+def country_osm(iso3, output_dir="."):
     """Function to download OSM data for a country.
 
     Function to download OpenStreetMap data from Geofabrik for a
@@ -290,7 +290,7 @@ def country_osm(iso3, output_dir=os.getcwd()):
 
 
 # country_srtm
-def country_srtm(iso3, output_dir=os.getcwd()):
+def country_srtm(iso3, output_dir="."):
     """Function to download SRTM data for a country.
 
     Function to download SRTM data (Shuttle Radar Topographic Mission
@@ -356,7 +356,7 @@ def country_srtm(iso3, output_dir=os.getcwd()):
 
 
 # country_gadm
-def country_gadm(iso3, output_dir=os.getcwd()):
+def country_gadm(iso3, output_dir="."):
     """Function to download GADM data for a country.
 
     Function to download GADM (Global Administrative Areas) for a
@@ -391,7 +391,7 @@ def country_gadm(iso3, output_dir=os.getcwd()):
 # country_download
 def country_download(iso3,
                      gdrive_remote_rclone, gdrive_folder,
-                     output_dir=os.getcwd()):
+                     output_dir="."):
     """Function to download data for a specific country.
 
     Function to download all the data for a specific country. It
