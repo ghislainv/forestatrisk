@@ -16,7 +16,7 @@ import os
 from shutil import rmtree
 from osgeo import ogr
 from glob import glob # To explore files in a folder
-from . import ee_jrc
+from . import ee_jrc, ee_gfc
 from zipfile import ZipFile  # To unzip files
 from pywdpa import get_wdpa
 import pandas as pd
@@ -114,7 +114,7 @@ def country_forest_run(iso3, proj="EPSG:3395",
     data). Default to "jrc".
 
     :param perc: Tree cover percentage threshold to define forest
-    (online used if fcc_source="gfc").
+    (only used if fcc_source="gfc").
 
     :param gdrive_remote_rclone: Name of the Google Drive remote for rclone.
 
@@ -147,7 +147,7 @@ def country_forest_run(iso3, proj="EPSG:3395",
     if not keep_dir:
         rmtree(output_dir, ignore_errors=True)
 
-    # Google EarthEngine task
+    # Google Earth Engine task
     if (fcc_source == "jrc"):
         # Check data availability
         data_availability = ee_jrc.check(gdrive_remote_rclone,
@@ -156,6 +156,20 @@ def country_forest_run(iso3, proj="EPSG:3395",
         if data_availability is False:
             print("Run Google Earth Engine")
             task = ee_jrc.run_task(iso3=iso3,
+                                   extent_latlong=extent_latlong,
+                                   scale=30,
+                                   proj=proj,
+                                   gdrive_folder=gdrive_folder)
+            print("GEE running on the following extent:")
+            print(str(extent_latlong))
+    if (fcc_source == "gfc"):
+        # Check data availability
+        data_availability = ee_gfc.check(gdrive_remote_rclone,
+                                         gdrive_folder, iso3)
+        # If not available, run GEE
+        if data_availability is False:
+            print("Run Google Earth Engine")
+            task = ee_gfc.run_task(perc=perc, iso3=iso3,
                                    extent_latlong=extent_latlong,
                                    scale=30,
                                    proj=proj,
@@ -233,8 +247,10 @@ def country_wdpa(iso3, output_dir="."):
     # Check for existing data
     fname = output_dir + "/pa_" + iso3 + ".shp"
     if os.path.isfile(fname) is not True:
-        # Download WDPA
-        get_wdpa(iso3, output_dir)
+        owd = os.getcwd()
+        os.chdir(output_dir)
+        get_wdpa(iso3)
+        os.chdir(owd)
 
 
 # country_osm

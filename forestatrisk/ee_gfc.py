@@ -9,26 +9,6 @@
 # license         :GPLv3
 # ==============================================================================
 
-# Annual product legend
-# 1. Undisturbed moist tropical forest
-# 2. Moist forest within the plantation area
-# 3. NEW degradation
-# 4. Ongoing degradation (disturbances still detected - can be few years after
-#    first degrad if long degrad)
-# 5. Degraded forest (former degradation, no disturbances detected anymore)
-# 6. NEW deforestation (may follow degradation)
-# 7. Ongoing deforestation (disturbances still detected)
-# 8. NEW Regrowth
-# 9. Regrowthing
-# 10. Other land cover (not water)
-# 11. Permanent Water (pekel et al. 2015)
-# 12. Seasonal Water (pekel et al. 2015)
-# 13. Nodata (beginning of the archive) but evergreen forest later
-# 14. Nodata (after the initial period) but evergreen forest later
-# 15. Nodata but other land cover later
-# 16. Nodata within the plantation area (comme val 2 mais nodata)
-# 17. Bamboo dominated forest
-
 # Imports
 from __future__ import division, print_function  # Python 3 compatibility
 import ee
@@ -37,19 +17,21 @@ import subprocess
 from os import getcwd
 
 
-# ee_jrc.run_task
-def run_task(iso3, extent_latlong, scale=30, proj=None,
+# ee_gfc.run_task
+def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
              gdrive_folder=None):
     """Compute forest-cover change with Google EarthEngine.
 
-    Compute the forest-cover change from JRC Vancutsem et al. data
-    with Python and GEE API. Export the results to Google Drive.
+    Compute the forest-cover change from Global Forest Change Hansen
+    et al. data with Python and GEE API. Export the results to Google
+    Drive.
 
     Notes for GOOGLE EARTH ENGINE (abbreviated GEE):
     - GEE account is needed: https://earthengine.google.com.
     - GEE API Python client is needed: \
     https://developers.google.com/earth-engine/python_install.
 
+    :param perc: Tree cover percentage threshold to define forest.
     :param iso3: Country ISO 3166-1 alpha-3 code.
     :param extent_latlong: List/tuple of region extent in lat/long
     (xmin, ymin, xmax, ymax).
@@ -67,42 +49,27 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     region = region.buffer(10000).bounds()
     export_coord = region.getInfo()["coordinates"]
 
-    # Path to JRC products
-    #path = "users/ghislainv/jrc/"
+    # Hansen map
+    gfc = ee.Image("UMD/hansen/global_forest_change_2018_v1_6").clip(region)
 
-    # JRC annual product (AP)
-    #AP = ee.ImageCollection(path + "AnnualChanges1982_2018")
-    AP = ee.ImageCollection(
-        "users/ClassifLandsat072015/Roadless36y/AnnualChanges1982_2018")
-    AP = AP.mosaic().toByte().clip(region)
+    # Tree cover, loss, and gain
+    treecover = gfc.select(["treecover2000"])
+    lossyear = gfc.select(["lossyear"])
 
-    # ap_allYear: forest if Y = 1, 4, 5, 13 or 14.
-    AP_forest = AP.where(AP.eq(3).Or(AP.eq(4)).Or(
-        AP.eq(5)).Or(AP.eq(13)).Or(AP.eq(14)), 1)
-    ap_allYear = AP_forest.where(AP_forest.neq(1), 0)
+    # Forest in 2000
+    forest2000 = treecover.gte(perc)
+    forest2000 = forest2000.toByte()
 
-    # Forest in Jan 2019
-    forest2019 = ap_allYear.select(36)
+    # Deforestation
+    loss01_04 = lossyear.gte(1).And(lossyear.lte(4))
+    loss01_09 = lossyear.gte(1).And(lossyear.lte(9))
+    loss01_14 = lossyear.gte(1).And(lossyear.lte(14))
 
-    # Forest cover Jan 2015
-    ap_2015_2019 = ap_allYear.select(list(range(32, 37)))
-    forest2015 = ap_2015_2019.reduce(ee.Reducer.sum())
-    forest2015 = forest2015.gte(1)
-
-    # Forest cover Jan 2010
-    ap_2010_2019 = ap_allYear.select(list(range(27, 37)))
-    forest2010 = ap_2010_2019.reduce(ee.Reducer.sum())
-    forest2010 = forest2010.gte(1)
-
-    # Forest cover Jan 2005
-    ap_2005_2019 = ap_allYear.select(list(range(22, 37)))
-    forest2005 = ap_2005_2019.reduce(ee.Reducer.sum())
-    forest2005 = forest2005.gte(1)
-
-    # Forest cover Jan 2000
-    ap_2000_2019 = ap_allYear.select(list(range(17, 37)))
-    forest2000 = ap_2000_2019.reduce(ee.Reducer.sum())
-    forest2000 = forest2000.gte(1)
+    # Forest
+    forest2005 = forest2000.where(loss01_04.eq(1), 0)
+    forest2010 = forest2000.where(loss01_09.eq(1), 0)
+    forest2015 = forest2000.where(loss01_14.eq(1), 0)
+    forest2019 = forest2000.where(lossyear.gte(1), 0)
 
     # Forest raster with five bands
     forest = forest2000.addBands(forest2005).addBands(
@@ -134,7 +101,7 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     return(task)
 
 
-# ee_jrc.check
+# ee_gfc.check
 def check(gdrive_remote_rclone, gdrive_folder, iso3):
     """Function to check if the forest cover data are already present in
     the Google Drive folder.
@@ -166,7 +133,7 @@ def check(gdrive_remote_rclone, gdrive_folder, iso3):
     return(present_in_folder)
 
 
-# ee_jrc.download
+# ee_gfc.download
 def download(gdrive_remote_rclone,
              gdrive_folder,
              iso3,
