@@ -9,10 +9,11 @@
 # ==============================================================================
 
 # Variables
-proj=$1
-extent=$2
-temp_dir=$3
-output_dir=$4
+iso=$1
+proj=$2
+extent=$3
+temp_dir=$4
+output_dir=$5
 
 # Working directory
 cd $temp_dir
@@ -31,7 +32,7 @@ echo "Forest data obtained with Google Earth Engine\n"
 # Message
 echo "Mosaicing and reprojecting\n"
 # Mosaicing
-gdalbuildvrt forest.vrt forest_*.tif
+gdalbuildvrt forest.vrt forest_$iso*.tif
 # Remove RGBA interpretation of the four bands
 gdal_translate -co "PHOTOMETRIC=MINISBLACK" -co "ALPHA=NO" \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \

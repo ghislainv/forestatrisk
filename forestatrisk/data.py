@@ -515,7 +515,7 @@ def country_compute(iso3,
     if (data_forest):
         script = pkg_resources.resource_filename("forestatrisk",
                                                  "shell/forest_country.sh")
-        args = ["sh ", script, "'" + proj + "'", "'" + extent + "'", temp_dir, output_dir]
+        args = ["sh ", script, iso3, "'" + proj + "'", "'" + extent + "'", temp_dir, output_dir]
         cmd = " ".join(args)
         subprocess.call(cmd, shell=True)
 
