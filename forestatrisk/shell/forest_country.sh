@@ -101,7 +101,7 @@ gdal_calc.py --overwrite -A forest_t1_src.tif -B forest_t2_src.tif \
              --outfile=fcc12_src.tif --type=Byte \
              --calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=255
+             --NoDataValue=255 --quiet
 
 # Compute distance
 gdal_proximity.py fcc12_src.tif _dist_defor_src.tif \
@@ -113,7 +113,7 @@ gdal_calc.py --overwrite -A _dist_defor_src.tif -B forest_t2_src.tif \
              --outfile=dist_defor.tif --type=UInt32 \
              --calc="A*(B==1)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=0
+             --NoDataValue=0 --quiet
 
 # gdal_translate -a_nodata 0 \
 #                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
@@ -127,7 +127,7 @@ gdal_calc.py --overwrite -A forest_t2_src.tif -B forest_t3_src.tif \
              --outfile=fcc23_src.tif --type=Byte \
              --calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=255
+             --NoDataValue=255 --quiet
 
 # Compute distance
 gdal_proximity.py fcc23_src.tif _dist_defor_src.tif \
@@ -139,7 +139,7 @@ gdal_calc.py --overwrite -A _dist_defor_src.tif -B forest_t3_src.tif \
              --outfile=dist_defor_forecast.tif --type=UInt32 \
              --calc="A*(B==1)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=0
+             --NoDataValue=0 --quiet
 
 # gdal_translate -a_nodata 0 \
 #                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
