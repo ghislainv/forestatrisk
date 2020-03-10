@@ -38,7 +38,7 @@ gdal_translate -co "PHOTOMETRIC=MINISBLACK" -co "ALPHA=NO" \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                forest.vrt forest_norgba.tif
 # Reprojecting
-gdalwarp -te $extent -tap -t_srs "$proj" \
+gdalwarp -overwrite -te $extent -tap -t_srs "$proj" \
          -tr 30 30 -r near \
          -co "PHOTOMETRIC=MINISBLACK" -co "ALPHA=NO" \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
