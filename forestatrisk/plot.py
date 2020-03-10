@@ -203,7 +203,8 @@ def fcc(input_fcc_raster,
         output_file="fcc.png",
         borders=None,
         zoom=None,
-        col=(227, 26, 28, 255),
+        col_for=(51, 160, 44, 255),
+        col_defor=(227, 26, 28, 255),
         figsize=(11.69, 8.27),
         dpi=300, **kwargs):
     """Plot forest-cover change (fcc) map.
@@ -216,7 +217,8 @@ def fcc(input_fcc_raster,
     :param output_file: name of the plot file.
     :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
-    :param col: rgba color for deforestation.
+    :param col_for: rgba color for forest. Defaut to forest green.
+    :param col_defor: rgba color for deforestation. Default to red.
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
 
@@ -256,9 +258,10 @@ def fcc(input_fcc_raster,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    col = tuple(np.array(col) / cmax)
-    colors.append(col)  # default is red
-    colors.append((51 / cmax, 160 / cmax, 44 / cmax, 1))  # forest green
+    col_defor = tuple(np.array(col_defor) / cmax)
+    col_for = tuple(np.array(col_for) / cmax)
+    colors.append(col_defor)
+    colors.append(col_for)
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
