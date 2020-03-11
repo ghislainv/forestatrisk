@@ -201,6 +201,7 @@ def correlation(y, data,
 # plot.fcc
 def fcc(input_fcc_raster,
         output_file="fcc.png",
+        addo=False,
         borders=None,
         zoom=None,
         col_for=(51, 160, 44, 255),
@@ -215,6 +216,7 @@ def fcc(input_fcc_raster,
 
     :param input_fcc_raster: path to fcc raster.
     :param output_file: name of the plot file.
+    :param addo: builds overview and use it for plot.
     :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param col_for: rgba color for forest. Defaut to forest green.
@@ -240,15 +242,19 @@ def fcc(input_fcc_raster,
     extent = [Xmin, Xmax, Ymin, Ymax]
 
     # Overviews
-    if (rasterB.GetOverviewCount() == 0):
-        # Build overviews
-        print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
-        rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
+    if addo is True:
+        if (rasterB.GetOverviewCount() == 0):
+            # Build overviews
+            print("Build overview")
+            gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+            rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
+        # Get data from finest overview
+        ov_band = rasterB.GetOverview(0)
+        ov_arr = ov_band.ReadAsArray()
+    else:
+        ov_arr = rasterB.ReadAsArray()
 
-    # Get data from finest overview
-    ov_band = rasterB.GetOverview(0)
-    ov_arr = ov_band.ReadAsArray()
+    # Change nodata values
     ov_arr[ov_arr == rasterND] = 2
 
     # Dereference driver
@@ -398,6 +404,7 @@ def differences(input_raster,
 # plot.forest
 def forest(input_forest_raster,
            output_file="forest.png",
+           addo=False,
            borders=None,
            zoom=None,
            figsize=(11.69, 8.27),
@@ -408,6 +415,7 @@ def forest(input_forest_raster,
 
     :param input_forest_raster: path to forest raster.
     :param output_file: name of the plot file.
+    :param addo: builds overview and use it for plot.
     :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param figsize: figure size in inches.
@@ -431,15 +439,19 @@ def forest(input_forest_raster,
     extent = [Xmin, Xmax, Ymin, Ymax]
 
     # Overviews
-    if (rasterB.GetOverviewCount() == 0):
-        # Build overviews
-        print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
-        rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
+    if addo is True:
+        if (rasterB.GetOverviewCount() == 0):
+            # Build overviews
+            print("Build overview")
+            gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+            rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
+        # Get data from finest overview
+        ov_band = rasterB.GetOverview(0)
+        ov_arr = ov_band.ReadAsArray()
+    else:
+        ov_arr = rasterB.ReadAsArray()
 
-    # Get data from finest overview
-    ov_band = rasterB.GetOverview(0)
-    ov_arr = ov_band.ReadAsArray()
+    # Change nodata values
     ov_arr[ov_arr == rasterND] = 2
 
     # Dereference driver
@@ -488,6 +500,7 @@ def forest(input_forest_raster,
 # plot.prob
 def prob(input_prob_raster,
          output_file="prob.png",
+         addo=False,
          borders=None,
          zoom=None,
          legend=False,
@@ -499,6 +512,7 @@ def prob(input_prob_raster,
 
     :param input_prob_raster: path to raster of probabilities.
     :param output_file: name of the plot file.
+    :param addo: builds overview and use it for plot.
     :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param legend: add colorbar if True.
@@ -523,15 +537,17 @@ def prob(input_prob_raster,
     extent = [Xmin, Xmax, Ymin, Ymax]
 
     # Overviews
-    if rasterB.GetOverviewCount() == 0:
-        # Build overviews
-        print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
-        rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
-
-    # Get data from finest overview
-    ov_band = rasterB.GetOverview(0)
-    ov_arr = ov_band.ReadAsArray()
+    if addo is True:
+        if (rasterB.GetOverviewCount() == 0):
+            # Build overviews
+            print("Build overview")
+            gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+            rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
+        # Get data from finest overview
+        ov_band = rasterB.GetOverview(0)
+        ov_arr = ov_band.ReadAsArray()
+    else:
+        ov_arr = rasterB.ReadAsArray()
 
     # Dereference driver
     rasterB = None
