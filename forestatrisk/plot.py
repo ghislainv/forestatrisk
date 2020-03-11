@@ -563,7 +563,7 @@ def prob(input_prob_raster,
     colors.append((52429 / vmax, (1, 0, 0, 1)))  # red, p=0.80
     colors.append((1, (0, 0, 0, 1)))  # black
     color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
-                                                  N=65536, gamma=1.0)
+                                                  N=65535, gamma=1.0)
 
     # Plot raster
     fig = plt.figure(figsize=figsize, dpi=dpi)
