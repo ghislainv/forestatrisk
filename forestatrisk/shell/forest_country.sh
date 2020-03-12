@@ -105,19 +105,13 @@ gdal_calc.py --overwrite -A forest_t1_src.tif -B forest_t2_src.tif \
 
 # Compute distance
 gdal_proximity.py fcc12_src.tif _dist_defor_src.tif \
+		  -co 'COMPRESS=LZW' -co 'PREDICTOR=2' -co 'BIGTIFF=YES' \
                   -values 0 -ot UInt32 -distunits GEO -use_input_nodata YES \
-                  -nodata 4294967295
+                  -nodata 0
 
-# Mask with forest_t2_src.tif
-gdal_calc.py --overwrite -A _dist_defor_src.tif -B forest_t2_src.tif \
-             --outfile=dist_defor.tif --type=UInt32 \
-             --calc="A*(B==1)" \
-             --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=0 --quiet
-
-# gdal_translate -a_nodata 0 \
-#                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-#                _dist_defor.tif dist_defor.tif
+gdal_translate -a_nodata 0 \
+               -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+               _dist_defor_src.tif dist_defor.tif
 
 # Message
 echo "Computing distance to past deforestation at t3 for forecasting\n"
@@ -131,19 +125,13 @@ gdal_calc.py --overwrite -A forest_t2_src.tif -B forest_t3_src.tif \
 
 # Compute distance
 gdal_proximity.py fcc23_src.tif _dist_defor_src.tif \
+		  -co 'COMPRESS=LZW' -co 'PREDICTOR=2' -co 'BIGTIFF=YES' \
                   -values 0 -ot UInt32 -distunits GEO -use_input_nodata YES \
-                  -nodata 4294967295
+                  -nodata 0
 
-# Mask with forest_t3_src.tif
-gdal_calc.py --overwrite -A _dist_defor_src.tif -B forest_t3_src.tif \
-             --outfile=dist_defor_forecast.tif --type=UInt32 \
-             --calc="A*(B==1)" \
-             --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=0 --quiet
-
-# gdal_translate -a_nodata 0 \
-#                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-#                _dist_defor.tif dist_defor.tif
+gdal_translate -a_nodata 0 \
+               -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
+               _dist_defor_src.tif dist_defor_forecast.tif
 
 # =====
 # 3. Forest-cover change rasters
