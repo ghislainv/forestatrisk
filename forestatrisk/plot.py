@@ -204,7 +204,7 @@ def fcc(input_fcc_raster,
         addo=False,
         borders=None,
         zoom=None,
-        col_for=(51, 160, 44, 255),
+        col_for=(34, 139, 34, 255),
         col_defor=(227, 26, 28, 255),
         figsize=(11.69, 8.27),
         dpi=300, **kwargs):
@@ -361,7 +361,7 @@ def differences(input_raster,
     # 00: true positive (red)
     colors.append((227 / cmax, 26 / cmax, 28 / cmax, 1))
     # 11: true negative (forest green)
-    colors.append((51 / cmax, 160 / cmax, 44 / cmax, 1))
+    colors.append((34 / cmax, 139 / cmax, 34 / cmax, 1))
     # 10: false negative (light blue)
     colors.append((65 / cmax, 105 / cmax, 225 / cmax, 1))
     # 01: false positive (navy blue)
@@ -461,7 +461,7 @@ def forest(input_forest_raster,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    colors.append((51 / cmax, 160 / cmax, 44 / cmax, 1))  # forest green
+    colors.append((34 / cmax, 139 / cmax, 34 / cmax, 1))  # forest green
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
@@ -560,7 +560,7 @@ def prob(input_prob_raster,
     colors.append((0, (34 / cmax, 139 / cmax, 34 / cmax, 1)))  # green
     colors.append((1 / vmax, (34 / cmax, 139 / cmax, 34 / cmax, 1)))  # green
     colors.append((39322 / vmax, (1, 165 / cmax, 0, 1)))  # orange, p=0.60
-    colors.append((52429 / vmax, (1, 0, 0, 1)))  # red, p=0.80
+    colors.append((52429 / vmax, (227 / cmax, 26 / cmax, 28 / cmax, 1)))  # red, p=0.80
     colors.append((1, (0, 0, 0, 1)))  # black
     color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
                                                   N=65535, gamma=1.0)
@@ -650,7 +650,7 @@ def obs(sample,
     colors = []
     cmax = 255.0  # float for division
     colors.append((227 / cmax, 26 / cmax, 28 / cmax, 1))  # red
-    colors.append((51 / cmax, 160 / cmax, 44 / cmax, 1))  # forest green
+    colors.append((34 / cmax, 139 / cmax, 34 / cmax, 1))  # forest green
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
