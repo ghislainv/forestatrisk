@@ -149,13 +149,22 @@ gdal_calc.py --overwrite -A fcc23_src.tif -B ctry_PROJ.tif \
              --NoDataValue=255 --quiet
 
 ## fcc13
-# Create raster fcc13_src.tif
+# Create raster fcc13.tif
 # Raster is directly masked with country border 
 gdal_calc.py --overwrite -A forest_t1_src.tif -B forest_t3_src.tif -C ctry_PROJ.tif \
              --outfile=fcc13.tif --type=Byte \
              --calc="255-254*(A==1)*(B==1)*(C==1)-255*(A==1)*(B==0)*(C==1)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=255 --quiet
+
+## fcc123
+# Create raster fcc123.tif (0: nodata, 1: for2000, 2: for2010, 3: for2019)
+# Raster is directly masked with country border 
+gdal_calc.py --overwrite -A forest_t1_src.tif -B forest_t2_src.tif -C forest_t3_src.tif -D ctry_PROJ.tif \
+             --outfile=fcc123.tif --type=Byte \
+             --calc="1*(A==1)*(B==1)*(C==1)*(D==1)+2*(A==0)*(B==1)*(C==1)*(D==1)+3*(A==0)*(B==0)*(C==1)*(D==1)" \
+             --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
+             --NoDataValue=0 --quiet
 
 # =====
 # 4. Cropping forest rasters
