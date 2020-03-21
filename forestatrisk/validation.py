@@ -31,6 +31,7 @@ def computeAUC(pos_scores, neg_scores, n_sample=100000):
     :return: AUC value.
 
     """
+    
     pos_scores = np.array(pos_scores, dtype=np.float)
     neg_scores = np.array(neg_scores, dtype=np.float)
     pos_sample = np.random.choice(pos_scores, size=n_sample, replace=True)
