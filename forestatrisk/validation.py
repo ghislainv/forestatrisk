@@ -17,6 +17,29 @@ from osgeo import gdal
 from .miscellaneous import progress_bar, makeblock
 
 
+# AUC (see Liu 2011)
+def computeAUC(pos_scores, neg_scores, n_sample=100000):
+    """Compute the AUC index.
+
+    Compute the Area Under the ROC Curve (AUC). See Liu et al. 2011
+    <10.1111/j.1600-0587.2010.06354.x>.
+
+    :param pos_scores: scores of positive observations.
+    :param neg_scores: scores of negative observations.
+    :param n_samples: number of samples to approximate AUC.
+
+    :return: AUC value.
+
+    """
+    pos_scores = np.array(pos_scores, dtype=np.float)
+    neg_scores = np.array(neg_scores, dtype=np.float)
+    pos_sample = np.random.choice(pos_scores, size=n_sample, replace=True)
+    neg_sample = np.random.choice(neg_scores, size=n_sample, replace=True)
+    AUC = np.mean(1.0*(pos_sample > neg_sample) + 0.5*(pos_sample == neg_sample))
+    
+    return AUC
+
+
 # Accuracy_indices
 def accuracy_indices(pred, obs):
     """Compute accuracy indices.
@@ -28,6 +51,7 @@ def accuracy_indices(pred, obs):
 
     :param pred: list of predictions.
     :param obs: list of observations.
+
     :return: a dictionnary of accuracy indices.
 
     """
@@ -75,6 +99,7 @@ def validation(pred, obs, blk_rows=128):
     :param pred: raster of predicted fcc.
     :param obs: raster of observed fcc.
     :param blk_rows: if > 0, number of rows for block (else 256x256).
+
     :return: a dictionnary of accuracy indices.
 
     """
