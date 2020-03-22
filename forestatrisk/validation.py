@@ -14,7 +14,11 @@ from __future__ import division, print_function  # Python 3 compatibility
 import numpy as np
 import pandas as pd
 from osgeo import gdal
+from patsy import dmatrices
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from .miscellaneous import progress_bar, makeblock
+from .model_binomial_iCAR import model_binomial_iCAR
 
 
 # AUC (see Liu 2011)
@@ -41,7 +45,7 @@ def computeAUC(pos_scores, neg_scores, n_sample=100000):
     return AUC
 
 
-# Accuracy_indices
+# accuracy_indices
 def accuracy_indices(pred, obs):
     """Compute accuracy indices.
 
@@ -78,16 +82,129 @@ def accuracy_indices(pred, obs):
     Expected_accuracy = (Prob_1and1 + Prob_0and0) / (N * N)
     Kappa = (OA - Expected_accuracy) / (1 - Expected_accuracy)
 
-    r = {"OA": round(OA, 2), "EA": round(Expected_accuracy, 2),
-         "FOM": round(FOM, 2),
-         "Sen": round(Sensitivity, 2),
-         "Spe": round(Specificity, 2),
-         "TSS": round(TSS, 2), "K": round(Kappa, 2)}
+    r = {"OA": OA, "EA": Expected_accuracy,
+         "FOM": FOM, "Sen": Sensitivity, "Spe": Specificity,
+         "TSS": TSS, "K": Kappa}
 
     return(r)
 
 
-# Validation
+# cross_validation
+def cross_validation(data, formula, mod_type="icar", ratio=30,
+                     nrep=5, seed=1234,
+                     icar_args={"burnin": 1000, "mcmc": 1000,
+                                "thin": 1, "beta_start": 0}):
+    """Model cross-validation
+
+    Performs model cross-validation. 
+
+    :param data: full dataset.
+    :param formula: model formula.
+    :param mod_type: model type, can be either "icar", "glm", or "RF".
+    :param ratio: percentage of data used for testing.
+    :param nrep: number of repetitions for cross-validation.
+    :param seed: seed for reproducibility.
+    :param icar_args: dictionnary of arguments for the binomial iCAR model.
+
+    :return: A Pandas data frame with cross-validation results.
+
+    """
+
+    # Set random seed for reproducibility
+    np.random.seed(seed)
+    
+    # Result table
+    CV_df = pd.DataFrame({"index": ["AUC", "OA", "EA", "FOM", "Sen", "Spe", "TSS", "K"]})
+    
+    # Constants
+    nobs = dataset.shape[0]
+    nobs_test = int(round(nobs * (ratio / 100)))
+    rows = np.arange(nobs)
+
+    # Loop on repetitions
+    for i in range(nrep):
+        # Print message
+        print("Repetition #: " + str(i+1))
+
+        # Data-sets for cross-validation
+        rows_test = np.random.choice(rows, size=nobs_test, replace=False)
+        rows_train = np.where(np.isin(rows, rows_test, invert=True))
+        data_test = dataset.iloc[rows_test].copy()
+        data_train = dataset.iloc[rows_train].copy()
+
+        # True threshold in data_test (might be slightly different from 0.5)
+        nfor_test = sum(data_test.fcc23==1)
+        ndefor_test = sum(data_test.fcc23==0)
+        thresh_test = 1 - (ndefor_test / nobs_test)
+
+        # Training matrices
+        y, x = dmatrices(formula, data=data_train, NA_action="drop")
+        Y_train = y[:, 0]
+        X_train = x[:, :-1]  # We remove the last column (cells)
+        # Test matrices
+        y, x = dmatrices(formula, data=data_test, NA_action="drop")
+        Y_test = y[:, 0]
+        X_test = x[:, :-1]  # We remove the last column (cells)
+
+        # Compute deforestation probability
+        # icar
+        if (mod_type == "icar"):
+            # Training the model
+            mod_icar = model_binomial_iCAR(
+                # Observations
+                suitability_formula=formula, data=data_train,
+                # Spatial structure
+                n_neighbors=nneigh, neighbors=adj,
+                # Chains
+                burnin=icar_args["burnin"], mcmc=icar_args["mcmc"], thin=icar_args["thin"],
+                # Starting values
+                beta_start=icar_args["beta_start"])
+            # Predictions for the test dataset
+            data_test["theta_pred"] = mod_icar.predict(new_data=data_test)
+        # glm
+        if (mod_type == "glm"):
+            # Training the model
+            glm = LogisticRegression(solver="lbfgs")
+            mod_glm = glm.fit(X_train, Y_train)
+            # Predictions for the test dataset
+            data_test["theta_pred"] = mod_glm.predict_proba(X_test)[:, 1]
+        # RF
+        if (mod_type == "RF"):
+            # Training the model
+            rf = RandomForestClassifier(n_estimators=500, n_jobs=1)
+            mod_rf = rf.fit(X_train, Y_train) 
+            # Predictions for the test dataset
+            data_test["theta_pred"] = mod_rf.predict_proba(X_test)[:, 1]
+
+        # Transform probabilities into binary data
+        proba_thresh = np.quantile(data_test["theta_pred"], thresh_test)
+        data_test["pred"] = 0
+        data_test.loc[data_test.theta_pred > proba_thresh, "pred"] = 1
+
+        # AUC
+        pos_scores = data_test.theta_pred[data_test.fcc23 == 0]
+        neg_scores = data_test.theta_pred[data_test.fcc23 == 1]
+        AUC = round(far.computeAUC(pos_scores, neg_scores), 2)
+        # Accuracy indices
+        obs = 1- data_test.fcc23
+        pred = data_test.pred
+        ai = far.accuracy_indices(obs, pred)
+
+        # Tupple of indices
+        acc_ind = (AUC, ai["OA"], ai["EA"], ai["FOM"], ai["Sen"], ai["Spe"], ai["TSS"], ai["K"])
+
+        # Results as data frame
+        CV_df["rep" + str(i+1)] = acc_ind
+
+    # Mean over repetitions
+    CV_values = CV_df.loc[:, CV_df.columns != "index"]
+    CV_df["mean"] = np.mean(CV_values, axis=1)
+    CV_df.round(4)
+
+    return CV_df
+
+
+# validation
 def validation(pred, obs, blk_rows=128):
     """Compute accuracy indices based on predicted and observed
     forest-cover change (fcc) maps.
