@@ -117,7 +117,7 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
     CV_df = pd.DataFrame({"index": ["AUC", "OA", "EA", "FOM", "Sen", "Spe", "TSS", "K"]})
     
     # Constants
-    nobs = dataset.shape[0]
+    nobs = data.shape[0]
     nobs_test = int(round(nobs * (ratio / 100)))
     rows = np.arange(nobs)
 
@@ -129,8 +129,8 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
         # Data-sets for cross-validation
         rows_test = np.random.choice(rows, size=nobs_test, replace=False)
         rows_train = np.where(np.isin(rows, rows_test, invert=True))
-        data_test = dataset.iloc[rows_test].copy()
-        data_train = dataset.iloc[rows_train].copy()
+        data_test = data.iloc[rows_test].copy()
+        data_train = data.iloc[rows_train].copy()
 
         # True threshold in data_test (might be slightly different from 0.5)
         nfor_test = sum(data_test.fcc23==1)
