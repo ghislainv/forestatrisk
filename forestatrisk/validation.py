@@ -92,7 +92,8 @@ def accuracy_indices(pred, obs):
 # cross_validation
 def cross_validation(data, formula, mod_type="icar", ratio=30,
                      nrep=5, seed=1234,
-                     icar_args={"burnin": 1000, "mcmc": 1000,
+                     icar_args={"n_neighbors": None, "neighbors": None,
+                                "burnin": 1000, "mcmc": 1000,
                                 "thin": 1, "beta_start": 0}):
     """Model cross-validation
 
@@ -154,7 +155,7 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
                 # Observations
                 suitability_formula=formula, data=data_train,
                 # Spatial structure
-                n_neighbors=nneigh, neighbors=adj,
+                n_neighbors=icar_args["n_neighbors"], neighbors=icar_args["neighbors"],
                 # Chains
                 burnin=icar_args["burnin"], mcmc=icar_args["mcmc"], thin=icar_args["thin"],
                 # Starting values
