@@ -185,11 +185,11 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
         # AUC
         pos_scores = data_test.theta_pred[data_test.fcc23 == 0]
         neg_scores = data_test.theta_pred[data_test.fcc23 == 1]
-        AUC = round(far.computeAUC(pos_scores, neg_scores), 2)
+        AUC = round(computeAUC(pos_scores, neg_scores), 2)
         # Accuracy indices
         obs = 1- data_test.fcc23
         pred = data_test.pred
-        ai = far.accuracy_indices(obs, pred)
+        ai = accuracy_indices(obs, pred)
 
         # Tupple of indices
         acc_ind = (AUC, ai["OA"], ai["EA"], ai["FOM"], ai["Sen"], ai["Spe"], ai["TSS"], ai["K"])
