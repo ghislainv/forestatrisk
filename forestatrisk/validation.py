@@ -185,7 +185,7 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
         # AUC
         pos_scores = data_test.theta_pred[data_test.fcc23 == 0]
         neg_scores = data_test.theta_pred[data_test.fcc23 == 1]
-        AUC = round(computeAUC(pos_scores, neg_scores), 2)
+        AUC = computeAUC(pos_scores, neg_scores)
         # Accuracy indices
         obs = 1- data_test.fcc23
         pred = data_test.pred
@@ -200,7 +200,7 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
     # Mean over repetitions
     CV_values = CV_df.loc[:, CV_df.columns != "index"]
     CV_df["mean"] = np.mean(CV_values, axis=1)
-    CV_df.round(4)
+    CV_df = CV_df.round(4)
 
     return CV_df
 

@@ -201,7 +201,7 @@ def correlation(y, data,
 # plot.fcc
 def fcc(input_fcc_raster,
         output_file="fcc.png",
-        addo=False,
+        maxpixels=500000,
         borders=None,
         zoom=None,
         col_for=(34, 139, 34, 255),
@@ -216,7 +216,7 @@ def fcc(input_fcc_raster,
 
     :param input_fcc_raster: path to fcc raster.
     :param output_file: name of the plot file.
-    :param addo: builds overview and use it for plot.
+    :param maxpixels: maximum number of pixels to plot.
     :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param col_for: rgba color for forest. Defaut to forest green.
@@ -241,17 +241,26 @@ def fcc(input_fcc_raster,
     Ymax = gt[3]
     extent = [Xmin, Xmax, Ymin, Ymax]
 
-    # Overviews
-    if addo is True:
-        if (rasterB.GetOverviewCount() == 0):
-            # Build overviews
-            print("Build overview")
-            gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
-            rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
-        # Get data from finest overview
+    # Total number of pixels
+    npixels_orig = ncol * nrow
+    # Check number of pixels is inferior to maxpixels
+    if (npixels_orig > maxpixels):
+        # Find overview level such that npixels <= maxpixels
+        i = 0
+        npixels_ov = npixels_orig
+        while npixels_ov > maxpixels:
+            i += 1
+            ov_level = pow(2, i)
+            npixels_ov = npixels_orig // np.power(ov_level, 2)
+        # Build overview
+        print("Build overview")
+        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        rasterR.BuildOverviews("nearest", [ov_level])
+        # Get data from overview
         ov_band = rasterB.GetOverview(0)
         ov_arr = ov_band.ReadAsArray()
     else:
+        # Get original data
         ov_arr = rasterB.ReadAsArray()
 
     # Change nodata values
@@ -303,108 +312,10 @@ def fcc(input_fcc_raster,
     return(fig)
 
 
-# plot.differences
-def differences(input_raster,
-                output_file="differences.png",
-                borders=None,
-                zoom=None,
-                figsize=(11.69, 8.27),
-                dpi=300, **kwargs):
-    """Plot a map to compare outputs.
-
-    This function plots a map of differences between two rasters of
-    predictions.
-
-    :param input_raster: path to raster of diffeences.
-    :param output_file: name of the plot file.
-    :param borders: vector file to be plotted.
-    :param zoom: zoom to region (xmin, xmax, ymin, ymax).
-    :param figsize: figure size in inches.
-    :param dpi: resolution for output image.
-
-    :return: a Matplotlib figure of the forest map.
-
-    """
-
-    # Load raster and band
-    rasterR = gdal.Open(input_raster, gdal.GA_ReadOnly)
-    rasterB = rasterR.GetRasterBand(1)
-    rasterND = rasterB.GetNoDataValue()
-    gt = rasterR.GetGeoTransform()
-    ncol = rasterR.RasterXSize
-    nrow = rasterR.RasterYSize
-    Xmin = gt[0]
-    Xmax = gt[0] + gt[1] * ncol
-    Ymin = gt[3] + gt[5] * nrow
-    Ymax = gt[3]
-    extent = [Xmin, Xmax, Ymin, Ymax]
-
-    # Overviews
-    if (rasterB.GetOverviewCount() == 0):
-        # Build overviews
-        print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
-        rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
-
-    # Get data from finest overview
-    ov_band = rasterB.GetOverview(0)
-    ov_arr = ov_band.ReadAsArray()
-    ov_arr[ov_arr == rasterND] = 4
-
-    # Dereference driver
-    rasterB = None
-    del(rasterR)
-
-    # Colormap
-    colors = []
-    cmax = 255.0  # float for division
-    # 00: true positive (red)
-    colors.append((227 / cmax, 26 / cmax, 28 / cmax, 1))
-    # 11: true negative (forest green)
-    colors.append((34 / cmax, 139 / cmax, 34 / cmax, 1))
-    # 10: false negative (light blue)
-    colors.append((65 / cmax, 105 / cmax, 225 / cmax, 1))
-    # 01: false positive (navy blue)
-    colors.append((176 / cmax, 216 / cmax, 230 / cmax, 1))
-    colors.append((0, 0, 0, 0))  # transparent
-    color_map = ListedColormap(colors)
-
-    # Plot raster
-    place = 111 if zoom is None else 121
-    fig = plt.figure(figsize=figsize, dpi=dpi)
-    ax1 = plt.subplot(place)
-    ax1.set_frame_on(False)
-    ax1.set_xticks([])
-    ax1.set_yticks([])
-    plt.imshow(ov_arr, cmap=color_map, extent=extent)
-    if borders is not None:
-        plot_layer(borders, symbol="k-", **kwargs)
-    plt.axis("off")
-    if zoom is not None:
-        z = Rectangle(
-            (zoom[0], zoom[2]),
-            zoom[1] - zoom[0],
-            zoom[3] - zoom[2],
-            fill=False
-        )
-        ax1.add_patch(z)
-        ax2 = plt.subplot(222)
-        plt.imshow(ov_arr, cmap=color_map, extent=extent)
-        plt.xlim(zoom[0], zoom[1])
-        plt.ylim(zoom[2], zoom[3])
-        ax2.set_xticks([])
-        ax2.set_yticks([])
-
-    # Save and return figure
-    fig.tight_layout()
-    fig.savefig(output_file, dpi="figure", bbox_inches="tight")
-    return(fig)
-
-
 # plot.forest
 def forest(input_forest_raster,
            output_file="forest.png",
-           addo=False,
+           maxpixels=500000,
            borders=None,
            zoom=None,
            figsize=(11.69, 8.27),
@@ -415,7 +326,7 @@ def forest(input_forest_raster,
 
     :param input_forest_raster: path to forest raster.
     :param output_file: name of the plot file.
-    :param addo: builds overview and use it for plot.
+    :param maxpixels: maximum number of pixels to plot.
     :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param figsize: figure size in inches.
@@ -438,17 +349,26 @@ def forest(input_forest_raster,
     Ymax = gt[3]
     extent = [Xmin, Xmax, Ymin, Ymax]
 
-    # Overviews
-    if addo is True:
-        if (rasterB.GetOverviewCount() == 0):
-            # Build overviews
-            print("Build overview")
-            gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
-            rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
-        # Get data from finest overview
+    # Total number of pixels
+    npixels_orig = ncol * nrow
+    # Check number of pixels is inferior to maxpixels
+    if (npixels_orig > maxpixels):
+        # Find overview level such that npixels <= maxpixels
+        i = 0
+        npixels_ov = npixels_orig
+        while npixels_ov > maxpixels:
+            i += 1
+            ov_level = pow(2, i)
+            npixels_ov = npixels_orig // np.power(ov_level, 2)
+        # Build overview
+        print("Build overview")
+        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        rasterR.BuildOverviews("nearest", [ov_level])
+        # Get data from overview
         ov_band = rasterB.GetOverview(0)
         ov_arr = ov_band.ReadAsArray()
     else:
+        # Get original data
         ov_arr = rasterB.ReadAsArray()
 
     # Change nodata values
@@ -500,7 +420,7 @@ def forest(input_forest_raster,
 # plot.prob
 def prob(input_prob_raster,
          output_file="prob.png",
-         addo=False,
+         maxpixels=500000,
          borders=None,
          zoom=None,
          legend=False,
@@ -512,7 +432,7 @@ def prob(input_prob_raster,
 
     :param input_prob_raster: path to raster of probabilities.
     :param output_file: name of the plot file.
-    :param addo: builds overview and use it for plot.
+    :param maxpixels: maximum number of pixels to plot.
     :param borders: vector file to be plotted.
     :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param legend: add colorbar if True.
@@ -536,17 +456,26 @@ def prob(input_prob_raster,
     Ymax = gt[3]
     extent = [Xmin, Xmax, Ymin, Ymax]
 
-    # Overviews
-    if addo is True:
-        if (rasterB.GetOverviewCount() == 0):
-            # Build overviews
-            print("Build overview")
-            gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
-            rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
-        # Get data from finest overview
+    # Total number of pixels
+    npixels_orig = ncol * nrow
+    # Check number of pixels is inferior to maxpixels
+    if (npixels_orig > maxpixels):
+        # Find overview level such that npixels <= maxpixels
+        i = 0
+        npixels_ov = npixels_orig
+        while npixels_ov > maxpixels:
+            i += 1
+            ov_level = pow(2, i)
+            npixels_ov = npixels_orig // np.power(ov_level, 2)
+        # Build overview
+        print("Build overview")
+        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        rasterR.BuildOverviews("nearest", [ov_level])
+        # Get data from overview
         ov_band = rasterB.GetOverview(0)
         ov_arr = ov_band.ReadAsArray()
     else:
+        # Get original data
         ov_arr = rasterB.ReadAsArray()
 
     # Dereference driver
@@ -681,6 +610,104 @@ def obs(sample,
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
+    return(fig)
+
+
+# plot.differences
+def differences(input_raster,
+                output_file="differences.png",
+                borders=None,
+                zoom=None,
+                figsize=(11.69, 8.27),
+                dpi=300, **kwargs):
+    """Plot a map to compare outputs.
+
+    This function plots a map of differences between two rasters of
+    predictions.
+
+    :param input_raster: path to raster of diffeences.
+    :param output_file: name of the plot file.
+    :param borders: vector file to be plotted.
+    :param zoom: zoom to region (xmin, xmax, ymin, ymax).
+    :param figsize: figure size in inches.
+    :param dpi: resolution for output image.
+
+    :return: a Matplotlib figure of the forest map.
+
+    """
+
+    # Load raster and band
+    rasterR = gdal.Open(input_raster, gdal.GA_ReadOnly)
+    rasterB = rasterR.GetRasterBand(1)
+    rasterND = rasterB.GetNoDataValue()
+    gt = rasterR.GetGeoTransform()
+    ncol = rasterR.RasterXSize
+    nrow = rasterR.RasterYSize
+    Xmin = gt[0]
+    Xmax = gt[0] + gt[1] * ncol
+    Ymin = gt[3] + gt[5] * nrow
+    Ymax = gt[3]
+    extent = [Xmin, Xmax, Ymin, Ymax]
+
+    # Overviews
+    if (rasterB.GetOverviewCount() == 0):
+        # Build overviews
+        print("Build overview")
+        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
+
+    # Get data from finest overview
+    ov_band = rasterB.GetOverview(0)
+    ov_arr = ov_band.ReadAsArray()
+    ov_arr[ov_arr == rasterND] = 4
+
+    # Dereference driver
+    rasterB = None
+    del(rasterR)
+
+    # Colormap
+    colors = []
+    cmax = 255.0  # float for division
+    # 00: true positive (red)
+    colors.append((227 / cmax, 26 / cmax, 28 / cmax, 1))
+    # 11: true negative (forest green)
+    colors.append((34 / cmax, 139 / cmax, 34 / cmax, 1))
+    # 10: false negative (light blue)
+    colors.append((65 / cmax, 105 / cmax, 225 / cmax, 1))
+    # 01: false positive (navy blue)
+    colors.append((176 / cmax, 216 / cmax, 230 / cmax, 1))
+    colors.append((0, 0, 0, 0))  # transparent
+    color_map = ListedColormap(colors)
+
+    # Plot raster
+    place = 111 if zoom is None else 121
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    ax1 = plt.subplot(place)
+    ax1.set_frame_on(False)
+    ax1.set_xticks([])
+    ax1.set_yticks([])
+    plt.imshow(ov_arr, cmap=color_map, extent=extent)
+    if borders is not None:
+        plot_layer(borders, symbol="k-", **kwargs)
+    plt.axis("off")
+    if zoom is not None:
+        z = Rectangle(
+            (zoom[0], zoom[2]),
+            zoom[1] - zoom[0],
+            zoom[3] - zoom[2],
+            fill=False
+        )
+        ax1.add_patch(z)
+        ax2 = plt.subplot(222)
+        plt.imshow(ov_arr, cmap=color_map, extent=extent)
+        plt.xlim(zoom[0], zoom[1])
+        plt.ylim(zoom[2], zoom[3])
+        ax2.set_xticks([])
+        ax2.set_yticks([])
+
+    # Save and return figure
+    fig.tight_layout()
+    fig.savefig(output_file, dpi="figure", bbox_inches="tight")
     return(fig)
 
 

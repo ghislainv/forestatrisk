@@ -149,10 +149,6 @@ def deforest(input_raster,
     fccB.FlushCache()  # Write cache data to disk
     fccB.ComputeStatistics(False)
 
-    # Build overviews
-    print("Build overview")
-    fccR.BuildOverviews("nearest", [4, 8, 16, 32])
-
     # Dereference driver
     fccB = None
     del(fccR)
