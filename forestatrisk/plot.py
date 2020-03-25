@@ -245,6 +245,9 @@ def fcc(input_fcc_raster,
     npixels_orig = ncol * nrow
     # Check number of pixels is inferior to maxpixels
     if (npixels_orig > maxpixels):
+        # Remove potential existing external overviews
+        if os.path.isfile(input_fcc_raster + ".ovr"):
+            os.remove(input_fcc_raster + ".ovr")
         # Find overview level such that npixels <= maxpixels
         i = 0
         npixels_ov = npixels_orig
@@ -353,6 +356,9 @@ def forest(input_forest_raster,
     npixels_orig = ncol * nrow
     # Check number of pixels is inferior to maxpixels
     if (npixels_orig > maxpixels):
+        # Remove potential existing external overviews
+        if os.path.isfile(input_forest_raster + ".ovr"):
+            os.remove(input_forest_raster + ".ovr")
         # Find overview level such that npixels <= maxpixels
         i = 0
         npixels_ov = npixels_orig
@@ -460,6 +466,9 @@ def prob(input_prob_raster,
     npixels_orig = ncol * nrow
     # Check number of pixels is inferior to maxpixels
     if (npixels_orig > maxpixels):
+        # Remove potential existing external overviews
+        if os.path.isfile(input_prob_raster + ".ovr"):
+            os.remove(input_prob_raster + ".ovr")
         # Find overview level such that npixels <= maxpixels
         i = 0
         npixels_ov = npixels_orig
