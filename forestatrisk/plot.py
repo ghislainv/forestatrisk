@@ -273,13 +273,17 @@ def fcc(input_fcc_raster,
     rasterB = None
     del(rasterR)
 
+    # Num of forest pixels
+    nfor = np.sum(ov_arr == 1)
+
     # Colormap
     colors = []
     cmax = 255.0  # float for division
     col_defor = tuple(np.array(col_defor) / cmax)
     col_for = tuple(np.array(col_for) / cmax)
     colors.append(col_defor)
-    colors.append(col_for)
+    if (nfor > 0):
+        colors.append(col_for)
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
 
