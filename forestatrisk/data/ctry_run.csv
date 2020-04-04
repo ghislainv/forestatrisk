@@ -1,122 +1,121 @@
-cont_run;ctry_run;iso3;ctry_geofab;cont_geofab;ctry_osmfr;cont_osmfr
-Africa;Angola;AGO;angola;africa;angola;africa
-Africa;Burundi;BDI;burundi;africa;burundi;africa
-Africa;Benin;BEN;benin;africa;benin;africa
-Africa;Central African Republic;CAF;central-african-republic;africa;central_african_republic;africa
-Africa;Côte D'Ivoire;CIV;ivory-coast;africa;ivory_coast;africa
-Africa;Cameroon;CMR;cameroon;africa;cameroon;africa
-Africa;Democratic Republic of the Congo;COD;congo-democratic-republic;africa;congo_kinshasa;africa
-Africa;Congo;COG;congo-brazzaville;africa;congo_brazzaville;africa
-Africa;Comoros;COM;comores;africa;comoros;africa
-Africa;Ethiopia;ETH;ethiopia;africa;NA;NA
-Africa;Gabon;GAB;gabon;africa;gabon;africa
-Africa;Ghana;GHA;ghana;africa;ghana;africa
-Africa;Guinea;GIN;guinea;africa;guinea;africa
-Africa;Gambia (Islamic Republic of the);GMB;senegal-and-gambia;africa;gambia;africa
-Africa;Guinea Bissau;GNB;guinea-bissau;africa;NA;NA
-Africa;Equatorial Guinea;GNQ;equatorial-guinea;africa;equatorial_guinea;africa
-Africa;Kenya;KEN;kenya;africa;kenya;africa
-Africa;Liberia;LBR;liberia;africa;NA;NA
-Africa;Madagascar;MDG;madagascar;africa;NA;NA
-Africa;Mauritius;MUS;mauritius;africa;mauritius;africa
-Africa;Malawi;MWI;malawi;africa;malawi;africa
-Africa;Mayotte;MYT;france/mayotte;europe;mayotte;africa
-Africa;Nigeria;NGA;nigeria;africa;NA;NA
-Africa;Reunion;REU;france/reunion;europe;reunion;africa
-Africa;Rwanda;RWA;rwanda;africa;rwanda;africa
-Africa;Senegal;SEN;senegal-and-gambia;africa;senegal;africa
-Africa;Sierra Leone;SLE;sierra-leone;africa;NA;NA
-Africa;South Sudan;SSD;south-sudan;africa;south_sudan;africa
-Africa;Sao Tome and Principe;STP;sao-tome-and-principe;africa;sao_tome_and_principe;africa
-Africa;Togo;TGO;togo;africa;togo;africa
-Africa;United Republic of Tanzania;TZA;tanzania;africa;NA;NA
-Africa;Uganda;UGA;uganda;africa;uganda;africa
-Africa;Zambia;ZMB;zambia;africa;zambia;africa
-America;Antigua and Barbuda;ATG;NA;NA;antigua_and_barbuda;central-america
-America;Bahamas;BHS;bahamas;central-america;bahamas;central-america
-America;Belize;BLZ;belize;central-america;NA;NA
-America;Bolivia (Plurinational State of);BOL;bolivia;south-america;NA;NA
-America;Barbados;BRB;NA;NA;barbados;central-america
-America;Colombia;COL;colombia;south-america;NA;NA
-America;Costa Rica;CRI;NA;NA;costa_rica;central-america
-America;Cuba;CUB;cuba;central-america;NA;NA
-America;Dominica;DMA;NA;NA;dominica;central-america
-America;Dominican Republic;DOM;haiti-and-domrep;central-america;NA;NA
-America;Ecuador;ECU;ecuador;south-america;NA;NA
-America;Guadeloupe;GLP;france/guadeloupe;europe;guadeloupe;central-america
-America;Grenada;GRD;NA;NA;grenada;central-america
-America;Guatemala;GTM;guatemala;central-america;NA;NA
-America;French Guiana;GUF;france/guyane;europe;guyane;south-america
-America;Guyana;GUY;NA;NA;guyana;south-america
-America;Honduras;HND;NA;NA;honduras;central-america
-America;Haiti;HTI;haiti-and-domrep;central-america;NA;NA
-America;Jamaica;JAM;jamaica;central-america;jamaica;central-america
-America;Saint Kitts and Nevis;KNA;NA;NA;saint_kitts_and_nevis;central-america
-America;Saint Lucia;LCA;NA;NA;saint_lucia;central-america
-America;Saint Martin (French part);MAF;NA;NA;saint_martin;central-america
-America;Mexico;MEX;mexico;north-america;NA;NA
-America;Montserrat;MSR;NA;NA;montserrat;central-america
-America;Martinique;MTQ;france/martinique;europe;martinique;central-america
-America;Nicaragua;NIC;nicaragua;central-america;nicaragua;central-america
-America;Panama;PAN;NA;NA;panama;central-america
-America;Peru;PER;peru;south-america;NA;NA
-America;Puerto Rico;PRI;us/puerto-rico;north-america;puerto_rico;central-america
-America;Paraguay;PRY;paraguay;south-america;paraguay;south-america
-America;El Salvador;SLV;NA;NA;el_salvador;central-america
-America;Suriname;SUR;suriname;south-america;suriname;south-america
-America;Sint Maarten (Dutch part);SXM;NA;NA;sint_maarten;central-america
-America;Trinidad and Tobago;TTO;NA;NA;trinidad_and_tobago;south-america
-America;Saint Vincent and the Grenadines;VCT;NA;NA;saint_vincent_and_the_grenadines;central-america
-America;Venezuela, Bolivarian Republic of;VEN;venezuela;south-america;venezuela;south-america
-America;Virgin Islands, British;VGB;NA;NA;british_virgin_islands;central-america
-America;Virgin Islands, U.S.;VIR;NA;NA;usa_virgin_islands;central-america
-Asia;Queensland;AUS-QLD;NA;NA;australia/queensland;oceania
-Asia;Bangladesh;BGD;bangladesh;asia;NA;NA
-Asia;Brunei Darussalam;BRN;NA;NA;brunei;asia
-Asia;Bhutan;BTN;bhutan;asia;bhutan;asia
-Asia;Fiji;FJI;fiji;australia-oceania;NA;NA
-Asia;Indonesia;IDN;indonesia;asia;indonesia;asia
-Asia;India, Andaman and Nicobar;IND-AND;india;asia;india;asia
-Asia;India, Western Ghats;IND-WEST;india;asia;india;asia
-Asia;India, North-East;IND-EAST;india;asia;india;asia
-Asia;Cambodia;KHM;cambodia;asia;cambodia;asia
-Asia;Lao People's Democratic Republic;LAO;laos;asia;laos;asia
-Asia;Sri Lanka;LKA;sri-lanka;asia;NA;NA
-Asia;Myanmar;MMR;myanmar;asia;mayanmar;asia
-Asia;Malaysia;MYS;malaysia-singapore-brunei;asia;malaysia;asia
-Asia;New Caledonia;NCL;new-caledonia;australia-oceania;new_caledonia;oceania
-Asia;Philippines;PHL;philippines;asia;NA;NA
-Asia;Papua New Guinea;PNG;papua-new-guinea;australia-oceania;papua_new_guinea;oceania
-Asia;Singapore;SGP;NA;NA;singapore;asia
-Asia;Solomon Islands;SLB;NA;NA;solomon_islands;oceania
-Asia;Thailand;THA;thailand;asia;NA;NA
-Asia;Timor-Leste;TLS;NA;NA;east_timor;asia
-Asia;Viet Nam;VNM;vietnam;asia;NA;NA
-Asia;Vanuatu;VUT;NA;NA;vanuatu;oceania
-Brazil;Acre;BRA-AC;NA;NA;north/acre;south-america/brazil
-Brazil;Alagoas;BRA-AL;NA;NA;northeast/alagoas;south-america/brazil
-Brazil;Amazonas;BRA-AM;NA;NA;north/amazonas;south-america/brazil
-Brazil;Amapá;BRA-AP;NA;NA;north/amapa;south-america/brazil
-Brazil;Bahia;BRA-BA;NA;NA;northeast/bahia;south-america/brazil
-Brazil;Ceará;BRA-CE;NA;NA;northeast/ceara;south-america/brazil
-Brazil;District Fédéral;BRA-DF;NA;NA;central-west/distrito-federal;south-america/brazil
-Brazil;Espírito Santo;BRA-ES;NA;NA;southeast/espirito-santo;south-america/brazil
-Brazil;Goiás;BRA-GO;NA;NA;central-west/goias;south-america/brazil
-Brazil;Maranhão;BRA-MA;NA;NA;northeast/maranhao;south-america/brazil
-Brazil;Minas Gerais;BRA-MG;NA;NA;southeast/minas-gerais;south-america/brazil
-Brazil;Mato Grosso do Sul;BRA-MS;NA;NA;central-west/mato-grosso-do-sul;south-america/brazil
-Brazil;Mato Grosso;BRA-MT;NA;NA;central-west/mato-grosso;south-america/brazil
-Brazil;Pará;BRA-PA;NA;NA;north/para;south-america/brazil
-Brazil;Paraíba;BRA-PB;NA;NA;northeast/paraiba;south-america/brazil
-Brazil;Pernambouco;BRA-PE;NA;NA;northeast/pernambuco;south-america/brazil
-Brazil;Piauí;BRA-PI;NA;NA;northeast/piaui;south-america/brazil
-Brazil;Paraná;BRA-PR;NA;NA;south/parana;south-america/brazil
-Brazil;Rio de Janeiro;BRA-RJ;NA;NA;southeast/rio-de-janeiro;south-america/brazil
-Brazil;Rio Grande do Norte;BRA-RN;NA;NA;northeast/rio-grande-do-norte;south-america/brazil
-Brazil;Rondônia;BRA-RO;NA;NA;north/rondonia;south-america/brazil
-Brazil;Roraima;BRA-RR;NA;NA;north/roraima;south-america/brazil
-Brazil;Rio Grande do Sul;BRA-RS;NA;NA;south/rio-grande-do-sul;south-america/brazil
-Brazil;Santa Catarina;BRA-SC;NA;NA;south/santa-catarina;south-america/brazil
-Brazil;Sergipe;BRA-SE;NA;NA;northeast/sergipe;south-america/brazil
-Brazil;São Paulo;BRA-SP;NA;NA;southeast/sao-paulo;south-america/brazil
-Brazil;Tocantins;BRA-TO;NA;NA;north/tocantins;south-america/brazil
+cont_run;ctry_run;iso3;ctry_long_name;ctry_geofab;cont_geofab;ctry_osmfr;cont_osmfr
+Africa;Angola;AGO;Angola;angola;africa;angola;africa
+Africa;Burundi;BDI;Burundi;burundi;africa;burundi;africa
+Africa;Benin;BEN;Benin;benin;africa;benin;africa
+Africa;CAR;CAF;Central African Republic;central-african-republic;africa;central_african_republic;africa
+Africa;Ivory Coast;CIV;Côte D'Ivoire;ivory-coast;africa;ivory_coast;africa
+Africa;Cameroon;CMR;Cameroon;cameroon;africa;cameroon;africa
+Africa;DRC;COD;Democratic Republic of the Congo;congo-democratic-republic;africa;congo_kinshasa;africa
+Africa;Congo;COG;Congo;congo-brazzaville;africa;congo_brazzaville;africa
+Africa;Comoros;COM;Comoros;comores;africa;comoros;africa
+Africa;Ethiopia;ETH;Ethiopia;ethiopia;africa;NA;NA
+Africa;Gabon;GAB;Gabon;gabon;africa;gabon;africa
+Africa;Ghana;GHA;Ghana;ghana;africa;ghana;africa
+Africa;Guinea;GIN;Guinea;guinea;africa;guinea;africa
+Africa;Gambia;GMB;Gambia (Islamic Republic of the);senegal-and-gambia;africa;gambia;africa
+Africa;Guinea Bissau;GNB;Guinea Bissau;guinea-bissau;africa;NA;NA
+Africa;Eq. Guinea;GNQ;Equatorial Guinea;equatorial-guinea;africa;equatorial_guinea;africa
+Africa;Kenya;KEN;Kenya;kenya;africa;kenya;africa
+Africa;Liberia;LBR;Liberia;liberia;africa;NA;NA
+Africa;Madagascar;MDG;Madagascar;madagascar;africa;NA;NA
+Africa;Mauritius;MUS;Mauritius;mauritius;africa;mauritius;africa
+Africa;Malawi;MWI;Malawi;malawi;africa;malawi;africa
+Africa;Mayotte;MYT;Mayotte;france/mayotte;europe;mayotte;africa
+Africa;Nigeria;NGA;Nigeria;nigeria;africa;NA;NA
+Africa;Reunion;REU;Reunion;france/reunion;europe;reunion;africa
+Africa;Rwanda;RWA;Rwanda;rwanda;africa;rwanda;africa
+Africa;Senegal;SEN;Senegal;senegal-and-gambia;africa;senegal;africa
+Africa;Sierra Leone;SLE;Sierra Leone;sierra-leone;africa;NA;NA
+Africa;South Sudan;SSD;South Sudan;south-sudan;africa;south_sudan;africa
+Africa;Sao Tome and P.;STP;Sao Tome and Principe;sao-tome-and-principe;africa;sao_tome_and_principe;africa
+Africa;Togo;TGO;Togo;togo;africa;togo;africa
+Africa;Tanzania;TZA;United Republic of Tanzania;tanzania;africa;NA;NA
+Africa;Uganda;UGA;Uganda;uganda;africa;uganda;africa
+Africa;Zambia;ZMB;Zambia;zambia;africa;zambia;africa
+America;Antigua and B.;ATG;Antigua and Barbuda;NA;NA;antigua_and_barbuda;central-america
+America;Bahamas;BHS;Bahamas;bahamas;central-america;bahamas;central-america
+America;Belize;BLZ;Belize;belize;central-america;NA;NA
+America;Bolivia;BOL;Bolivia (Plurinational State of);bolivia;south-america;NA;NA
+America;Barbados;BRB;Barbados;NA;NA;barbados;central-america
+America;Colombia;COL;Colombia;colombia;south-america;NA;NA
+America;Costa Rica;CRI;Costa Rica;NA;NA;costa_rica;central-america
+America;Cuba;CUB;Cuba;cuba;central-america;NA;NA
+America;Dominica;DMA;Dominica;NA;NA;dominica;central-america
+America;Dominican Rep.;DOM;Dominican Republic;haiti-and-domrep;central-america;NA;NA
+America;Ecuador;ECU;Ecuador;ecuador;south-america;NA;NA
+America;Guadeloupe;GLP;Guadeloupe;france/guadeloupe;europe;guadeloupe;central-america
+America;Grenada;GRD;Grenada;NA;NA;grenada;central-america
+America;Guatemala;GTM;Guatemala;guatemala;central-america;NA;NA
+America;French Guiana;GUF;French Guiana;france/guyane;europe;guyane;south-america
+America;Guyana;GUY;Guyana;NA;NA;guyana;south-america
+America;Honduras;HND;Honduras;NA;NA;honduras;central-america
+America;Haiti;HTI;Haiti;haiti-and-domrep;central-america;NA;NA
+America;Jamaica;JAM;Jamaica;jamaica;central-america;jamaica;central-america
+America;Saint Kitts and N.;KNA;Saint Kitts and Nevis;NA;NA;saint_kitts_and_nevis;central-america
+America;Saint Lucia;LCA;Saint Lucia;NA;NA;saint_lucia;central-america
+America;Saint Martin;MAF;Saint Martin (French part);NA;NA;saint_martin;central-america
+America;Mexico;MEX;Mexico;mexico;north-america;NA;NA
+America;Montserrat;MSR;Montserrat;NA;NA;montserrat;central-america
+America;Martinique;MTQ;Martinique;france/martinique;europe;martinique;central-america
+America;Nicaragua;NIC;Nicaragua;nicaragua;central-america;nicaragua;central-america
+America;Panama;PAN;Panama;NA;NA;panama;central-america
+America;Peru;PER;Peru;peru;south-america;NA;NA
+America;Puerto Rico;PRI;Puerto Rico;us/puerto-rico;north-america;puerto_rico;central-america
+America;Paraguay;PRY;Paraguay;paraguay;south-america;paraguay;south-america
+America;El Salvador;SLV;El Salvador;NA;NA;el_salvador;central-america
+America;Suriname;SUR;Suriname;suriname;south-america;suriname;south-america
+America;Sint Maarten;SXM;Sint Maarten (Dutch part);NA;NA;sint_maarten;central-america
+America;Trinidad and Tobago;TTO;Trinidad and Tobago;NA;NA;trinidad_and_tobago;south-america
+America;Saint Vincent;VCT;Saint Vincent and the Grenadines;NA;NA;saint_vincent_and_the_grenadines;central-america
+America;Venezuela;VEN;Venezuela, Bolivarian Republic of;venezuela;south-america;venezuela;south-america
+America;Virgin Isl. UK;VGB;Virgin Islands, British;NA;NA;british_virgin_islands;central-america
+America;Virgin Isl. US;VIR;Virgin Islands, U.S.;NA;NA;usa_virgin_islands;central-america
+Asia;Queensland;AUS-QLD;Queensland;NA;NA;australia/queensland;oceania
+Asia;Bangladesh;BGD;Bangladesh;bangladesh;asia;NA;NA
+Asia;Brunei;BRN;Brunei Darussalam;NA;NA;brunei;asia
+Asia;Bhutan;BTN;Bhutan;bhutan;asia;bhutan;asia
+Asia;Fiji;FJI;Fiji;fiji;australia-oceania;NA;NA
+Asia;Indonesia;IDN;Indonesia;indonesia;asia;indonesia;asia
+Asia;Ind. Andaman;IND-AND;India, Andaman and Nicobar;india;asia;india;asia
+Asia;Ind. Ghats;IND-WEST;India, Western Ghats;india;asia;india;asia
+Asia;Ind. North-East;IND-EAST;India, North-East;india;asia;india;asia
+Asia;Cambodia;KHM;Cambodia;cambodia;asia;cambodia;asia
+Asia;Laos;LAO;Lao People's Democratic Republic;laos;asia;laos;asia
+Asia;Sri Lanka;LKA;Sri Lanka;sri-lanka;asia;NA;NA
+Asia;Myanmar;MMR;Myanmar;myanmar;asia;mayanmar;asia
+Asia;Malaysia;MYS;Malaysia;malaysia-singapore-brunei;asia;malaysia;asia
+Asia;New Caledonia;NCL;New Caledonia;new-caledonia;australia-oceania;new_caledonia;oceania
+Asia;Philippines;PHL;Philippines;philippines;asia;NA;NA
+Asia;Papua New Guinea;PNG;Papua New Guinea;papua-new-guinea;australia-oceania;papua_new_guinea;oceania
+Asia;Singapore;SGP;Singapore;NA;NA;singapore;asia
+Asia;Solomon Isl.;SLB;Solomon Islands;NA;NA;solomon_islands;oceania
+Asia;Thailand;THA;Thailand;thailand;asia;NA;NA
+Asia;Timor-Leste;TLS;Timor-Leste;NA;NA;east_timor;asia
+Asia;Vietnam;VNM;Viet Nam;vietnam;asia;NA;NA
+Asia;Vanuatu;VUT;Vanuatu;NA;NA;vanuatu;oceania
+Brazil;Acre;BRA-AC;Acre;NA;NA;north/acre;south-america/brazil
+Brazil;Alagoas;BRA-AL;Alagoas;NA;NA;northeast/alagoas;south-america/brazil
+Brazil;Amazonas;BRA-AM;Amazonas;NA;NA;north/amazonas;south-america/brazil
+Brazil;Amapa;BRA-AP;Amapá;NA;NA;north/amapa;south-america/brazil
+Brazil;Bahia;BRA-BA;Bahia;NA;NA;northeast/bahia;south-america/brazil
+Brazil;Ceara;BRA-CE;Ceará;NA;NA;northeast/ceara;south-america/brazil
+Brazil;Espirito Santo;BRA-ES;Espírito Santo;NA;NA;southeast/espirito-santo;south-america/brazil
+Brazil;Goias;BRA-GO;Goiás;NA;NA;central-west/goias;south-america/brazil
+Brazil;Maranhao;BRA-MA;Maranhão;NA;NA;northeast/maranhao;south-america/brazil
+Brazil;Minas Gerais;BRA-MG;Minas Gerais;NA;NA;southeast/minas-gerais;south-america/brazil
+Brazil;Mato Grosso do Sul;BRA-MS;Mato Grosso do Sul;NA;NA;central-west/mato-grosso-do-sul;south-america/brazil
+Brazil;Mato Grosso;BRA-MT;Mato Grosso;NA;NA;central-west/mato-grosso;south-america/brazil
+Brazil;Para;BRA-PA;Pará;NA;NA;north/para;south-america/brazil
+Brazil;Paraiba;BRA-PB;Paraíba;NA;NA;northeast/paraiba;south-america/brazil
+Brazil;Pernambouco;BRA-PE;Pernambouco;NA;NA;northeast/pernambuco;south-america/brazil
+Brazil;Piaui;BRA-PI;Piauí;NA;NA;northeast/piaui;south-america/brazil
+Brazil;Parana;BRA-PR;Paraná;NA;NA;south/parana;south-america/brazil
+Brazil;Rio de Janeiro;BRA-RJ;Rio de Janeiro;NA;NA;southeast/rio-de-janeiro;south-america/brazil
+Brazil;Rio Grande do Norte;BRA-RN;Rio Grande do Norte;NA;NA;northeast/rio-grande-do-norte;south-america/brazil
+Brazil;Rondonia;BRA-RO;Rondônia;NA;NA;north/rondonia;south-america/brazil
+Brazil;Roraima;BRA-RR;Roraima;NA;NA;north/roraima;south-america/brazil
+Brazil;Rio Grande do Sul;BRA-RS;Rio Grande do Sul;NA;NA;south/rio-grande-do-sul;south-america/brazil
+Brazil;Santa Catarina;BRA-SC;Santa Catarina;NA;NA;south/santa-catarina;south-america/brazil
+Brazil;Sergipe;BRA-SE;Sergipe;NA;NA;northeast/sergipe;south-america/brazil
+Brazil;Sao Paulo;BRA-SP;São Paulo;NA;NA;southeast/sao-paulo;south-america/brazil
+Brazil;Tocantins;BRA-TO;Tocantins;NA;NA;north/tocantins;south-america/brazil
