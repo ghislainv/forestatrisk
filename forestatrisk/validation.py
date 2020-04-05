@@ -94,18 +94,20 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
                      nrep=5, seed=1234,
                      icar_args={"n_neighbors": None, "neighbors": None,
                                 "burnin": 1000, "mcmc": 1000,
-                                "thin": 1, "beta_start": 0}):
+                                "thin": 1, "beta_start": 0},
+                     rf_args={"n_estimators": 100, "n_jobs": None}):
     """Model cross-validation
 
     Performs model cross-validation. 
 
     :param data: full dataset.
     :param formula: model formula.
-    :param mod_type: model type, can be either "icar", "glm", or "RF".
+    :param mod_type: model type, can be either "icar", "glm", or "rf".
     :param ratio: percentage of data used for testing.
     :param nrep: number of repetitions for cross-validation.
     :param seed: seed for reproducibility.
     :param icar_args: dictionnary of arguments for the binomial iCAR model.
+    :param icar_rf: dictionnary of arguments for the random forest model.
 
     :return: A Pandas data frame with cross-validation results.
 
@@ -170,9 +172,10 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
             # Predictions for the test dataset
             data_test["theta_pred"] = mod_glm.predict_proba(X_test)[:, 1]
         # RF
-        if (mod_type == "RF"):
+        if (mod_type == "rf"):
             # Training the model
-            rf = RandomForestClassifier(n_estimators=500, n_jobs=1)
+            rf = RandomForestClassifier(n_estimators=rf_args["n_estimators"],
+                                        n_jobs=rf_args["n_jobs"])
             mod_rf = rf.fit(X_train, Y_train) 
             # Predictions for the test dataset
             data_test["theta_pred"] = mod_rf.predict_proba(X_test)[:, 1]
