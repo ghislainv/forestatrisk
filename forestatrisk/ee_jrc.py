@@ -10,37 +10,34 @@
 # ==============================================================================
 
 # Annual product legend
-# 1. Undisturbed moist tropical forest
-# 2. Moist forest within the plantation area
-# 3. NEW degradation
-# 4. Ongoing degradation (disturbances still detected - can be few years after
-#    first degrad if long degrad)
+# 1. Tropical moist forest (TMF including bamboo-dominated forest and mangroves)
+# 2. TMF converted later in a tree plantation
+# 3. NEW degradation 
+# 4. Ongoing degradation (disturbances still detected - can be few years after first degrad if several degradation stages)
 # 5. Degraded forest (former degradation, no disturbances detected anymore)
 # 6. NEW deforestation (may follow degradation)
 # 7. Ongoing deforestation (disturbances still detected)
 # 8. NEW Regrowth
 # 9. Regrowthing
 # 10. Other land cover (not water)
-# 11. Permanent Water (pekel et al. 2015)
-# 12. Seasonal Water (pekel et al. 2015)
-# 13. Nodata (beginning of the archive) but evergreen forest later
-# 14. Nodata (after the initial period) but evergreen forest later
-# 15. Nodata but other land cover later
-# 16. Nodata within the plantation area (comme val 2 mais nodata)
-# 17. Bamboo dominated forest
+# 11. Permanent Water (pekel et al.2015)     
+# 12. Seasonal Water (pekel et al.2015) 
+# 13. Init period without valid data - Init class = TMF
+# 14. Init period with min 1 valid obs - Init class = TMF
+# 15. Nodata  - Init class = other LC 
+# 16. Init period without valid data - Init class = Plantation
 
 # Imports
 from __future__ import division, print_function  # Python 3 compatibility
 import ee
 import time
 import subprocess
-from os import getcwd
 
 
 # ee_jrc.run_task
 def run_task(iso3, extent_latlong, scale=30, proj=None,
              gdrive_folder=None):
-    """Compute forest-cover change with Google EarthEngine.
+    """Compute forest-cover change with Google Earth Engine.
 
     Compute the forest-cover change from JRC Vancutsem et al. data
     with Python and GEE API. Export the results to Google Drive.
@@ -73,46 +70,46 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     # JRC annual product (AP)
     #AP = ee.ImageCollection(path + "AnnualChanges1982_2018")
     AP = ee.ImageCollection(
-        "users/ClassifLandsat072015/Roadless36y/AnnualChanges1982_2018")
+        "users/ClassifLandsat072015/Roadless2019/AnnualChanges_1982_2019")
     AP = AP.mosaic().toByte().clip(region)
 
-    # ap_allYear: forest if Y = 1, 4, 5, 13 or 14.
+    # ap_allYear: forest if Y = 1, 3, 4, 5, 13 or 14.
     AP_forest = AP.where(AP.eq(3).Or(AP.eq(4)).Or(
         AP.eq(5)).Or(AP.eq(13)).Or(AP.eq(14)), 1)
     ap_allYear = AP_forest.where(AP_forest.neq(1), 0)
 
-    # Forest in Jan 2019
-    forest2019 = ap_allYear.select(36)
+    # Forest in Jan 2020
+    forest2020 = ap_allYear.select(37)
 
     # Forest cover Jan 2015
-    ap_2015_2019 = ap_allYear.select(list(range(32, 37)))
-    forest2015 = ap_2015_2019.reduce(ee.Reducer.sum())
+    ap_2015_2020 = ap_allYear.select(list(range(32, 38)))
+    forest2015 = ap_2015_2020.reduce(ee.Reducer.sum())
     forest2015 = forest2015.gte(1)
 
     # Forest cover Jan 2010
-    ap_2010_2019 = ap_allYear.select(list(range(27, 37)))
-    forest2010 = ap_2010_2019.reduce(ee.Reducer.sum())
+    ap_2010_2020 = ap_allYear.select(list(range(27, 38)))
+    forest2010 = ap_2010_2020.reduce(ee.Reducer.sum())
     forest2010 = forest2010.gte(1)
 
     # Forest cover Jan 2005
-    ap_2005_2019 = ap_allYear.select(list(range(22, 37)))
-    forest2005 = ap_2005_2019.reduce(ee.Reducer.sum())
+    ap_2005_2020 = ap_allYear.select(list(range(22, 38)))
+    forest2005 = ap_2005_2020.reduce(ee.Reducer.sum())
     forest2005 = forest2005.gte(1)
 
     # Forest cover Jan 2000
-    ap_2000_2019 = ap_allYear.select(list(range(17, 37)))
-    forest2000 = ap_2000_2019.reduce(ee.Reducer.sum())
+    ap_2000_2020 = ap_allYear.select(list(range(17, 38)))
+    forest2000 = ap_2000_2020.reduce(ee.Reducer.sum())
     forest2000 = forest2000.gte(1)
 
     # Forest raster with five bands
     forest = forest2000.addBands(forest2005).addBands(
-        forest2010).addBands(forest2015).addBands(forest2019)
+        forest2010).addBands(forest2015).addBands(forest2020)
     forest = forest.select([0, 1, 2, 3, 4], ["forest2000", "forest2005",
                                              "forest2010", "forest2015",
-                                             "forest2019"])
+                                             "forest2020"])
     forest = forest.set("system:bandNames", ["forest2000", "forest2005",
                                              "forest2010", "forest2015",
-                                             "forest2019"])
+                                             "forest2020"])
 
     # maxPixels
     maxPix = 1e13
@@ -170,7 +167,7 @@ def check(gdrive_remote_rclone, gdrive_folder, iso3):
 def download(gdrive_remote_rclone,
              gdrive_folder,
              iso3,
-             output_dir=getcwd()):
+             output_dir="."):
     """Download forest-cover data from Google Drive.
 
     Check that GEE task is completed. Wait for the task to be
