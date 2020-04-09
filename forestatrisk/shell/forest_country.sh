@@ -62,12 +62,12 @@ gdal_translate -mask none -b 2 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF
 gdal_translate -mask none -b 4 -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                forest_src.tif forest_2015_src.tif
 
-# Rasterize country border
+# Rasterize country border (by default: zero outside, without nodata value)
 gdal_rasterize -te $extent -tr 30 30 -tap \
-	       -burn 1 -a_nodata 255 \
+	       -burn 1 \
 	       -ot Byte \
 	       -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-	       ctry_PROJ.shp ctry_PROJ.tif 
+	       ctry_PROJ.shp ctry_PROJ.tif
 
 # =====
 # 1. Compute distance to forest edge at t2
@@ -105,7 +105,7 @@ echo "Computing distance to past deforestation\n"
 # Create raster fcc12_src.tif
 gdal_calc.py --overwrite -A forest_t1_src.tif -B forest_t2_src.tif \
              --outfile=fcc12_src.tif --type=Byte \
-             --calc="255 - 254*(A==1)*(B==1) - 255*(A==1)*(B==0)" \
+             --calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=255 --quiet
 
@@ -125,7 +125,7 @@ echo "Computing distance to past deforestation at t3 for forecasting\n"
 # Create raster fcc23_src.tif
 gdal_calc.py --overwrite -A forest_t2_src.tif -B forest_t3_src.tif \
              --outfile=fcc23_src.tif --type=Byte \
-             --calc="255 - 254*(A==1)*(B==1) - 255*(A==1)*(B==0)" \
+             --calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=255 --quiet
 
@@ -147,41 +147,35 @@ gdal_translate -a_nodata 0 \
 echo "Mask forest rasters with country border\n"
 
 # Mask forest with country border
-# gdal_calc.py --overwrite -A forest_t0_src.tif -B ctry_PROJ.tif \
-#              --outfile=forest_t0.tif --type=Byte \
-#              --calc="255-254*(A==1)*(B==1)" \
-#              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-#              --NoDataValue=255 --quiet
-
 gdal_calc.py --overwrite -A forest_t1_src.tif -B ctry_PROJ.tif \
              --outfile=forest_t1.tif --type=Byte \
-             --calc="255 - 254*(A==1)*(B==1)" \
+             --calc="A*B" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=255 --quiet
+             --quiet
 
 gdal_calc.py --overwrite -A forest_t2_src.tif -B ctry_PROJ.tif \
              --outfile=forest_t2.tif --type=Byte \
-             --calc="255 - 254*(A==1)*(B==1)" \
+             --calc="A*B" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=255 --quiet
+             --quiet
 
 gdal_calc.py --overwrite -A forest_t3_src.tif -B ctry_PROJ.tif \
              --outfile=forest_t3.tif --type=Byte \
-             --calc="255 - 254*(A==1)*(B==1)" \
+             --calc="A*B" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=255 --quiet
+             --quiet
 
 gdal_calc.py --overwrite -A forest_2005_src.tif -B ctry_PROJ.tif \
              --outfile=forest_2005.tif --type=Byte \
-             --calc="255 - 254*(A==1)*(B==1)" \
+             --calc="A*B" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=255 --quiet
+             --quiet
 
 gdal_calc.py --overwrite -A forest_2015_src.tif -B ctry_PROJ.tif \
              --outfile=forest_2015.tif --type=Byte \
-             --calc="255 - 254*(A==1)*(B==1)" \
+             --calc="A*B" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=255 --quiet
+             --quiet
 
 # =====
 # 4. Forest-cover change rasters
@@ -194,25 +188,23 @@ echo "Computing forest-cover change rasters\n"
 # Mask fcc23 with country border
 gdal_calc.py --overwrite -A fcc23_src.tif -B ctry_PROJ.tif \
              --outfile=fcc23.tif --type=Byte \
-             --calc="255 - 254*(A==1)*(B==1) - 255*(A==0)*(B==1)" \
+             --calc="255-254*(A==1)*(B==1)-255*(A==0)*(B==1)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=255 --quiet
 
 ## fcc123
 # Create raster fcc123.tif (0: nodata, 1: for2000, 2: for2010, 3: for2020)
-# Raster is directly masked with country border 
 gdal_calc.py --overwrite -A forest_t1.tif -B forest_t2.tif -C forest_t3.tif \
              --outfile=fcc123.tif --type=Byte \
-             --calc="1*(A==1)*(B==1)*(C==1) + 2*(A==0)*(B==1)*(C==1) + 3*(A==0)*(B==0)*(C==1)" \
-             --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
-             --NoDataValue=0 --quiet
+             --calc="A+B+C" \
+	     --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
+	     --NoDataValue=0 --quiet
 
 ## fcc12345
 # Create raster fcc12345.tif (0: nodata, 1: for2000, 2: for2005, 3: for2010, 4: for2015, 5: for2020)
-# Raster is directly masked with country border 
 gdal_calc.py --overwrite -A forest_t1.tif -B forest_2005.tif -C forest_t2.tif -D forest_2015.tif -E forest_t3.tif \
              --outfile=fcc12345.tif --type=Byte \
-	     --calc="1*(A==1)*(B==1)*(C==1)*(D==1)*(E==1) + 2*(A==0)*(B==1)*(C==1)*(D==1)*(E==1) + 3*(A==0)*(B==0)*(C==1)*(D==1)*(E==1) + 4*(A==0)*(B==0)*(C==0)*(D==1)*(E==1) + 5*(A==0)*(B==0)*(C==0)*(D==0)*(E==1)" \
+	     --calc="A+B+C+D+E" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --NoDataValue=0 --quiet
 
