@@ -319,6 +319,120 @@ def fcc(input_fcc_raster,
     return(fig)
 
 
+# plot.fcc12345
+def fcc12345(input_fcc_raster,
+             output_file="fcc12345.png",
+             maxpixels=500000,
+             borders=None,
+             zoom=None,
+             col=[(220, 105, 0, 255),
+                  (235, 140, 0, 255),
+                  (224, 48, 30, 255),
+                  (163, 32, 32, 255),
+                  (34, 139, 34, 255)],
+             figsize=(11.69, 8.27),
+             dpi=300, **kwargs):
+    """Plot forest-cover change (fcc12345) map.
+
+    This function plots the forest-cover change map with 4
+    deforestation time-periods (2000 -> 2005 -> 2010 -> 2015 -> 2020
+    for example) plus the remaining forest (5 classes).
+
+    :param input_fcc_raster: path to fcc12345 raster.
+    :param output_file: name of the plot file.
+    :param maxpixels: maximum number of pixels to plot.
+    :param borders: vector file to be plotted.
+    :param zoom: zoom to region (xmin, xmax, ymin, ymax).
+    :param col: list of rgba colors for classes 12345.
+    :param figsize: figure size in inches.
+    :param dpi: resolution for output image.
+
+    :return: a Matplotlib figure of the forest map.
+
+    """
+
+    # Load raster and band
+    rasterR = gdal.Open(input_fcc_raster, gdal.GA_ReadOnly)
+    rasterB = rasterR.GetRasterBand(1)
+    rasterND = rasterB.GetNoDataValue()
+    gt = rasterR.GetGeoTransform()
+    ncol = rasterR.RasterXSize
+    nrow = rasterR.RasterYSize
+    Xmin = gt[0]
+    Xmax = gt[0] + gt[1] * ncol
+    Ymin = gt[3] + gt[5] * nrow
+    Ymax = gt[3]
+    extent = [Xmin, Xmax, Ymin, Ymax]
+
+    # Total number of pixels
+    npixels_orig = ncol * nrow
+    # Check number of pixels is inferior to maxpixels
+    if (npixels_orig > maxpixels):
+        # Remove potential existing external overviews
+        if os.path.isfile(input_fcc_raster + ".ovr"):
+            os.remove(input_fcc_raster + ".ovr")
+        # Find overview level such that npixels <= maxpixels
+        i = 0
+        npixels_ov = npixels_orig
+        while npixels_ov > maxpixels:
+            i += 1
+            ov_level = pow(2, i)
+            npixels_ov = npixels_orig // np.power(ov_level, 2)
+        # Build overview
+        print("Build overview")
+        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        rasterR.BuildOverviews("nearest", [ov_level])
+        # Get data from overview
+        ov_band = rasterB.GetOverview(0)
+        ov_arr = ov_band.ReadAsArray()
+    else:
+        # Get original data
+        ov_arr = rasterB.ReadAsArray()
+
+    # Dereference driver
+    rasterB = None
+    del(rasterR)
+
+    # Colormap
+    colors = [(1, 1, 1, 0)] # transparent white for 0
+    cmax = 255.0  # float for division
+    for i in range(5):
+        col_class = tuple(np.array(col[i]) / cmax)
+        colors.append(col_class)
+    color_map = ListedColormap(colors)
+
+    # Plot raster
+    place = 111 if zoom is None else 121
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    ax1 = plt.subplot(place)
+    ax1.set_frame_on(False)
+    ax1.set_xticks([])
+    ax1.set_yticks([])
+    plt.imshow(ov_arr, cmap=color_map, extent=extent)
+    if borders is not None:
+        plot_layer(borders, symbol="k-", **kwargs)
+    plt.axis("off")
+    if zoom is not None:
+        z = Rectangle(
+            (zoom[0], zoom[2]),
+            zoom[1] - zoom[0],
+            zoom[3] - zoom[2],
+            fill=False
+        )
+        ax1.add_patch(z)
+        ax2 = plt.subplot(222)
+        plt.imshow(ov_arr, cmap=color_map, extent=extent)
+        plt.xlim(zoom[0], zoom[1])
+        plt.ylim(zoom[2], zoom[3])
+        ax2.set_xticks([])
+        ax2.set_yticks([])
+
+    # Save and return figure
+    fig.tight_layout()
+    fig.savefig(output_file, dpi="figure", bbox_inches="tight")
+    return(fig)
+
+
 # plot.forest
 def forest(input_forest_raster,
            output_file="forest.png",
