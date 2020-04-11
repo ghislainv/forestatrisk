@@ -17,7 +17,7 @@ from .miscellaneous import progress_bar, makeblock
 
 
 # emissions
-def emissions(input_stocks="data/AGB.tif",
+def emissions(input_stocks="data/emissions/AGB.tif",
               input_forest="output/forest_cover_2050.tif",
               coefficient=0.47,
               blk_rows=128):
