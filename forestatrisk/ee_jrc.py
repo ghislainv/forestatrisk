@@ -73,7 +73,7 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
         "users/ClassifLandsat072015/Roadless2019/AnnualChanges_1982_2019")
     AP = AP.mosaic().toByte().clip(region)
 
-    # ap_allYear: forest if Y = 1, 3, 4, 5, 13 or 14.
+    # ap_allYear: forest if Y = 1, 2, 3, 4, 5, 13, 14 or 16.
     AP_forest = AP.where(AP.eq(3).Or(AP.eq(4)).Or(
         AP.eq(5)).Or(AP.eq(13)).Or(AP.eq(14)), 1)
     ap_allYear = AP_forest.where(AP_forest.neq(1), 0)
