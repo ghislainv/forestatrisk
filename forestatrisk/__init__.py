@@ -30,6 +30,7 @@ from .predict_raster import predict_raster
 from .predict_raster_binomial_iCAR import predict_raster_binomial_iCAR
 from .resample_sum import resample_sum
 from .deforest import deforest
+from .deforest_diffusion import deforest_diffusion, deforest_diffusion_t_nofor
 from .validation import computeAUC, accuracy_indices, cross_validation, validation
 from .validation_npix import validation_npix
 from .emissions import emissions
