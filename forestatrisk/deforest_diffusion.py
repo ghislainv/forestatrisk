@@ -124,23 +124,4 @@ def deforest_diffusion_t_nofor(forest_t0, t0, annual_defor):
     
     return({"ny": ny, "year": ny + t0})
 
-
-# TEST
-
-# Set working directory
-os.chdir(os.path.expanduser("~/Code/forestatrisk-tropics/"))
-
-# Upload data
-brazil_df = pd.read_csv("Analysis/results/fcc_brazil.csv")
-forest_t0 = np.array(brazil_df.for2019)
-annual_defor = np.array(brazil_df.andef)
-
-# Apply functions
-brazil_df["for2050"] = deforest_diffusion(forest_t0=forest_t0, t0=2019, annual_defor=annual_defor, t=2050)["forest_t"]
-brazil_df["for2100"] = deforest_diffusion(forest_t0=forest_t0, t0=2019, annual_defor=annual_defor, t=2100)["forest_t"]
-brazil_df["y_zerof"] = deforest_diffusion_t_nofor(forest_t0=forest_t0, t0=2019, annual_defor=annual_defor)["year"]
-
-# Print to check results
-brazil_df[["cont", "iso3", "for2019", "andef", "for2050", "for2100", "y_zerof"]]
-
 # EOF
