@@ -104,6 +104,7 @@ conda install -c conda-forge earthengine-api --yes
 pip install pywdpa sklearn # Packages not available with conda
 # pip install forestatrisk # For PyPI version
 pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
+# conda install -c conda-forge python-dotenv rclone --yes  # Potentially interesting libraries
 ```
 
 To deactivate and delete the conda environment:
