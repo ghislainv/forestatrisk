@@ -12,7 +12,7 @@
 # Annual product legend
 # 1. Tropical moist forest (TMF including bamboo-dominated forest and mangroves)
 # 2. TMF converted later in a tree plantation
-# 3. NEW degradation 
+# 3. NEW degradation
 # 4. Ongoing degradation (disturbances still detected - can be few years after first degrad if several degradation stages)
 # 5. Degraded forest (former degradation, no disturbances detected anymore)
 # 6. NEW deforestation (may follow degradation)
@@ -20,18 +20,18 @@
 # 8. NEW Regrowth
 # 9. Regrowthing
 # 10. Other land cover (not water)
-# 11. Permanent Water (pekel et al.2015)     
-# 12. Seasonal Water (pekel et al.2015) 
+# 11. Permanent Water (pekel et al.2015)
+# 12. Seasonal Water (pekel et al.2015)
 # 13. Init period without valid data - Init class = TMF
 # 14. Init period with min 1 valid obs - Init class = TMF
-# 15. Nodata  - Init class = other LC 
+# 15. Nodata  - Init class = other LC
 # 16. Init period without valid data - Init class = Plantation
 
 # Imports
 from __future__ import division, print_function  # Python 3 compatibility
-import ee
 import time
 import subprocess
+import ee
 
 
 # ee_jrc.run_task
@@ -68,13 +68,13 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     #path = "users/ghislainv/jrc/"
 
     # JRC annual product (AP)
-    #AP = ee.ImageCollection(path + "AnnualChanges1982_2018")
+    #AP = ee.ImageCollection(path + "AnnualChanges1982_2019")
     AP = ee.ImageCollection(
         "users/ClassifLandsat072015/Roadless2019/AnnualChanges_1982_2019")
     AP = AP.mosaic().toByte().clip(region)
 
-    # ap_allYear: forest if Y = 1, 2, 3, 4, 5, 13, 14 or 16.
-    AP_forest = AP.where(AP.eq(3).Or(AP.eq(4)).Or(
+    # ap_allYear: forest if Y = 1, 2, 3, 4, 5, 13, or 14.
+    AP_forest = AP.where(AP.eq(2).Or(AP.eq(3)).Or(AP.eq(4)).Or(
         AP.eq(5)).Or(AP.eq(13)).Or(AP.eq(14)), 1)
     ap_allYear = AP_forest.where(AP_forest.neq(1), 0)
 
@@ -112,7 +112,7 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
                                              "forest2020"])
 
     # maxPixels
-    maxPix = 1e13
+    maxpix = 1e13
 
     # Export forest to Google Drive
     # ! region must be lat/long coordinates with Python API.
@@ -123,12 +123,12 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
         folder=gdrive_folder,
         region=export_coord,
         scale=scale,
-        maxPixels=maxPix,
+        maxPixels=maxpix,
         crs=proj)
     task.start()
 
     # Return task
-    return(task)
+    return task
 
 
 # ee_jrc.check
@@ -160,7 +160,7 @@ def check(gdrive_remote_rclone, gdrive_folder, iso3):
     if fname in out:
         present_in_folder = True
     # Return
-    return(present_in_folder)
+    return present_in_folder
 
 
 # ee_jrc.download
