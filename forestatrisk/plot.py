@@ -555,7 +555,8 @@ def forest(input_forest_raster,
            dpi=300, **kwargs):
     """Plot forest map.
 
-    This function plots the forest map in green value 1 in raster.
+    This function plots the forest map in green. Raster values must be
+    0 (non-forest) and 1 (forest).
 
     :param input_forest_raster: path to forest raster.
     :param output_file: name of the plot file.
@@ -617,8 +618,8 @@ def forest(input_forest_raster,
     # Colormap
     colors = []
     cmax = 255.0  # float for division
-    colors.append((34 / cmax, 139 / cmax, 34 / cmax, 1))  # forest green
     colors.append((0, 0, 0, 0))  # transparent
+    colors.append((34 / cmax, 139 / cmax, 34 / cmax, 1))  # forest green
     color_map = ListedColormap(colors)
 
     # Plot raster
