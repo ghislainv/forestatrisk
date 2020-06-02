@@ -71,7 +71,10 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     #AP = ee.ImageCollection(path + "AnnualChanges1982_2019")
     AP = ee.ImageCollection(
         "users/ClassifLandsat072015/Roadless2019/AnnualChanges_1982_2019")
-    AP = AP.mosaic().toByte().clip(region)
+    AP = AP.mosaic().toByte().unmask()
+    AP = AP.clip(region)
+    MASK = AP.select(0)
+    AP = AP.where(MASK.eq(0), 0)
 
     # ap_allYear: forest if Y = 1, 2, 3, 4, 5, 13, or 14.
     AP_forest = AP.where(AP.eq(2).Or(AP.eq(3)).Or(AP.eq(4)).Or(
