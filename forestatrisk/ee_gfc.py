@@ -49,7 +49,7 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     export_coord = region.getInfo()["coordinates"]
 
     # Hansen map
-    gfc = ee.Image("UMD/hansen/global_forest_change_2018_v1_6").clip(region)
+    gfc = ee.Image("UMD/hansen/global_forest_change_2019_v1_7").clip(region)
 
     # Tree cover, loss, and gain
     treecover = gfc.select(["treecover2000"])
@@ -68,17 +68,17 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     forest2005 = forest2000.where(loss01_04.eq(1), 0)
     forest2010 = forest2000.where(loss01_09.eq(1), 0)
     forest2015 = forest2000.where(loss01_14.eq(1), 0)
-    forest2019 = forest2000.where(lossyear.gte(1), 0)
+    forest2020 = forest2000.where(lossyear.gte(1), 0)
 
     # Forest raster with five bands
     forest = forest2000.addBands(forest2005).addBands(
-        forest2010).addBands(forest2015).addBands(forest2019)
+        forest2010).addBands(forest2015).addBands(forest2020)
     forest = forest.select([0, 1, 2, 3, 4], ["forest2000", "forest2005",
                                              "forest2010", "forest2015",
-                                             "forest2019"])
+                                             "forest2020"])
     forest = forest.set("system:bandNames", ["forest2000", "forest2005",
                                              "forest2010", "forest2015",
-                                             "forest2019"])
+                                             "forest2020"])
 
     # maxPixels
     maxPix = 1e13
