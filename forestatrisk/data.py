@@ -257,8 +257,8 @@ def country_wdpa(iso3, output_dir="."):
 def country_osm(iso3, output_dir="."):
     """Function to download OSM data for a country.
 
-    Function to download OpenStreetMap data from Geofabrik for a
-    specific country.
+    Function to download OpenStreetMap data from Geofabrik or 
+    openstreetmap.fr for aspecific country.
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 

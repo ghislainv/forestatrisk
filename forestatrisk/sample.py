@@ -107,7 +107,7 @@ def sample(nsamp=10000, adapt=True, Seed=1234, csize=10,
     if adapt is True:
         gt = forestR.GetGeoTransform()
         pix_area = gt[1] * (-gt[5])
-        farea = pix_area * nfc / 10000  # farea in ha
+        farea = pix_area * (nfc + ndc) / 10000  # farea in ha
         nsamp_prop = 1000 * farea / 1e6  # 1000 per 1Mha
         if nsamp_prop >= 50000:
             nsamp = 50000
