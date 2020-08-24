@@ -659,7 +659,6 @@ def prob(input_prob_raster,
          output_file="prob.png",
          maxpixels=500000,
          borders=None,
-         zoom=None,
          legend=False,
          figsize=(11.69, 8.27),
          dpi=300, **kwargs):
