@@ -169,7 +169,7 @@ def correlation(y, data,
             y_bin = np.array(y_bin)  # Transform into np.array to compute sum
             s = float(sum(y_bin == 1))  # success
             n = len(y_bin)  # trials
-            if n is not 0:
+            if n != 0:
                 theta[j] = s / n
             else:
                 theta[j] = np.nan
@@ -354,7 +354,6 @@ def fcc12345(input_fcc_raster,
     # Load raster and band
     rasterR = gdal.Open(input_fcc_raster, gdal.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
-    rasterND = rasterB.GetNoDataValue()
     gt = rasterR.GetGeoTransform()
     ncol = rasterR.RasterXSize
     nrow = rasterR.RasterYSize
@@ -466,7 +465,6 @@ def fcc123(input_fcc_raster,
     # Load raster and band
     rasterR = gdal.Open(input_fcc_raster, gdal.GA_ReadOnly)
     rasterB = rasterR.GetRasterBand(1)
-    rasterND = rasterB.GetNoDataValue()
     gt = rasterR.GetGeoTransform()
     ncol = rasterR.RasterXSize
     nrow = rasterR.RasterYSize
@@ -978,7 +976,6 @@ def var(var_dir,
     # The PDF document
     pdf_pages = PdfPages(output_file)
     # Generate the pages
-    gridsize = gridsize
     ny = gridsize[0]
     nx = gridsize[1]
     nplot_per_page = ny * nx
@@ -1051,7 +1048,6 @@ def var(var_dir,
 def rho(input_rho_raster,
         output_file="rho.png",
         borders=None,
-        zoom=None,
         figsize=(11.69, 8.27),
         dpi=300):
     """Plot map of spatial random effects (rho).
@@ -1061,7 +1057,6 @@ def rho(input_rho_raster,
     :param input_rho_raster: path to raster of random effects.
     :param output_file: name of the plot file.
     :param borders: vector file to be plotted.
-    :param zoom: zoom to region (xmin, xmax, ymin, ymax).
     :param figsize: figure size in inches.
     :param dpi: resolution for output image.
 
@@ -1094,8 +1089,8 @@ def rho(input_rho_raster,
     ov_arr = ov_band.ReadAsArray()
     ov_arr[ov_arr == -9999] = np.nan
 
-    # Compute 95% quantiles
-    rho_min, rho_max = np.nanpercentile(ov_arr, [0.25, 97.5])
+    # Compute 99% quantiles
+    rho_min, rho_max = np.nanpercentile(ov_arr, [0.5, 99.5])
     rho_bound = np.max((-rho_min, rho_max))
 
     # Dereference driver
