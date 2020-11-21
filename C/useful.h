@@ -20,3 +20,5 @@ double myrnorm(double mean, double sd);
 double integer(double a, double b);
 double inter_le(double a, double b);
 double myrtgamma_left(double a, double b, double t);
+
+// EOF

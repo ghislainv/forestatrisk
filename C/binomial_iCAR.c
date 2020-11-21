@@ -840,12 +840,12 @@ static PyObject *binomial_iCAR(PyObject *self, PyObject *args, PyObject *keywds)
   free(theta_latent_vect);
   free(theta_pred_vect);
   
-} // end hSDM_binomial_iCAR function
+} // end binomial_iCAR function
 
 /* Bind Python function names to our C functions */
-static PyMethodDef hsdm_methods[] = {
+static PyMethodDef hbm_methods[] = {
   /* The cast of the function is necessary since PyCFunction values
-   * only take two PyObject* parameters, and hSDM_binomial_iCAR() takes
+   * only take two PyObject* parameters, and binomial_iCAR() takes
    * three.
    */
   {"binomial_iCAR", (PyCFunction)binomial_iCAR, METH_VARARGS | METH_KEYWORDS,
@@ -857,12 +857,12 @@ static PyMethodDef hsdm_methods[] = {
 /* https://stackoverflow.com/questions/43621948/c-python-module-import-error-undefined-symbol-py-initmodule3-py-initmodu?noredirect=1&lq=1 */
 /* http://python3porting.com/cextensions.html */
 #if PY_MAJOR_VERSION >= 3
-  static struct PyModuleDef hsdm = {
+  static struct PyModuleDef hbm = {
       PyModuleDef_HEAD_INIT,
-      "hsdm", /* m_name */
-      "hsdm module to fit hierarchical Bayesian models", /* m_doc */
+      "hbm", /* m_name */
+      "hbm module to fit hierarchical Bayesian models", /* m_doc */
       -1, /* m_size */
-      hsdm_methods, /* m_methods */
+      hbm_methods, /* m_methods */
       NULL, /* m_reload */
       NULL, /* m_traverse */
       NULL, /* m_clear */
@@ -872,16 +872,16 @@ static PyMethodDef hsdm_methods[] = {
 
 /* Python calls this to let us initialize our module */
 #if PY_MAJOR_VERSION < 3
-  PyMODINIT_FUNC inithsdm(void) {
-    (void) Py_InitModule("hsdm", hsdm_methods);
+  PyMODINIT_FUNC inithbm(void) {
+    (void) Py_InitModule("hbm", hbm_methods);
     /* Load 'numpy' functionality. */
     import_array();
   }
 #else
-  PyMODINIT_FUNC PyInit_hsdm(void) {
+  PyMODINIT_FUNC PyInit_hbm(void) {
     /* Load 'numpy' functionality. */
     import_array();
-    return PyModule_Create(&hsdm);
+    return PyModule_Create(&hbm);
   }
 #endif
 

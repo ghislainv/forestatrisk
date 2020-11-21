@@ -9,33 +9,16 @@
 # license         :GPLv3
 # ==============================================================================
 
+# Standard library imports
 from __future__ import division, print_function  # Python 3 compatibility
 import os
+
+# Third party imports
 import matplotlib
+
+# Use Agg if no display found
 if os.environ.get("DISPLAY", "") == "":
     print("no display found. Using non-interactive Agg backend")
     matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import numpy as np
-from . import data
-from . import plot
-from .accuracy import confmat, accuracy
-from .interpolate_rho import interpolate_rho
-from .miscellaneous import invlogit, make_dir
-from .model_binomial_iCAR import model_binomial_iCAR
-from .model_random_forest import model_random_forest
-from .sample import sample
-from .cellneigh import cellneigh, cellneigh_ctry
-from .predict_raster import predict_raster
-from .predict_raster_binomial_iCAR import predict_raster_binomial_iCAR
-from .resample_sum import resample_sum
-from .deforest import deforest
-from .deforest_diffusion import deforest_diffusion, deforest_diffusion_t_nofor
-from .validation import computeAUC, accuracy_indices, cross_validation, validation
-from .validation_npix import validation_npix
-from .emissions import emissions
-from .countpix import countpix
-from .diffproj import r_diffproj, mat_diffproj
-from .wrast_rho import wrast_rho
 
-# End
+# EOF

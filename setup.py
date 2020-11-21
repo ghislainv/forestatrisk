@@ -18,10 +18,10 @@ import numpy.distutils.misc_util
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-# Informations to compile internal hsdm module
-hsdm_module = Extension("forestatrisk.hsdm",
-                        sources=["C/binomial_iCAR.c", "C/useful.c"])
-                        #extra_compile_args=['-std=c99'])
+# Informations to compile internal hbm module (hierarchical bayesian model)
+hbm_module = Extension("forestatrisk.hbm",
+                       sources=["C/binomial_iCAR.c", "C/useful.c"])
+# extra_compile_args=['-std=c99'])
 
 # Setup
 setup(name="forestatrisk",
@@ -39,9 +39,9 @@ setup(name="forestatrisk",
                    "Programming Language :: Python :: 3",
                    "Operating System :: OS Independent",
                    "Topic :: Scientific/Engineering :: Bio-Informatics"],
-      keywords="deforestation hsdm hierarchical logistic model probability risk Bayesian spatial autocorrelation",
+      keywords="deforestation hbm hierarchical logistic model probability risk Bayesian spatial autocorrelation",
       python_requires=">=2.7",
-      ext_modules=[hsdm_module],
+      ext_modules=[hbm_module],
       packages=["forestatrisk"],
       package_dir={"forestatrisk": "forestatrisk"},
       package_data={"forestatrisk": ["data/*.csv", "shell/data_country.sh",
