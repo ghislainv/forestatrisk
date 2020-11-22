@@ -11,13 +11,17 @@
 
 # Import
 from __future__ import division, print_function  # Python 3 compatibility
+from glob import glob  # To explore files in a folder
 import os  # Operating system interfaces
 import sys  # To read and write files
-from glob import glob  # To explore files in a folder
+
+# Third party imports
 import numpy as np  # For arrays
-import pandas as pd  # To export result as a pandas DF
 from osgeo import gdal  # GIS libraries
-from .miscellaneous import makeblock, progress_bar
+import pandas as pd  # To export result as a pandas DF
+
+# Local imports
+from ..misc import makeblock, progress_bar
 
 
 # Sample
@@ -32,25 +36,25 @@ def sample(nsamp=10000, adapt=True, Seed=1234, csize=10,
     forested areas and (ii) extract environmental variable values for
     each spatial point.
 
-    :param nsamp: number of random spatial points.
+    :param nsamp: Number of random spatial points.
 
-    :param adapt: adapt nsamp to forest area: 1000 for 1 Mha of
+    :param adapt: Adapt nsamp to forest area: 1000 for 1 Mha of
     forest, with min=10000 and max=50000.
 
-    :param seed: seed for random number generator.
+    :param seed: Seed for random number generator.
 
-    :param csize: spatial cell size in km.
+    :param csize: Spatial cell size in km.
 
-    :param var_dir: directory with raster data.
+    :param var_dir: Directory with raster data.
 
-    :param input_forest_raster: name of the forest raster file (1=forest, \
+    :param input_forest_raster: Name of the forest raster file (1=forest, \
     0=deforested) in the var_dir directory
 
-    :param output_file: path to file to save sample points.
+    :param output_file: Path to file to save sample points.
 
-    :param blk_rows: if > 0, number of lines per block.
+    :param blk_rows: If > 0, number of lines per block.
 
-    :return: a pandas DataFrame, each row being one observation.
+    :return: A pandas DataFrame, each row being one observation.
 
     """
 
@@ -220,11 +224,11 @@ def sample(nsamp=10000, adapt=True, Seed=1234, csize=10,
     nrow = int(np.ceil((Ymax - Ymin) / csize))
     ncell = ncol * nrow
     print("... {} cells ({} x {})".format(ncell, nrow, ncol))
-    # I and J are the coordinates of the cells and start at zero
+    # bigI and bigJ are the coordinates of the cells and start at zero
     print("Identify cell number from XY coordinates")
-    J = ((pts_x - Xmin) / csize).astype(np.int)
-    I = ((Ymax - pts_y) / csize).astype(np.int)
-    cell = I * ncol + J  # Cell number starts at zero
+    bigJ = ((pts_x - Xmin) / csize).astype(np.int)
+    bigI = ((Ymax - pts_y) / csize).astype(np.int)
+    cell = bigI * ncol + bigJ  # Cell number starts at zero
 
     # =============================================
     # Extract values from rasters
@@ -304,6 +308,6 @@ def sample(nsamp=10000, adapt=True, Seed=1234, csize=10,
     # Convert to pandas DataFrame and return the result
     colname.extend(["X", "Y", "cell"])
     val_DF = pd.DataFrame(val, columns=colname)
-    return(val_DF)
+    return val_DF
 
 # End

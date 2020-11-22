@@ -21,8 +21,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 
 # Local application imports
-from ..misc.miscellaneous import progress_bar, makeblock
-from ..model.model_binomial_iCAR import model_binomial_iCAR
+from ..misc import progress_bar, makeblock
+from ..model import model_binomial_iCAR
 
 
 # AUC (see Liu 2011)

@@ -22,8 +22,8 @@ import pandas as pd
 from patsy import build_design_matrices
 
 # Local application imports
-from ..misc.miscellaneous import invlogit, rescale
-from ..misc.miscellaneous import progress_bar, makeblock
+from ..misc import invlogit, rescale
+from ..misc import progress_bar, makeblock
 
 
 # predict_binomial_iCAR

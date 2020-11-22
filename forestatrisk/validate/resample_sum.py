@@ -17,7 +17,7 @@ import numpy as np
 from osgeo import gdal
 
 # Local application imports
-from ..misc.miscellaneous import progress_bar, make_square
+from ..misc import progress_bar, make_square
 
 
 # Coarsen

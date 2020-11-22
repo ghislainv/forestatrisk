@@ -33,7 +33,7 @@ from pywdpa import get_wdpa
 import pandas as pd
 
 # Local application imports
-from ..misc.miscellaneous import make_dir
+from ..misc import make_dir
 from . import ee_jrc, ee_gfc
 
 

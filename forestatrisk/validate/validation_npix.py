@@ -18,7 +18,7 @@ from osgeo import gdal
 import pandas as pd
 
 # Local application imports
-from ..misc.miscellaneous import progress_bar
+from ..misc import progress_bar
 
 
 # Make

@@ -14,9 +14,9 @@ from setuptools import setup
 from distutils.core import Extension
 import numpy.distutils.misc_util
 
-# Markdown README file
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+# reStructuredText README file
+with open("README.rst", "rb") as f:
+    long_description = f.read().decode("utf-8")
 
 # Informations to compile internal hbm module (hierarchical bayesian model)
 hbm_module = Extension("forestatrisk.hbm",
@@ -25,7 +25,7 @@ hbm_module = Extension("forestatrisk.hbm",
 
 # Setup
 setup(name="forestatrisk",
-      version="0.1.1",
+      version="0.2",
       author="Ghislain Vieilledent",
       author_email="ghislain.vieilledent@cirad.fr",
       url="https://github.com/ghislainv/forestatrisk",

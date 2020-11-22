@@ -9,7 +9,7 @@
 # license         :GPLv3
 # ===================================================================
 
-from .data import data
+from . import data
 from .sample import sample
 
 # EOF

@@ -9,6 +9,6 @@
 # license         :GPLv3
 # ===================================================================
 
-from plot import plot
+from . import plot
 
 # EOF

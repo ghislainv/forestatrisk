@@ -10,7 +10,7 @@
 # ===================================================================
 
 from .cellneigh import cellneigh, cellneigh_ctry
-from .model.binomial.iCAR import model_binomial_iCAR
+from .model_binomial_iCAR import model_binomial_iCAR
 from .model_random_forest import model_random_forest
 
 # EOF

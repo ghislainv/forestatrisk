@@ -21,8 +21,8 @@ import pandas as pd
 from osgeo import gdal
 
 # Local application imports
-from ..misc.miscellaneous import rescale
-from ..misc.miscellaneous import progress_bar, makeblock
+from ..misc import rescale
+from ..misc import progress_bar, makeblock
 
 
 # predict_raster

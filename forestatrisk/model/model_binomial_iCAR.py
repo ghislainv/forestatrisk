@@ -20,7 +20,7 @@ from patsy import dmatrices, build_design_matrices, EvalEnvironment
 from sklearn.linear_model import LogisticRegression
 
 # Local application imports
-from ..misc.miscellaneous import invlogit
+from ..misc import invlogit
 from .. import hbm
 
 
