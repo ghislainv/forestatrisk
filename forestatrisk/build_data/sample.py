@@ -38,17 +38,11 @@ def sample(nsamp=10000, adapt=True, Seed=1234, csize=10,
     each spatial point.
 
     :param nsamp: Number of random spatial points.
-
     :param adapt: Adapt nsamp to forest area: 1000 for 1 Mha of
         forest, with min=10000 and max=50000.
-        
-
     :param seed: Seed for random number generator.
-
     :param csize: Spatial cell size in km.
-
     :param var_dir: Directory with raster data.
-
     :param input_forest_raster: Name of the forest raster file
         (1=forest, 0=deforested) in the var_dir directory.
     :param output_file: Path to file to save sample points.

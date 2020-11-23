@@ -4,7 +4,7 @@ Reference
 ``.build_data``
 ===============
 
-.. automodule:: forestatrisk.build_data.sample
+.. automodule:: forestatrisk.build_data
    :members: sample
    :undoc-members:
    :show-inheritance:
