@@ -13,7 +13,7 @@
 import os
 import sys
 import re  # Regular expression
-#sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
@@ -40,7 +40,7 @@ add_function_parentheses = True
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode',
-              'sphinx.ext.napoleon', 'sphinx.ext.mathjax', 'nbsphinx']
+              'sphinx.ext.mathjax', 'nbsphinx']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

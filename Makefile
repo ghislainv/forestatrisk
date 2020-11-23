@@ -3,7 +3,7 @@
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
-SPHINXOPTS    ?= 
+SPHINXOPTS    ?= -E
 SPHINXBUILD   ?= ~/.pyenv/versions/miniconda3-latest/envs/conda-far/bin/sphinx-build
 SOURCEDIR     = docsrc
 BUILDDIR      = build

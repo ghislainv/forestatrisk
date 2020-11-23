@@ -106,19 +106,19 @@ def country_forest_run(iso3, proj="EPSG:3395",
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
     :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
-    GDAL/OGR. Default to "EPSG:3395" (World Mercator).
+        GDAL/OGR. Default to "EPSG:3395" (World Mercator).
 
     :param output_dir: Directory where shapefile for country border is saved.
 
     :param keep_dir: Boolean to keep the output_dir folder. Default
-    to "True" (directory "data_raw" is not deleted).
+        to "True" (directory "data_raw" is not deleted).
 
     :param fcc_source: Source for forest-cover change data. Can be
-    "gfc" (Global Forest Change data) or "jrc" (Joint Research Center
-    data). Default to "jrc".
+        "gfc" (Global Forest Change data) or "jrc" (Joint Research Center
+        data). Default to "jrc".
 
     :param perc: Tree cover percentage threshold to define forest
-    (only used if fcc_source="gfc").
+        (only used if fcc_source="gfc").
 
     :param gdrive_remote_rclone: Name of the Google Drive remote for rclone.
 
@@ -201,7 +201,7 @@ def country_forest_download(iso3,
     :param gdrive_folder: the Google Drive folder to download from.
 
     :param output_dir: Output directory to download files to. Default
-    to current working directory.
+        to current working directory.
 
     """
 
@@ -242,7 +242,7 @@ def country_wdpa(iso3, output_dir="."):
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
     :param output_dir: Directory where shapefiles for protected areas
-    are downloaded. Default to current working directory.
+        are downloaded. Default to current working directory.
 
     """
 
@@ -268,7 +268,7 @@ def country_osm(iso3, output_dir="."):
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
     :param output_dir: Directory where data is downloaded. Default to
-    current working directory.
+        current working directory.
 
     """
 
@@ -320,7 +320,7 @@ def country_srtm(iso3, output_dir="."):
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
     :param output_dir: Directory where data is downloaded. Default to
-    current working directory.
+        current working directory.
 
     """
 
@@ -386,7 +386,7 @@ def country_gadm(iso3, output_dir="."):
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
     :param output_dir: Directory where data is downloaded. Default to
-    current working directory.
+        current working directory.
 
     """
 
@@ -425,7 +425,7 @@ def country_download(iso3,
     :param gdrive_folder: the Google Drive folder to download from.
 
     :param output_dir: Directory where data is downloaded. Default to
-    current working directory.
+        current working directory.
 
     """
 
@@ -477,16 +477,16 @@ def country_compute(iso3,
     :param output_dir: Output directory.
 
     :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
-    GDAL/OGR. Default to "EPSG:3395" (World Mercator).
+        GDAL/OGR. Default to "EPSG:3395" (World Mercator).
 
     :param data_country: Boolean for running data_country.sh to
-    compute country variables. Default to "True".
+        compute country variables. Default to "True".
 
     :param data_forest: Boolean for running data_forest.sh to
-    compute forest landscape variables. Default to "True".
+        compute forest landscape variables. Default to "True".
 
     :param keep_temp_dir: Boolean to keep the temporary directory. Default
-    to "False".
+        to "False".
 
     """
 

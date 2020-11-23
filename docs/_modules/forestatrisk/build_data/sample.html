@@ -60,22 +60,23 @@
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">makeblock</span><span class="p">,</span> <span class="n">progress_bar</span>
 
 
-<span class="c1"># Sample</span>
-<div class="viewcode-block" id="sample"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.sample">[docs]</a><span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="n">nsamp</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">adapt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span> <span class="n">csize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="c1"># sample()</span>
+<div class="viewcode-block" id="sample"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.sample.sample">[docs]</a><span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="n">nsamp</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">adapt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span> <span class="n">csize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
            <span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
            <span class="n">input_forest_raster</span><span class="o">=</span><span class="s2">&quot;forest.tif&quot;</span><span class="p">,</span>
            <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/sample.txt&quot;</span><span class="p">,</span>
            <span class="n">blk_rows</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Sample points and extract raster values.</span>
 
-<span class="sd">    This function (i) randomly draw spatial points in deforested and</span>
+<span class="sd">    This function (i) randomly draws spatial points in deforested and</span>
 <span class="sd">    forested areas and (ii) extract environmental variable values for</span>
 <span class="sd">    each spatial point.</span>
 
 <span class="sd">    :param nsamp: Number of random spatial points.</span>
 
-<span class="sd">    :param adapt: Adapt nsamp to forest area: 1000 for 1 Mha of</span>
-<span class="sd">    forest, with min=10000 and max=50000.</span>
+<span class="sd">    :param adapt: Adapt ``nsamp`` to forest area: 1000 for 1 Mha of</span>
+<span class="sd">        forest, with min=10000 and max=50000.</span>
 
 <span class="sd">    :param seed: Seed for random number generator.</span>
 
@@ -83,14 +84,14 @@
 
 <span class="sd">    :param var_dir: Directory with raster data.</span>
 
-<span class="sd">    :param input_forest_raster: Name of the forest raster file (1=forest, \</span>
-<span class="sd">    0=deforested) in the var_dir directory</span>
+<span class="sd">    :param input_forest_raster: Name of the forest raster file</span>
+<span class="sd">       (1=forest, 0=deforested) in the var_dir directory.</span>
 
 <span class="sd">    :param output_file: Path to file to save sample points.</span>
 
 <span class="sd">    :param blk_rows: If &gt; 0, number of lines per block.</span>
 
-<span class="sd">    :return: A pandas DataFrame, each row being one observation.</span>
+<span class="sd">    :return: A Pandas DataFrame, each row being one observation.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
