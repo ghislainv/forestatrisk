@@ -41,6 +41,12 @@ from .validate import validation_npix
 from .validate import computeAUC, accuracy_indices
 from .validate import cross_validation, validation
 
+# Welcome message
+print("# ==================================================================== #")
+print("# ForestAtRisk: modelling and forecasting deforestation in the tropics #")
+print("# https://ecology.ghislainv.fr/forestatrisk                            #")
+print("# ==================================================================== #")
+
 # Use Agg if no display found
 if os.environ.get("DISPLAY", "") == "":
     print("no display found. Using non-interactive Agg backend")
