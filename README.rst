@@ -1,26 +1,42 @@
+..
+   # ==============================================================================
+   # author          :Ghislain Vieilledent
+   # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+   # web             :https://ecology.ghislainv.fr
+   # license         :GPLv3
+   # ==============================================================================
+
+.. image:: https://ecology.ghislainv.fr/forestatrisk/_images/logo-forestatrisk.svg
+   :align: right
+   :target: https://ecology.ghislainv.fr/forestatrisk
+   :alt: Logo forestatrisk
+   :width: 140px
+
+``forestatrisk`` Python package
+*******************************
 
 .. image:: https://badge.fury.io/py/forestatrisk.svg
    :target: https://badge.fury.io/py/forestatrisk
    :alt: PyPI version
 
+.. image:: https://img.shields.io/pypi/pyversions/forestatrisk.svg
+   :target: https://pypi.org/project/forestatrisk
+   :alt: Python version
 
 .. image:: https://api.travis-ci.org/ghislainv/forestatrisk.svg?branch=master
    :target: https://travis-ci.org/ghislainv/forestatrisk
    :alt: Travis CI
 	 
+.. image:: https://img.shields.io/badge/licence-GPLv3-8f10cb.svg
+   :target: https://www.gnu.org/licenses/gpl-3.0.html
+   :alt: License GPLv3	 
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.996337.svg
+   :target: https://doi.org/10.5281/zenodo.996337
+   :alt: Zenodo
 	 
-``forestatrisk`` Python package
-*******************************
-
-.. image:: docs/_images/forestatrisk.jpg
-   :width: 500px
-   :align: center
-   :target: docs/_images/forestatrisk.jpg
-   :alt: prob_AFR
-
-
-Estimating the risk of deforestation in tropical countries
-==========================================================
+Overview
+========
 
 The ``forestatrisk`` Python package can be used to estimate the
 spatial probability of deforestation in the tropics depending on
@@ -31,6 +47,12 @@ Spatial environmental variables can be derived from topography
 towns, and forest edge), deforestation history (distance to previous
 deforestation) or land conservation status (eg. protected area) for
 example.
+
+.. image:: https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.jpg
+   :width: 500px
+   :align: center
+   :target: https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.jpg
+   :alt: prob_AFR
 
 Sampling
 --------
@@ -145,9 +167,9 @@ Map of the probability of deforestation in Madagascar for the year
 2010 obtained with ``forestatrisk``. Dark red: high probability of
 deforestation, Dark green: low probability of deforestation.
 
-.. image:: docs/_images/prob_Mada.jpg
+.. image:: https://ecology.ghislainv.fr/forestatrisk/_images/prob_Mada.jpg
    :width: 350px
    :align: center
-   :target: docs/_images/prob_Mada.jpg
+   :target: https://ecology.ghislainv.fr/forestatrisk/_images/prob_Mada.jpg
    :alt: prob_Mada
 

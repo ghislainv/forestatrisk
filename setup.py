@@ -10,9 +10,17 @@
 # ==============================================================================
 
 # Import
+import re
 from setuptools import setup, find_packages
 from distutils.core import Extension
 import numpy.distutils.misc_util
+
+# Version
+version = re.search(
+    '^__version__\s*=\s*"(.*)"',
+    open('forestatrisk/forestatrisk.py').read(),
+    re.M
+    ).group(1)
 
 # reStructuredText README file
 with open("README.rst", "rb") as f:
@@ -32,7 +40,7 @@ hbm_module = Extension("forestatrisk.hbm",
 
 # Setup
 setup(name="forestatrisk",
-      version="0.2",
+      version=version,
       author="Ghislain Vieilledent",
       author_email="ghislain.vieilledent@cirad.fr",
       url="https://github.com/ghislainv/forestatrisk",
@@ -41,18 +49,25 @@ setup(name="forestatrisk",
       long_description=long_description,
       long_description_content_type="text/x-rst",
       classifiers=["Development Status :: 4 - Beta",
-                   "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+                   "License :: OSI Approved :: GNU General Public License v3 "
+                   "(GPLv3)",
                    "Programming Language :: Python :: 2",
                    "Programming Language :: Python :: 3",
                    "Operating System :: OS Independent",
                    "Topic :: Scientific/Engineering :: Bio-Informatics"],
-      keywords="deforestation hbm hierarchical logistic model probability risk Bayesian spatial autocorrelation",
+      keywords="deforestation hbm hierarchical logistic model probability "
+               "risk Bayesian spatial autocorrelation",
       python_requires=">=2.7",
       ext_modules=[hbm_module],
       packages=find_packages(),
       package_dir={"forestatrisk": "forestatrisk"},
-      package_data={"forestatrisk": ["data/*.csv", "shell/data_country.sh",
-                                     "shell/forest_country.sh"]},
+      package_data={
+          "forestatrisk": ["data/*.csv", "shell/data_country.sh",
+                           "shell/forest_country.sh"]
+      },
+      entry_points={
+          "console_scripts": ["forestatrisk = forestatrisk.forestatrisk:main"]
+      },
       install_requires=["earthengine-api", "gdal", "numpy", "matplotlib",
                         "pandas", "patsy", "pywdpa", "sklearn"],
       extras_require={

@@ -22,17 +22,18 @@ from .miscellaneous import makeblock, progress_bar
 
 # Countpix
 def countpix(input_raster, value=1, blk_rows=0):
+
     """Count the number of pixels having a specific value.
 
-    Count the number of pixels (and the corresponding area in ha) having a
-    specific value.
+    Count the number of pixels (and the corresponding area in ha)
+    having a specific value.
 
     :param input_raster: Input raster file.
     :param value: Target value.
     :param blk_rows: if > 0, number of lines per block.
 
-    :return: A dictionary with the number of pixels having the
-    specified value (npix) and the total area (area, in ha).
+    :return: A dictionary with the number of pixels having the \
+             specified value (npix) and the total area (area, in ha).
 
     """
 

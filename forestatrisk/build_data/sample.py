@@ -24,22 +24,24 @@ import pandas as pd  # To export result as a pandas DF
 from ..misc import makeblock, progress_bar
 
 
-# Sample
+# sample()
 def sample(nsamp=10000, adapt=True, Seed=1234, csize=10,
            var_dir="data",
            input_forest_raster="forest.tif",
            output_file="output/sample.txt",
            blk_rows=0):
+
     """Sample points and extract raster values.
 
-    This function (i) randomly draw spatial points in deforested and
+    This function (i) randomly draws spatial points in deforested and
     forested areas and (ii) extract environmental variable values for
     each spatial point.
 
     :param nsamp: Number of random spatial points.
 
     :param adapt: Adapt nsamp to forest area: 1000 for 1 Mha of
-    forest, with min=10000 and max=50000.
+        forest, with min=10000 and max=50000.
+        
 
     :param seed: Seed for random number generator.
 
@@ -47,14 +49,12 @@ def sample(nsamp=10000, adapt=True, Seed=1234, csize=10,
 
     :param var_dir: Directory with raster data.
 
-    :param input_forest_raster: Name of the forest raster file (1=forest, \
-    0=deforested) in the var_dir directory
-
+    :param input_forest_raster: Name of the forest raster file
+        (1=forest, 0=deforested) in the var_dir directory.
     :param output_file: Path to file to save sample points.
-
     :param blk_rows: If > 0, number of lines per block.
 
-    :return: A pandas DataFrame, each row being one observation.
+    :return: A Pandas DataFrame, each row being one observation.
 
     """
 

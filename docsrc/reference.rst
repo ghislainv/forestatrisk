@@ -1,0 +1,56 @@
+Reference
+*********
+
+``.build_data``
+===============
+
+.. automodule:: forestatrisk.build_data.sample
+   :members: sample
+   :undoc-members:
+   :show-inheritance:
+
+``.model``
+==========
+
+.. autoclass:: forestatrisk.model.model_binomial_iCAR.model_binomial_iCAR
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+``.predict``
+============
+
+.. automodule:: forestatrisk.predict
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+``.project``
+============
+
+.. automodule:: forestatrisk.project
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+``.validate``
+=============
+
+.. automodule:: forestatrisk.validate
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+``.plot``
+=========
+
+.. automodule:: forestatrisk
+   :members: plot.*
+   :show-inheritance:
+
+``.misc``
+=========
+
+.. automodule:: forestatrisk.misc
+   :members: countpix, invlogit, make_dir
+
