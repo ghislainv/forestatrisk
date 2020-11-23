@@ -6,7 +6,7 @@
    # license         :GPLv3
    # ==============================================================================
 
-.. image:: https://ecology.ghislainv.fr/forestatrisk/_images/logo-forestatrisk.svg
+.. image:: https://ecology.ghislainv.fr/forestatrisk/_images/logo-far.svg
    :align: right
    :target: https://ecology.ghislainv.fr/forestatrisk
    :alt: Logo forestatrisk
