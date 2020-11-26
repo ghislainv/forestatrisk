@@ -1,72 +1,176 @@
 Reference
 *********
 
+..
+  # ===========================================================
+  # Data
+  # ===========================================================
+
 1. Data
 ===========
 
-Derive forest data
-------------------
+Obtain forest cover change data
++++++++++++++++++++++++++++++++
+.. currentmodule:: forestatrisk.build_data.data
 
-.. automodule:: forestatrisk.build_data.data
-   :members: country_forest_run
+Forest data from GEE
+--------------------
+.. autofunction:: country_forest_run
 
 Download data
---------------
++++++++++++++
+.. currentmodule:: forestatrisk.build_data.data
 
-.. automodule:: forestatrisk.build_data.data
-   :members: country_download, country_forest_download, country_gadm, country_osm, country_srtm, country_wdpa
+All data
+--------
+.. autofunction:: country_download
+
+Forest data
+-----------
+.. autofunction:: country_forest_download
+
+GADM data
+---------
+.. autofunction:: country_gadm
+
+OSM data
+--------
+.. autofunction:: country_osm
+
+SRTM data
+---------
+.. autofunction:: country_srtm
+
+WDPA data
+---------
+.. autofunction:: country_wdpa
 
 Compute variables
------------------
++++++++++++++++++
+.. currentmodule:: forestatrisk.build_data.data
 
-.. automodule:: forestatrisk.build_data.data
-   :members: country_compute
+.. autofunction:: country_compute
 
 Utilities
----------
++++++++++
+.. currentmodule:: forestatrisk.build_data.data
 
-.. automodule:: forestatrisk.build_data.data
-   :members: extent_shp, tiles_srtm
+extent_shp
+----------
+.. autofunction:: extent_shp
 
+tiles_srtm
+----------	  
+.. autofunction:: tiles_srtm
+
+..
+  # ===========================================================
+  # Sample
+  # ===========================================================
+		  
 2. Sample
 =========
 
-.. automodule:: forestatrisk.build_data
-   :members: sample
+.. currentmodule:: forestatrisk.build_data.sample
+
+.. autofunction:: sample
+
+..
+  # ===========================================================
+  # Model
+  # ===========================================================
 
 3. Model
 ========
 
 iCAR model
-----------
+++++++++++
 
-.. automodule:: forestatrisk.model
-   :members: model_binomial_iCAR
+model_binomial_iCAR
+-------------------
+.. currentmodule:: forestatrisk.model.model_binomial_iCAR
+.. autofunction:: model_binomial_iCAR
 
-.. automodule:: forestatrisk.model
-   :members: ceillneigh
+cellneigh
+---------
+.. currentmodule:: forestatrisk.model.cellneigh
+.. autofunction:: cellneigh
+.. autofunction:: cellneigh_ctry
 
 Random Forest model
--------------------
++++++++++++++++++++
+.. currentmodule:: forestatrisk.model.model_random_forest
 
-.. automodule:: forestatrisk.model
-   :members: model_random_forest
+random_forest
+-------------
+.. autofunction:: model_random_forest
 
+..
+  # ===========================================================
+  # Predict
+  # ===========================================================
+   
 4. Predict
 ==========
 
-.. automodule:: forestatrisk.predict
-   :members:
 
+.. currentmodule:: forestatrisk.predict.interpolate_rho
+.. autofunction:: interpolate_rho
+
+
+.. currentmodule:: forestatrisk.predict.predict_raster
+.. autofunction:: predict_raster
+
+
+.. currentmodule:: forestatrisk.predict.predict_raster_binomial_iCAR
+.. autofunction:: predict_raster_binomial_iCAR
+		  
+..
+  # ===========================================================
+  # Project
+  # ===========================================================
+  
 5. Project
 ==========
 
-.. automodule:: forestatrisk.project
-   :members:
+Deforest
+++++++++
+.. currentmodule:: forestatrisk.project.deforest
+.. autofunction:: deforest
+		  
+		  
+Deforestation diffusion
++++++++++++++++++++++++
+.. currentmodule:: forestatrisk.project.deforest_diffusion
 
+diffusion
+---------
+.. autofunction:: deforest_diffusion
+
+diffusion_t_nofor
+-----------------
+.. autofunction:: deforest_diffusion_t_nofor
+
+Carbon emissions
+++++++++++++++++
+.. currentmodule:: forestatrisk.project.emissions
+		  
+.. autofunction:: emissions
+
+..
+  # ===========================================================
+  # Validate
+  # ===========================================================
+		  
 6. Validate
 ===========
+.. currentmodule:: forestatrisk.validate.validation
 
-.. automodule:: forestatrisk.validate
-   :members:
+Accuracy indices
+++++++++++++++++
+.. autofunction:: computeAUC
+.. autofunction:: accuracy_indices
+.. autofunction:: cross_validation
+.. autofunction:: validation
+
 

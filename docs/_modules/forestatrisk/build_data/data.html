@@ -101,7 +101,7 @@
     <span class="sd">&quot;&quot;&quot;Compute lat/long tiles for SRTM data from an extent.</span>
 
 <span class="sd">    This function computes lat/long tiles for SRTM data from an extent</span>
-<span class="sd">    in lat/long. See &lt;http://dwtkns.com/srtm/&gt;. SRTM tiles are 5x5</span>
+<span class="sd">    in lat/long. See `&lt;http://dwtkns.com/srtm/&gt;`_. SRTM tiles are 5x5</span>
 <span class="sd">    degrees. x: -180/+180, y: +60/-60.</span>
 
 <span class="sd">    :param extent_latlong: Extent in lat/long: (xmin, ymin, xmax, ymax).</span>
@@ -139,7 +139,7 @@
                        <span class="n">gdrive_remote_rclone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">gdrive_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute forest rasters per country and export them to Google Drive</span>
-<span class="sd">    with Google Earth Engine.</span>
+<span class="sd">    with Google Earth Engine (GEE).</span>
 
 <span class="sd">    :param iso3: Country ISO 3166-1 alpha-3 code.</span>
 
@@ -156,7 +156,7 @@
 <span class="sd">        data. Default to &quot;jrc&quot;.</span>
 
 <span class="sd">    :param perc: Tree cover percentage threshold to define forest</span>
-<span class="sd">        (only used if ``fcc_source=&quot;gfc&quot;``).</span>
+<span class="sd">        (only used if ``fcc_source=&quot;gfc&quot;``\\ ).</span>
 
 <span class="sd">    :param gdrive_remote_rclone: Name of the Google Drive remote for rclone.</span>
 
@@ -230,7 +230,7 @@
 <span class="sd">    Download forest cover data from Google Drive in the current</span>
 <span class="sd">    working directory. Print a message if the file is not available.</span>
 
-<span class="sd">    RClone program is needed: https://rclone.org.</span>
+<span class="sd">    RClone program is needed: `&lt;https://rclone.org&gt;`_\\ .</span>
 
 <span class="sd">    :param iso3: Country ISO 3166-1 alpha-3 code.</span>
 
@@ -274,7 +274,7 @@
     <span class="sd">&quot;&quot;&quot;Function to download the protected areas per country.</span>
 
 <span class="sd">    Protected areas comes from the World Database on Protected Areas</span>
-<span class="sd">    (&lt;https://www.protectedplanet.net/&gt;). This function uses the</span>
+<span class="sd">    (\\ `&lt;https://www.protectedplanet.net/&gt;`_\\ ). This function uses the</span>
 <span class="sd">    pywdpa python package.</span>
 
 <span class="sd">    :param iso3: Country ISO 3166-1 alpha-3 code.</span>
@@ -300,8 +300,8 @@
 <div class="viewcode-block" id="country_osm"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.data.country_osm">[docs]</a><span class="k">def</span> <span class="nf">country_osm</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Function to download OSM data for a country.</span>
 
-<span class="sd">    Function to download OpenStreetMap data from Geofabrik or</span>
-<span class="sd">    openstreetmap.fr for aspecific country.</span>
+<span class="sd">    Function to download OpenStreetMap data from Geofabrik.de or</span>
+<span class="sd">    OpenStreetMap.fr for aspecific country.</span>
 
 <span class="sd">    :param iso3: Country ISO 3166-1 alpha-3 code.</span>
 
@@ -419,7 +419,7 @@
     <span class="sd">&quot;&quot;&quot;Function to download GADM data for a country.</span>
 
 <span class="sd">    Function to download GADM (Global Administrative Areas) for a</span>
-<span class="sd">    specific country. See &lt;https://gadm.org&gt;.</span>
+<span class="sd">    specific country. See `&lt;https://gadm.org&gt;`_\\ .</span>
 
 <span class="sd">    :param iso3: Country ISO 3166-1 alpha-3 code.</span>
 
@@ -454,7 +454,7 @@
     <span class="sd">&quot;&quot;&quot;Function to download data for a specific country.</span>
 
 <span class="sd">    Function to download all the data for a specific country. It</span>
-<span class="sd">    includes GADM, SRTM, WDPA, OSM and GEE forest data.</span>
+<span class="sd">    includes GEE forest data, GADM, OSM, SRTM, and WDPA data.</span>
 
 <span class="sd">    :param iso3: Country ISO 3166-1 alpha-3 code.</span>
 

@@ -46,16 +46,16 @@
 <a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.996337"><img alt="Zenodo" src="https://zenodo.org/badge/DOI/10.5281/zenodo.996337.svg" /></a>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package can be used to model and forecast
-deforestation in the tropics. It provides functions to estimate the
-spatial probability of deforestation in the tropics depending on
-various spatial explanatory variables.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package can be used to <strong>model</strong> and
+<strong>forecast</strong> deforestation in the tropics. It provides functions to
+estimate the spatial probability of deforestation in the tropics
+depending on various spatial explanatory variables.</p>
 <p>Spatial explanatory variables can be derived from topography
 (altitude, slope, and aspect), accessibility (distance to roads,
 towns, and forest edge), deforestation history (distance to previous
 deforestation) or land conservation status (eg. protected area) for
 example.</p>
-<a class="reference external image-reference" href="https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png"><img alt="prob_AFR" class="align-center" src="https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png" style="width: 500px;" /></a>
+<a class="reference external image-reference" href="https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png"><img alt="prob_AFR" class="align-center" src="https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png" style="width: 1000px;" /></a>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
@@ -71,7 +71,10 @@ mkdir venvs <span class="c1"># Directory for virtual environments</span>
 <span class="nb">cd</span> venvs
 virtualenv --python<span class="o">=</span>/usr/bin/python3 venv-far
 <span class="nb">source</span> ~/venvs/venv-far/bin/activate
-pip install numpy <span class="c1"># Install numpy first</span>
+<span class="c1"># Install numpy first</span>
+pip install numpy
+<span class="c1"># Install gdal (the correct version)</span>
+pip install --global-option<span class="o">=</span>build_ext --global-option<span class="o">=</span><span class="s2">&quot;-I/usr/include/gdal&quot;</span> <span class="nv">gdal</span><span class="o">==</span><span class="k">$(</span>gdal-config --version<span class="k">)</span>
 <span class="c1"># pip install forestatrisk # For PyPI version, this will install all other dependencies</span>
 pip install https://github.com/ghislainv/forestatrisk/archive/master.zip <span class="c1"># For GitHub dev version</span>
 pip install statsmodels <span class="c1"># Optional additional packages</span>
@@ -139,8 +142,9 @@ raster of probability of deforestation (rescaled from 1 to 65535),
 which is obtained from function <code class="docutils literal notranslate"><span class="pre">.predict()</span></code>, and an area (in
 hectares) to be deforested.</p>
 </div>
+</div>
 <div class="section" id="content">
-<h3>Content<a class="headerlink" href="#content" title="Permalink to this headline">¶</a></h3>
+<h2>Content<a class="headerlink" href="#content" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/get_started.html">Get started</a><ul>
@@ -157,7 +161,7 @@ hectares) to be deforested.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="reference.html#data">1. Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="reference.html#module-forestatrisk.build_data">2. Sample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#sample">2. Sample</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reference.html#model">3. Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reference.html#predict">4. Predict</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reference.html#project">5. Project</a></li>
@@ -174,13 +178,12 @@ hectares) to be deforested.</p>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
-<h3>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h3>
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-</div>
 </div>
 </div>
 

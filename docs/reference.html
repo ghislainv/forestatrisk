@@ -41,13 +41,15 @@
 <h1>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="data">
 <h2>1. Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="module-forestatrisk.build_data.data">
-<span id="derive-forest-data"></span><h3>Derive forest data<a class="headerlink" href="#module-forestatrisk.build_data.data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="obtain-forest-cover-change-data">
+<h3>Obtain forest cover change data<a class="headerlink" href="#obtain-forest-cover-change-data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="forest-data-from-gee">
+<h4>Forest data from GEE<a class="headerlink" href="#forest-data-from-gee" title="Permalink to this headline">¶</a></h4>
 <dl class="py function">
 <dt id="forestatrisk.build_data.data.country_forest_run">
 <code class="sig-name descname">country_forest_run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">proj</span><span class="o">=</span><span class="default_value">'EPSG:3395'</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'data_raw'</span></em>, <em class="sig-param"><span class="n">keep_dir</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fcc_source</span><span class="o">=</span><span class="default_value">'jrc'</span></em>, <em class="sig-param"><span class="n">perc</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">gdrive_remote_rclone</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gdrive_folder</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_forest_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_forest_run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute forest rasters per country and export them to Google Drive
-with Google Earth Engine.</p>
+with Google Earth Engine (GEE).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -70,14 +72,17 @@ data. Default to “jrc”.</p></li>
 </dd></dl>
 
 </div>
-<div class="section" id="module-0">
-<span id="download-data"></span><h3>Download data<a class="headerlink" href="#module-0" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="download-data">
+<h3>Download data<a class="headerlink" href="#download-data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="all-data">
+<h4>All data<a class="headerlink" href="#all-data" title="Permalink to this headline">¶</a></h4>
 <dl class="py function">
 <dt id="forestatrisk.build_data.data.country_download">
 <code class="sig-name descname">country_download</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">gdrive_remote_rclone</span></em>, <em class="sig-param"><span class="n">gdrive_folder</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'.'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_download" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to download data for a specific country.</p>
 <p>Function to download all the data for a specific country. It
-includes GADM, SRTM, WDPA, OSM and GEE forest data.</p>
+includes GEE forest data, GADM, OSM, SRTM, and WDPA data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -91,6 +96,9 @@ current working directory.</p></li>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="forest-data">
+<h4>Forest data<a class="headerlink" href="#forest-data" title="Permalink to this headline">¶</a></h4>
 <dl class="py function">
 <dt id="forestatrisk.build_data.data.country_forest_download">
 <code class="sig-name descname">country_forest_download</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">gdrive_remote_rclone</span></em>, <em class="sig-param"><span class="n">gdrive_folder</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'.'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_forest_download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_forest_download" title="Permalink to this definition">¶</a></dt>
@@ -111,12 +119,15 @@ to current working directory.</p></li>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="gadm-data">
+<h4>GADM data<a class="headerlink" href="#gadm-data" title="Permalink to this headline">¶</a></h4>
 <dl class="py function">
 <dt id="forestatrisk.build_data.data.country_gadm">
 <code class="sig-name descname">country_gadm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'.'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_gadm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_gadm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to download GADM data for a country.</p>
 <p>Function to download GADM (Global Administrative Areas) for a
-specific country. See &lt;<a class="reference external" href="https://gadm.org">https://gadm.org</a>&gt;.</p>
+specific country. See <a class="reference external" href="https://gadm.org">https://gadm.org</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -128,12 +139,15 @@ current working directory.</p></li>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="osm-data">
+<h4>OSM data<a class="headerlink" href="#osm-data" title="Permalink to this headline">¶</a></h4>
 <dl class="py function">
 <dt id="forestatrisk.build_data.data.country_osm">
 <code class="sig-name descname">country_osm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'.'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_osm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_osm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to download OSM data for a country.</p>
-<p>Function to download OpenStreetMap data from Geofabrik or
-openstreetmap.fr for aspecific country.</p>
+<p>Function to download OpenStreetMap data from Geofabrik.de or
+OpenStreetMap.fr for aspecific country.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -145,6 +159,9 @@ current working directory.</p></li>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="srtm-data">
+<h4>SRTM data<a class="headerlink" href="#srtm-data" title="Permalink to this headline">¶</a></h4>
 <dl class="py function">
 <dt id="forestatrisk.build_data.data.country_srtm">
 <code class="sig-name descname">country_srtm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'.'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_srtm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_srtm" title="Permalink to this definition">¶</a></dt>
@@ -162,12 +179,15 @@ current working directory.</p></li>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="wdpa-data">
+<h4>WDPA data<a class="headerlink" href="#wdpa-data" title="Permalink to this headline">¶</a></h4>
 <dl class="py function">
 <dt id="forestatrisk.build_data.data.country_wdpa">
 <code class="sig-name descname">country_wdpa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'.'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_wdpa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_wdpa" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to download the protected areas per country.</p>
 <p>Protected areas comes from the World Database on Protected Areas
-(&lt;<a class="reference external" href="https://www.protectedplanet.net/">https://www.protectedplanet.net/</a>&gt;). This function uses the
+(<a class="reference external" href="https://www.protectedplanet.net/">https://www.protectedplanet.net/</a>). This function uses the
 pywdpa python package.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -181,8 +201,9 @@ are downloaded. Default to current working directory.</p></li>
 </dd></dl>
 
 </div>
-<div class="section" id="module-1">
-<span id="compute-variables"></span><h3>Compute variables<a class="headerlink" href="#module-1" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="compute-variables">
+<h3>Compute variables<a class="headerlink" href="#compute-variables" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
 <dt id="forestatrisk.build_data.data.country_compute">
 <code class="sig-name descname">country_compute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">temp_dir</span><span class="o">=</span><span class="default_value">'data_raw'</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">proj</span><span class="o">=</span><span class="default_value">'EPSG:3395'</span></em>, <em class="sig-param"><span class="n">data_country</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">data_forest</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">keep_temp_dir</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_compute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_compute" title="Permalink to this definition">¶</a></dt>
@@ -211,8 +232,10 @@ to “False”.</p></li>
 </dd></dl>
 
 </div>
-<div class="section" id="module-2">
-<span id="utilities"></span><h3>Utilities<a class="headerlink" href="#module-2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="utilities">
+<h3>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="extent-shp">
+<h4>extent_shp<a class="headerlink" href="#extent-shp" title="Permalink to this headline">¶</a></h4>
 <dl class="py function">
 <dt id="forestatrisk.build_data.data.extent_shp">
 <code class="sig-name descname">extent_shp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inShapefile</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#extent_shp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.extent_shp" title="Permalink to this definition">¶</a></dt>
@@ -229,12 +252,15 @@ shapefile.</p>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="tiles-srtm">
+<h4>tiles_srtm<a class="headerlink" href="#tiles-srtm" title="Permalink to this headline">¶</a></h4>
 <dl class="py function">
 <dt id="forestatrisk.build_data.data.tiles_srtm">
 <code class="sig-name descname">tiles_srtm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">extent_latlong</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#tiles_srtm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.tiles_srtm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute lat/long tiles for SRTM data from an extent.</p>
 <p>This function computes lat/long tiles for SRTM data from an extent
-in lat/long. See &lt;<a class="reference external" href="http://dwtkns.com/srtm/">http://dwtkns.com/srtm/</a>&gt;. SRTM tiles are 5x5
+in lat/long. See <a class="reference external" href="http://dwtkns.com/srtm/">http://dwtkns.com/srtm/</a>. SRTM tiles are 5x5
 degrees. x: -180/+180, y: +60/-60.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -248,11 +274,12 @@ degrees. x: -180/+180, y: +60/-60.</p>
 
 </div>
 </div>
-<div class="section" id="module-forestatrisk.build_data">
-<span id="sample"></span><h2>2. Sample<a class="headerlink" href="#module-forestatrisk.build_data" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="sample">
+<h2>2. Sample<a class="headerlink" href="#sample" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="forestatrisk.build_data.sample">
-<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nsamp</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">adapt</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">Seed</span><span class="o">=</span><span class="default_value">1234</span></em>, <em class="sig-param"><span class="n">csize</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">var_dir</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">input_forest_raster</span><span class="o">=</span><span class="default_value">'forest.tif'</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/sample.txt'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/sample.html#sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.sample" title="Permalink to this definition">¶</a></dt>
+<dt id="forestatrisk.build_data.sample.sample">
+<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nsamp</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">adapt</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">Seed</span><span class="o">=</span><span class="default_value">1234</span></em>, <em class="sig-param"><span class="n">csize</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">var_dir</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">input_forest_raster</span><span class="o">=</span><span class="default_value">'forest.tif'</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/sample.txt'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/sample.html#sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.sample.sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sample points and extract raster values.</p>
 <p>This function (i) randomly draws spatial points in deforested and
 forested areas and (ii) extract environmental variable values for
@@ -283,19 +310,367 @@ forest, with min=10000 and max=50000. Default to <code class="docutils literal n
 <h2>3. Model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="icar-model">
 <h3>iCAR model<a class="headerlink" href="#icar-model" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="model-binomial-icar">
+<h4>model_binomial_iCAR<a class="headerlink" href="#model-binomial-icar" title="Permalink to this headline">¶</a></h4>
+<dl class="py function">
+<dt id="forestatrisk.model.model_binomial_iCAR.model_binomial_iCAR">
+<code class="sig-name descname">model_binomial_iCAR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">suitability_formula</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">n_neighbors</span></em>, <em class="sig-param"><span class="n">neighbors</span></em>, <em class="sig-param"><span class="n">NA_action</span><span class="o">=</span><span class="default_value">'drop'</span></em>, <em class="sig-param"><span class="n">data_pred</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">eval_env</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">burnin</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">mcmc</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">thin</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">beta_start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">Vrho_start</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">mubeta</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">Vbeta</span><span class="o">=</span><span class="default_value">1000000.0</span></em>, <em class="sig-param"><span class="n">priorVrho</span><span class="o">=</span><span class="default_value">- 1.0</span></em>, <em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">rate</span><span class="o">=</span><span class="default_value">0.0005</span></em>, <em class="sig-param"><span class="n">Vrho_max</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">1234</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">save_rho</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">save_p</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/model/model_binomial_iCAR.html#model_binomial_iCAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.model_binomial_iCAR.model_binomial_iCAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>model_binomial_iCAR class.</p>
+<p>model_binomial_iCAR class to estimates the parameters of a Binomial
+model with iCAR process for spatial autocorrelation in a
+hierarchical Bayesian framework.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="cellneigh">
+<h4>cellneigh<a class="headerlink" href="#cellneigh" title="Permalink to this headline">¶</a></h4>
+<dl class="py function">
+<dt id="forestatrisk.model.cellneigh.cellneigh">
+<code class="sig-name descname">cellneigh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raster</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">region</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">csize</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">rank</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/model/cellneigh.html#cellneigh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.cellneigh.cellneigh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute number of spatial cells and neighbours.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raster</strong> – Path to raster file to compute region.</p></li>
+<li><p><strong>region</strong> – List/tuple of region coordinates (east, west, south, north).</p></li>
+<li><p><strong>csize</strong> – Spatial cell size (in km).</p></li>
+<li><p><strong>rank</strong> – Rank of the neighborhood (1 for chess king’s move).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple of length 2 with number of neighbours for each cell
+and adjacent cells.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.model.cellneigh.cellneigh_ctry">
+<code class="sig-name descname">cellneigh_ctry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raster</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">region</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vector</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">csize</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">rank</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/model/cellneigh.html#cellneigh_ctry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.cellneigh.cellneigh_ctry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute number of spatial cells and neighbours inside country’s
+borders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raster</strong> – Path to raster file to compute region from.</p></li>
+<li><p><strong>region</strong> – List/tuple of region coordinates (east, west,
+south, north) if raster is not provided.</p></li>
+<li><p><strong>vector</strong> – Path to vector file with country’s borders.</p></li>
+<li><p><strong>csize</strong> – Spatial cell size (in km).</p></li>
+<li><p><strong>rank</strong> – Rank of the neighborhood (1 for chess king’s move).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple of length 4 with (i) number of neighbours for each
+cell, (ii) adjacent cells, (iii) total number of cells inside
+country’s border, (iv) total number of cells from region.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </div>
 <div class="section" id="random-forest-model">
 <h3>Random Forest model<a class="headerlink" href="#random-forest-model" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="random-forest">
+<h4>random_forest<a class="headerlink" href="#random-forest" title="Permalink to this headline">¶</a></h4>
+<dl class="py function">
+<dt id="forestatrisk.model.model_random_forest.model_random_forest">
+<code class="sig-name descname">model_random_forest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">formula</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">NA_action</span><span class="o">=</span><span class="default_value">'drop'</span></em>, <em class="sig-param"><span class="n">eval_env</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">n_estimators</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">n_jobs</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/model/model_random_forest.html#model_random_forest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.model_random_forest.model_random_forest" title="Permalink to this definition">¶</a></dt>
+<dd><p>model_random_forest class.</p>
+<p>model_random_forest class.</p>
+</dd></dl>
+
+</div>
 </div>
 </div>
 <div class="section" id="predict">
 <h2>4. Predict<a class="headerlink" href="#predict" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.predict.interpolate_rho.interpolate_rho">
+<code class="sig-name descname">interpolate_rho</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rho</span></em>, <em class="sig-param"><span class="n">input_raster</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/rho.tif'</span></em>, <em class="sig-param"><span class="n">csize_orig</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">csize_new</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/predict/interpolate_rho.html#interpolate_rho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.predict.interpolate_rho.interpolate_rho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample rho values with interpolation.</p>
+<p>This function resamples the spatial random effects (rho values)
+obtained from an iCAR model. It performs a cubicspline interpolation
+at a finer resolution and smoothens the rho values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> – Original rho values estimates with the iCAR model.</p></li>
+<li><p><strong>input_raster</strong> – Path to input raster defining the region.</p></li>
+<li><p><strong>output_file</strong> – Path to output raster file with resampled rho values.</p></li>
+<li><p><strong>csize_orig</strong> – Original size of the spatial cells (in km).</p></li>
+<li><p><strong>csize_new</strong> – New size of the spatial cells for cubicspline
+interpolation (in km).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.predict.predict_raster.predict_raster">
+<code class="sig-name descname">predict_raster</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">var_dir</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">input_forest_raster</span><span class="o">=</span><span class="default_value">'data/forest.tif'</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'predictions.tif'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/predict/predict_raster.html#predict_raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.predict.predict_raster.predict_raster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the spatial probability of deforestation from a model.</p>
+<p>This function predicts the spatial probability of deforestation
+from a model_binomial_iCAR model. Computation are done by block and
+can be performed on large geographical areas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – The model (glm, rf) to predict from. Must have a
+model.predict() function.</p></li>
+<li><p><strong>var_dir</strong> – Directory with rasters (.tif) of explicative variables.</p></li>
+<li><p><strong>input_forest_raster</strong> – Path to forest raster (1 for forest).</p></li>
+<li><p><strong>output_file</strong> – Name of the output raster file for predictions.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for computation by block.</p></li>
+<li><p><strong>**kwargs</strong> – see below.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><p>Additional arguments to be passed to
+<code class="docutils literal notranslate"><span class="pre">model.predict()</span></code>.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A raster of predictions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.predict.predict_raster_binomial_iCAR.predict_raster_binomial_iCAR">
+<code class="sig-name descname">predict_raster_binomial_iCAR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">var_dir</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">input_cell_raster</span><span class="o">=</span><span class="default_value">'output/rho.tif'</span></em>, <em class="sig-param"><span class="n">input_forest_raster</span><span class="o">=</span><span class="default_value">'data/forest.tif'</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/pred_binomial_iCAR.tif'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/predict/predict_raster_binomial_iCAR.html#predict_raster_binomial_iCAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.predict.predict_raster_binomial_iCAR.predict_raster_binomial_iCAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the spatial probability of deforestation from a model.</p>
+<p>This function predicts the spatial probability of deforestation
+from a model_binomial_iCAR model. Computation are done by block and
+can be performed on large geographical areas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – The model_binomial_iCAR model to predict from.</p></li>
+<li><p><strong>var_dir</strong> – Directory with rasters (.tif) of explicative variables.</p></li>
+<li><p><strong>input_cell_raster</strong> – Path to raster of rho values for spatial cells.</p></li>
+<li><p><strong>input_forest_raster</strong> – Path to forest raster (1 for forest).</p></li>
+<li><p><strong>output_file</strong> – Name of the raster file to output the probability map.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for computation by block.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="project">
 <h2>5. Project<a class="headerlink" href="#project" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="deforest">
+<h3>Deforest<a class="headerlink" href="#deforest" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="forestatrisk.project.deforest.deforest">
+<code class="sig-name descname">deforest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_raster</span></em>, <em class="sig-param"><span class="n">hectares</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/fcc.tif'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/project/deforest.html#deforest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.project.deforest.deforest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to map the future forest-cover change.</p>
+<p>This function computes the future forest cover map based on (i) a
+raster of probability of deforestation (rescaled from 1 to 65535),
+and (ii) a surface (in hectares) to be deforested.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_raster</strong> – Raster of probability of deforestation (1 to 65535
+with 0 as nodata value).</p></li>
+<li><p><strong>hectares</strong> – Number of hectares to deforest.</p></li>
+<li><p><strong>output_file</strong> – Name of the raster file for forest cover map.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for block (else 256x256).</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple of statistics (hectares, frequence,
+threshold, error).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="deforestation-diffusion">
+<h3>Deforestation diffusion<a class="headerlink" href="#deforestation-diffusion" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="diffusion">
+<h4>diffusion<a class="headerlink" href="#diffusion" title="Permalink to this headline">¶</a></h4>
+<dl class="py function">
+<dt id="forestatrisk.project.deforest_diffusion.deforest_diffusion">
+<code class="sig-name descname">deforest_diffusion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">forest_t0</span></em>, <em class="sig-param"><span class="n">t0</span></em>, <em class="sig-param"><span class="n">annual_defor</span></em>, <em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/project/deforest_diffusion.html#deforest_diffusion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.project.deforest_diffusion.deforest_diffusion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Diffusion of the deforestation between states of a country.</p>
+<p>Diffusion of the deforestation between states of a country. We
+suppose that the deforestation is constant at the country
+level. When a state has no more forest, its deforestation (annual
+area of deforestation) is attributed to the other states of the
+country still having forest. This function can be useful for
+Brazil for example.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>forest_t0</strong> – Forest area at t0 for each state. Numpy array.</p></li>
+<li><p><strong>t0</strong> – Year at t0.</p></li>
+<li><p><strong>annual_defor</strong> – Annual deforestation for each state. Numpy array.</p></li>
+<li><p><strong>t</strong> – Year at the end of the deforestation period.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionnary with forest at t0 (“forest_t0”), forest at
+time t (“forest_t”) and deforestation between t0 and t
+(“defor_t0_t”).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="diffusion-t-nofor">
+<h4>diffusion_t_nofor<a class="headerlink" href="#diffusion-t-nofor" title="Permalink to this headline">¶</a></h4>
+<dl class="py function">
+<dt id="forestatrisk.project.deforest_diffusion.deforest_diffusion_t_nofor">
+<code class="sig-name descname">deforest_diffusion_t_nofor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">forest_t0</span></em>, <em class="sig-param"><span class="n">t0</span></em>, <em class="sig-param"><span class="n">annual_defor</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/project/deforest_diffusion.html#deforest_diffusion_t_nofor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.project.deforest_diffusion.deforest_diffusion_t_nofor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the number of years until there is no forest in each state
+for of a deforestation with diffusion.</p>
+<p>Compute the number of years until there is no forest in each state
+for of a deforestation with diffusion. When a state has no more
+forest, its deforestation (annual area of deforestation) is
+attributed to the other states of the country still having
+forest. This function can be useful for Brazil for example.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>forest_t0</strong> – Forest area at t0 for each state. Numpy array.</p></li>
+<li><p><strong>t0</strong> – Year at t0.</p></li>
+<li><p><strong>annual_defor</strong> – Annual deforestation for each state. Numpy array.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionnary indicating the number of years (“ny”), for
+each state, after which all the forest will have disappeared, and
+the corresponding year (“y”, assuming forest_t0 was estimated at
+the beginning of the year).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="carbon-emissions">
+<h3>Carbon emissions<a class="headerlink" href="#carbon-emissions" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="forestatrisk.project.emissions.emissions">
+<code class="sig-name descname">emissions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_stocks</span><span class="o">=</span><span class="default_value">'data/emissions/AGB.tif'</span></em>, <em class="sig-param"><span class="n">input_forest</span><span class="o">=</span><span class="default_value">'output/forest_cover_2050.tif'</span></em>, <em class="sig-param"><span class="n">coefficient</span><span class="o">=</span><span class="default_value">0.47</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/project/emissions.html#emissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.project.emissions.emissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the carbon emissions associated to future deforestation.</p>
+<p>This function predicts the carbon emissions associated to future
+deforestation. Computation are done by block and can be performed
+on large geographical areas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_stocks</strong> – Path to raster of biomass or carbon stocks (in Mg/ha).</p></li>
+<li><p><strong>input_forest</strong> – Path to forest-cover change raster (0=deforestation).</p></li>
+<li><p><strong>coefficient</strong> – Coefficient to convert stocks in MgC/ha (can be 1).</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for computation by block.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Emissions of carbon in MgC.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </div>
 <div class="section" id="validate">
 <h2>6. Validate<a class="headerlink" href="#validate" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="accuracy-indices">
+<h3>Accuracy indices<a class="headerlink" href="#accuracy-indices" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="forestatrisk.validate.validation.computeAUC">
+<code class="sig-name descname">computeAUC</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos_scores</span></em>, <em class="sig-param"><span class="n">neg_scores</span></em>, <em class="sig-param"><span class="n">n_sample</span><span class="o">=</span><span class="default_value">100000</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/validation.html#computeAUC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.validation.computeAUC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the AUC index.</p>
+<p>Compute the Area Under the ROC Curve (AUC). See Liu et al. 2011
+&lt;10.1111/j.1600-0587.2010.06354.x&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos_scores</strong> – Scores of positive observations.</p></li>
+<li><p><strong>neg_scores</strong> – Scores of negative observations.</p></li>
+<li><p><strong>n_samples</strong> – Number of samples to approximate AUC.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>AUC value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.validation.accuracy_indices">
+<code class="sig-name descname">accuracy_indices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pred</span></em>, <em class="sig-param"><span class="n">obs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/validation.html#accuracy_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.validation.accuracy_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute accuracy indices.</p>
+<p>Compute the Overall Accuracy, the Figure of Merit, the
+Specificity, the Sensitivity, the True Skill Statistics and the
+Cohen’s Kappa from a confusion matrix built on predictions
+vs. observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> – List of predictions.</p></li>
+<li><p><strong>obs</strong> – List of observations.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionnary of accuracy indices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.validation.cross_validation">
+<code class="sig-name descname">cross_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">formula</span></em>, <em class="sig-param"><span class="n">mod_type</span><span class="o">=</span><span class="default_value">'icar'</span></em>, <em class="sig-param"><span class="n">ratio</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">nrep</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">1234</span></em>, <em class="sig-param"><span class="n">icar_args</span><span class="o">=</span><span class="default_value">{'beta_start': 0, 'burnin': 1000, 'mcmc': 1000, 'n_neighbors': None, 'neighbors': None, 'thin': 1}</span></em>, <em class="sig-param"><span class="n">rf_args</span><span class="o">=</span><span class="default_value">{'n_estimators': 100, 'n_jobs': None}</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/validation.html#cross_validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.validation.cross_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model cross-validation</p>
+<p>Performs model cross-validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Full dataset.</p></li>
+<li><p><strong>formula</strong> – Model formula.</p></li>
+<li><p><strong>mod_type</strong> – Model type, can be either “icar”, “glm”, or “rf”.</p></li>
+<li><p><strong>ratio</strong> – Percentage of data used for testing.</p></li>
+<li><p><strong>nrep</strong> – Number of repetitions for cross-validation.</p></li>
+<li><p><strong>seed</strong> – Seed for reproducibility.</p></li>
+<li><p><strong>icar_args</strong> – Dictionnary of arguments for the binomial iCAR model.</p></li>
+<li><p><strong>rf_args</strong> – Dictionnary of arguments for the random forest model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Pandas data frame with cross-validation results.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.validation.validation">
+<code class="sig-name descname">validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pred</span></em>, <em class="sig-param"><span class="n">obs</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/validation.html#validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.validation.validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute accuracy indices based on predicted and observed
+forest-cover change (fcc) maps.</p>
+<p>Compute the Overall Accuracy, the Figure of Merit, the
+Specificity, the Sensitivity, the True Skill Statistics and the
+Cohen’s Kappa from a confusion matrix built on predictions
+vs. observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> – Raster of predicted fcc.</p></li>
+<li><p><strong>obs</strong> – Raster of observed fcc.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for block (else 256x256).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionnary of accuracy indices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </div>
 </div>
 
@@ -334,7 +709,7 @@ forest, with min=10000 and max=50000. Default to <code class="docutils literal n
 <li class="toctree-l1"><a class="reference internal" href="notebooks/get_started.html">Get started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#data">1. Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-forestatrisk.build_data">2. Sample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sample">2. Sample</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#model">3. Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#predict">4. Predict</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#project">5. Project</a></li>
