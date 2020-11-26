@@ -38,69 +38,22 @@
 Overview
 ========
 
-The ``forestatrisk`` Python package can be used to estimate the
+The ``forestatrisk`` Python package can be used to model and forecast
+deforestation in the tropics. It provides functions to estimate the
 spatial probability of deforestation in the tropics depending on
-various spatial environmental variables.
+various spatial explanatory variables.
 
-Spatial environmental variables can be derived from topography
+Spatial explanatory variables can be derived from topography
 (altitude, slope, and aspect), accessibility (distance to roads,
 towns, and forest edge), deforestation history (distance to previous
 deforestation) or land conservation status (eg. protected area) for
 example.
 
-.. image:: https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.jpg
+.. image:: https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png
    :width: 500px
    :align: center
-   :target: https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.jpg
+   :target: https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png
    :alt: prob_AFR
-
-Sampling
---------
-
-Function ``.sample()`` allows the random sampling of observations points
-considering historical deforestation maps. The sampling is balanced
-and stratified considering remaining forest and deforested areas after
-a given period of time. The function also retrieves information from
-environmental variables for each sampled point. The sampling is done
-by block to allow the computation on large study areas (e.g. country
-or continental scale) with a high spatial resolution (e.g. 30m).
-
-Modelling
----------
-
-Function ``.model_binomial_iCAR()`` can be used to fit the deforestation
-model from the data. A linear Binomial logistic regression model is
-used to estimate the parameters of the deforestation model. The model
-includes an intrinsic Conditional Autoregressive (iCAR) process to
-account for the spatial autocorrelation of the observations
-(Vieilledent et al. 2014). Parameter inference is done in a
-hierarchical Bayesian framework. The function calls a Gibbs sampler
-with a Metropolis algorithm written in pure C code to reduce
-computation time.
-
-Predicting
-----------
-
-Function ``.predict()`` allows predicting the deforestation probability
-on the whole study area using the deforestation model fitted with the
-``.model()`` function. The prediction is done by block to allow the
-computation on large study areas (e.g. country or continental scale)
-with a high spatial resolution (e.g. 30m).
-
-Function ``.deforest()`` predicts the future forest cover map based on a
-raster of probability of deforestation (rescaled from 1 to 65535),
-which is obtained from function ``.predict()``, and an area (in
-hectares) to be deforested.
-
-Tutorial
-========
-
-We wrote a tutorial using a notebook to show how to use the
-``forestatrisk`` Python package. We took Madagascar as a case study
-considering past deforestation on the period 2000-2010, estimating
-deforestation probability for the year 2010, and projecting the future
-forest cover in 2050. The notebook is available at the following web
-adress: `<https://forestatrisk.cirad.fr/tutorial/>`_.
 
 Installation
 ============
@@ -136,7 +89,7 @@ To deactivate and delete the virtual environment:
    rm -R ~/venvs/venv-far # Just remove the repository
 
 Using ``conda``
-===============
+---------------
 
 You first need to have ``miniconda3`` installed (see `here <https://docs.conda.io/en/latest/miniconda.html>`__).
 
@@ -159,17 +112,44 @@ To deactivate and delete the conda environment:
    conda deactivate
    conda env remove --name conda-far
 
+Main functionalities
+====================
 
-Figure
+Sample
 ------
 
-Map of the probability of deforestation in Madagascar for the year
-2010 obtained with ``forestatrisk``. Dark red: high probability of
-deforestation, Dark green: low probability of deforestation.
+Function ``.sample()`` allows the random sampling of observations points
+considering historical deforestation maps. The sampling is balanced
+and stratified considering remaining forest and deforested areas after
+a given period of time. The function also retrieves information from
+environmental variables for each sampled point. The sampling is done
+by block to allow the computation on large study areas (e.g. country
+or continental scale) with a high spatial resolution (e.g. 30m).
 
-.. image:: https://ecology.ghislainv.fr/forestatrisk/_images/prob_Mada.jpg
-   :width: 350px
-   :align: center
-   :target: https://ecology.ghislainv.fr/forestatrisk/_images/prob_Mada.jpg
-   :alt: prob_Mada
+Model
+-----
+
+Function ``.model_binomial_iCAR()`` can be used to fit the deforestation
+model from the data. A linear Binomial logistic regression model is
+used to estimate the parameters of the deforestation model. The model
+includes an intrinsic Conditional Autoregressive (iCAR) process to
+account for the spatial autocorrelation of the observations
+(Vieilledent et al. 2014). Parameter inference is done in a
+hierarchical Bayesian framework. The function calls a Gibbs sampler
+with a Metropolis algorithm written in pure C code to reduce
+computation time.
+
+Predict and project
+-------------------
+
+Function ``.predict()`` allows predicting the deforestation probability
+on the whole study area using the deforestation model fitted with the
+``.model()`` function. The prediction is done by block to allow the
+computation on large study areas (e.g. country or continental scale)
+with a high spatial resolution (e.g. 30m).
+
+Function ``.deforest()`` predicts the future forest cover map based on a
+raster of probability of deforestation (rescaled from 1 to 65535),
+which is obtained from function ``.predict()``, and an area (in
+hectares) to be deforested.
 

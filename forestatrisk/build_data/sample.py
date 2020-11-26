@@ -39,10 +39,10 @@ def sample(nsamp=10000, adapt=True, Seed=1234, csize=10,
 
     :param nsamp: Number of random spatial points.
 
-    :param adapt: Adapt ``nsamp`` to forest area: 1000 for 1 Mha of
-        forest, with min=10000 and max=50000.
+    :param adapt: Boolean. Adapt ``nsamp`` to forest area: 1000 for 1 Mha of
+        forest, with min=10000 and max=50000. Default to ``True``.
 
-    :param seed: Seed for random number generator.
+    :param Seed: Seed for random number generator.
 
     :param csize: Spatial cell size in km.
 

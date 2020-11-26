@@ -114,11 +114,11 @@ def country_forest_run(iso3, proj="EPSG:3395",
         to "True" (directory "data_raw" is not deleted).
 
     :param fcc_source: Source for forest-cover change data. Can be
-        "gfc" (Global Forest Change data) or "jrc" (Joint Research Center
-        data). Default to "jrc".
+        "gfc" (Global Forest Change) or "jrc" (Joint Research Center)
+        data. Default to "jrc".
 
     :param perc: Tree cover percentage threshold to define forest
-        (only used if fcc_source="gfc").
+        (only used if ``fcc_source="gfc"``).
 
     :param gdrive_remote_rclone: Name of the Google Drive remote for rclone.
 
