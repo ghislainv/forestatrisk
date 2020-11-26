@@ -14,6 +14,8 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -44,58 +46,16 @@
 <a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.996337"><img alt="Zenodo" src="https://zenodo.org/badge/DOI/10.5281/zenodo.996337.svg" /></a>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package can be used to estimate the
+<p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package can be used to model and forecast
+deforestation in the tropics. It provides functions to estimate the
 spatial probability of deforestation in the tropics depending on
-various spatial environmental variables.</p>
-<p>Spatial environmental variables can be derived from topography
+various spatial explanatory variables.</p>
+<p>Spatial explanatory variables can be derived from topography
 (altitude, slope, and aspect), accessibility (distance to roads,
 towns, and forest edge), deforestation history (distance to previous
 deforestation) or land conservation status (eg. protected area) for
 example.</p>
-<a class="reference external image-reference" href="https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.jpg"><img alt="prob_AFR" class="align-center" src="https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.jpg" style="width: 500px;" /></a>
-<div class="section" id="sampling">
-<h3>Sampling<a class="headerlink" href="#sampling" title="Permalink to this headline">¶</a></h3>
-<p>Function <code class="docutils literal notranslate"><span class="pre">.sample()</span></code> allows the random sampling of observations points
-considering historical deforestation maps. The sampling is balanced
-and stratified considering remaining forest and deforested areas after
-a given period of time. The function also retrieves information from
-environmental variables for each sampled point. The sampling is done
-by block to allow the computation on large study areas (e.g. country
-or continental scale) with a high spatial resolution (e.g. 30m).</p>
-</div>
-<div class="section" id="modelling">
-<h3>Modelling<a class="headerlink" href="#modelling" title="Permalink to this headline">¶</a></h3>
-<p>Function <code class="docutils literal notranslate"><span class="pre">.model_binomial_iCAR()</span></code> can be used to fit the deforestation
-model from the data. A linear Binomial logistic regression model is
-used to estimate the parameters of the deforestation model. The model
-includes an intrinsic Conditional Autoregressive (iCAR) process to
-account for the spatial autocorrelation of the observations
-(Vieilledent et al. 2014). Parameter inference is done in a
-hierarchical Bayesian framework. The function calls a Gibbs sampler
-with a Metropolis algorithm written in pure C code to reduce
-computation time.</p>
-</div>
-<div class="section" id="predicting">
-<h3>Predicting<a class="headerlink" href="#predicting" title="Permalink to this headline">¶</a></h3>
-<p>Function <code class="docutils literal notranslate"><span class="pre">.predict()</span></code> allows predicting the deforestation probability
-on the whole study area using the deforestation model fitted with the
-<code class="docutils literal notranslate"><span class="pre">.model()</span></code> function. The prediction is done by block to allow the
-computation on large study areas (e.g. country or continental scale)
-with a high spatial resolution (e.g. 30m).</p>
-<p>Function <code class="docutils literal notranslate"><span class="pre">.deforest()</span></code> predicts the future forest cover map based on a
-raster of probability of deforestation (rescaled from 1 to 65535),
-which is obtained from function <code class="docutils literal notranslate"><span class="pre">.predict()</span></code>, and an area (in
-hectares) to be deforested.</p>
-</div>
-</div>
-<div class="section" id="tutorial">
-<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h2>
-<p>We wrote a tutorial using a notebook to show how to use the
-<code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package. We took Madagascar as a case study
-considering past deforestation on the period 2000-2010, estimating
-deforestation probability for the year 2010, and projecting the future
-forest cover in 2050. The notebook is available at the following web
-adress: <a class="reference external" href="https://forestatrisk.cirad.fr/tutorial/">https://forestatrisk.cirad.fr/tutorial/</a>.</p>
+<a class="reference external image-reference" href="https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png"><img alt="prob_AFR" class="align-center" src="https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png" style="width: 500px;" /></a>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
@@ -123,9 +83,8 @@ rm -R ~/venvs/venv-far <span class="c1"># Just remove the repository</span>
 </pre></div>
 </div>
 </div>
-</div>
 <div class="section" id="using-conda">
-<h2>Using <code class="docutils literal notranslate"><span class="pre">conda</span></code><a class="headerlink" href="#using-conda" title="Permalink to this headline">¶</a></h2>
+<h3>Using <code class="docutils literal notranslate"><span class="pre">conda</span></code><a class="headerlink" href="#using-conda" title="Permalink to this headline">¶</a></h3>
 <p>You first need to have <code class="docutils literal notranslate"><span class="pre">miniconda3</span></code> installed (see <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">here</a>).</p>
 <p>Then, create a conda environment (details <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">here</a>) and install the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package with the following commands:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda create --name conda-far python gdal numpy matplotlib pandas patsy pip statsmodels --yes
@@ -142,27 +101,67 @@ pip install https://github.com/ghislainv/forestatrisk/archive/master.zip <span c
 conda env remove --name conda-far
 </pre></div>
 </div>
-<div class="section" id="figure">
-<h3>Figure<a class="headerlink" href="#figure" title="Permalink to this headline">¶</a></h3>
-<p>Map of the probability of deforestation in Madagascar for the year
-2010 obtained with <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code>. Dark red: high probability of
-deforestation, Dark green: low probability of deforestation.</p>
-<a class="reference external image-reference" href="https://ecology.ghislainv.fr/forestatrisk/_images/prob_Mada.jpg"><img alt="prob_Mada" class="align-center" src="https://ecology.ghislainv.fr/forestatrisk/_images/prob_Mada.jpg" style="width: 350px;" /></a>
+</div>
+</div>
+<div class="section" id="main-functionalities">
+<h2>Main functionalities<a class="headerlink" href="#main-functionalities" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sample">
+<h3>Sample<a class="headerlink" href="#sample" title="Permalink to this headline">¶</a></h3>
+<p>Function <code class="docutils literal notranslate"><span class="pre">.sample()</span></code> allows the random sampling of observations points
+considering historical deforestation maps. The sampling is balanced
+and stratified considering remaining forest and deforested areas after
+a given period of time. The function also retrieves information from
+environmental variables for each sampled point. The sampling is done
+by block to allow the computation on large study areas (e.g. country
+or continental scale) with a high spatial resolution (e.g. 30m).</p>
+</div>
+<div class="section" id="model">
+<h3>Model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h3>
+<p>Function <code class="docutils literal notranslate"><span class="pre">.model_binomial_iCAR()</span></code> can be used to fit the deforestation
+model from the data. A linear Binomial logistic regression model is
+used to estimate the parameters of the deforestation model. The model
+includes an intrinsic Conditional Autoregressive (iCAR) process to
+account for the spatial autocorrelation of the observations
+(Vieilledent et al. 2014). Parameter inference is done in a
+hierarchical Bayesian framework. The function calls a Gibbs sampler
+with a Metropolis algorithm written in pure C code to reduce
+computation time.</p>
+</div>
+<div class="section" id="predict-and-project">
+<h3>Predict and project<a class="headerlink" href="#predict-and-project" title="Permalink to this headline">¶</a></h3>
+<p>Function <code class="docutils literal notranslate"><span class="pre">.predict()</span></code> allows predicting the deforestation probability
+on the whole study area using the deforestation model fitted with the
+<code class="docutils literal notranslate"><span class="pre">.model()</span></code> function. The prediction is done by block to allow the
+computation on large study areas (e.g. country or continental scale)
+with a high spatial resolution (e.g. 30m).</p>
+<p>Function <code class="docutils literal notranslate"><span class="pre">.deforest()</span></code> predicts the future forest cover map based on a
+raster of probability of deforestation (rescaled from 1 to 65535),
+which is obtained from function <code class="docutils literal notranslate"><span class="pre">.predict()</span></code>, and an area (in
+hectares) to be deforested.</p>
 </div>
 <div class="section" id="content">
 <h3>Content<a class="headerlink" href="#content" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/get_started.html">Get started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Managing-the-WDPA-API-token">Managing the WDPA API token</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Downloading-protected-areas">Downloading protected areas</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Command-line">Command line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Downloading-and-preparing-the-data">Downloading and preparing the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Sampling-the-observations">Sampling the observations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Descriptive-statistics">Descriptive statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Spatial-deforestation-model">Spatial deforestation model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Results-of-the-model">Results of the model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Predicting-the-spatial-probability-of-deforestation">Predicting the spatial probability of deforestation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Predicting-the-future-forest-cover">Predicting the future forest cover</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#Model-validation">Model validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#References">References</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="reference.html#module-forestatrisk.build_data.sample"><code class="docutils literal notranslate"><span class="pre">.build_data</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#data">1. Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#module-forestatrisk.build_data">2. Sample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#model">3. Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#predict">4. Predict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#project">5. Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#validate">6. Validate</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>

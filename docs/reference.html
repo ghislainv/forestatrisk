@@ -14,6 +14,8 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,70 +39,39 @@
             
   <div class="section" id="reference">
 <h1>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-forestatrisk.build_data.sample">
-<span id="build-data"></span><h2><code class="docutils literal notranslate"><span class="pre">.build_data</span></code><a class="headerlink" href="#module-forestatrisk.build_data.sample" title="Permalink to this headline">¶</a></h2>
-<p>Sample points and extract raster values.</p>
-<p>This function (i) randomly draws spatial points in deforested and
-forested areas and (ii) extract environmental variable values for
-each spatial point.</p>
-<dl class="field-list simple">
-<dt class="field-odd">param nsamp</dt>
-<dd class="field-odd"><p>Number of random spatial points.</p>
-</dd>
-<dt class="field-even">param adapt</dt>
-<dd class="field-even"><p>Adapt <code class="docutils literal notranslate"><span class="pre">nsamp</span></code> to forest area: 1000 for 1 Mha of
-forest, with min=10000 and max=50000.</p>
-</dd>
-<dt class="field-odd">param seed</dt>
-<dd class="field-odd"><p>Seed for random number generator.</p>
-</dd>
-<dt class="field-even">param csize</dt>
-<dd class="field-even"><p>Spatial cell size in km.</p>
-</dd>
-<dt class="field-odd">param var_dir</dt>
-<dd class="field-odd"><p>Directory with raster data.</p>
-</dd>
-<dt class="field-even">param input_forest_raster</dt>
-<dd class="field-even"><p>Name of the forest raster file
-(1=forest, 0=deforested) in the var_dir directory.</p>
-</dd>
-<dt class="field-odd">param output_file</dt>
-<dd class="field-odd"><p>Path to file to save sample points.</p>
-</dd>
-<dt class="field-even">param blk_rows</dt>
-<dd class="field-even"><p>If &gt; 0, number of lines per block.</p>
-</dd>
-<dt class="field-odd">return</dt>
-<dd class="field-odd"><p>A Pandas DataFrame, each row being one observation.</p>
-</dd>
-</dl>
-<span class="target" id="module-forestatrisk.build_data.data"></span><dl class="py function">
-<dt id="forestatrisk.build_data.data.country_compute">
-<code class="sig-name descname">country_compute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">temp_dir</span><span class="o">=</span><span class="default_value">'data_raw'</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">proj</span><span class="o">=</span><span class="default_value">'EPSG:3395'</span></em>, <em class="sig-param"><span class="n">data_country</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">data_forest</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">keep_temp_dir</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_compute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_compute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function computing and formatting country data.</p>
-<p>This function computes and formats the country data. Computations
-are done in a temporary directory where data have been downloaded
-(default to “data_raw”). Then data are copied to an output
-directory (default to “data”).</p>
+<div class="section" id="data">
+<h2>1. Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-forestatrisk.build_data.data">
+<span id="derive-forest-data"></span><h3>Derive forest data<a class="headerlink" href="#module-forestatrisk.build_data.data" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="forestatrisk.build_data.data.country_forest_run">
+<code class="sig-name descname">country_forest_run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">proj</span><span class="o">=</span><span class="default_value">'EPSG:3395'</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'data_raw'</span></em>, <em class="sig-param"><span class="n">keep_dir</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fcc_source</span><span class="o">=</span><span class="default_value">'jrc'</span></em>, <em class="sig-param"><span class="n">perc</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">gdrive_remote_rclone</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gdrive_folder</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_forest_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_forest_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute forest rasters per country and export them to Google Drive
+with Google Earth Engine.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
-<li><p><strong>temp_dir</strong> – Temporary directory for computation.</p></li>
-<li><p><strong>output_dir</strong> – Output directory.</p></li>
 <li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
 GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
-<li><p><strong>data_country</strong> – Boolean for running data_country.sh to
-compute country variables. Default to “True”.</p></li>
-<li><p><strong>data_forest</strong> – Boolean for running data_forest.sh to
-compute forest landscape variables. Default to “True”.</p></li>
-<li><p><strong>keep_temp_dir</strong> – Boolean to keep the temporary directory. Default
-to “False”.</p></li>
+<li><p><strong>output_dir</strong> – Directory where shapefile for country border is saved.</p></li>
+<li><p><strong>keep_dir</strong> – Boolean to keep the output_dir folder. Default
+to “True” (directory “data_raw” is not deleted).</p></li>
+<li><p><strong>fcc_source</strong> – Source for forest-cover change data. Can be
+“gfc” (Global Forest Change) or “jrc” (Joint Research Center)
+data. Default to “jrc”.</p></li>
+<li><p><strong>perc</strong> – Tree cover percentage threshold to define forest
+(only used if <code class="docutils literal notranslate"><span class="pre">fcc_source=&quot;gfc&quot;</span></code>).</p></li>
+<li><p><strong>gdrive_remote_rclone</strong> – Name of the Google Drive remote for rclone.</p></li>
+<li><p><strong>gdrive_folder</strong> – Name of the Google Drive folder to use.</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="module-0">
+<span id="download-data"></span><h3>Download data<a class="headerlink" href="#module-0" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
 <dt id="forestatrisk.build_data.data.country_download">
 <code class="sig-name descname">country_download</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">gdrive_remote_rclone</span></em>, <em class="sig-param"><span class="n">gdrive_folder</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'.'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_download" title="Permalink to this definition">¶</a></dt>
@@ -135,32 +106,6 @@ working directory. Print a message if the file is not available.</p>
 <li><p><strong>gdrive_folder</strong> – the Google Drive folder to download from.</p></li>
 <li><p><strong>output_dir</strong> – Output directory to download files to. Default
 to current working directory.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="forestatrisk.build_data.data.country_forest_run">
-<code class="sig-name descname">country_forest_run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">proj</span><span class="o">=</span><span class="default_value">'EPSG:3395'</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'data_raw'</span></em>, <em class="sig-param"><span class="n">keep_dir</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fcc_source</span><span class="o">=</span><span class="default_value">'jrc'</span></em>, <em class="sig-param"><span class="n">perc</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">gdrive_remote_rclone</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gdrive_folder</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_forest_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_forest_run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute forest rasters per country and export them to Google Drive
-with Google Earth Engine.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
-<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
-GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
-<li><p><strong>output_dir</strong> – Directory where shapefile for country border is saved.</p></li>
-<li><p><strong>keep_dir</strong> – Boolean to keep the output_dir folder. Default
-to “True” (directory “data_raw” is not deleted).</p></li>
-<li><p><strong>fcc_source</strong> – Source for forest-cover change data. Can be
-“gfc” (Global Forest Change data) or “jrc” (Joint Research Center
-data). Default to “jrc”.</p></li>
-<li><p><strong>perc</strong> – Tree cover percentage threshold to define forest
-(only used if fcc_source=”gfc”).</p></li>
-<li><p><strong>gdrive_remote_rclone</strong> – Name of the Google Drive remote for rclone.</p></li>
-<li><p><strong>gdrive_folder</strong> – Name of the Google Drive folder to use.</p></li>
 </ul>
 </dd>
 </dl>
@@ -235,6 +180,39 @@ are downloaded. Default to current working directory.</p></li>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="module-1">
+<span id="compute-variables"></span><h3>Compute variables<a class="headerlink" href="#module-1" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="forestatrisk.build_data.data.country_compute">
+<code class="sig-name descname">country_compute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iso3</span></em>, <em class="sig-param"><span class="n">temp_dir</span><span class="o">=</span><span class="default_value">'data_raw'</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">proj</span><span class="o">=</span><span class="default_value">'EPSG:3395'</span></em>, <em class="sig-param"><span class="n">data_country</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">data_forest</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">keep_temp_dir</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#country_compute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_compute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function computing and formatting country data.</p>
+<p>This function computes and formats the country data. Computations
+are done in a temporary directory where data have been downloaded
+(default to “data_raw”). Then data are copied to an output
+directory (default to “data”).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>temp_dir</strong> – Temporary directory for computation.</p></li>
+<li><p><strong>output_dir</strong> – Output directory.</p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
+<li><p><strong>data_country</strong> – Boolean for running data_country.sh to
+compute country variables. Default to “True”.</p></li>
+<li><p><strong>data_forest</strong> – Boolean for running data_forest.sh to
+compute forest landscape variables. Default to “True”.</p></li>
+<li><p><strong>keep_temp_dir</strong> – Boolean to keep the temporary directory. Default
+to “False”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-2">
+<span id="utilities"></span><h3>Utilities<a class="headerlink" href="#module-2" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
 <dt id="forestatrisk.build_data.data.extent_shp">
 <code class="sig-name descname">extent_shp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inShapefile</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/data.html#extent_shp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.data.extent_shp" title="Permalink to this definition">¶</a></dt>
@@ -268,6 +246,56 @@ degrees. x: -180/+180, y: +60/-60.</p>
 </dl>
 </dd></dl>
 
+</div>
+</div>
+<div class="section" id="module-forestatrisk.build_data">
+<span id="sample"></span><h2>2. Sample<a class="headerlink" href="#module-forestatrisk.build_data" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.build_data.sample">
+<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nsamp</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">adapt</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">Seed</span><span class="o">=</span><span class="default_value">1234</span></em>, <em class="sig-param"><span class="n">csize</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">var_dir</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">input_forest_raster</span><span class="o">=</span><span class="default_value">'forest.tif'</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/sample.txt'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/sample.html#sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample points and extract raster values.</p>
+<p>This function (i) randomly draws spatial points in deforested and
+forested areas and (ii) extract environmental variable values for
+each spatial point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nsamp</strong> – Number of random spatial points.</p></li>
+<li><p><strong>adapt</strong> – Boolean. Adapt <code class="docutils literal notranslate"><span class="pre">nsamp</span></code> to forest area: 1000 for 1 Mha of
+forest, with min=10000 and max=50000. Default to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>Seed</strong> – Seed for random number generator.</p></li>
+<li><p><strong>csize</strong> – Spatial cell size in km.</p></li>
+<li><p><strong>var_dir</strong> – Directory with raster data.</p></li>
+<li><p><strong>input_forest_raster</strong> – Name of the forest raster file
+(1=forest, 0=deforested) in the var_dir directory.</p></li>
+<li><p><strong>output_file</strong> – Path to file to save sample points.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of lines per block.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Pandas DataFrame, each row being one observation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="model">
+<h2>3. Model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="icar-model">
+<h3>iCAR model<a class="headerlink" href="#icar-model" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="random-forest-model">
+<h3>Random Forest model<a class="headerlink" href="#random-forest-model" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="predict">
+<h2>4. Predict<a class="headerlink" href="#predict" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="project">
+<h2>5. Project<a class="headerlink" href="#project" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="validate">
+<h2>6. Validate<a class="headerlink" href="#validate" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -305,7 +333,12 @@ degrees. x: -180/+180, y: +60/-60.</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="notebooks/get_started.html">Get started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-forestatrisk.build_data.sample"><code class="docutils literal notranslate"><span class="pre">.build_data</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data">1. Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-forestatrisk.build_data">2. Sample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model">3. Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#predict">4. Predict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#project">5. Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#validate">6. Validate</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
