@@ -28,7 +28,7 @@ def cellneigh(raster=None, region=None, csize=10, rank=1):
     :param rank: Rank of the neighborhood (1 for chess king's move).
 
     :return: Tuple of length 2 with number of neighbours for each cell
-    and adjacent cells.
+        and adjacent cells.
 
     """
 
@@ -90,14 +90,14 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
 
     :param raster: Path to raster file to compute region from.
     :param region: List/tuple of region coordinates (east, west,
-    south, north) if raster is not provided.
+        south, north) if raster is not provided.
     :param vector: Path to vector file with country's borders.
     :param csize: Spatial cell size (in km).
     :param rank: Rank of the neighborhood (1 for chess king's move).
 
     :return: Tuple of length 4 with (i) number of neighbours for each
-    cell, (ii) adjacent cells, (iii) total number of cells inside
-    country's border, (iv) total number of cells from region.
+        cell, (ii) adjacent cells, (iii) total number of cells inside
+        country's border, (iv) total number of cells from region.
 
     """
 

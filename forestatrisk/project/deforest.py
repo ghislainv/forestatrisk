@@ -32,7 +32,7 @@ def deforest(input_raster,
     and (ii) a surface (in hectares) to be deforested.
 
     :param input_raster: Raster of probability of deforestation (1 to 65535
-    with 0 as nodata value).
+        with 0 as nodata value).
     :param hectares: Number of hectares to deforest.
     :param output_file: Name of the raster file for forest cover map.
     :param blk_rows: If > 0, number of rows for block (else 256x256).
@@ -40,7 +40,7 @@ def deforest(input_raster,
     :param dpi: Resolution for output image.
 
     :return: A tuple of statistics (hectares, frequence,
-    threshold, error).
+        threshold, error).
 
     """
 

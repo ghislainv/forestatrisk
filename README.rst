@@ -38,10 +38,10 @@
 Overview
 ========
 
-The ``forestatrisk`` Python package can be used to model and forecast
-deforestation in the tropics. It provides functions to estimate the
-spatial probability of deforestation in the tropics depending on
-various spatial explanatory variables.
+The ``forestatrisk`` Python package can be used to **model** and
+**forecast** deforestation in the tropics. It provides functions to
+estimate the spatial probability of deforestation in the tropics
+depending on various spatial explanatory variables.
 
 Spatial explanatory variables can be derived from topography
 (altitude, slope, and aspect), accessibility (distance to roads,
@@ -50,7 +50,7 @@ deforestation) or land conservation status (eg. protected area) for
 example.
 
 .. image:: https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png
-   :width: 500px
+   :width: 1000px
    :align: center
    :target: https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png
    :alt: prob_AFR
@@ -63,7 +63,7 @@ package. The best way to install the package is to create a Python
 virtual environment, either through ``virtualenv`` or ``conda``.
 
 Using ``virtualenv``
---------------------
+++++++++++++++++++++
 
 You first need to have the ``virtualenv`` package installed (see `here <https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/>`__).
 
@@ -76,7 +76,10 @@ Then, create a virtual environment and install the ``forestatrisk`` package with
    cd venvs
    virtualenv --python=/usr/bin/python3 venv-far
    source ~/venvs/venv-far/bin/activate
-   pip install numpy # Install numpy first
+   # Install numpy first
+   pip install numpy
+   # Install gdal (the correct version) 
+   pip install --global-option=build_ext --global-option="-I/usr/include/gdal" gdal==$(gdal-config --version)
    # pip install forestatrisk # For PyPI version, this will install all other dependencies
    pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
    pip install statsmodels # Optional additional packages
@@ -89,7 +92,7 @@ To deactivate and delete the virtual environment:
    rm -R ~/venvs/venv-far # Just remove the repository
 
 Using ``conda``
----------------
++++++++++++++++
 
 You first need to have ``miniconda3`` installed (see `here <https://docs.conda.io/en/latest/miniconda.html>`__).
 
@@ -116,7 +119,7 @@ Main functionalities
 ====================
 
 Sample
-------
+++++++
 
 Function ``.sample()`` allows the random sampling of observations points
 considering historical deforestation maps. The sampling is balanced
@@ -127,7 +130,7 @@ by block to allow the computation on large study areas (e.g. country
 or continental scale) with a high spatial resolution (e.g. 30m).
 
 Model
------
++++++
 
 Function ``.model_binomial_iCAR()`` can be used to fit the deforestation
 model from the data. A linear Binomial logistic regression model is
@@ -140,7 +143,7 @@ with a Metropolis algorithm written in pure C code to reduce
 computation time.
 
 Predict and project
--------------------
++++++++++++++++++++
 
 Function ``.predict()`` allows predicting the deforestation probability
 on the whole study area using the deforestation model fitted with the

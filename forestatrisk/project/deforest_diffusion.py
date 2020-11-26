@@ -31,8 +31,8 @@ def deforest_diffusion(forest_t0, t0, annual_defor, t):
     :param t: Year at the end of the deforestation period.
 
     :return: A dictionnary with forest at t0 ("forest_t0"), forest at
-    time t ("forest_t") and deforestation between t0 and t
-    ("defor_t0_t").
+        time t ("forest_t") and deforestation between t0 and t
+        ("defor_t0_t").
 
     """
 
@@ -82,9 +82,9 @@ def deforest_diffusion_t_nofor(forest_t0, t0, annual_defor):
     :param annual_defor: Annual deforestation for each state. Numpy array.
 
     :return: A dictionnary indicating the number of years ("ny"), for
-    each state, after which all the forest will have disappeared, and
-    the corresponding year ("y", assuming forest_t0 was estimated at
-    the beginning of the year).
+        each state, after which all the forest will have disappeared, and
+        the corresponding year ("y", assuming forest_t0 was estimated at
+        the beginning of the year).
 
     """
 

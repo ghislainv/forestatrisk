@@ -37,12 +37,15 @@ def predict_raster(model, var_dir="data",
     can be performed on large geographical areas.
 
     :param model: The model (glm, rf) to predict from. Must have a
-    model.predict() function.
+        model.predict() function.
     :param var_dir: Directory with rasters (.tif) of explicative variables.
     :param input_forest_raster: Path to forest raster (1 for forest).
     :param output_file: Name of the output raster file for predictions.
     :param blk_rows: If > 0, number of rows for computation by block.
-    :param **kwargs: Additional arguments to be passed to model.predict().
+    :param \\**kwargs: see below.
+
+    :Keyword Arguments: Additional arguments to be passed to
+        ``model.predict()``\\ .
 
     :return: A raster of predictions.
 

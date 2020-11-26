@@ -29,10 +29,10 @@ def interpolate_rho(rho, input_raster, output_file="output/rho.tif",
 
     :param rho: Original rho values estimates with the iCAR model.
     :param input_raster: Path to input raster defining the region.
-    :output_file: Path to output raster file with resampled rho values.
-    :csize_orig: Original size of the spatial cells (in km).
-    :csize_new: New size of the spatial cells for cubicspline
-    interpolation (in km).
+    :param output_file: Path to output raster file with resampled rho values.
+    :param csize_orig: Original size of the spatial cells (in km).
+    :param csize_new: New size of the spatial cells for cubicspline
+        interpolation (in km).
 
     """
 

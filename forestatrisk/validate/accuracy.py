@@ -109,7 +109,7 @@ def accuracy(mat):
     Cohen's Kappa from a confusion matrix.
 
     :param mat: Confusion matrix. Format: [[n00, n01], [n10, n11]]
-    with pred on lines and obs on columns.
+        with pred on lines and obs on columns.
 
     :return: A dictionnary of accuracy indices.
 

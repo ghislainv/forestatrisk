@@ -33,7 +33,7 @@ from .predict import predict_raster, predict_raster_binomial_iCAR
 # Project
 from .project import deforest_diffusion, deforest_diffusion_t_nofor
 from .project import deforest, emissions
-# Validatz
+# Validate
 from .validate import confmat, accuracy
 from .validate import r_diffproj, mat_diffproj
 from .validate import resample_sum

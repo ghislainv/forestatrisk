@@ -63,7 +63,7 @@ def tiles_srtm(extent_latlong):
     """Compute lat/long tiles for SRTM data from an extent.
 
     This function computes lat/long tiles for SRTM data from an extent
-    in lat/long. See <http://dwtkns.com/srtm/>. SRTM tiles are 5x5
+    in lat/long. See `<http://dwtkns.com/srtm/>`_. SRTM tiles are 5x5
     degrees. x: -180/+180, y: +60/-60.
 
     :param extent_latlong: Extent in lat/long: (xmin, ymin, xmax, ymax).
@@ -101,7 +101,7 @@ def country_forest_run(iso3, proj="EPSG:3395",
                        gdrive_remote_rclone=None,
                        gdrive_folder=None):
     """Compute forest rasters per country and export them to Google Drive
-    with Google Earth Engine.
+    with Google Earth Engine (GEE).
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
@@ -118,7 +118,7 @@ def country_forest_run(iso3, proj="EPSG:3395",
         data. Default to "jrc".
 
     :param perc: Tree cover percentage threshold to define forest
-        (only used if ``fcc_source="gfc"``).
+        (only used if ``fcc_source="gfc"``\\ ).
 
     :param gdrive_remote_rclone: Name of the Google Drive remote for rclone.
 
@@ -192,7 +192,7 @@ def country_forest_download(iso3,
     Download forest cover data from Google Drive in the current
     working directory. Print a message if the file is not available.
 
-    RClone program is needed: https://rclone.org.
+    RClone program is needed: `<https://rclone.org>`_\\ .
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
@@ -236,7 +236,7 @@ def country_wdpa(iso3, output_dir="."):
     """Function to download the protected areas per country.
 
     Protected areas comes from the World Database on Protected Areas
-    (<https://www.protectedplanet.net/>). This function uses the
+    (\\ `<https://www.protectedplanet.net/>`_\\ ). This function uses the
     pywdpa python package.
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
@@ -262,8 +262,8 @@ def country_wdpa(iso3, output_dir="."):
 def country_osm(iso3, output_dir="."):
     """Function to download OSM data for a country.
 
-    Function to download OpenStreetMap data from Geofabrik or
-    openstreetmap.fr for aspecific country.
+    Function to download OpenStreetMap data from Geofabrik.de or
+    OpenStreetMap.fr for aspecific country.
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
@@ -381,7 +381,7 @@ def country_gadm(iso3, output_dir="."):
     """Function to download GADM data for a country.
 
     Function to download GADM (Global Administrative Areas) for a
-    specific country. See <https://gadm.org>.
+    specific country. See `<https://gadm.org>`_\\ .
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
@@ -416,7 +416,7 @@ def country_download(iso3,
     """Function to download data for a specific country.
 
     Function to download all the data for a specific country. It
-    includes GADM, SRTM, WDPA, OSM and GEE forest data.
+    includes GEE forest data, GADM, OSM, SRTM, and WDPA data.
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 

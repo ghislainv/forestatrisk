@@ -2,7 +2,7 @@ Changelog
 =========
 
 forestatrisk 0.2
-----------------
+++++++++++++++++
 
 * New module organization.
 * Adding a logo for the package.
@@ -12,7 +12,7 @@ forestatrisk 0.2
 
 
 forestatrisk 0.1.1
-------------------
+++++++++++++++++++
 
 * New ``ee_jrc`` function to compute forest cover with GEE.
 * Use of ``rclone`` to interact with GoogleDrive.
@@ -23,6 +23,7 @@ forestatrisk 0.1.1
 
 
 forestatrisk 0.1
-------------------
+++++++++++++++++
 
 * First release of the package.
+  
