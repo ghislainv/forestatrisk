@@ -164,13 +164,66 @@ Carbon emissions
 		  
 6. Validate
 ===========
-.. currentmodule:: forestatrisk.validate.validation
+
+Model validation
+++++++++++++++++
+.. currentmodule:: forestatrisk.validate.model_validation
 
 Accuracy indices
-++++++++++++++++
+----------------
 .. autofunction:: computeAUC
 .. autofunction:: accuracy_indices
+
+Cross-validation
+----------------  
 .. autofunction:: cross_validation
-.. autofunction:: validation
 
+Map validation
+++++++++++++++
+.. currentmodule:: forestatrisk.validate.map_validation
+.. autofunction:: map_validation
+		  
+.. currentmodule:: forestatrisk.validate.diffproj
+.. autofunction:: r_diffproj
+.. autofunction:: mat_diffproj
 
+.. currentmodule:: forestatrisk.validate.resample_sum
+.. autofunction:: resample_sum
+
+.. currentmodule:: forestatrisk.validate.map_accuracy
+.. autofunction:: map_confmat
+.. autofunction:: map_accuracy
+		  
+..
+  # ===========================================================
+  # Plot
+  # ===========================================================
+
+7. Plot
+=======
+.. currentmodule:: forestatrisk.plot.plot
+
+Data
+++++
+.. autofunction:: var
+.. autofunction:: obs
+.. autofunction:: correlation
+
+Forest cover
+++++++++++++
+.. autofunction:: forest
+
+Forest cover change
++++++++++++++++++++
+.. autofunction:: fcc
+.. autofunction:: fcc123
+.. autofunction:: fcc12345
+
+Deforestation rpobability
++++++++++++++++++++++++++
+.. autofunction:: rho
+.. autofunction:: prob
+.. autofunction:: freq_prob
+		  
+..
+  EOF

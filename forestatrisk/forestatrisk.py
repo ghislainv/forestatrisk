@@ -15,10 +15,14 @@ __version__ = "0.2"
 
 
 def main():
+    """forestatrisk.forestatrisk: provides entry point main().
+
+    Running ``forestatrisk`` in the terminal prints ForestAtRisk
+    description and version. Can be used to check that the
+    ``forestatrisk`` Python package can be correctly imported.
+
     """
-    forestatrisk.forestatrisk: provides entry point main().
-    """
-    print("ForestAtRisk version {}.".format(__version__))
+    print("# ForestAtRisk version {}.".format(__version__))
     return None
 
 # End

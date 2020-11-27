@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>forestatrisk.model package &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="forestatrisk.plot package" href="forestatrisk.plot.html" />
+    <link rel="prev" title="forestatrisk.misc package" href="forestatrisk.misc.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="forestatrisk-model-package">
+<h1>forestatrisk.model package<a class="headerlink" href="#forestatrisk-model-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-forestatrisk.model.cellneigh">
+<span id="forestatrisk-model-cellneigh-module"></span><h2>forestatrisk.model.cellneigh module<a class="headerlink" href="#module-forestatrisk.model.cellneigh" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.model.cellneigh.cellneigh">
+<code class="sig-name descname">cellneigh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raster</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">region</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">csize</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">rank</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/model/cellneigh.html#cellneigh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.cellneigh.cellneigh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute number of spatial cells and neighbours.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raster</strong> – Path to raster file to compute region.</p></li>
+<li><p><strong>region</strong> – List/tuple of region coordinates (east, west, south, north).</p></li>
+<li><p><strong>csize</strong> – Spatial cell size (in km).</p></li>
+<li><p><strong>rank</strong> – Rank of the neighborhood (1 for chess king’s move).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple of length 2 with number of neighbours for each cell
+and adjacent cells.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.model.cellneigh.cellneigh_ctry">
+<code class="sig-name descname">cellneigh_ctry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raster</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">region</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vector</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">csize</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">rank</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/model/cellneigh.html#cellneigh_ctry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.cellneigh.cellneigh_ctry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute number of spatial cells and neighbours inside country’s
+borders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raster</strong> – Path to raster file to compute region from.</p></li>
+<li><p><strong>region</strong> – List/tuple of region coordinates (east, west,
+south, north) if raster is not provided.</p></li>
+<li><p><strong>vector</strong> – Path to vector file with country’s borders.</p></li>
+<li><p><strong>csize</strong> – Spatial cell size (in km).</p></li>
+<li><p><strong>rank</strong> – Rank of the neighborhood (1 for chess king’s move).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple of length 4 with (i) number of neighbours for each
+cell, (ii) adjacent cells, (iii) total number of cells inside
+country’s border, (iv) total number of cells from region.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.model.model_binomial_iCAR">
+<span id="forestatrisk-model-model-binomial-icar-module"></span><h2>forestatrisk.model.model_binomial_iCAR module<a class="headerlink" href="#module-forestatrisk.model.model_binomial_iCAR" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="forestatrisk.model.model_binomial_iCAR.model_binomial_iCAR">
+<em class="property">class </em><code class="sig-name descname">model_binomial_iCAR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">suitability_formula</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">n_neighbors</span></em>, <em class="sig-param"><span class="n">neighbors</span></em>, <em class="sig-param"><span class="n">NA_action</span><span class="o">=</span><span class="default_value">'drop'</span></em>, <em class="sig-param"><span class="n">data_pred</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">eval_env</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">burnin</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">mcmc</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">thin</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">beta_start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">Vrho_start</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">mubeta</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">Vbeta</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">priorVrho</span><span class="o">=</span><span class="default_value">- 1.0</span></em>, <em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">rate</span><span class="o">=</span><span class="default_value">0.0005</span></em>, <em class="sig-param"><span class="n">Vrho_max</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">1234</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">save_rho</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">save_p</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/model/model_binomial_iCAR.html#model_binomial_iCAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.model_binomial_iCAR.model_binomial_iCAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>model_binomial_iCAR class.</p>
+<p>model_binomial_iCAR class to estimates the parameters of a Binomial
+model with iCAR process for spatial autocorrelation in a
+hierarchical Bayesian framework.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>suitability_formula</strong> – A formula-like object that can be
+used to construct a design matrix (see <code class="docutils literal notranslate"><span class="pre">patsy.dmatrices</span></code>).</p></li>
+<li><p><strong>data</strong> – A dict-like object that can be used to look up
+variables referenced in <code class="docutils literal notranslate"><span class="pre">suitability_formula</span></code>.</p></li>
+<li><p><strong>n_neighbors</strong> – A vector of integers that indicates the
+number of neighbors (adjacent entities) of each spatial
+entity. length(n.neighbors) indicates the total number of
+spatial entities.</p></li>
+<li><p><strong>neighbors</strong> – A vector of integers indicating the
+neighbors (adjacent entities) of each spatial entity. Must be
+of the form c(neighbors of entity 1, neighbors of entity 2,
+… , neighbors of the last entity). Length of the neighbors
+vector should be equal to sum(n.neighbors).</p></li>
+<li><p><strong>NA_action</strong> – What to do with rows that contain missing
+values (see <code class="docutils literal notranslate"><span class="pre">patsy.dmatrices</span></code>).</p></li>
+<li><p><strong>data_pred</strong> – Optional dataset for predictions.</p></li>
+<li><p><strong>eval_env</strong> – Environment used to look up any variables
+referenced in suitability_formula that cannot be found in data
+(see <code class="docutils literal notranslate"><span class="pre">patsy.dmatrices</span></code>).</p></li>
+<li><p><strong>burnin</strong> – Number of iterations for the burnin phase.</p></li>
+<li><p><strong>mcmc</strong> – The number of Gibbs iterations for the
+sampler. Total number of Gibbs iterations is equal to
+burnin+mcmc. burnin+mcmc must be divisible by 10 and superior
+or equal to 100 so that the progress bar can be displayed.</p></li>
+<li><p><strong>thin</strong> – The thinning interval used in the simulation. The
+number of mcmc iterations must be divisible by this value.</p></li>
+<li><p><strong>beta_start</strong> – Starting values for beta parameters. This
+can either be a scalar or a p-length vector.</p></li>
+<li><p><strong>Vrho_start</strong> – Positive scalar indicating the starting
+value for the variance of the spatial random effects.</p></li>
+<li><p><strong>mubeta</strong> – Means of the priors for the beta parameters of the
+suitability process. mubeta must be either a scalar or a
+p-length vector. If mubeta takes a scalar value, then that
+value will serve as the prior mean for all of the betas. The
+default value is set to 0 for an uninformative prior.</p></li>
+<li><p><strong>Vbeta</strong> – Variances of the Normal priors for the beta
+parameters of the suitability process. Vbeta must be either a
+scalar or a p-length vector. If Vbeta takes a scalar value,
+then that value will serve as the prior variance for all of
+the betas. The default variance is large and set to 1000 for
+an uninformative flat prior.</p></li>
+<li><p><strong>priorVrho</strong> – Type of prior for the variance of the
+spatial random effects. Can be set to a fixed positive scalar,
+or to an inverse-gamma distribution (“1/Gamma”) with
+parameters shape and rate, or to a uniform distribution
+(“Uniform”) on the interval [0,Vrho.max]. Default set to
+“1/Gamma”.</p></li>
+<li><p><strong>shape</strong> – The shape parameter for the Gamma prior on the
+precision of the spatial random effects. Default value is
+shape=0.5 for uninformative prior.</p></li>
+<li><p><strong>rate</strong> – The rate (1/scale) parameter for the Gamma prior
+on the precision of the spatial random effects. Default value
+is rate=0.0005 for uninformative prior.</p></li>
+<li><p><strong>Vrho_max</strong> – Upper bound for the uniform prior of the
+spatial random effect variance. Default set to 10.</p></li>
+<li><p><strong>seed</strong> – The seed for the random number generator. Default
+set to 1234.</p></li>
+<li><p><strong>verbose</strong> – A switch (0,1) which determines whether or not
+the progress of the sampler is printed to the screen. Default
+is 1: a progress bar is printed, indicating the step (in %)
+reached by the Gibbs sampler.</p></li>
+<li><p><strong>save_rho</strong> – A switch (0,1) which determines whether or
+not the sampled values for rhos are saved. Default is 0: the
+posterior mean is computed and returned in the rho.pred
+vector. Be careful, setting save.rho to 1 might require a
+large amount of memory.</p></li>
+<li><p><strong>save_p</strong> – A switch (0,1) which determines whether or not
+the sampled values for predictions are saved. Default is 0:
+the posterior mean is computed and returned in the theta.pred
+vector. Be careful, setting save.p to 1 might require a large
+amount of memory.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object of class model_binomial_iCAR.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="forestatrisk.model.model_binomial_iCAR.model_binomial_iCAR.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'mcmc.pdf'</span></em>, <em class="sig-param"><span class="n">plots_per_page</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">8.27, 11.69</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/model/model_binomial_iCAR.html#model_binomial_iCAR.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.model_binomial_iCAR.model_binomial_iCAR.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot traces and posterior distributions.</p>
+<p>This function plots the traces and posterior distributions of
+the parameters of a model_binomial_iCAR model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_file</strong> – Name of the plot file.</p></li>
+<li><p><strong>plots_per_page</strong> – Number of plots (lines) per page.</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of Matplotlib figures.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="forestatrisk.model.model_binomial_iCAR.model_binomial_iCAR.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_data</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/model/model_binomial_iCAR.html#model_binomial_iCAR.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.model_binomial_iCAR.model_binomial_iCAR.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function returning the predictions of a model_binomial_iCAR model.</p>
+<p>Function to return the predictions of a model_binomial_iCAR model
+for a new data-set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – model_binomial_iCAR to predict from.</p></li>
+<li><p><strong>new_data</strong> – A dict-like object which will be used to look         up data (including explicative variables and cell values).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Predictions (probabilities).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.model.model_random_forest">
+<span id="forestatrisk-model-model-random-forest-module"></span><h2>forestatrisk.model.model_random_forest module<a class="headerlink" href="#module-forestatrisk.model.model_random_forest" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="forestatrisk.model.model_random_forest.model_random_forest">
+<em class="property">class </em><code class="sig-name descname">model_random_forest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">formula</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">NA_action</span><span class="o">=</span><span class="default_value">'drop'</span></em>, <em class="sig-param"><span class="n">eval_env</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">n_estimators</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">n_jobs</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/model/model_random_forest.html#model_random_forest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.model_random_forest.model_random_forest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>model_random_forest class.</p>
+<p>model_random_forest class.</p>
+<dl class="py method">
+<dt id="forestatrisk.model.model_random_forest.model_random_forest.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/model/model_random_forest.html#model_random_forest.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.model_random_forest.model_random_forest.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function returning the predictions of a model_random_forest model.</p>
+<p>Function to return the predictions of a model_random_forest model
+for a new data-set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – model_random_forest to predict from.</p></li>
+<li><p><strong>new_data</strong> – A dict-like object which will be used to look         up data (including explicative variables and cell values).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>prediction (a probability).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo-far.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contents.html">Contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../contents.html">Contents</a><ul>
+      <li>Previous: <a href="forestatrisk.misc.html" title="previous chapter">forestatrisk.misc package</a></li>
+      <li>Next: <a href="forestatrisk.plot.html" title="next chapter">forestatrisk.plot package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/subpackages/forestatrisk.model.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

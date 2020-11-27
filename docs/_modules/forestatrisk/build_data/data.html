@@ -76,7 +76,7 @@
 
 
 <span class="c1"># Extent of a shapefile</span>
-<div class="viewcode-block" id="extent_shp"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.data.extent_shp">[docs]</a><span class="k">def</span> <span class="nf">extent_shp</span><span class="p">(</span><span class="n">inShapefile</span><span class="p">):</span>
+<div class="viewcode-block" id="extent_shp"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.extent_shp">[docs]</a><span class="k">def</span> <span class="nf">extent_shp</span><span class="p">(</span><span class="n">inShapefile</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute the extent of a shapefile.</span>
 
 <span class="sd">    This function computes the extent (xmin, xmax, ymin, ymax) of a</span>
@@ -97,7 +97,7 @@
 
 
 <span class="c1"># tiles_srtm</span>
-<div class="viewcode-block" id="tiles_srtm"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.data.tiles_srtm">[docs]</a><span class="k">def</span> <span class="nf">tiles_srtm</span><span class="p">(</span><span class="n">extent_latlong</span><span class="p">):</span>
+<div class="viewcode-block" id="tiles_srtm"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.tiles_srtm">[docs]</a><span class="k">def</span> <span class="nf">tiles_srtm</span><span class="p">(</span><span class="n">extent_latlong</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute lat/long tiles for SRTM data from an extent.</span>
 
 <span class="sd">    This function computes lat/long tiles for SRTM data from an extent</span>
@@ -132,7 +132,7 @@
 
 
 <span class="c1"># country_forest_run</span>
-<div class="viewcode-block" id="country_forest_run"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.data.country_forest_run">[docs]</a><span class="k">def</span> <span class="nf">country_forest_run</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">,</span>
+<div class="viewcode-block" id="country_forest_run"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_forest_run">[docs]</a><span class="k">def</span> <span class="nf">country_forest_run</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">,</span>
                        <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
                        <span class="n">keep_dir</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                        <span class="n">fcc_source</span><span class="o">=</span><span class="s2">&quot;jrc&quot;</span><span class="p">,</span> <span class="n">perc</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
@@ -221,7 +221,7 @@
 
 
 <span class="c1"># country_forest_download</span>
-<div class="viewcode-block" id="country_forest_download"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.data.country_forest_download">[docs]</a><span class="k">def</span> <span class="nf">country_forest_download</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span>
+<div class="viewcode-block" id="country_forest_download"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_forest_download">[docs]</a><span class="k">def</span> <span class="nf">country_forest_download</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span>
                             <span class="n">gdrive_remote_rclone</span><span class="p">,</span>
                             <span class="n">gdrive_folder</span><span class="p">,</span>
                             <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
@@ -270,7 +270,7 @@
 
 
 <span class="c1"># country_wdpa</span>
-<div class="viewcode-block" id="country_wdpa"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.data.country_wdpa">[docs]</a><span class="k">def</span> <span class="nf">country_wdpa</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="country_wdpa"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_wdpa">[docs]</a><span class="k">def</span> <span class="nf">country_wdpa</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Function to download the protected areas per country.</span>
 
 <span class="sd">    Protected areas comes from the World Database on Protected Areas</span>
@@ -297,7 +297,7 @@
 
 
 <span class="c1"># country_osm</span>
-<div class="viewcode-block" id="country_osm"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.data.country_osm">[docs]</a><span class="k">def</span> <span class="nf">country_osm</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="country_osm"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_osm">[docs]</a><span class="k">def</span> <span class="nf">country_osm</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Function to download OSM data for a country.</span>
 
 <span class="sd">    Function to download OpenStreetMap data from Geofabrik.de or</span>
@@ -349,7 +349,7 @@
 
 
 <span class="c1"># country_srtm</span>
-<div class="viewcode-block" id="country_srtm"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.data.country_srtm">[docs]</a><span class="k">def</span> <span class="nf">country_srtm</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="country_srtm"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_srtm">[docs]</a><span class="k">def</span> <span class="nf">country_srtm</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Function to download SRTM data for a country.</span>
 
 <span class="sd">    Function to download SRTM data (Shuttle Radar Topographic Mission</span>
@@ -415,7 +415,7 @@
 
 
 <span class="c1"># country_gadm</span>
-<div class="viewcode-block" id="country_gadm"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.data.country_gadm">[docs]</a><span class="k">def</span> <span class="nf">country_gadm</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="country_gadm"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_gadm">[docs]</a><span class="k">def</span> <span class="nf">country_gadm</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Function to download GADM data for a country.</span>
 
 <span class="sd">    Function to download GADM (Global Administrative Areas) for a</span>
@@ -448,7 +448,7 @@
 
 
 <span class="c1"># country_download</span>
-<div class="viewcode-block" id="country_download"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.data.country_download">[docs]</a><span class="k">def</span> <span class="nf">country_download</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span>
+<div class="viewcode-block" id="country_download"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_download">[docs]</a><span class="k">def</span> <span class="nf">country_download</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span>
                      <span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span>
                      <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Function to download data for a specific country.</span>
@@ -494,7 +494,7 @@
 
 
 <span class="c1"># country_compute</span>
-<div class="viewcode-block" id="country_compute"><a class="viewcode-back" href="../../../reference.html#forestatrisk.build_data.data.country_compute">[docs]</a><span class="k">def</span> <span class="nf">country_compute</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span>
+<div class="viewcode-block" id="country_compute"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_compute">[docs]</a><span class="k">def</span> <span class="nf">country_compute</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span>
                     <span class="n">temp_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
                     <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
                     <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">,</span>
@@ -603,8 +603,9 @@
 <h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebooks/get_started.html">Get started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contents.html">Contents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
 </ul>
 
 <div class="relations">

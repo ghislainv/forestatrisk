@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>forestatrisk.project package &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="forestatrisk.validate package" href="forestatrisk.validate.html" />
+    <link rel="prev" title="forestatrisk.predict package" href="forestatrisk.predict.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="forestatrisk-project-package">
+<h1>forestatrisk.project package<a class="headerlink" href="#forestatrisk-project-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-forestatrisk.project.deforest">
+<span id="forestatrisk-project-deforest-module"></span><h2>forestatrisk.project.deforest module<a class="headerlink" href="#module-forestatrisk.project.deforest" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.project.deforest.deforest">
+<code class="sig-name descname">deforest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_raster</span></em>, <em class="sig-param"><span class="n">hectares</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/fcc.tif'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/deforest.html#deforest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.project.deforest.deforest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to map the future forest-cover change.</p>
+<p>This function computes the future forest cover map based on (i) a
+raster of probability of deforestation (rescaled from 1 to 65535),
+and (ii) a surface (in hectares) to be deforested.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_raster</strong> – Raster of probability of deforestation (1 to 65535
+with 0 as nodata value).</p></li>
+<li><p><strong>hectares</strong> – Number of hectares to deforest.</p></li>
+<li><p><strong>output_file</strong> – Name of the raster file for forest cover map.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for block (else 256x256).</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple of statistics (hectares, frequence,
+threshold, error).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.project.deforest_diffusion">
+<span id="forestatrisk-project-deforest-diffusion-module"></span><h2>forestatrisk.project.deforest_diffusion module<a class="headerlink" href="#module-forestatrisk.project.deforest_diffusion" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.project.deforest_diffusion.deforest_diffusion">
+<code class="sig-name descname">deforest_diffusion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">forest_t0</span></em>, <em class="sig-param"><span class="n">t0</span></em>, <em class="sig-param"><span class="n">annual_defor</span></em>, <em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/deforest_diffusion.html#deforest_diffusion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.project.deforest_diffusion.deforest_diffusion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Diffusion of the deforestation between states of a country.</p>
+<p>Diffusion of the deforestation between states of a country. We
+suppose that the deforestation is constant at the country
+level. When a state has no more forest, its deforestation (annual
+area of deforestation) is attributed to the other states of the
+country still having forest. This function can be useful for
+Brazil for example.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>forest_t0</strong> – Forest area at t0 for each state. Numpy array.</p></li>
+<li><p><strong>t0</strong> – Year at t0.</p></li>
+<li><p><strong>annual_defor</strong> – Annual deforestation for each state. Numpy array.</p></li>
+<li><p><strong>t</strong> – Year at the end of the deforestation period.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionnary with forest at t0 (“forest_t0”), forest at
+time t (“forest_t”) and deforestation between t0 and t
+(“defor_t0_t”).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.project.deforest_diffusion.deforest_diffusion_t_nofor">
+<code class="sig-name descname">deforest_diffusion_t_nofor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">forest_t0</span></em>, <em class="sig-param"><span class="n">t0</span></em>, <em class="sig-param"><span class="n">annual_defor</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/deforest_diffusion.html#deforest_diffusion_t_nofor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.project.deforest_diffusion.deforest_diffusion_t_nofor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the number of years until there is no forest in each state
+for of a deforestation with diffusion.</p>
+<p>Compute the number of years until there is no forest in each state
+for of a deforestation with diffusion. When a state has no more
+forest, its deforestation (annual area of deforestation) is
+attributed to the other states of the country still having
+forest. This function can be useful for Brazil for example.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>forest_t0</strong> – Forest area at t0 for each state. Numpy array.</p></li>
+<li><p><strong>t0</strong> – Year at t0.</p></li>
+<li><p><strong>annual_defor</strong> – Annual deforestation for each state. Numpy array.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionnary indicating the number of years (“ny”), for
+each state, after which all the forest will have disappeared, and
+the corresponding year (“y”, assuming forest_t0 was estimated at
+the beginning of the year).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.project.emissions">
+<span id="forestatrisk-project-emissions-module"></span><h2>forestatrisk.project.emissions module<a class="headerlink" href="#module-forestatrisk.project.emissions" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.project.emissions.emissions">
+<code class="sig-name descname">emissions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_stocks</span><span class="o">=</span><span class="default_value">'data/emissions/AGB.tif'</span></em>, <em class="sig-param"><span class="n">input_forest</span><span class="o">=</span><span class="default_value">'output/forest_cover_2050.tif'</span></em>, <em class="sig-param"><span class="n">coefficient</span><span class="o">=</span><span class="default_value">0.47</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/emissions.html#emissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.project.emissions.emissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the carbon emissions associated to future deforestation.</p>
+<p>This function predicts the carbon emissions associated to future
+deforestation. Computation are done by block and can be performed
+on large geographical areas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_stocks</strong> – Path to raster of biomass or carbon stocks (in Mg/ha).</p></li>
+<li><p><strong>input_forest</strong> – Path to forest-cover change raster (0=deforestation).</p></li>
+<li><p><strong>coefficient</strong> – Coefficient to convert stocks in MgC/ha (can be 1).</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for computation by block.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Emissions of carbon in MgC.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo-far.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contents.html">Contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../contents.html">Contents</a><ul>
+      <li>Previous: <a href="forestatrisk.predict.html" title="previous chapter">forestatrisk.predict package</a></li>
+      <li>Next: <a href="forestatrisk.validate.html" title="next chapter">forestatrisk.validate package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/subpackages/forestatrisk.project.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

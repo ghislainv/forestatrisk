@@ -7,8 +7,9 @@ Content
    :maxdepth: 2
 
    notebooks/get_started
-   reference
+   contents
    changelog
+   indices
 
 Indices and tables
 ==================

@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>forestatrisk.build_data.ee_jrc &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for forestatrisk.build_data.ee_jrc</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># author          :Ghislain Vieilledent</span>
+<span class="c1"># email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com</span>
+<span class="c1"># web             :https://ecology.ghislainv.fr</span>
+<span class="c1"># python_version  :&gt;=2.7</span>
+<span class="c1"># license         :GPLv3</span>
+<span class="c1"># ==============================================================================</span>
+
+<span class="c1"># Annual product legend</span>
+<span class="c1"># 1. Tropical moist forest (TMF including bamboo-dominated forest and mangroves)</span>
+<span class="c1"># 2. TMF converted later in a tree plantation</span>
+<span class="c1"># 3. NEW degradation</span>
+<span class="c1"># 4. Ongoing degradation (disturbances still detected - can be few years after first degrad if several degradation stages)</span>
+<span class="c1"># 5. Degraded forest (former degradation, no disturbances detected anymore)</span>
+<span class="c1"># 6. NEW deforestation (may follow degradation)</span>
+<span class="c1"># 7. Ongoing deforestation (disturbances still detected)</span>
+<span class="c1"># 8. NEW Regrowth</span>
+<span class="c1"># 9. Regrowthing</span>
+<span class="c1"># 10. Other land cover (not water)</span>
+<span class="c1"># 11. Permanent Water (pekel et al.2015)</span>
+<span class="c1"># 12. Seasonal Water (pekel et al.2015)</span>
+<span class="c1"># 13. Init period without valid data - Init class = TMF</span>
+<span class="c1"># 14. Init period with min 1 valid obs - Init class = TMF</span>
+<span class="c1"># 15. Nodata  - Init class = other LC</span>
+<span class="c1"># 16. Init period without valid data - Init class = Plantation</span>
+
+<span class="c1"># Standard library imports</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 3 compatibility</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># Third party imports</span>
+<span class="kn">import</span> <span class="nn">ee</span>
+
+
+<span class="c1"># ee_jrc.run_task</span>
+<div class="viewcode-block" id="run_task"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.ee_jrc.run_task">[docs]</a><span class="k">def</span> <span class="nf">run_task</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">extent_latlong</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">gdrive_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute forest-cover change with Google Earth Engine.</span>
+
+<span class="sd">    Compute the forest-cover change from Joint Research Center (JRC)</span>
+<span class="sd">    Vancutsem et al. data with Python and GEE API. Export the results</span>
+<span class="sd">    to Google Drive.</span>
+
+<span class="sd">    Notes for Google Earth Engine (abbreviated GEE):</span>
+
+<span class="sd">    * GEE account is needed: `&lt;https://earthengine.google.com&gt;`_\\ .</span>
+<span class="sd">    * GEE API Python client is needed: \</span>
+<span class="sd">    `&lt;https://developers.google.com/earth-engine/python_install&gt;`_\\ .</span>
+
+<span class="sd">    :param iso3: Country ISO 3166-1 alpha-3 code.</span>
+<span class="sd">    :param extent_latlong: List/tuple of region extent in lat/long</span>
+<span class="sd">        (xmin, ymin, xmax, ymax).</span>
+<span class="sd">    :param scale: Resolution in meters per pixel. Default to 30.</span>
+<span class="sd">    :param proj: The projection for the export.</span>
+<span class="sd">    :param gdrive_folder: Name of the Google Drive folder to export to.</span>
+
+<span class="sd">    :return: Google Earth Engine task.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Region</span>
+    <span class="n">region</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span><span class="n">extent_latlong</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
+                                   <span class="n">geodesic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">region</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span><span class="o">.</span><span class="n">bounds</span><span class="p">()</span>
+    <span class="n">export_coord</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">getInfo</span><span class="p">()[</span><span class="s2">&quot;coordinates&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Path to JRC products</span>
+    <span class="c1"># path = &quot;users/ghislainv/jrc/&quot;</span>
+
+    <span class="c1"># JRC annual product (AP)</span>
+    <span class="c1"># AP = ee.ImageCollection(path + &quot;AnnualChanges1982_2019&quot;)</span>
+    <span class="n">AP</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">ImageCollection</span><span class="p">(</span>
+        <span class="s2">&quot;users/ClassifLandsat072015/Roadless2019/AnnualChanges_1982_2019&quot;</span><span class="p">)</span>
+    <span class="n">AP</span> <span class="o">=</span> <span class="n">AP</span><span class="o">.</span><span class="n">mosaic</span><span class="p">()</span><span class="o">.</span><span class="n">toByte</span><span class="p">()</span>
+    <span class="n">AP</span> <span class="o">=</span> <span class="n">AP</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+
+    <span class="c1"># ap_allYear: forest if Y = 1, 2, 3, 4, 5, 13, or 14.</span>
+    <span class="n">AP_forest</span> <span class="o">=</span> <span class="n">AP</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span>
+        <span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">13</span><span class="p">))</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">14</span><span class="p">)),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ap_allYear</span> <span class="o">=</span> <span class="n">AP_forest</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">AP_forest</span><span class="o">.</span><span class="n">neq</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Forest in Jan 2020</span>
+    <span class="n">forest2020</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="mi">37</span><span class="p">)</span>
+
+    <span class="c1"># Forest cover Jan 2015</span>
+    <span class="n">ap_2015_2020</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">38</span><span class="p">)))</span>
+    <span class="n">forest2015</span> <span class="o">=</span> <span class="n">ap_2015_2020</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">forest2015</span> <span class="o">=</span> <span class="n">forest2015</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Forest cover Jan 2010</span>
+    <span class="n">ap_2010_2020</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">27</span><span class="p">,</span> <span class="mi">38</span><span class="p">)))</span>
+    <span class="n">forest2010</span> <span class="o">=</span> <span class="n">ap_2010_2020</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">forest2010</span> <span class="o">=</span> <span class="n">forest2010</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Forest cover Jan 2005</span>
+    <span class="n">ap_2005_2020</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="mi">38</span><span class="p">)))</span>
+    <span class="n">forest2005</span> <span class="o">=</span> <span class="n">ap_2005_2020</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">forest2005</span> <span class="o">=</span> <span class="n">forest2005</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Forest cover Jan 2000</span>
+    <span class="n">ap_2000_2020</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">38</span><span class="p">)))</span>
+    <span class="n">forest2000</span> <span class="o">=</span> <span class="n">ap_2000_2020</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">forest2000</span> <span class="o">=</span> <span class="n">forest2000</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Forest raster with five bands</span>
+    <span class="n">forest</span> <span class="o">=</span> <span class="n">forest2000</span><span class="o">.</span><span class="n">addBands</span><span class="p">(</span><span class="n">forest2005</span><span class="p">)</span><span class="o">.</span><span class="n">addBands</span><span class="p">(</span>
+        <span class="n">forest2010</span><span class="p">)</span><span class="o">.</span><span class="n">addBands</span><span class="p">(</span><span class="n">forest2015</span><span class="p">)</span><span class="o">.</span><span class="n">addBands</span><span class="p">(</span><span class="n">forest2020</span><span class="p">)</span>
+    <span class="n">forest</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;forest2000&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2005&quot;</span><span class="p">,</span>
+                                             <span class="s2">&quot;forest2010&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2015&quot;</span><span class="p">,</span>
+                                             <span class="s2">&quot;forest2020&quot;</span><span class="p">])</span>
+    <span class="n">forest</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;system:bandNames&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;forest2000&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2005&quot;</span><span class="p">,</span>
+                                             <span class="s2">&quot;forest2010&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2015&quot;</span><span class="p">,</span>
+                                             <span class="s2">&quot;forest2020&quot;</span><span class="p">])</span>
+
+    <span class="c1"># maxPixels</span>
+    <span class="n">maxpix</span> <span class="o">=</span> <span class="mf">1e13</span>
+
+    <span class="c1"># Export forest to Google Drive</span>
+    <span class="c1"># ! region must be lat/long coordinates with Python API.</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">batch</span><span class="o">.</span><span class="n">Export</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">toDrive</span><span class="p">(</span>
+        <span class="n">image</span><span class="o">=</span><span class="n">forest</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;forest_&quot;</span> <span class="o">+</span> <span class="n">iso3</span><span class="p">,</span>
+        <span class="n">fileNamePrefix</span><span class="o">=</span><span class="s2">&quot;forest_&quot;</span> <span class="o">+</span> <span class="n">iso3</span><span class="p">,</span>
+        <span class="n">folder</span><span class="o">=</span><span class="n">gdrive_folder</span><span class="p">,</span>
+        <span class="n">region</span><span class="o">=</span><span class="n">export_coord</span><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span>
+        <span class="n">maxPixels</span><span class="o">=</span><span class="n">maxpix</span><span class="p">,</span>
+        <span class="n">crs</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+    <span class="n">task</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="c1"># Return task</span>
+    <span class="k">return</span> <span class="n">task</span></div>
+
+
+<span class="c1"># ee_jrc.check</span>
+<div class="viewcode-block" id="check"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.ee_jrc.check">[docs]</a><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">iso3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function to check if the forest cover data are already present in</span>
+<span class="sd">    the Google Drive folder.</span>
+
+<span class="sd">    RClone program is needed: `&lt;https://rclone.org&gt;`_\\ .</span>
+
+<span class="sd">    :param gdrive_remote_rclone: Google Drive remote name in rclone.</span>
+<span class="sd">    :param gdrive_folder: the Google Drive folder to look in.</span>
+<span class="sd">    :param iso3: Country ISO 3166-1 alpha-3 code.</span>
+
+<span class="sd">    :return: A boolean indicating the presence (True) of the data in</span>
+<span class="sd">        the folder.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># RClone command</span>
+    <span class="n">remote_path</span> <span class="o">=</span> <span class="n">gdrive_remote_rclone</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">gdrive_folder</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="s2">&quot;&#39;forest_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;*.tif&#39;&quot;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rclone&quot;</span><span class="p">,</span> <span class="s2">&quot;lsf&quot;</span><span class="p">,</span> <span class="s2">&quot;--include&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">remote_path</span><span class="p">]</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+    <span class="c1"># Filename to find</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="s2">&quot;forest_&quot;</span> <span class="o">+</span> <span class="n">iso3</span>
+    <span class="c1"># Check file is present</span>
+    <span class="n">present_in_folder</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+        <span class="n">present_in_folder</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="c1"># Return</span>
+    <span class="k">return</span> <span class="n">present_in_folder</span></div>
+
+
+<span class="c1"># ee_jrc.download</span>
+<div class="viewcode-block" id="download"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.ee_jrc.download">[docs]</a><span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span>
+             <span class="n">gdrive_folder</span><span class="p">,</span>
+             <span class="n">iso3</span><span class="p">,</span>
+             <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Download forest-cover data from Google Drive.</span>
+
+<span class="sd">    Check that GEE task is completed. Wait for the task to be</span>
+<span class="sd">    completed. Then download forest-cover data from Google Drive in the</span>
+<span class="sd">    current working directory.</span>
+
+<span class="sd">    RClone program is needed: `&lt;https://rclone.org&gt;`_\\ .</span>
+
+<span class="sd">    :param gdrive_remote_rclone: Google Drive remote name in rclone.</span>
+
+<span class="sd">    :param gdrive_folder: the Google Drive folder to look in.</span>
+
+<span class="sd">    :param iso3: Country ISO 3166-1 alpha-3 code.</span>
+
+<span class="sd">    :param output_dir: Output directory to download files to. Default</span>
+<span class="sd">        to current working directory.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Data availability</span>
+    <span class="n">data_availability</span> <span class="o">=</span> <span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span>
+                              <span class="n">gdrive_folder</span><span class="p">,</span>
+                              <span class="n">iso3</span><span class="p">)</span>
+
+    <span class="c1"># Check task status</span>
+    <span class="k">while</span> <span class="n">data_availability</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="c1"># We wait 1 min</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+        <span class="c1"># We reactualize the status</span>
+        <span class="n">data_availability</span> <span class="o">=</span> <span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span>
+                                  <span class="n">gdrive_folder</span><span class="p">,</span>
+                                  <span class="n">iso3</span><span class="p">)</span>
+
+    <span class="c1"># Commands to download results with rclone</span>
+    <span class="n">remote_path</span> <span class="o">=</span> <span class="n">gdrive_remote_rclone</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">gdrive_folder</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="s2">&quot;&#39;forest_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;*.tif&#39;&quot;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rclone&quot;</span><span class="p">,</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;--include&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">remote_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">]</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<span class="c1"># End</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/logo-far.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contents.html">Contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

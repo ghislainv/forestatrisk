@@ -111,13 +111,14 @@ def r_diffproj(inputA, inputB,
 # mat_diffproj
 def mat_diffproj(input_raster,
                  blk_rows=128):
-    """Compute a raster of differences for comparison.
+    """Compute a confusion matrix from a raster of differences.
 
-    This function compute a raster of differences between two rasters
-    of future forest cover. Rasters must have the same extent and resolution.
+    This function computes a confusion matrix from a raster of
+    differences. The raster of differences can be obtained using
+    function ``.r_diffproj()``\\ .
 
     :param input_raster: Raster of differences obtain with
-    forestatrisk.r_projdiff.
+        forestatrisk.r_projdiff.
 
     :return: A confusion matrix. [[np00, np01], [np10, np11]].
 

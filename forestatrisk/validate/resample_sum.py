@@ -24,6 +24,8 @@ from ..misc import progress_bar, make_square
 def coarsen_sum(a, c):
     """Resample to coarser resolution using sum
 
+    This is an internal function used by resample_sum.
+
     :param a: 2D numpy array
     :param c: Coarseness, in number of cells
     """
@@ -49,8 +51,9 @@ def resample_sum(input_raster, output_raster, val=0,
                  window_size=2):
     """Resample to coarser resolution with counts.
 
-    This function rescample to coarser resolution counting pixel
-    number having a given value.
+    This function resamples to coarser resolution counting pixel
+    number having a given value. Window's size is limited to 1000
+    pixels.
 
     :param input_raster: Path to input raster.
     :param val: Pixel value to consider.

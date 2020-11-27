@@ -21,13 +21,13 @@ from ..misc import progress_bar, makeblock
 
 
 # Percentage_correct
-def confmat(r_obs0, r_obs1, r_pred0, r_pred1,
-            blk_rows=0):
+def map_confmat(r_obs0, r_obs1, r_pred0, r_pred1,
+                blk_rows=0):
     """Compute a confusion matrix.
 
     This function computes a confusion matrix at a given
     resolution. Number of pixels in each category (0, 1) and in each
-    spatial cell are given by list_obs and list_pred rasters.
+    spatial cell are given by r_obs\\* and r_pred\\* rasters.
 
     :param r_obs0: Raster counting the number of 0 for observations.
     :param r_obs1: Raster counting the number of 1 for observations.
@@ -100,8 +100,8 @@ def confmat(r_obs0, r_obs1, r_pred0, r_pred1,
     return conf_mat
 
 
-# accuracy
-def accuracy(mat):
+# map_accuracy
+def map_accuracy(mat):
     """Compute accuracy indices from a confusion matrix.
 
     Compute Overall Accuracy, Expected Accuracy, Figure of Merit,

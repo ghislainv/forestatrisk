@@ -41,17 +41,19 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
              gdrive_folder=None):
     """Compute forest-cover change with Google Earth Engine.
 
-    Compute the forest-cover change from JRC Vancutsem et al. data
-    with Python and GEE API. Export the results to Google Drive.
+    Compute the forest-cover change from Joint Research Center (JRC)
+    Vancutsem et al. data with Python and GEE API. Export the results
+    to Google Drive.
 
-    Notes for GOOGLE EARTH ENGINE (abbreviated GEE):
-    - GEE account is needed: https://earthengine.google.com.
-    - GEE API Python client is needed: \
-    https://developers.google.com/earth-engine/python_install.
+    Notes for Google Earth Engine (abbreviated GEE):
+
+    * GEE account is needed: `<https://earthengine.google.com>`_\\ .
+    * GEE API Python client is needed: \
+    `<https://developers.google.com/earth-engine/python_install>`_\\ .
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
     :param extent_latlong: List/tuple of region extent in lat/long
-    (xmin, ymin, xmax, ymax).
+        (xmin, ymin, xmax, ymax).
     :param scale: Resolution in meters per pixel. Default to 30.
     :param proj: The projection for the export.
     :param gdrive_folder: Name of the Google Drive folder to export to.
@@ -139,14 +141,14 @@ def check(gdrive_remote_rclone, gdrive_folder, iso3):
     """Function to check if the forest cover data are already present in
     the Google Drive folder.
 
-    RClone program is needed: https://rclone.org.
+    RClone program is needed: `<https://rclone.org>`_\\ .
 
     :param gdrive_remote_rclone: Google Drive remote name in rclone.
     :param gdrive_folder: the Google Drive folder to look in.
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
     :return: A boolean indicating the presence (True) of the data in
-    the folder.
+        the folder.
 
     """
 
@@ -177,7 +179,7 @@ def download(gdrive_remote_rclone,
     completed. Then download forest-cover data from Google Drive in the
     current working directory.
 
-    RClone program is needed: https://rclone.org.
+    RClone program is needed: `<https://rclone.org>`_\\ .
 
     :param gdrive_remote_rclone: Google Drive remote name in rclone.
 
@@ -186,7 +188,7 @@ def download(gdrive_remote_rclone,
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
     :param output_dir: Output directory to download files to. Default
-    to current working directory.
+        to current working directory.
 
     """
 

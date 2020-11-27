@@ -35,12 +35,11 @@ def plot_polygon(poly, symbol='k-', **kwargs):
 
 
 # Use this function to fill polygons.
-# Uncomment this one and comment out the one above.
-# def plot_polygon(poly, symbol='w', **kwargs):
-#     """Plots a polygon using the given symbol."""
-#     for i in range(poly.GetGeometryCount()):
-#         x, y = zip(*poly.GetGeometryRef(i).GetPoints())
-#         plt.fill(x, y, symbol, **kwargs)
+def plot_polygon_fill(poly, symbol='w', **kwargs):
+    """Plots a polygon using the given symbol."""
+    for i in range(poly.GetGeometryCount()):
+        x, y = zip(*poly.GetGeometryRef(i).GetPoints())
+        plt.fill(x, y, symbol, **kwargs)
 
 
 def plot_line(line, symbol='k-', **kwargs):
@@ -225,6 +224,9 @@ def fcc(input_fcc_raster,
     :param col_defor: rgba color for deforestation. Default to red.
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
+    :param \\**kwargs: see below.
+
+    :Keyword Arguments: Additional arguments to plot borders.
 
     :return: A Matplotlib figure of the forest map.
 
@@ -348,6 +350,9 @@ def fcc12345(input_fcc_raster,
     :param col: List of rgba colors for classes 12345.
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
+    :param \\**kwargs: see below.
+
+    :Keyword Arguments: Additional arguments to plot borders.
 
     :return: A Matplotlib figure of the forest map.
 
@@ -459,6 +464,9 @@ def fcc123(input_fcc_raster,
     :param col: List of rgba colors for classes 123.
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
+    :param \\**kwargs: see below.
+
+    :Keyword Arguments: Additional arguments to plot borders.
 
     :return: A Matplotlib figure of the forest map.
 
@@ -565,6 +573,9 @@ def forest(input_forest_raster,
     :param zoom: Zoom to region (xmin, xmax, ymin, ymax).
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
+    :param \\**kwargs: see below.
+
+    :Keyword Arguments: Additional arguments to plot borders.
 
     :return: A Matplotlib figure of the forest map.
 
@@ -674,9 +685,12 @@ def prob(input_prob_raster,
     :param legend: Add colorbar if True.
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
+    :param \\**kwargs: see below.
+
+    :Keyword Arguments: Additional arguments to plot borders.
 
     :return: A Matplotlib figure of the map of spatial probability of
-    deforestation.
+        deforestation.
 
     """
 
@@ -870,6 +884,9 @@ def differences(input_raster,
     :param zoom: Zoom to region (xmin, xmax, ymin, ymax).
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
+    :param \\**kwargs: see below.
+
+    :Keyword Arguments: Additional arguments to plot borders.
 
     :return: A Matplotlib figure of the forest map.
 
@@ -1051,7 +1068,7 @@ def rho(input_rho_raster,
         output_file="rho.png",
         borders=None,
         figsize=(11.69, 8.27),
-        dpi=300):
+        dpi=300, **kwargs):
     """Plot map of spatial random effects (rho).
 
     This function plots the spatial random effects.
@@ -1061,6 +1078,9 @@ def rho(input_rho_raster,
     :param borders: Vector file to be plotted.
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
+    :param \\**kwargs: see below.
+
+    :Keyword Arguments: Additional arguments to plot borders.
 
     :return: A Matplotlib figure of the map of spatial random effects.
 
@@ -1105,7 +1125,7 @@ def rho(input_rho_raster,
     plt.imshow(ov_arr, cmap="RdYlGn_r", extent=extent,
                vmin=-rho_bound, vmax=rho_bound)
     if borders is not None:
-        plot_layer(borders, symbol="k-")
+        plot_layer(borders, symbol="k-", **kwargs)
     plt.colorbar()
     figure_as_image(fig, output_file)
 
@@ -1123,13 +1143,13 @@ def freq_prob(stats,
     This function plots the distribution of the probability values.
 
     :param stats: Tuple of statistics (counts, threshold, error,
-    hectares) returned by deforestprob.deforest().
+        hectares) returned by deforestprob.deforest().
     :param output_file: Name of the plot file.
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
 
     :return: A Matplotlib figure of the distribution of the
-    probability values.
+        probability values.
 
     """
 

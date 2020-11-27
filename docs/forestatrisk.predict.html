@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>forestatrisk.predict package &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="forestatrisk-predict-package">
+<h1>forestatrisk.predict package<a class="headerlink" href="#forestatrisk-predict-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-forestatrisk.predict.interpolate_rho">
+<span id="forestatrisk-predict-interpolate-rho-module"></span><h2>forestatrisk.predict.interpolate_rho module<a class="headerlink" href="#module-forestatrisk.predict.interpolate_rho" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.predict.interpolate_rho.interpolate_rho">
+<code class="sig-name descname">interpolate_rho</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rho</span></em>, <em class="sig-param"><span class="n">input_raster</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/rho.tif'</span></em>, <em class="sig-param"><span class="n">csize_orig</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">csize_new</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/predict/interpolate_rho.html#interpolate_rho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.predict.interpolate_rho.interpolate_rho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample rho values with interpolation.</p>
+<p>This function resamples the spatial random effects (rho values)
+obtained from an iCAR model. It performs a cubicspline interpolation
+at a finer resolution and smoothens the rho values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> – Original rho values estimates with the iCAR model.</p></li>
+<li><p><strong>input_raster</strong> – Path to input raster defining the region.</p></li>
+<li><p><strong>output_file</strong> – Path to output raster file with resampled rho values.</p></li>
+<li><p><strong>csize_orig</strong> – Original size of the spatial cells (in km).</p></li>
+<li><p><strong>csize_new</strong> – New size of the spatial cells for cubicspline
+interpolation (in km).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.predict.predict_raster">
+<span id="forestatrisk-predict-predict-raster-module"></span><h2>forestatrisk.predict.predict_raster module<a class="headerlink" href="#module-forestatrisk.predict.predict_raster" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.predict.predict_raster.predict_raster">
+<code class="sig-name descname">predict_raster</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">var_dir</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">input_forest_raster</span><span class="o">=</span><span class="default_value">'data/forest.tif'</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'predictions.tif'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/predict/predict_raster.html#predict_raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.predict.predict_raster.predict_raster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the spatial probability of deforestation from a model.</p>
+<p>This function predicts the spatial probability of deforestation
+from a model_binomial_iCAR model. Computation are done by block and
+can be performed on large geographical areas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – The model (glm, rf) to predict from. Must have a
+model.predict() function.</p></li>
+<li><p><strong>var_dir</strong> – Directory with rasters (.tif) of explicative variables.</p></li>
+<li><p><strong>input_forest_raster</strong> – Path to forest raster (1 for forest).</p></li>
+<li><p><strong>output_file</strong> – Name of the output raster file for predictions.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for computation by block.</p></li>
+<li><p><strong>**kwargs</strong> – see below.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><p>Additional arguments to be passed to
+<code class="docutils literal notranslate"><span class="pre">model.predict()</span></code>.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A raster of predictions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.predict.predict_raster_binomial_iCAR">
+<span id="forestatrisk-predict-predict-raster-binomial-icar-module"></span><h2>forestatrisk.predict.predict_raster_binomial_iCAR module<a class="headerlink" href="#module-forestatrisk.predict.predict_raster_binomial_iCAR" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.predict.predict_raster_binomial_iCAR.predict_binomial_iCAR">
+<code class="sig-name descname">predict_binomial_iCAR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">new_data</span></em>, <em class="sig-param"><span class="n">rhos</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/predict/predict_raster_binomial_iCAR.html#predict_binomial_iCAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.predict.predict_raster_binomial_iCAR.predict_binomial_iCAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to return the predictions of a model_binomial_iCAR model.</p>
+<p>Function to return the predictions of a model_binomial_iCAR model
+for a new data-set. In this function, rho values for spatial cells
+are directly provided and not obtained from the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – The model_binomial_iCAR model to predict from.</p></li>
+<li><p><strong>new_data</strong> – Pandas DataFrame including explicative variables.</p></li>
+<li><p><strong>rhos</strong> – Spatial random effects for each observation (row) in new_data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Predictions (probabilities).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.predict.predict_raster_binomial_iCAR.predict_raster_binomial_iCAR">
+<code class="sig-name descname">predict_raster_binomial_iCAR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">var_dir</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">input_cell_raster</span><span class="o">=</span><span class="default_value">'output/rho.tif'</span></em>, <em class="sig-param"><span class="n">input_forest_raster</span><span class="o">=</span><span class="default_value">'data/forest.tif'</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/pred_binomial_iCAR.tif'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/predict/predict_raster_binomial_iCAR.html#predict_raster_binomial_iCAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.predict.predict_raster_binomial_iCAR.predict_raster_binomial_iCAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the spatial probability of deforestation from a model.</p>
+<p>This function predicts the spatial probability of deforestation
+from a model_binomial_iCAR model. Computation are done by block and
+can be performed on large geographical areas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – The model_binomial_iCAR model to predict from.</p></li>
+<li><p><strong>var_dir</strong> – Directory with rasters (.tif) of explicative variables.</p></li>
+<li><p><strong>input_cell_raster</strong> – Path to raster of rho values for spatial cells.</p></li>
+<li><p><strong>input_forest_raster</strong> – Path to forest raster (1 for forest).</p></li>
+<li><p><strong>output_file</strong> – Name of the raster file to output the probability map.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for computation by block.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.predict.wrast_rho">
+<span id="forestatrisk-predict-wrast-rho-module"></span><h2>forestatrisk.predict.wrast_rho module<a class="headerlink" href="#module-forestatrisk.predict.wrast_rho" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.predict.wrast_rho.wrast_rho">
+<code class="sig-name descname">wrast_rho</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rho</span></em>, <em class="sig-param"><span class="n">input_raster</span></em>, <em class="sig-param"><span class="n">csize</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/rho_orig.tif'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/predict/wrast_rho.html#wrast_rho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.predict.wrast_rho.wrast_rho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write rho values to GeoTIFF.</p>
+<p>This function writes rho values (spatial random effects) to a
+GeoTIFF raster file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> – original rho values estimates with the iCAR model.</p></li>
+<li><p><strong>input_raster</strong> – path to input raster defining the region.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Csize</dt>
+<dd class="field-even"><p>size of the spatial cells (in km).</p>
+</dd>
+<dt class="field-odd">Output_file</dt>
+<dd class="field-odd"><p>path to output raster file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.predict">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-forestatrisk.predict" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/logo-far.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Indices and tables</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/forestatrisk.predict.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

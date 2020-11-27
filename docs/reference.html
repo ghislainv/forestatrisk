@@ -279,7 +279,7 @@ degrees. x: -180/+180, y: +60/-60.</p>
 <h2>2. Sample<a class="headerlink" href="#sample" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="forestatrisk.build_data.sample.sample">
-<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nsamp</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">adapt</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">Seed</span><span class="o">=</span><span class="default_value">1234</span></em>, <em class="sig-param"><span class="n">csize</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">var_dir</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">input_forest_raster</span><span class="o">=</span><span class="default_value">'forest.tif'</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/sample.txt'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/sample.html#sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.sample.sample" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nsamp</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">adapt</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">1234</span></em>, <em class="sig-param"><span class="n">csize</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">var_dir</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">input_forest_raster</span><span class="o">=</span><span class="default_value">'forest.tif'</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/sample.txt'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/build_data/sample.html#sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.build_data.sample.sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sample points and extract raster values.</p>
 <p>This function (i) randomly draws spatial points in deforested and
 forested areas and (ii) extract environmental variable values for
@@ -290,7 +290,7 @@ each spatial point.</p>
 <li><p><strong>nsamp</strong> – Number of random spatial points.</p></li>
 <li><p><strong>adapt</strong> – Boolean. Adapt <code class="docutils literal notranslate"><span class="pre">nsamp</span></code> to forest area: 1000 for 1 Mha of
 forest, with min=10000 and max=50000. Default to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-<li><p><strong>Seed</strong> – Seed for random number generator.</p></li>
+<li><p><strong>seed</strong> – Seed for random number generator.</p></li>
 <li><p><strong>csize</strong> – Spatial cell size in km.</p></li>
 <li><p><strong>var_dir</strong> – Directory with raster data.</p></li>
 <li><p><strong>input_forest_raster</strong> – Name of the forest raster file
@@ -580,14 +580,15 @@ on large geographical areas.</p>
 </div>
 <div class="section" id="validate">
 <h2>6. Validate<a class="headerlink" href="#validate" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="model-validation">
+<h3>Model validation<a class="headerlink" href="#model-validation" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="accuracy-indices">
-<h3>Accuracy indices<a class="headerlink" href="#accuracy-indices" title="Permalink to this headline">¶</a></h3>
+<h4>Accuracy indices<a class="headerlink" href="#accuracy-indices" title="Permalink to this headline">¶</a></h4>
 <dl class="py function">
-<dt id="forestatrisk.validate.validation.computeAUC">
-<code class="sig-name descname">computeAUC</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos_scores</span></em>, <em class="sig-param"><span class="n">neg_scores</span></em>, <em class="sig-param"><span class="n">n_sample</span><span class="o">=</span><span class="default_value">100000</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/validation.html#computeAUC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.validation.computeAUC" title="Permalink to this definition">¶</a></dt>
+<dt id="forestatrisk.validate.model_validation.computeAUC">
+<code class="sig-name descname">computeAUC</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos_scores</span></em>, <em class="sig-param"><span class="n">neg_scores</span></em>, <em class="sig-param"><span class="n">n_sample</span><span class="o">=</span><span class="default_value">100000</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/model_validation.html#computeAUC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.model_validation.computeAUC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the AUC index.</p>
-<p>Compute the Area Under the ROC Curve (AUC). See Liu et al. 2011
-&lt;10.1111/j.1600-0587.2010.06354.x&gt;.</p>
+<p>Compute the Area Under the ROC Curve (AUC). See <a class="reference external" href="https://doi.org/10.1111/j.1600-0587.2010.06354.x">Liu et al. 2011</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -603,8 +604,8 @@ on large geographical areas.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="forestatrisk.validate.validation.accuracy_indices">
-<code class="sig-name descname">accuracy_indices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pred</span></em>, <em class="sig-param"><span class="n">obs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/validation.html#accuracy_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.validation.accuracy_indices" title="Permalink to this definition">¶</a></dt>
+<dt id="forestatrisk.validate.model_validation.accuracy_indices">
+<code class="sig-name descname">accuracy_indices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pred</span></em>, <em class="sig-param"><span class="n">obs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/model_validation.html#accuracy_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.model_validation.accuracy_indices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute accuracy indices.</p>
 <p>Compute the Overall Accuracy, the Figure of Merit, the
 Specificity, the Sensitivity, the True Skill Statistics and the
@@ -623,9 +624,12 @@ vs. observations.</p>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="cross-validation">
+<h4>Cross-validation<a class="headerlink" href="#cross-validation" title="Permalink to this headline">¶</a></h4>
 <dl class="py function">
-<dt id="forestatrisk.validate.validation.cross_validation">
-<code class="sig-name descname">cross_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">formula</span></em>, <em class="sig-param"><span class="n">mod_type</span><span class="o">=</span><span class="default_value">'icar'</span></em>, <em class="sig-param"><span class="n">ratio</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">nrep</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">1234</span></em>, <em class="sig-param"><span class="n">icar_args</span><span class="o">=</span><span class="default_value">{'beta_start': 0, 'burnin': 1000, 'mcmc': 1000, 'n_neighbors': None, 'neighbors': None, 'thin': 1}</span></em>, <em class="sig-param"><span class="n">rf_args</span><span class="o">=</span><span class="default_value">{'n_estimators': 100, 'n_jobs': None}</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/validation.html#cross_validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.validation.cross_validation" title="Permalink to this definition">¶</a></dt>
+<dt id="forestatrisk.validate.model_validation.cross_validation">
+<code class="sig-name descname">cross_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">formula</span></em>, <em class="sig-param"><span class="n">mod_type</span><span class="o">=</span><span class="default_value">'icar'</span></em>, <em class="sig-param"><span class="n">ratio</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">nrep</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">1234</span></em>, <em class="sig-param"><span class="n">icar_args</span><span class="o">=</span><span class="default_value">{'beta_start': 0, 'burnin': 1000, 'mcmc': 1000, 'n_neighbors': None, 'neighbors': None, 'thin': 1}</span></em>, <em class="sig-param"><span class="n">rf_args</span><span class="o">=</span><span class="default_value">{'n_estimators': 100, 'n_jobs': None}</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/model_validation.html#cross_validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.model_validation.cross_validation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Model cross-validation</p>
 <p>Performs model cross-validation.</p>
 <dl class="field-list simple">
@@ -647,9 +651,13 @@ vs. observations.</p>
 </dl>
 </dd></dl>
 
+</div>
+</div>
+<div class="section" id="map-validation">
+<h3>Map validation<a class="headerlink" href="#map-validation" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
-<dt id="forestatrisk.validate.validation.validation">
-<code class="sig-name descname">validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pred</span></em>, <em class="sig-param"><span class="n">obs</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/validation.html#validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.validation.validation" title="Permalink to this definition">¶</a></dt>
+<dt id="forestatrisk.validate.map_validation.map_validation">
+<code class="sig-name descname">map_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pred</span></em>, <em class="sig-param"><span class="n">obs</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/map_validation.html#map_validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.map_validation.map_validation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute accuracy indices based on predicted and observed
 forest-cover change (fcc) maps.</p>
 <p>Compute the Overall Accuracy, the Figure of Merit, the
@@ -666,6 +674,383 @@ vs. observations.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A dictionnary of accuracy indices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.diffproj.r_diffproj">
+<code class="sig-name descname">r_diffproj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputA</span></em>, <em class="sig-param"><span class="n">inputB</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'diffproj.tif'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/diffproj.html#r_diffproj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.diffproj.r_diffproj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a raster of differences for comparison.</p>
+<p>This function compute a raster of differences between two rasters
+of future forest cover. Rasters must have the same extent and resolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputA</strong> – Path to first raster (predictions).</p></li>
+<li><p><strong>inputB</strong> – Path to second raster of (sd. predictions or observations).</p></li>
+<li><p><strong>output_file</strong> – Name of the output raster file for differences.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for computation by block.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.diffproj.mat_diffproj">
+<code class="sig-name descname">mat_diffproj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_raster</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/diffproj.html#mat_diffproj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.diffproj.mat_diffproj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a confusion matrix from a raster of differences.</p>
+<p>This function computes a confusion matrix from a raster of
+differences. The raster of differences can be obtained using
+function <code class="docutils literal notranslate"><span class="pre">.r_diffproj()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input_raster</strong> – Raster of differences obtain with
+forestatrisk.r_projdiff.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A confusion matrix. [[np00, np01], [np10, np11]].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.resample_sum.resample_sum">
+<code class="sig-name descname">resample_sum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_raster</span></em>, <em class="sig-param"><span class="n">output_raster</span></em>, <em class="sig-param"><span class="n">val</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">window_size</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/resample_sum.html#resample_sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.resample_sum.resample_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample to coarser resolution with counts.</p>
+<p>This function resamples to coarser resolution counting pixel
+number having a given value. Window’s size is limited to 1000
+pixels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_raster</strong> – Path to input raster.</p></li>
+<li><p><strong>val</strong> – Pixel value to consider.</p></li>
+<li><p><strong>window_size</strong> – Size of the window in number of pixels.</p></li>
+<li><p><strong>output_raster</strong> – Path to output raster file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.map_accuracy.map_confmat">
+<code class="sig-name descname">map_confmat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">r_obs0</span></em>, <em class="sig-param"><span class="n">r_obs1</span></em>, <em class="sig-param"><span class="n">r_pred0</span></em>, <em class="sig-param"><span class="n">r_pred1</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/map_accuracy.html#map_confmat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.map_accuracy.map_confmat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a confusion matrix.</p>
+<p>This function computes a confusion matrix at a given
+resolution. Number of pixels in each category (0, 1) and in each
+spatial cell are given by r_obs* and r_pred* rasters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r_obs0</strong> – Raster counting the number of 0 for observations.</p></li>
+<li><p><strong>r_obs1</strong> – Raster counting the number of 1 for observations.</p></li>
+<li><p><strong>r_pred0</strong> – Raster counting the number of 0 for predictions.</p></li>
+<li><p><strong>r_pred1</strong> – Raster counting the number of 1 for predictions.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of lines per block.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A numpy array of shape (2,2).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.map_accuracy.map_accuracy">
+<code class="sig-name descname">map_accuracy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mat</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/map_accuracy.html#map_accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.map_accuracy.map_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute accuracy indices from a confusion matrix.</p>
+<p>Compute Overall Accuracy, Expected Accuracy, Figure of Merit,
+Specificity, Sensitivity, True Skill Statistics and
+Cohen’s Kappa from a confusion matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mat</strong> – Confusion matrix. Format: [[n00, n01], [n10, n11]]
+with pred on lines and obs on columns.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionnary of accuracy indices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="plot">
+<h2>7. Plot<a class="headerlink" href="#plot" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Data<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="forestatrisk.plot.plot.var">
+<code class="sig-name descname">var</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">var_dir</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'var.pdf'</span></em>, <em class="sig-param"><span class="n">gridsize</span><span class="o">=</span><span class="default_value">3, 3</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">11.69, 8.27</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">300</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/plot/plot.html#var"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.plot.plot.var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot variable maps.</p>
+<p>This function plots variable maps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var_dir</strong> – Path to variable directory.</p></li>
+<li><p><strong>output_file</strong> – Name of the plot file.</p></li>
+<li><p><strong>grid_size</strong> – Grid size per page.</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of Matplotlib figures.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.plot.plot.obs">
+<code class="sig-name descname">obs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sample</span></em>, <em class="sig-param"><span class="n">name_forest_var</span></em>, <em class="sig-param"><span class="n">input_fcc_raster</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'obs.png'</span></em>, <em class="sig-param"><span class="n">zoom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">s</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">11.69, 8.27</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">300</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/plot/plot.html#obs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.plot.plot.obs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the sample points over the forest map.</p>
+<p>This function plots the sample points over the forest map. Green
+is the remaining forest (value 1), red is the deforestation (value
+0).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample</strong> – Pandas DataFrame with observation coordinates (X, Y).</p></li>
+<li><p><strong>name_forest_var</strong> – Name of the forest variable in sample DataFrame.</p></li>
+<li><p><strong>input_fcc_raster</strong> – Path to forest-cover change raster.</p></li>
+<li><p><strong>output_file</strong> – Name of the plot file.</p></li>
+<li><p><strong>zoom</strong> – Zoom to region (xmin, xmax, ymin, ymax).</p></li>
+<li><p><strong>s</strong> – Marker size for sample points.</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Matplotlib figure of the sample points.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.plot.plot.correlation">
+<code class="sig-name descname">correlation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'correlation.pdf'</span></em>, <em class="sig-param"><span class="n">plots_per_page</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">8.27, 11.69</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">300</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/plot/plot.html#correlation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.plot.plot.correlation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correlation between variables and the probability of deforestation.</p>
+<p>This function plots (i) the histogram of the explicative variables
+and (ii) the probability of deforestation by bins of equal number of
+observations for each explicative variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y</strong> – A 1D array for the response variable (forest=1, defor=0).</p></li>
+<li><p><strong>data</strong> – A pandas DataFrame with column names.</p></li>
+<li><p><strong>output_file</strong> – Path to output file.</p></li>
+<li><p><strong>plots_per_page</strong> – Number of plots (lines) per page.</p></li>
+<li><p><strong>figsize</strong> – Figure size.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of Matplotlib figures.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="forest-cover">
+<h3>Forest cover<a class="headerlink" href="#forest-cover" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="forestatrisk.plot.plot.forest">
+<code class="sig-name descname">forest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_forest_raster</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'forest.png'</span></em>, <em class="sig-param"><span class="n">maxpixels</span><span class="o">=</span><span class="default_value">500000</span></em>, <em class="sig-param"><span class="n">borders</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zoom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">11.69, 8.27</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/plot/plot.html#forest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.plot.plot.forest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot forest map.</p>
+<p>This function plots the forest map in green. Raster values must be
+0 (non-forest) and 1 (forest).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_forest_raster</strong> – Path to forest raster.</p></li>
+<li><p><strong>output_file</strong> – Name of the plot file.</p></li>
+<li><p><strong>maxpixels</strong> – Maximum number of pixels to plot.</p></li>
+<li><p><strong>borders</strong> – Vector file to be plotted.</p></li>
+<li><p><strong>zoom</strong> – Zoom to region (xmin, xmax, ymin, ymax).</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+<li><p><strong>**kwargs</strong> – see below.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><p>Additional arguments to plot borders.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A Matplotlib figure of the forest map.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="forest-cover-change">
+<h3>Forest cover change<a class="headerlink" href="#forest-cover-change" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="forestatrisk.plot.plot.fcc">
+<code class="sig-name descname">fcc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_fcc_raster</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'fcc.png'</span></em>, <em class="sig-param"><span class="n">maxpixels</span><span class="o">=</span><span class="default_value">500000</span></em>, <em class="sig-param"><span class="n">borders</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zoom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">col_for</span><span class="o">=</span><span class="default_value">34, 139, 34, 255</span></em>, <em class="sig-param"><span class="n">col_defor</span><span class="o">=</span><span class="default_value">227, 26, 28, 255</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">11.69, 8.27</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/plot/plot.html#fcc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.plot.plot.fcc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot forest-cover change (fcc) map.</p>
+<p>This function plots the forest-cover change map. Green is the
+remaining forest (value 1 in raster), the color specified is for
+deforestation (value 0 in raster).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_fcc_raster</strong> – Path to fcc raster.</p></li>
+<li><p><strong>output_file</strong> – Name of the plot file.</p></li>
+<li><p><strong>maxpixels</strong> – Maximum number of pixels to plot.</p></li>
+<li><p><strong>borders</strong> – Vector file to be plotted.</p></li>
+<li><p><strong>zoom</strong> – Zoom to region (xmin, xmax, ymin, ymax).</p></li>
+<li><p><strong>col_for</strong> – rgba color for forest. Defaut to forest green.</p></li>
+<li><p><strong>col_defor</strong> – rgba color for deforestation. Default to red.</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+<li><p><strong>**kwargs</strong> – see below.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><p>Additional arguments to plot borders.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A Matplotlib figure of the forest map.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.plot.plot.fcc123">
+<code class="sig-name descname">fcc123</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_fcc_raster</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'fcc123.png'</span></em>, <em class="sig-param"><span class="n">maxpixels</span><span class="o">=</span><span class="default_value">500000</span></em>, <em class="sig-param"><span class="n">borders</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zoom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">col</span><span class="o">=</span><span class="default_value">[255, 165, 0, 255, 227, 26, 28, 255, 34, 139, 34, 255]</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">11.69, 8.27</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/plot/plot.html#fcc123"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.plot.plot.fcc123" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot forest-cover change (fcc123) map.</p>
+<p>This function plots the forest-cover change map with 2
+deforestation time-periods (2000 -&gt; 2010 -&gt; 2020 for example) plus
+the remaining forest (3 classes).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_fcc_raster</strong> – Path to fcc123 raster.</p></li>
+<li><p><strong>output_file</strong> – Name of the plot file.</p></li>
+<li><p><strong>maxpixels</strong> – Maximum number of pixels to plot.</p></li>
+<li><p><strong>borders</strong> – Vector file to be plotted.</p></li>
+<li><p><strong>zoom</strong> – Zoom to region (xmin, xmax, ymin, ymax).</p></li>
+<li><p><strong>col</strong> – List of rgba colors for classes 123.</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+<li><p><strong>**kwargs</strong> – see below.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><p>Additional arguments to plot borders.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A Matplotlib figure of the forest map.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.plot.plot.fcc12345">
+<code class="sig-name descname">fcc12345</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_fcc_raster</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'fcc12345.png'</span></em>, <em class="sig-param"><span class="n">maxpixels</span><span class="o">=</span><span class="default_value">500000</span></em>, <em class="sig-param"><span class="n">borders</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zoom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">col</span><span class="o">=</span><span class="default_value">[255, 165, 0, 255, 235, 100, 0, 255, 227, 26, 28, 255, 163, 26, 28, 255, 34, 139, 34, 255]</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">11.69, 8.27</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/plot/plot.html#fcc12345"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.plot.plot.fcc12345" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot forest-cover change (fcc12345) map.</p>
+<p>This function plots the forest-cover change map with 4
+deforestation time-periods (2000 -&gt; 2005 -&gt; 2010 -&gt; 2015 -&gt; 2020
+for example) plus the remaining forest (5 classes).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_fcc_raster</strong> – Path to fcc12345 raster.</p></li>
+<li><p><strong>output_file</strong> – Name of the plot file.</p></li>
+<li><p><strong>maxpixels</strong> – Maximum number of pixels to plot.</p></li>
+<li><p><strong>borders</strong> – Vector file to be plotted.</p></li>
+<li><p><strong>zoom</strong> – Zoom to region (xmin, xmax, ymin, ymax).</p></li>
+<li><p><strong>col</strong> – List of rgba colors for classes 12345.</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+<li><p><strong>**kwargs</strong> – see below.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><p>Additional arguments to plot borders.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A Matplotlib figure of the forest map.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="deforestation-rpobability">
+<h3>Deforestation rpobability<a class="headerlink" href="#deforestation-rpobability" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="forestatrisk.plot.plot.rho">
+<code class="sig-name descname">rho</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_rho_raster</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'rho.png'</span></em>, <em class="sig-param"><span class="n">borders</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">11.69, 8.27</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/plot/plot.html#rho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.plot.plot.rho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot map of spatial random effects (rho).</p>
+<p>This function plots the spatial random effects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_rho_raster</strong> – Path to raster of random effects.</p></li>
+<li><p><strong>output_file</strong> – Name of the plot file.</p></li>
+<li><p><strong>borders</strong> – Vector file to be plotted.</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+<li><p><strong>**kwargs</strong> – see below.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><p>Additional arguments to plot borders.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A Matplotlib figure of the map of spatial random effects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.plot.plot.prob">
+<code class="sig-name descname">prob</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_prob_raster</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'prob.png'</span></em>, <em class="sig-param"><span class="n">maxpixels</span><span class="o">=</span><span class="default_value">500000</span></em>, <em class="sig-param"><span class="n">borders</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">11.69, 8.27</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/plot/plot.html#prob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.plot.plot.prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot map of spatial probability of deforestation.</p>
+<p>This function plots the spatial probability of deforestation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_prob_raster</strong> – Path to raster of probabilities.</p></li>
+<li><p><strong>output_file</strong> – Name of the plot file.</p></li>
+<li><p><strong>maxpixels</strong> – Maximum number of pixels to plot.</p></li>
+<li><p><strong>borders</strong> – Vector file to be plotted.</p></li>
+<li><p><strong>zoom</strong> – Zoom to region (xmin, xmax, ymin, ymax).</p></li>
+<li><p><strong>legend</strong> – Add colorbar if True.</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+<li><p><strong>**kwargs</strong> – see below.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><p>Additional arguments to plot borders.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A Matplotlib figure of the map of spatial probability of
+deforestation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.plot.plot.freq_prob">
+<code class="sig-name descname">freq_prob</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stats</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'freq_prob.png'</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">300</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/plot/plot.html#freq_prob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.plot.plot.freq_prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot distribution of probability values.</p>
+<p>This function plots the distribution of the probability values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stats</strong> – Tuple of statistics (counts, threshold, error,
+hectares) returned by deforestprob.deforest().</p></li>
+<li><p><strong>output_file</strong> – Name of the plot file.</p></li>
+<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
+<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Matplotlib figure of the distribution of the
+probability values.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -714,9 +1099,11 @@ vs. observations.</p>
 <li class="toctree-l2"><a class="reference internal" href="#predict">4. Predict</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#project">5. Project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#validate">6. Validate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plot">7. Plot</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Indices and tables</a></li>
 </ul>
 
 <div class="relations">

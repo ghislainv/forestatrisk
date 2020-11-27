@@ -1,0 +1,1293 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>forestatrisk.plot.plot &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for forestatrisk.plot.plot</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># author          :Ghislain Vieilledent</span>
+<span class="c1"># email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com</span>
+<span class="c1"># web             :https://ecology.ghislainv.fr</span>
+<span class="c1"># python_version  :&gt;=2.7</span>
+<span class="c1"># license         :GPLv3</span>
+<span class="c1"># ==============================================================================</span>
+
+<span class="c1"># Standard library imports</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 3 compatibility</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Third party imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span><span class="p">,</span> <span class="n">ogr</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span><span class="p">,</span> <span class="n">LinearSegmentedColormap</span>
+<span class="kn">from</span> <span class="nn">matplotlib.backends.backend_pdf</span> <span class="kn">import</span> <span class="n">PdfPages</span>
+<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Rectangle</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+
+<span class="c1"># Plot vector objects</span>
+<span class="c1"># (https://github.com/cgarrard/osgeopy-code/blob/master/Chapter13/listing13_3.py)</span>
+<div class="viewcode-block" id="plot_polygon"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.plot_polygon">[docs]</a><span class="k">def</span> <span class="nf">plot_polygon</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a polygon using the given symbol.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">poly</span><span class="o">.</span><span class="n">GetGeometryCount</span><span class="p">()):</span>
+        <span class="n">subgeom</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">GetGeometryRef</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">subgeom</span><span class="o">.</span><span class="n">GetPoints</span><span class="p">())</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="c1"># Use this function to fill polygons.</span>
+<div class="viewcode-block" id="plot_polygon_fill"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.plot_polygon_fill">[docs]</a><span class="k">def</span> <span class="nf">plot_polygon_fill</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a polygon using the given symbol.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">poly</span><span class="o">.</span><span class="n">GetGeometryCount</span><span class="p">()):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">poly</span><span class="o">.</span><span class="n">GetGeometryRef</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">GetPoints</span><span class="p">())</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="plot_line"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.plot_line">[docs]</a><span class="k">def</span> <span class="nf">plot_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a line using the given symbol.&quot;&quot;&quot;</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">line</span><span class="o">.</span><span class="n">GetPoints</span><span class="p">())</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="plot_point"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.plot_point">[docs]</a><span class="k">def</span> <span class="nf">plot_point</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;ko&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a point using the given symbol.&quot;&quot;&quot;</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">point</span><span class="o">.</span><span class="n">GetX</span><span class="p">(),</span> <span class="n">point</span><span class="o">.</span><span class="n">GetY</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="plot_layer"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.plot_layer">[docs]</a><span class="k">def</span> <span class="nf">plot_layer</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">layer_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots an OGR layer using the given symbol.&quot;&quot;&quot;</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">ogr</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetLayer</span><span class="p">(</span><span class="n">layer_index</span><span class="p">):</span>
+        <span class="n">geom</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+        <span class="n">geom_type</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">GetGeometryType</span><span class="p">()</span>
+
+        <span class="c1"># Polygons</span>
+        <span class="k">if</span> <span class="n">geom_type</span> <span class="o">==</span> <span class="n">ogr</span><span class="o">.</span><span class="n">wkbPolygon</span><span class="p">:</span>
+            <span class="n">plot_polygon</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Multipolygons</span>
+        <span class="k">elif</span> <span class="n">geom_type</span> <span class="o">==</span> <span class="n">ogr</span><span class="o">.</span><span class="n">wkbMultiPolygon</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">GetGeometryCount</span><span class="p">()):</span>
+                <span class="n">subgeom</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">GetGeometryRef</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">plot_polygon</span><span class="p">(</span><span class="n">subgeom</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Lines</span>
+        <span class="k">elif</span> <span class="n">geom_type</span> <span class="o">==</span> <span class="n">ogr</span><span class="o">.</span><span class="n">wkbLineString</span><span class="p">:</span>
+            <span class="n">plot_line</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Multilines</span>
+        <span class="k">elif</span> <span class="n">geom_type</span> <span class="o">==</span> <span class="n">ogr</span><span class="o">.</span><span class="n">wkbMultiLineString</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">GetGeometryCount</span><span class="p">()):</span>
+                <span class="n">subgeom</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">GetGeometryRef</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">plot_line</span><span class="p">(</span><span class="n">subgeom</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Points</span>
+        <span class="k">elif</span> <span class="n">geom_type</span> <span class="o">==</span> <span class="n">ogr</span><span class="o">.</span><span class="n">wkbPoint</span><span class="p">:</span>
+            <span class="n">plot_point</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Multipoints</span>
+        <span class="k">elif</span> <span class="n">geom_type</span> <span class="o">==</span> <span class="n">ogr</span><span class="o">.</span><span class="n">wkbMultiPoint</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">GetGeometryCount</span><span class="p">()):</span>
+                <span class="n">subgeom</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">GetGeometryRef</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">plot_point</span><span class="p">(</span><span class="n">subgeom</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="c1"># Saving a matplotlib.pyplot figure as a border-less frame-less image</span>
+<div class="viewcode-block" id="figure_as_image"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.figure_as_image">[docs]</a><span class="k">def</span> <span class="nf">figure_as_image</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Remove borders and frames of a Matplotlib figure and save.</span>
+
+<span class="sd">    :param fig: Matplotlib figure you want to save as the image.</span>
+<span class="sd">    :param output_file: Path to the output image file.</span>
+
+<span class="sd">    :return: Figure without borders and frame.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="s2">&quot;figure&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># plot.correlation</span>
+<div class="viewcode-block" id="correlation"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.correlation">[docs]</a><span class="k">def</span> <span class="nf">correlation</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
+                <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;correlation.pdf&quot;</span><span class="p">,</span>
+                <span class="n">plots_per_page</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">8.27</span><span class="p">,</span> <span class="mf">11.69</span><span class="p">),</span>
+                <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Correlation between variables and the probability of deforestation.</span>
+
+<span class="sd">    This function plots (i) the histogram of the explicative variables</span>
+<span class="sd">    and (ii) the probability of deforestation by bins of equal number of</span>
+<span class="sd">    observations for each explicative variable.</span>
+
+<span class="sd">    :param y: A 1D array for the response variable (forest=1, defor=0).</span>
+<span class="sd">    :param data: A pandas DataFrame with column names.</span>
+<span class="sd">    :param output_file: Path to output file.</span>
+<span class="sd">    :param plots_per_page: Number of plots (lines) per page.</span>
+<span class="sd">    :param figsize: Figure size.</span>
+<span class="sd">    :param dpi: Resolution for output image.</span>
+
+<span class="sd">    :return: List of Matplotlib figures.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Data</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">y</span>  <span class="c1"># Transform: defor=1, forest=0</span>
+    <span class="n">perc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">110</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">nperc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">perc</span><span class="p">)</span>
+    <span class="n">colnames</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span>
+    <span class="c1"># The PDF document</span>
+    <span class="n">pdf_pages</span> <span class="o">=</span> <span class="n">PdfPages</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+    <span class="c1"># Generate the pages</span>
+    <span class="n">nb_plots</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">colnames</span><span class="p">)</span>
+    <span class="n">nb_plots_per_page</span> <span class="o">=</span> <span class="n">plots_per_page</span>
+    <span class="c1">#  nb_pages = int(np.ceil(nb_plots / float(nb_plots_per_page)))</span>
+    <span class="n">grid_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">nb_plots_per_page</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="c1"># List of figures to be returned</span>
+    <span class="n">figures</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Loop on variables</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_plots</span><span class="p">):</span>
+        <span class="c1"># Create a figure instance (ie. a new page) if needed</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">nb_plots_per_page</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+        <span class="n">varname</span> <span class="o">=</span> <span class="n">colnames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nperc</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">se</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nperc</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nperc</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">quantiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanpercentile</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">varname</span><span class="p">],</span> <span class="n">q</span><span class="o">=</span><span class="n">perc</span><span class="p">)</span>
+        <span class="c1"># Compute theta and se by bins</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nperc</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">inf</span> <span class="o">=</span> <span class="n">quantiles</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">sup</span> <span class="o">=</span> <span class="n">quantiles</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">inf</span> <span class="o">+</span> <span class="p">(</span><span class="n">sup</span> <span class="o">-</span> <span class="n">inf</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">y_bin</span> <span class="o">=</span> <span class="n">y</span><span class="p">[(</span><span class="n">data</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">inf</span><span class="p">)</span> <span class="o">&amp;</span>
+                      <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sup</span><span class="p">)]</span>
+            <span class="n">y_bin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_bin</span><span class="p">)</span>  <span class="c1"># Transform into np.array to compute sum</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">y_bin</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># success</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_bin</span><span class="p">)</span>  <span class="c1"># trials</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">theta</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span> <span class="o">/</span> <span class="n">n</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">theta</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">ph</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">se</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ph</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">ph</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Plots</span>
+        <span class="c1"># Histogram</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">nb_plots_per_page</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">Arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">varname</span><span class="p">])</span>
+        <span class="n">Arr</span> <span class="o">=</span> <span class="n">Arr</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">Arr</span><span class="p">)]</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">Arr</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;#808080&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">varname</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Nb. of observations&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+        <span class="c1"># Corelation</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">nb_plots_per_page</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">varname</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Defor. probability&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+        <span class="c1"># Close the page if needed</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">nb_plots_per_page</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">nb_plots</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+            <span class="n">figures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+            <span class="n">pdf_pages</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+    <span class="c1"># Write the PDF document to the disk</span>
+    <span class="n">pdf_pages</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">figures</span><span class="p">)</span></div>
+
+
+<span class="c1"># plot.fcc</span>
+<div class="viewcode-block" id="fcc"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.fcc">[docs]</a><span class="k">def</span> <span class="nf">fcc</span><span class="p">(</span><span class="n">input_fcc_raster</span><span class="p">,</span>
+        <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;fcc.png&quot;</span><span class="p">,</span>
+        <span class="n">maxpixels</span><span class="o">=</span><span class="mi">500000</span><span class="p">,</span>
+        <span class="n">borders</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">zoom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">col_for</span><span class="o">=</span><span class="p">(</span><span class="mi">34</span><span class="p">,</span> <span class="mi">139</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+        <span class="n">col_defor</span><span class="o">=</span><span class="p">(</span><span class="mi">227</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">11.69</span><span class="p">,</span> <span class="mf">8.27</span><span class="p">),</span>
+        <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot forest-cover change (fcc) map.</span>
+
+<span class="sd">    This function plots the forest-cover change map. Green is the</span>
+<span class="sd">    remaining forest (value 1 in raster), the color specified is for</span>
+<span class="sd">    deforestation (value 0 in raster).</span>
+
+<span class="sd">    :param input_fcc_raster: Path to fcc raster.</span>
+<span class="sd">    :param output_file: Name of the plot file.</span>
+<span class="sd">    :param maxpixels: Maximum number of pixels to plot.</span>
+<span class="sd">    :param borders: Vector file to be plotted.</span>
+<span class="sd">    :param zoom: Zoom to region (xmin, xmax, ymin, ymax).</span>
+<span class="sd">    :param col_for: rgba color for forest. Defaut to forest green.</span>
+<span class="sd">    :param col_defor: rgba color for deforestation. Default to red.</span>
+<span class="sd">    :param figsize: Figure size in inches.</span>
+<span class="sd">    :param dpi: Resolution for output image.</span>
+<span class="sd">    :param \\**kwargs: see below.</span>
+
+<span class="sd">    :Keyword Arguments: Additional arguments to plot borders.</span>
+
+<span class="sd">    :return: A Matplotlib figure of the forest map.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Load raster and band</span>
+    <span class="n">rasterR</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">input_fcc_raster</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">rasterND</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span>
+    <span class="n">gt</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterXSize</span>
+    <span class="n">nrow</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterYSize</span>
+    <span class="n">Xmin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Xmax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ncol</span>
+    <span class="n">Ymin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="n">Ymax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">]</span>
+
+    <span class="c1"># Total number of pixels</span>
+    <span class="n">npixels_orig</span> <span class="o">=</span> <span class="n">ncol</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="c1"># Check number of pixels is inferior to maxpixels</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">npixels_orig</span> <span class="o">&gt;</span> <span class="n">maxpixels</span><span class="p">):</span>
+        <span class="c1"># Remove potential existing external overviews</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">input_fcc_raster</span> <span class="o">+</span> <span class="s2">&quot;.ovr&quot;</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">input_fcc_raster</span> <span class="o">+</span> <span class="s2">&quot;.ovr&quot;</span><span class="p">)</span>
+        <span class="c1"># Find overview level such that npixels &lt;= maxpixels</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">npixels_ov</span> <span class="o">=</span> <span class="n">npixels_orig</span>
+        <span class="k">while</span> <span class="n">npixels_ov</span> <span class="o">&gt;</span> <span class="n">maxpixels</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">ov_level</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">npixels_ov</span> <span class="o">=</span> <span class="n">npixels_orig</span> <span class="o">//</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">ov_level</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># Build overview</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Build overview&quot;</span><span class="p">)</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s1">&#39;COMPRESS_OVERVIEW&#39;</span><span class="p">,</span> <span class="s1">&#39;DEFLATE&#39;</span><span class="p">)</span>
+        <span class="n">rasterR</span><span class="o">.</span><span class="n">BuildOverviews</span><span class="p">(</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">ov_level</span><span class="p">])</span>
+        <span class="c1"># Get data from overview</span>
+        <span class="n">ov_band</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetOverview</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">ov_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Get original data</span>
+        <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+
+    <span class="c1"># Change nodata values</span>
+    <span class="n">ov_arr</span><span class="p">[</span><span class="n">ov_arr</span> <span class="o">==</span> <span class="n">rasterND</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="c1"># Dereference driver</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span><span class="p">(</span><span class="n">rasterR</span><span class="p">)</span>
+
+    <span class="c1"># Num of forest pixels</span>
+    <span class="n">nfor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ov_arr</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Colormap</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cmax</span> <span class="o">=</span> <span class="mf">255.0</span>  <span class="c1"># float for division</span>
+    <span class="n">col_defor</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col_defor</span><span class="p">)</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">)</span>
+    <span class="n">col_for</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col_for</span><span class="p">)</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">)</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_defor</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nfor</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_for</span><span class="p">)</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  <span class="c1"># transparent</span>
+    <span class="n">color_map</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+
+    <span class="c1"># Plot raster</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="mi">111</span> <span class="k">if</span> <span class="n">zoom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">121</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">place</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">borders</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plot_layer</span><span class="p">(</span><span class="n">borders</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">zoom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+            <span class="n">zoom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">zoom</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">fill</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+    <span class="c1"># Save and return figure</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="s2">&quot;figure&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></div>
+
+
+<span class="c1"># plot.fcc12345</span>
+<div class="viewcode-block" id="fcc12345"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.fcc12345">[docs]</a><span class="k">def</span> <span class="nf">fcc12345</span><span class="p">(</span><span class="n">input_fcc_raster</span><span class="p">,</span>
+             <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;fcc12345.png&quot;</span><span class="p">,</span>
+             <span class="n">maxpixels</span><span class="o">=</span><span class="mi">500000</span><span class="p">,</span>
+             <span class="n">borders</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">zoom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">col</span><span class="o">=</span><span class="p">[(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">165</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+                  <span class="p">(</span><span class="mi">235</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+                  <span class="p">(</span><span class="mi">227</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+                  <span class="p">(</span><span class="mi">163</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+                  <span class="p">(</span><span class="mi">34</span><span class="p">,</span> <span class="mi">139</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">255</span><span class="p">)],</span>
+             <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">11.69</span><span class="p">,</span> <span class="mf">8.27</span><span class="p">),</span>
+             <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot forest-cover change (fcc12345) map.</span>
+
+<span class="sd">    This function plots the forest-cover change map with 4</span>
+<span class="sd">    deforestation time-periods (2000 -&gt; 2005 -&gt; 2010 -&gt; 2015 -&gt; 2020</span>
+<span class="sd">    for example) plus the remaining forest (5 classes).</span>
+
+<span class="sd">    :param input_fcc_raster: Path to fcc12345 raster.</span>
+<span class="sd">    :param output_file: Name of the plot file.</span>
+<span class="sd">    :param maxpixels: Maximum number of pixels to plot.</span>
+<span class="sd">    :param borders: Vector file to be plotted.</span>
+<span class="sd">    :param zoom: Zoom to region (xmin, xmax, ymin, ymax).</span>
+<span class="sd">    :param col: List of rgba colors for classes 12345.</span>
+<span class="sd">    :param figsize: Figure size in inches.</span>
+<span class="sd">    :param dpi: Resolution for output image.</span>
+<span class="sd">    :param \\**kwargs: see below.</span>
+
+<span class="sd">    :Keyword Arguments: Additional arguments to plot borders.</span>
+
+<span class="sd">    :return: A Matplotlib figure of the forest map.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Load raster and band</span>
+    <span class="n">rasterR</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">input_fcc_raster</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">gt</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterXSize</span>
+    <span class="n">nrow</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterYSize</span>
+    <span class="n">Xmin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Xmax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ncol</span>
+    <span class="n">Ymin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="n">Ymax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">]</span>
+
+    <span class="c1"># Total number of pixels</span>
+    <span class="n">npixels_orig</span> <span class="o">=</span> <span class="n">ncol</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="c1"># Check number of pixels is inferior to maxpixels</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">npixels_orig</span> <span class="o">&gt;</span> <span class="n">maxpixels</span><span class="p">):</span>
+        <span class="c1"># Remove potential existing external overviews</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">input_fcc_raster</span> <span class="o">+</span> <span class="s2">&quot;.ovr&quot;</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">input_fcc_raster</span> <span class="o">+</span> <span class="s2">&quot;.ovr&quot;</span><span class="p">)</span>
+        <span class="c1"># Find overview level such that npixels &lt;= maxpixels</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">npixels_ov</span> <span class="o">=</span> <span class="n">npixels_orig</span>
+        <span class="k">while</span> <span class="n">npixels_ov</span> <span class="o">&gt;</span> <span class="n">maxpixels</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">ov_level</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">npixels_ov</span> <span class="o">=</span> <span class="n">npixels_orig</span> <span class="o">//</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">ov_level</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># Build overview</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Build overview&quot;</span><span class="p">)</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s1">&#39;COMPRESS_OVERVIEW&#39;</span><span class="p">,</span> <span class="s1">&#39;DEFLATE&#39;</span><span class="p">)</span>
+        <span class="n">rasterR</span><span class="o">.</span><span class="n">BuildOverviews</span><span class="p">(</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">ov_level</span><span class="p">])</span>
+        <span class="c1"># Get data from overview</span>
+        <span class="n">ov_band</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetOverview</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">ov_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Get original data</span>
+        <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+
+    <span class="c1"># Dereference driver</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span><span class="p">(</span><span class="n">rasterR</span><span class="p">)</span>
+
+    <span class="c1"># Colormap</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>  <span class="c1"># transparent white for 0</span>
+    <span class="n">cmax</span> <span class="o">=</span> <span class="mf">255.0</span>  <span class="c1"># float for division</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">col_class</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">)</span>
+        <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_class</span><span class="p">)</span>
+    <span class="n">color_map</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+
+    <span class="c1"># Plot raster</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="mi">111</span> <span class="k">if</span> <span class="n">zoom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">121</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">place</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">borders</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plot_layer</span><span class="p">(</span><span class="n">borders</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">zoom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+            <span class="n">zoom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">zoom</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">fill</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+    <span class="c1"># Save and return figure</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="s2">&quot;figure&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></div>
+
+
+<span class="c1"># plot.fcc123</span>
+<div class="viewcode-block" id="fcc123"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.fcc123">[docs]</a><span class="k">def</span> <span class="nf">fcc123</span><span class="p">(</span><span class="n">input_fcc_raster</span><span class="p">,</span>
+           <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;fcc123.png&quot;</span><span class="p">,</span>
+           <span class="n">maxpixels</span><span class="o">=</span><span class="mi">500000</span><span class="p">,</span>
+           <span class="n">borders</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+           <span class="n">zoom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+           <span class="n">col</span><span class="o">=</span><span class="p">[(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">165</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">227</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">34</span><span class="p">,</span> <span class="mi">139</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">255</span><span class="p">)],</span>
+           <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">11.69</span><span class="p">,</span> <span class="mf">8.27</span><span class="p">),</span>
+           <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot forest-cover change (fcc123) map.</span>
+
+<span class="sd">    This function plots the forest-cover change map with 2</span>
+<span class="sd">    deforestation time-periods (2000 -&gt; 2010 -&gt; 2020 for example) plus</span>
+<span class="sd">    the remaining forest (3 classes).</span>
+
+<span class="sd">    :param input_fcc_raster: Path to fcc123 raster.</span>
+<span class="sd">    :param output_file: Name of the plot file.</span>
+<span class="sd">    :param maxpixels: Maximum number of pixels to plot.</span>
+<span class="sd">    :param borders: Vector file to be plotted.</span>
+<span class="sd">    :param zoom: Zoom to region (xmin, xmax, ymin, ymax).</span>
+<span class="sd">    :param col: List of rgba colors for classes 123.</span>
+<span class="sd">    :param figsize: Figure size in inches.</span>
+<span class="sd">    :param dpi: Resolution for output image.</span>
+<span class="sd">    :param \\**kwargs: see below.</span>
+
+<span class="sd">    :Keyword Arguments: Additional arguments to plot borders.</span>
+
+<span class="sd">    :return: A Matplotlib figure of the forest map.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Load raster and band</span>
+    <span class="n">rasterR</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">input_fcc_raster</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">gt</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterXSize</span>
+    <span class="n">nrow</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterYSize</span>
+    <span class="n">Xmin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Xmax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ncol</span>
+    <span class="n">Ymin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="n">Ymax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">]</span>
+
+    <span class="c1"># Total number of pixels</span>
+    <span class="n">npixels_orig</span> <span class="o">=</span> <span class="n">ncol</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="c1"># Check number of pixels is inferior to maxpixels</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">npixels_orig</span> <span class="o">&gt;</span> <span class="n">maxpixels</span><span class="p">):</span>
+        <span class="c1"># Remove potential existing external overviews</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">input_fcc_raster</span> <span class="o">+</span> <span class="s2">&quot;.ovr&quot;</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">input_fcc_raster</span> <span class="o">+</span> <span class="s2">&quot;.ovr&quot;</span><span class="p">)</span>
+        <span class="c1"># Find overview level such that npixels &lt;= maxpixels</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">npixels_ov</span> <span class="o">=</span> <span class="n">npixels_orig</span>
+        <span class="k">while</span> <span class="n">npixels_ov</span> <span class="o">&gt;</span> <span class="n">maxpixels</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">ov_level</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">npixels_ov</span> <span class="o">=</span> <span class="n">npixels_orig</span> <span class="o">//</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">ov_level</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># Build overview</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Build overview&quot;</span><span class="p">)</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s1">&#39;COMPRESS_OVERVIEW&#39;</span><span class="p">,</span> <span class="s1">&#39;DEFLATE&#39;</span><span class="p">)</span>
+        <span class="n">rasterR</span><span class="o">.</span><span class="n">BuildOverviews</span><span class="p">(</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">ov_level</span><span class="p">])</span>
+        <span class="c1"># Get data from overview</span>
+        <span class="n">ov_band</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetOverview</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">ov_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Get original data</span>
+        <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+
+    <span class="c1"># Dereference driver</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span><span class="p">(</span><span class="n">rasterR</span><span class="p">)</span>
+
+    <span class="c1"># Colormap</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>  <span class="c1"># transparent white for 0</span>
+    <span class="n">cmax</span> <span class="o">=</span> <span class="mf">255.0</span>  <span class="c1"># float for division</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">col_class</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">)</span>
+        <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_class</span><span class="p">)</span>
+    <span class="n">color_map</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+
+    <span class="c1"># Plot raster</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="mi">111</span> <span class="k">if</span> <span class="n">zoom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">121</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">place</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">borders</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plot_layer</span><span class="p">(</span><span class="n">borders</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">zoom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+            <span class="n">zoom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">zoom</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">fill</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+    <span class="c1"># Save and return figure</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="s2">&quot;figure&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></div>
+
+
+<span class="c1"># plot.forest</span>
+<div class="viewcode-block" id="forest"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.forest">[docs]</a><span class="k">def</span> <span class="nf">forest</span><span class="p">(</span><span class="n">input_forest_raster</span><span class="p">,</span>
+           <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;forest.png&quot;</span><span class="p">,</span>
+           <span class="n">maxpixels</span><span class="o">=</span><span class="mi">500000</span><span class="p">,</span>
+           <span class="n">borders</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+           <span class="n">zoom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+           <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">11.69</span><span class="p">,</span> <span class="mf">8.27</span><span class="p">),</span>
+           <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot forest map.</span>
+
+<span class="sd">    This function plots the forest map in green. Raster values must be</span>
+<span class="sd">    0 (non-forest) and 1 (forest).</span>
+
+<span class="sd">    :param input_forest_raster: Path to forest raster.</span>
+<span class="sd">    :param output_file: Name of the plot file.</span>
+<span class="sd">    :param maxpixels: Maximum number of pixels to plot.</span>
+<span class="sd">    :param borders: Vector file to be plotted.</span>
+<span class="sd">    :param zoom: Zoom to region (xmin, xmax, ymin, ymax).</span>
+<span class="sd">    :param figsize: Figure size in inches.</span>
+<span class="sd">    :param dpi: Resolution for output image.</span>
+<span class="sd">    :param \\**kwargs: see below.</span>
+
+<span class="sd">    :Keyword Arguments: Additional arguments to plot borders.</span>
+
+<span class="sd">    :return: A Matplotlib figure of the forest map.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Load raster and band</span>
+    <span class="n">rasterR</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">input_forest_raster</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">rasterND</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span>
+    <span class="n">gt</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterXSize</span>
+    <span class="n">nrow</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterYSize</span>
+    <span class="n">Xmin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Xmax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ncol</span>
+    <span class="n">Ymin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="n">Ymax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">]</span>
+
+    <span class="c1"># Total number of pixels</span>
+    <span class="n">npixels_orig</span> <span class="o">=</span> <span class="n">ncol</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="c1"># Check number of pixels is inferior to maxpixels</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">npixels_orig</span> <span class="o">&gt;</span> <span class="n">maxpixels</span><span class="p">):</span>
+        <span class="c1"># Remove potential existing external overviews</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">input_forest_raster</span> <span class="o">+</span> <span class="s2">&quot;.ovr&quot;</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">input_forest_raster</span> <span class="o">+</span> <span class="s2">&quot;.ovr&quot;</span><span class="p">)</span>
+        <span class="c1"># Find overview level such that npixels &lt;= maxpixels</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">npixels_ov</span> <span class="o">=</span> <span class="n">npixels_orig</span>
+        <span class="k">while</span> <span class="n">npixels_ov</span> <span class="o">&gt;</span> <span class="n">maxpixels</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">ov_level</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">npixels_ov</span> <span class="o">=</span> <span class="n">npixels_orig</span> <span class="o">//</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">ov_level</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># Build overview</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Build overview&quot;</span><span class="p">)</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s1">&#39;COMPRESS_OVERVIEW&#39;</span><span class="p">,</span> <span class="s1">&#39;DEFLATE&#39;</span><span class="p">)</span>
+        <span class="n">rasterR</span><span class="o">.</span><span class="n">BuildOverviews</span><span class="p">(</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">ov_level</span><span class="p">])</span>
+        <span class="c1"># Get data from overview</span>
+        <span class="n">ov_band</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetOverview</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">ov_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Get original data</span>
+        <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+
+    <span class="c1"># Change nodata values</span>
+    <span class="n">ov_arr</span><span class="p">[</span><span class="n">ov_arr</span> <span class="o">==</span> <span class="n">rasterND</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="c1"># Dereference driver</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span><span class="p">(</span><span class="n">rasterR</span><span class="p">)</span>
+
+    <span class="c1"># Colormap</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cmax</span> <span class="o">=</span> <span class="mf">255.0</span>  <span class="c1"># float for division</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  <span class="c1"># transparent</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">34</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">139</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">34</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># forest green</span>
+    <span class="n">color_map</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+
+    <span class="c1"># Plot raster</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="mi">111</span> <span class="k">if</span> <span class="n">zoom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">121</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">place</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">borders</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plot_layer</span><span class="p">(</span><span class="n">borders</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">zoom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+            <span class="n">zoom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">zoom</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">fill</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+    <span class="c1"># Save and return figure</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="s2">&quot;figure&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></div>
+
+
+<span class="c1"># plot.prob</span>
+<div class="viewcode-block" id="prob"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.prob">[docs]</a><span class="k">def</span> <span class="nf">prob</span><span class="p">(</span><span class="n">input_prob_raster</span><span class="p">,</span>
+         <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;prob.png&quot;</span><span class="p">,</span>
+         <span class="n">maxpixels</span><span class="o">=</span><span class="mi">500000</span><span class="p">,</span>
+         <span class="n">borders</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+         <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+         <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">11.69</span><span class="p">,</span> <span class="mf">8.27</span><span class="p">),</span>
+         <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot map of spatial probability of deforestation.</span>
+
+<span class="sd">    This function plots the spatial probability of deforestation.</span>
+
+<span class="sd">    :param input_prob_raster: Path to raster of probabilities.</span>
+<span class="sd">    :param output_file: Name of the plot file.</span>
+<span class="sd">    :param maxpixels: Maximum number of pixels to plot.</span>
+<span class="sd">    :param borders: Vector file to be plotted.</span>
+<span class="sd">    :param zoom: Zoom to region (xmin, xmax, ymin, ymax).</span>
+<span class="sd">    :param legend: Add colorbar if True.</span>
+<span class="sd">    :param figsize: Figure size in inches.</span>
+<span class="sd">    :param dpi: Resolution for output image.</span>
+<span class="sd">    :param \\**kwargs: see below.</span>
+
+<span class="sd">    :Keyword Arguments: Additional arguments to plot borders.</span>
+
+<span class="sd">    :return: A Matplotlib figure of the map of spatial probability of</span>
+<span class="sd">        deforestation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Load raster and band</span>
+    <span class="n">rasterR</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">input_prob_raster</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">gt</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterXSize</span>
+    <span class="n">nrow</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterYSize</span>
+    <span class="n">Xmin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Xmax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ncol</span>
+    <span class="n">Ymin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="n">Ymax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">]</span>
+
+    <span class="c1"># Total number of pixels</span>
+    <span class="n">npixels_orig</span> <span class="o">=</span> <span class="n">ncol</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="c1"># Check number of pixels is inferior to maxpixels</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">npixels_orig</span> <span class="o">&gt;</span> <span class="n">maxpixels</span><span class="p">):</span>
+        <span class="c1"># Remove potential existing external overviews</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">input_prob_raster</span> <span class="o">+</span> <span class="s2">&quot;.ovr&quot;</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">input_prob_raster</span> <span class="o">+</span> <span class="s2">&quot;.ovr&quot;</span><span class="p">)</span>
+        <span class="c1"># Find overview level such that npixels &lt;= maxpixels</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">npixels_ov</span> <span class="o">=</span> <span class="n">npixels_orig</span>
+        <span class="k">while</span> <span class="n">npixels_ov</span> <span class="o">&gt;</span> <span class="n">maxpixels</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">ov_level</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">npixels_ov</span> <span class="o">=</span> <span class="n">npixels_orig</span> <span class="o">//</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">ov_level</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># Build overview</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Build overview&quot;</span><span class="p">)</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s1">&#39;COMPRESS_OVERVIEW&#39;</span><span class="p">,</span> <span class="s1">&#39;DEFLATE&#39;</span><span class="p">)</span>
+        <span class="n">rasterR</span><span class="o">.</span><span class="n">BuildOverviews</span><span class="p">(</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">ov_level</span><span class="p">])</span>
+        <span class="c1"># Get data from overview</span>
+        <span class="n">ov_band</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetOverview</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">ov_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Get original data</span>
+        <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+
+    <span class="c1"># Dereference driver</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span><span class="p">(</span><span class="n">rasterR</span><span class="p">)</span>
+
+    <span class="c1"># Colormap</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cmax</span> <span class="o">=</span> <span class="mf">255.0</span>  <span class="c1"># float for division</span>
+    <span class="n">vmax</span> <span class="o">=</span> <span class="mf">65535.0</span>  <span class="c1"># float for division</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="mi">34</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">139</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">34</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>  <span class="c1"># green</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">1</span> <span class="o">/</span> <span class="n">vmax</span><span class="p">,</span> <span class="p">(</span><span class="mi">34</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">139</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">34</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>  <span class="c1"># green</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">39322</span> <span class="o">/</span> <span class="n">vmax</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">165</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>  <span class="c1"># orange, p=0.60</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">52429</span> <span class="o">/</span> <span class="n">vmax</span><span class="p">,</span> <span class="p">(</span><span class="mi">227</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">26</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">28</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>  <span class="c1"># red, p=0.80</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>  <span class="c1"># black</span>
+    <span class="n">color_map</span> <span class="o">=</span> <span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;mycm&quot;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+                                                  <span class="n">N</span><span class="o">=</span><span class="mi">65535</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">color_map</span><span class="o">.</span><span class="n">set_under</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  <span class="c1"># transparent, must be associated with vmin</span>
+
+    <span class="c1"># Plot raster</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
+               <span class="n">vmin</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">65535</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">borders</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plot_layer</span><span class="p">(</span><span class="n">borders</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Legend</span>
+    <span class="k">if</span> <span class="n">legend</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">65535</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">ticks</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span>
+                            <span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">vl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">vl</span><span class="p">)</span>
+
+    <span class="c1"># Save image</span>
+    <span class="n">figure_as_image</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+
+    <span class="c1"># Return figure</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></div>
+
+
+<span class="c1"># plot.obs</span>
+<div class="viewcode-block" id="obs"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.obs">[docs]</a><span class="k">def</span> <span class="nf">obs</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span>
+        <span class="n">name_forest_var</span><span class="p">,</span>
+        <span class="n">input_fcc_raster</span><span class="p">,</span>
+        <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;obs.png&quot;</span><span class="p">,</span>
+        <span class="n">zoom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">11.69</span><span class="p">,</span> <span class="mf">8.27</span><span class="p">),</span>
+        <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot the sample points over the forest map.</span>
+
+<span class="sd">    This function plots the sample points over the forest map. Green</span>
+<span class="sd">    is the remaining forest (value 1), red is the deforestation (value</span>
+<span class="sd">    0).</span>
+
+<span class="sd">    :param sample: Pandas DataFrame with observation coordinates (X, Y).</span>
+<span class="sd">    :param name_forest_var: Name of the forest variable in sample DataFrame.</span>
+<span class="sd">    :param input_fcc_raster: Path to forest-cover change raster.</span>
+<span class="sd">    :param output_file: Name of the plot file.</span>
+<span class="sd">    :param zoom: Zoom to region (xmin, xmax, ymin, ymax).</span>
+<span class="sd">    :param s: Marker size for sample points.</span>
+<span class="sd">    :param figsize: Figure size in inches.</span>
+<span class="sd">    :param dpi: Resolution for output image.</span>
+
+<span class="sd">    :return: A Matplotlib figure of the sample points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Load raster and band</span>
+    <span class="n">rasterR</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">input_fcc_raster</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">rasterND</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span>
+    <span class="n">gt</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterXSize</span>
+    <span class="n">nrow</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterYSize</span>
+    <span class="n">Xmin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Xmax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ncol</span>
+    <span class="n">Ymin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="n">Ymax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">]</span>
+
+    <span class="c1"># Overviews</span>
+    <span class="k">if</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetOverviewCount</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Build overviews</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Build overview&quot;</span><span class="p">)</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s1">&#39;COMPRESS_OVERVIEW&#39;</span><span class="p">,</span> <span class="s1">&#39;DEFLATE&#39;</span><span class="p">)</span>
+        <span class="n">rasterR</span><span class="o">.</span><span class="n">BuildOverviews</span><span class="p">(</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">])</span>
+
+    <span class="c1"># Get data from finest overview</span>
+    <span class="n">ov_band</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetOverview</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">ov_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+    <span class="n">ov_arr</span><span class="p">[</span><span class="n">ov_arr</span> <span class="o">==</span> <span class="n">rasterND</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="c1"># Dereference driver</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span><span class="p">(</span><span class="n">rasterR</span><span class="p">)</span>
+
+    <span class="c1"># Colormap</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cmax</span> <span class="o">=</span> <span class="mf">255.0</span>  <span class="c1"># float for division</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">227</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">26</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">28</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># red</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">34</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">139</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">34</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># forest green</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  <span class="c1"># transparent</span>
+    <span class="n">color_map</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+
+    <span class="c1"># Plot raster</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="c1"># No frame</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+    <span class="c1"># Raster</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+    <span class="c1"># Points</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">name_forest_var</span>
+    <span class="n">x_defor</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">]</span>
+    <span class="n">y_defor</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">][</span><span class="s2">&quot;Y&quot;</span><span class="p">]</span>
+    <span class="n">x_for</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">]</span>
+    <span class="n">y_for</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;Y&quot;</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_defor</span><span class="p">,</span> <span class="n">y_defor</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkred&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_for</span><span class="p">,</span> <span class="n">y_for</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkgreen&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">zoom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="c1"># Save and return figure</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></div>
+
+
+<span class="c1"># plot.differences</span>
+<div class="viewcode-block" id="differences"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.differences">[docs]</a><span class="k">def</span> <span class="nf">differences</span><span class="p">(</span><span class="n">input_raster</span><span class="p">,</span>
+                <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;differences.png&quot;</span><span class="p">,</span>
+                <span class="n">borders</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">zoom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">11.69</span><span class="p">,</span> <span class="mf">8.27</span><span class="p">),</span>
+                <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot a map to compare outputs.</span>
+
+<span class="sd">    This function plots a map of differences between two rasters of</span>
+<span class="sd">    predictions.</span>
+
+<span class="sd">    :param input_raster: Path to raster of diffeences.</span>
+<span class="sd">    :param output_file: Name of the plot file.</span>
+<span class="sd">    :param borders: Vector file to be plotted.</span>
+<span class="sd">    :param zoom: Zoom to region (xmin, xmax, ymin, ymax).</span>
+<span class="sd">    :param figsize: Figure size in inches.</span>
+<span class="sd">    :param dpi: Resolution for output image.</span>
+<span class="sd">    :param \\**kwargs: see below.</span>
+
+<span class="sd">    :Keyword Arguments: Additional arguments to plot borders.</span>
+
+<span class="sd">    :return: A Matplotlib figure of the forest map.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Load raster and band</span>
+    <span class="n">rasterR</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">input_raster</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">rasterND</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span>
+    <span class="n">gt</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterXSize</span>
+    <span class="n">nrow</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterYSize</span>
+    <span class="n">Xmin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Xmax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ncol</span>
+    <span class="n">Ymin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="n">Ymax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">]</span>
+
+    <span class="c1"># Overviews</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rasterB</span><span class="o">.</span><span class="n">GetOverviewCount</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="c1"># Build overviews</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Build overview&quot;</span><span class="p">)</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s1">&#39;COMPRESS_OVERVIEW&#39;</span><span class="p">,</span> <span class="s1">&#39;DEFLATE&#39;</span><span class="p">)</span>
+        <span class="n">rasterR</span><span class="o">.</span><span class="n">BuildOverviews</span><span class="p">(</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">])</span>
+
+    <span class="c1"># Get data from finest overview</span>
+    <span class="n">ov_band</span> <span class="o">=</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetOverview</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">ov_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+    <span class="n">ov_arr</span><span class="p">[</span><span class="n">ov_arr</span> <span class="o">==</span> <span class="n">rasterND</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+
+    <span class="c1"># Dereference driver</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span><span class="p">(</span><span class="n">rasterR</span><span class="p">)</span>
+
+    <span class="c1"># Colormap</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cmax</span> <span class="o">=</span> <span class="mf">255.0</span>  <span class="c1"># float for division</span>
+    <span class="c1"># 00: true positive (red)</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">227</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">26</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">28</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="c1"># 11: true negative (forest green)</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">34</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">139</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">34</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="c1"># 10: false negative (light blue)</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">65</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">105</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">225</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="c1"># 01: false positive (navy blue)</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">176</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">216</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">230</span> <span class="o">/</span> <span class="n">cmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  <span class="c1"># transparent</span>
+    <span class="n">color_map</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+
+    <span class="c1"># Plot raster</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="mi">111</span> <span class="k">if</span> <span class="n">zoom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">121</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">place</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">borders</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plot_layer</span><span class="p">(</span><span class="n">borders</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">zoom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+            <span class="n">zoom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">zoom</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">fill</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">zoom</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">zoom</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+    <span class="c1"># Save and return figure</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="s2">&quot;figure&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></div>
+
+
+<span class="c1"># plot.var</span>
+<div class="viewcode-block" id="var"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.var">[docs]</a><span class="k">def</span> <span class="nf">var</span><span class="p">(</span><span class="n">var_dir</span><span class="p">,</span>
+        <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;var.pdf&quot;</span><span class="p">,</span>
+        <span class="n">gridsize</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">11.69</span><span class="p">,</span> <span class="mf">8.27</span><span class="p">),</span>
+        <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot variable maps.</span>
+
+<span class="sd">    This function plots variable maps.</span>
+
+<span class="sd">    :param var_dir: Path to variable directory.</span>
+<span class="sd">    :param output_file: Name of the plot file.</span>
+<span class="sd">    :param grid_size: Grid size per page.</span>
+<span class="sd">    :param figsize: Figure size in inches.</span>
+<span class="sd">    :param dpi: Resolution for output image.</span>
+<span class="sd">    :return: List of Matplotlib figures.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Raster list</span>
+    <span class="n">var_tif</span> <span class="o">=</span> <span class="n">var_dir</span> <span class="o">+</span> <span class="s2">&quot;/*.tif&quot;</span>
+    <span class="n">raster_list</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">var_tif</span><span class="p">)</span>
+    <span class="n">raster_list</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">nrast</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">raster_list</span><span class="p">)</span>
+
+    <span class="c1"># The PDF document</span>
+    <span class="n">pdf_pages</span> <span class="o">=</span> <span class="n">PdfPages</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+    <span class="c1"># Generate the pages</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">gridsize</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">gridsize</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">nplot_per_page</span> <span class="o">=</span> <span class="n">ny</span> <span class="o">*</span> <span class="n">nx</span>
+    <span class="c1"># List of figures to be returned</span>
+    <span class="n">figures</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Loop on raster files</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrast</span><span class="p">):</span>
+
+        <span class="c1"># Create a figure instance (ie. a new page) if needed</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">nplot_per_page</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+
+        <span class="c1"># Open raster and get band</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">raster_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ND</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ND</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NoData value is not specified </span><span class="se">\</span>
+<span class="s2">            for input raster file &quot;</span> <span class="o">+</span> <span class="n">raster_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Raster name</span>
+        <span class="n">base_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">raster_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">index_dot</span> <span class="o">=</span> <span class="n">base_name</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="n">raster_name</span> <span class="o">=</span> <span class="n">base_name</span><span class="p">[:</span><span class="n">index_dot</span><span class="p">]</span>
+
+        <span class="c1"># Raster info</span>
+        <span class="n">gt</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+        <span class="n">ncol</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">RasterXSize</span>
+        <span class="n">nrow</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">RasterYSize</span>
+        <span class="n">Xmin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">Xmax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ncol</span>
+        <span class="n">Ymin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrow</span>
+        <span class="n">Ymax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">]</span>
+
+        <span class="c1"># Overviews</span>
+        <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">GetOverviewCount</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Build overviews</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Build overview&quot;</span><span class="p">)</span>
+            <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s1">&#39;COMPRESS_OVERVIEW&#39;</span><span class="p">,</span> <span class="s1">&#39;DEFLATE&#39;</span><span class="p">)</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">BuildOverviews</span><span class="p">(</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">])</span>
+        <span class="c1"># Get data from finest overview</span>
+        <span class="n">ov_band</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">GetOverview</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">ov_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+        <span class="n">mov_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="n">ov_arr</span> <span class="o">==</span> <span class="n">ND</span><span class="p">))</span>
+        <span class="c1"># Plot raster</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">(</span><span class="n">gridsize</span><span class="p">,</span>
+                              <span class="p">((</span><span class="n">i</span> <span class="o">%</span> <span class="n">nplot_per_page</span><span class="p">)</span> <span class="o">//</span> <span class="n">nx</span><span class="p">,</span> <span class="n">i</span> <span class="o">%</span> <span class="n">nx</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mov_arr</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">raster_name</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Close the page if needed</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">nplot_per_page</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">nrast</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+            <span class="n">figures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+            <span class="n">pdf_pages</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+    <span class="c1"># Write the PDF document to the disk</span>
+    <span class="n">pdf_pages</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">figures</span><span class="p">)</span></div>
+
+
+<span class="c1"># plot.rho</span>
+<div class="viewcode-block" id="rho"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.rho">[docs]</a><span class="k">def</span> <span class="nf">rho</span><span class="p">(</span><span class="n">input_rho_raster</span><span class="p">,</span>
+        <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;rho.png&quot;</span><span class="p">,</span>
+        <span class="n">borders</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">11.69</span><span class="p">,</span> <span class="mf">8.27</span><span class="p">),</span>
+        <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot map of spatial random effects (rho).</span>
+
+<span class="sd">    This function plots the spatial random effects.</span>
+
+<span class="sd">    :param input_rho_raster: Path to raster of random effects.</span>
+<span class="sd">    :param output_file: Name of the plot file.</span>
+<span class="sd">    :param borders: Vector file to be plotted.</span>
+<span class="sd">    :param figsize: Figure size in inches.</span>
+<span class="sd">    :param dpi: Resolution for output image.</span>
+<span class="sd">    :param \\**kwargs: see below.</span>
+
+<span class="sd">    :Keyword Arguments: Additional arguments to plot borders.</span>
+
+<span class="sd">    :return: A Matplotlib figure of the map of spatial random effects.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Load raster and band</span>
+    <span class="n">rasterR</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">input_rho_raster</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">gt</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterXSize</span>
+    <span class="n">nrow</span> <span class="o">=</span> <span class="n">rasterR</span><span class="o">.</span><span class="n">RasterYSize</span>
+    <span class="n">Xmin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Xmax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ncol</span>
+    <span class="n">Ymin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrow</span>
+    <span class="n">Ymax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">]</span>
+
+    <span class="c1"># Overviews</span>
+    <span class="k">if</span> <span class="n">rasterB</span><span class="o">.</span><span class="n">GetOverviewCount</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Build overviews</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Build overview&quot;</span><span class="p">)</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s1">&#39;COMPRESS_OVERVIEW&#39;</span><span class="p">,</span> <span class="s1">&#39;DEFLATE&#39;</span><span class="p">)</span>
+        <span class="n">rasterR</span><span class="o">.</span><span class="n">BuildOverviews</span><span class="p">(</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">])</span>
+
+    <span class="c1"># Get data</span>
+    <span class="c1"># ov_band = rasterB.GetOverview(0)</span>
+    <span class="n">ov_band</span> <span class="o">=</span> <span class="n">rasterB</span>
+    <span class="n">ov_arr</span> <span class="o">=</span> <span class="n">ov_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+    <span class="n">ov_arr</span><span class="p">[</span><span class="n">ov_arr</span> <span class="o">==</span> <span class="o">-</span><span class="mi">9999</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="c1"># Compute 99% quantiles</span>
+    <span class="n">rho_min</span><span class="p">,</span> <span class="n">rho_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanpercentile</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">99.5</span><span class="p">])</span>
+    <span class="n">rho_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">((</span><span class="o">-</span><span class="n">rho_min</span><span class="p">,</span> <span class="n">rho_max</span><span class="p">))</span>
+
+    <span class="c1"># Dereference driver</span>
+    <span class="n">rasterB</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span><span class="p">(</span><span class="n">rasterR</span><span class="p">)</span>
+
+    <span class="c1"># Plot raster and save</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ov_arr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdYlGn_r&quot;</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
+               <span class="n">vmin</span><span class="o">=-</span><span class="n">rho_bound</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">rho_bound</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">borders</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plot_layer</span><span class="p">(</span><span class="n">borders</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+    <span class="n">figure_as_image</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+
+    <span class="c1"># Return figure</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></div>
+
+
+<span class="c1"># freq_prob</span>
+<div class="viewcode-block" id="freq_prob"><a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.freq_prob">[docs]</a><span class="k">def</span> <span class="nf">freq_prob</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span>
+              <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;freq_prob.png&quot;</span><span class="p">,</span>
+              <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plot distribution of probability values.</span>
+
+<span class="sd">    This function plots the distribution of the probability values.</span>
+
+<span class="sd">    :param stats: Tuple of statistics (counts, threshold, error,</span>
+<span class="sd">        hectares) returned by deforestprob.deforest().</span>
+<span class="sd">    :param output_file: Name of the plot file.</span>
+<span class="sd">    :param figsize: Figure size in inches.</span>
+<span class="sd">    :param dpi: Resolution for output image.</span>
+
+<span class="sd">    :return: A Matplotlib figure of the distribution of the</span>
+<span class="sd">        probability values.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Get data from stats</span>
+    <span class="n">frequences</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Plot figure and save</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">frequences</span><span class="p">,</span> <span class="s2">&quot;bo&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Frequencies of deforestation probabilities&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Save and return figure</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></div>
+
+<span class="c1"># End</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/logo-far.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contents.html">Contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

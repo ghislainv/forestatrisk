@@ -9,11 +9,11 @@
 # license         :GPLv3
 # ===================================================================
 
-from .accuracy import confmat, accuracy
 from .diffproj import r_diffproj, mat_diffproj
+from .model_validation import computeAUC, accuracy_indices, cross_validation
+from .map_validation import map_validation
+from .map_accuracy import map_confmat, map_accuracy
 from .resample_sum import resample_sum
-from .validation_npix import validation_npix
-from .validation import computeAUC, accuracy_indices
-from .validation import cross_validation, validation
+from .validation_npix import validation_npix  # Deprecated function
 
 # EOF

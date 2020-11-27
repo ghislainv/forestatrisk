@@ -1,0 +1,29 @@
+forestatrisk.plot package
+=========================
+
+Submodules
+----------
+
+forestatrisk.plot.niceplot module
+---------------------------------
+
+.. automodule:: forestatrisk.plot.niceplot
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+forestatrisk.plot.plot module
+-----------------------------
+
+.. automodule:: forestatrisk.plot.plot
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: forestatrisk.plot
+   :members:
+   :undoc-members:
+   :show-inheritance:

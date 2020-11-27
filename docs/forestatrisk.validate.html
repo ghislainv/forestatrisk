@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>forestatrisk.validate package &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="forestatrisk-validate-package">
+<h1>forestatrisk.validate package<a class="headerlink" href="#forestatrisk-validate-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-forestatrisk.validate.diffproj">
+<span id="forestatrisk-validate-diffproj-module"></span><h2>forestatrisk.validate.diffproj module<a class="headerlink" href="#module-forestatrisk.validate.diffproj" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.validate.diffproj.mat_diffproj">
+<code class="sig-name descname">mat_diffproj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_raster</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/diffproj.html#mat_diffproj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.diffproj.mat_diffproj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a confusion matrix from a raster of differences.</p>
+<p>This function computes a confusion matrix from a raster of
+differences. The raster of differences can be obtained using
+function <code class="docutils literal notranslate"><span class="pre">.r_diffproj()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input_raster</strong> – Raster of differences obtain with
+forestatrisk.r_projdiff.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A confusion matrix. [[np00, np01], [np10, np11]].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.diffproj.r_diffproj">
+<code class="sig-name descname">r_diffproj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputA</span></em>, <em class="sig-param"><span class="n">inputB</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'diffproj.tif'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/diffproj.html#r_diffproj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.diffproj.r_diffproj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a raster of differences for comparison.</p>
+<p>This function compute a raster of differences between two rasters
+of future forest cover. Rasters must have the same extent and resolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputA</strong> – Path to first raster (predictions).</p></li>
+<li><p><strong>inputB</strong> – Path to second raster of (sd. predictions or observations).</p></li>
+<li><p><strong>output_file</strong> – Name of the output raster file for differences.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for computation by block.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.validate.map_accuracy">
+<span id="forestatrisk-validate-map-accuracy-module"></span><h2>forestatrisk.validate.map_accuracy module<a class="headerlink" href="#module-forestatrisk.validate.map_accuracy" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.validate.map_accuracy.map_accuracy">
+<code class="sig-name descname">map_accuracy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mat</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/map_accuracy.html#map_accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.map_accuracy.map_accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute accuracy indices from a confusion matrix.</p>
+<p>Compute Overall Accuracy, Expected Accuracy, Figure of Merit,
+Specificity, Sensitivity, True Skill Statistics and
+Cohen’s Kappa from a confusion matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mat</strong> – Confusion matrix. Format: [[n00, n01], [n10, n11]]
+with pred on lines and obs on columns.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionnary of accuracy indices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.map_accuracy.map_confmat">
+<code class="sig-name descname">map_confmat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">r_obs0</span></em>, <em class="sig-param"><span class="n">r_obs1</span></em>, <em class="sig-param"><span class="n">r_pred0</span></em>, <em class="sig-param"><span class="n">r_pred1</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/map_accuracy.html#map_confmat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.map_accuracy.map_confmat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a confusion matrix.</p>
+<p>This function computes a confusion matrix at a given
+resolution. Number of pixels in each category (0, 1) and in each
+spatial cell are given by r_obs* and r_pred* rasters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r_obs0</strong> – Raster counting the number of 0 for observations.</p></li>
+<li><p><strong>r_obs1</strong> – Raster counting the number of 1 for observations.</p></li>
+<li><p><strong>r_pred0</strong> – Raster counting the number of 0 for predictions.</p></li>
+<li><p><strong>r_pred1</strong> – Raster counting the number of 1 for predictions.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of lines per block.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A numpy array of shape (2,2).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.validate.map_validation">
+<span id="forestatrisk-validate-map-validation-module"></span><h2>forestatrisk.validate.map_validation module<a class="headerlink" href="#module-forestatrisk.validate.map_validation" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.validate.map_validation.map_validation">
+<code class="sig-name descname">map_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pred</span></em>, <em class="sig-param"><span class="n">obs</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/map_validation.html#map_validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.map_validation.map_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute accuracy indices based on predicted and observed
+forest-cover change (fcc) maps.</p>
+<p>Compute the Overall Accuracy, the Figure of Merit, the
+Specificity, the Sensitivity, the True Skill Statistics and the
+Cohen’s Kappa from a confusion matrix built on predictions
+vs. observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> – Raster of predicted fcc.</p></li>
+<li><p><strong>obs</strong> – Raster of observed fcc.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for block (else 256x256).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionnary of accuracy indices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.validate.model_validation">
+<span id="forestatrisk-validate-model-validation-module"></span><h2>forestatrisk.validate.model_validation module<a class="headerlink" href="#module-forestatrisk.validate.model_validation" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.validate.model_validation.accuracy_indices">
+<code class="sig-name descname">accuracy_indices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pred</span></em>, <em class="sig-param"><span class="n">obs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/model_validation.html#accuracy_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.model_validation.accuracy_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute accuracy indices.</p>
+<p>Compute the Overall Accuracy, the Figure of Merit, the
+Specificity, the Sensitivity, the True Skill Statistics and the
+Cohen’s Kappa from a confusion matrix built on predictions
+vs. observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> – List of predictions.</p></li>
+<li><p><strong>obs</strong> – List of observations.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionnary of accuracy indices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.model_validation.computeAUC">
+<code class="sig-name descname">computeAUC</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos_scores</span></em>, <em class="sig-param"><span class="n">neg_scores</span></em>, <em class="sig-param"><span class="n">n_sample</span><span class="o">=</span><span class="default_value">100000</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/model_validation.html#computeAUC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.model_validation.computeAUC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the AUC index.</p>
+<p>Compute the Area Under the ROC Curve (AUC). See <a class="reference external" href="https://doi.org/10.1111/j.1600-0587.2010.06354.x">Liu et al. 2011</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos_scores</strong> – Scores of positive observations.</p></li>
+<li><p><strong>neg_scores</strong> – Scores of negative observations.</p></li>
+<li><p><strong>n_samples</strong> – Number of samples to approximate AUC.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>AUC value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.model_validation.cross_validation">
+<code class="sig-name descname">cross_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">formula</span></em>, <em class="sig-param"><span class="n">mod_type</span><span class="o">=</span><span class="default_value">'icar'</span></em>, <em class="sig-param"><span class="n">ratio</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">nrep</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">1234</span></em>, <em class="sig-param"><span class="n">icar_args</span><span class="o">=</span><span class="default_value">{'beta_start': 0, 'burnin': 1000, 'mcmc': 1000, 'n_neighbors': None, 'neighbors': None, 'thin': 1}</span></em>, <em class="sig-param"><span class="n">rf_args</span><span class="o">=</span><span class="default_value">{'n_estimators': 100, 'n_jobs': None}</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/model_validation.html#cross_validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.model_validation.cross_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model cross-validation</p>
+<p>Performs model cross-validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Full dataset.</p></li>
+<li><p><strong>formula</strong> – Model formula.</p></li>
+<li><p><strong>mod_type</strong> – Model type, can be either “icar”, “glm”, or “rf”.</p></li>
+<li><p><strong>ratio</strong> – Percentage of data used for testing.</p></li>
+<li><p><strong>nrep</strong> – Number of repetitions for cross-validation.</p></li>
+<li><p><strong>seed</strong> – Seed for reproducibility.</p></li>
+<li><p><strong>icar_args</strong> – Dictionnary of arguments for the binomial iCAR model.</p></li>
+<li><p><strong>rf_args</strong> – Dictionnary of arguments for the random forest model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Pandas data frame with cross-validation results.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.validate.resample_sum">
+<span id="forestatrisk-validate-resample-sum-module"></span><h2>forestatrisk.validate.resample_sum module<a class="headerlink" href="#module-forestatrisk.validate.resample_sum" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.validate.resample_sum.coarsen_sum">
+<code class="sig-name descname">coarsen_sum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">a</span></em>, <em class="sig-param"><span class="n">c</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/resample_sum.html#coarsen_sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.resample_sum.coarsen_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample to coarser resolution using sum</p>
+<p>This is an internal function used by resample_sum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – 2D numpy array</p></li>
+<li><p><strong>c</strong> – Coarseness, in number of cells</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.resample_sum.resample_sum">
+<code class="sig-name descname">resample_sum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_raster</span></em>, <em class="sig-param"><span class="n">output_raster</span></em>, <em class="sig-param"><span class="n">val</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">window_size</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/resample_sum.html#resample_sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.resample_sum.resample_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample to coarser resolution with counts.</p>
+<p>This function resamples to coarser resolution counting pixel
+number having a given value. Window’s size is limited to 1000
+pixels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_raster</strong> – Path to input raster.</p></li>
+<li><p><strong>val</strong> – Pixel value to consider.</p></li>
+<li><p><strong>window_size</strong> – Size of the window in number of pixels.</p></li>
+<li><p><strong>output_raster</strong> – Path to output raster file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.validate.validation_npix">
+<span id="forestatrisk-validate-validation-npix-module"></span><h2>forestatrisk.validate.validation_npix module<a class="headerlink" href="#module-forestatrisk.validate.validation_npix" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="forestatrisk.validate.validation_npix.make_square">
+<code class="sig-name descname">make_square</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rasterfile</span></em>, <em class="sig-param"><span class="n">square_size</span><span class="o">=</span><span class="default_value">33</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/validation_npix.html#make_square"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.validation_npix.make_square" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute block information. <strong>(deprecated)</strong></p>
+<p>This is an internal function for <code class="docutils literal notranslate"><span class="pre">.validation_npix()</span></code>.</p>
+<p>This function computes block information from the caracteristics
+of a raster file and an indication on the number of rows to
+consider.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rasterfile</strong> – Path to a raster file.</p></li>
+<li><p><strong>square_size</strong> – Pixel number to define square side size.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple of length 6 including square number, square number</p>
+</dd>
+</dl>
+<p>on x axis, square number on y axis, square offsets on x axis, square
+offsets on y axis, square sizes on x axis, square sizes on y axis.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="forestatrisk.validate.validation_npix.validation_npix">
+<code class="sig-name descname">validation_npix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">r_pred</span></em>, <em class="sig-param"><span class="n">r_obs</span></em>, <em class="sig-param"><span class="n">value_f</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">value_d</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">square_size</span><span class="o">=</span><span class="default_value">33</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'npix.txt'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/forestatrisk/validate/validation_npix.html#validation_npix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.validate.validation_npix.validation_npix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute non-deforested and deforested pixels per
+square. <strong>(deprecated)</strong></p>
+<p>This function computes the number of non-deforested and deforested
+pixels in squares of a given size for both a raster of predictions
+and a raster of observations. Results can be used to compute
+correlations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r_pred</strong> – Path to raster of predictions.</p></li>
+<li><p><strong>r_obs</strong> – Path to raster of observations.</p></li>
+<li><p><strong>value_f</strong> – Value of non-deforested pixels in rasters.</p></li>
+<li><p><strong>value_d</strong> – Value of deforested pixels in rasters.</p></li>
+<li><p><strong>square_size</strong> – Size of the square side in number of pixels.</p></li>
+<li><p><strong>output_file</strong> – Path to result file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A pandas DataFrame, each row being one square.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-forestatrisk.validate">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-forestatrisk.validate" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/logo-far.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Indices and tables</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/forestatrisk.validate.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

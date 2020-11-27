@@ -1,0 +1,37 @@
+forestatrisk.model package
+==========================
+
+Submodules
+----------
+
+forestatrisk.model.cellneigh module
+-----------------------------------
+
+.. automodule:: forestatrisk.model.cellneigh
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+forestatrisk.model.model\_binomial\_iCAR module
+-----------------------------------------------
+
+.. automodule:: forestatrisk.model.model_binomial_iCAR
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+forestatrisk.model.model\_random\_forest module
+-----------------------------------------------
+
+.. automodule:: forestatrisk.model.model_random_forest
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: forestatrisk.model
+   :members:
+   :undoc-members:
+   :show-inheritance:

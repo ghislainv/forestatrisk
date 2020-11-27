@@ -34,18 +34,16 @@ from .predict import predict_raster, predict_raster_binomial_iCAR
 from .project import deforest_diffusion, deforest_diffusion_t_nofor
 from .project import deforest, emissions
 # Validate
-from .validate import confmat, accuracy
+from .validate import computeAUC, accuracy_indices, cross_validation
+from .validate import map_validation
+from .validate import map_confmat, map_accuracy
 from .validate import r_diffproj, mat_diffproj
 from .validate import resample_sum
 from .validate import validation_npix
-from .validate import computeAUC, accuracy_indices
-from .validate import cross_validation, validation
 
 # Welcome message
-print("# ==================================================================== #")
-print("# ForestAtRisk: modelling and forecasting deforestation in the tropics #")
-print("# https://ecology.ghislainv.fr/forestatrisk                            #")
-print("# ==================================================================== #")
+print("# ForestAtRisk: Modelling and forecasting deforestation in the tropics.")
+print("# https://ecology.ghislainv.fr/forestatrisk/")
 
 # Use Agg if no display found
 if os.environ.get("DISPLAY", "") == "":

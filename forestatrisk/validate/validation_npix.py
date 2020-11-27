@@ -23,7 +23,9 @@ from ..misc import progress_bar
 
 # Make
 def make_square(rasterfile, square_size=33):
-    """Compute block information.
+    """Compute block information. **(deprecated)**
+
+    This is an internal function for ``.validation_npix()``\\ .
 
     This function computes block information from the caracteristics
     of a raster file and an indication on the number of rows to
@@ -33,8 +35,8 @@ def make_square(rasterfile, square_size=33):
     :param square_size: Pixel number to define square side size.
 
     :return: A tuple of length 6 including square number, square number
-    on x axis, square number on y axis, square offsets on x axis, square
-    offsets on y axis, square sizes on x axis, square sizes on y axis.
+        on x axis, square number on y axis, square offsets on x axis, square
+        offsets on y axis, square sizes on x axis, square sizes on y axis.
 
     """
 
@@ -65,7 +67,8 @@ def make_square(rasterfile, square_size=33):
 # validation_Dha
 def validation_npix(r_pred, r_obs, value_f=1, value_d=0,
                     square_size=33, output_file="npix.txt"):
-    """Compute non-deforested and deforested pixels per square.
+    """Compute non-deforested and deforested pixels per
+    square. **(deprecated)**
 
     This function computes the number of non-deforested and deforested
     pixels in squares of a given size for both a raster of predictions

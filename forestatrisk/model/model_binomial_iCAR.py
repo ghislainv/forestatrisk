@@ -32,6 +32,102 @@ class model_binomial_iCAR(object):
     model_binomial_iCAR class to estimates the parameters of a Binomial
     model with iCAR process for spatial autocorrelation in a
     hierarchical Bayesian framework.
+
+    :param suitability_formula: A formula-like object that can be
+        used to construct a design matrix (see ``patsy.dmatrices``).
+
+    :param data: A dict-like object that can be used to look up
+        variables referenced in ``suitability_formula``.
+
+    :param n_neighbors: A vector of integers that indicates the
+        number of neighbors (adjacent entities) of each spatial
+        entity. length(n.neighbors) indicates the total number of
+        spatial entities.
+
+    :param neighbors: A vector of integers indicating the
+        neighbors (adjacent entities) of each spatial entity. Must be
+        of the form c(neighbors of entity 1, neighbors of entity 2,
+        ... , neighbors of the last entity). Length of the neighbors
+        vector should be equal to sum(n.neighbors).
+
+    :param NA_action: What to do with rows that contain missing
+        values (see ``patsy.dmatrices``).
+
+    :param data_pred: Optional dataset for predictions.
+
+    :param eval_env: Environment used to look up any variables
+        referenced in suitability_formula that cannot be found in data
+        (see ``patsy.dmatrices``).
+
+    :param burnin: Number of iterations for the burnin phase.
+
+    :param mcmc: The number of Gibbs iterations for the
+        sampler. Total number of Gibbs iterations is equal to
+        burnin+mcmc. burnin+mcmc must be divisible by 10 and superior
+        or equal to 100 so that the progress bar can be displayed.
+
+    :param thin: The thinning interval used in the simulation. The
+        number of mcmc iterations must be divisible by this value.
+
+    :param beta_start: Starting values for beta parameters. This
+        can either be a scalar or a p-length vector.
+
+    :param Vrho_start: Positive scalar indicating the starting
+        value for the variance of the spatial random effects.
+
+    :param mubeta: Means of the priors for the beta parameters of the
+        suitability process. mubeta must be either a scalar or a
+        p-length vector. If mubeta takes a scalar value, then that
+        value will serve as the prior mean for all of the betas. The
+        default value is set to 0 for an uninformative prior.
+
+    :param Vbeta: Variances of the Normal priors for the beta
+        parameters of the suitability process. Vbeta must be either a
+        scalar or a p-length vector. If Vbeta takes a scalar value,
+        then that value will serve as the prior variance for all of
+        the betas. The default variance is large and set to 1000 for
+        an uninformative flat prior.
+
+    :param priorVrho: Type of prior for the variance of the
+        spatial random effects. Can be set to a fixed positive scalar,
+        or to an inverse-gamma distribution ("1/Gamma") with
+        parameters shape and rate, or to a uniform distribution
+        ("Uniform") on the interval [0,Vrho.max]. Default set to
+        "1/Gamma".
+
+    :param shape: The shape parameter for the Gamma prior on the
+        precision of the spatial random effects. Default value is
+        shape=0.5 for uninformative prior.
+
+    :param rate: The rate (1/scale) parameter for the Gamma prior
+        on the precision of the spatial random effects. Default value
+        is rate=0.0005 for uninformative prior.
+
+    :param Vrho_max: Upper bound for the uniform prior of the
+        spatial random effect variance. Default set to 10.
+
+    :param seed: The seed for the random number generator. Default
+        set to 1234.
+
+    :param verbose: A switch (0,1) which determines whether or not
+        the progress of the sampler is printed to the screen. Default
+        is 1: a progress bar is printed, indicating the step (in %)
+        reached by the Gibbs sampler.
+
+    :param save_rho: A switch (0,1) which determines whether or
+        not the sampled values for rhos are saved. Default is 0: the
+        posterior mean is computed and returned in the rho.pred
+        vector. Be careful, setting save.rho to 1 might require a
+        large amount of memory.
+
+    :param save_p: A switch (0,1) which determines whether or not
+        the sampled values for predictions are saved. Default is 0:
+        the posterior mean is computed and returned in the theta.pred
+        vector. Be careful, setting save.p to 1 might require a large
+        amount of memory.
+
+    :return: An object of class model_binomial_iCAR.
+
     """
 
     def __init__(self,  # Observations
@@ -50,7 +146,7 @@ class model_binomial_iCAR(object):
                  beta_start=0,
                  Vrho_start=1,
                  # Priors
-                 mubeta=0, Vbeta=1.0e6,
+                 mubeta=0, Vbeta=1000,
                  priorVrho=-1.0,  # -1="1/Gamma"
                  shape=0.5, rate=0.0005,
                  Vrho_max=10,
@@ -115,7 +211,7 @@ class model_binomial_iCAR(object):
         parameters of the suitability process. Vbeta must be either a
         scalar or a p-length vector. If Vbeta takes a scalar value,
         then that value will serve as the prior variance for all of
-        the betas. The default variance is large and set to 1.0E6 for
+        the betas. The default variance is large and set to 1000 for
         an uninformative flat prior.
 
         :param priorVrho: Type of prior for the variance of the

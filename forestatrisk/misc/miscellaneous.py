@@ -41,9 +41,10 @@ def invlogit(x):
 # Function to make a directory
 def make_dir(newdir):
     """Make new directory
-        - already exists, silently complete
-        - regular file in the way, raise an exception
-        - parent directory(ies) does not exist, make them as well
+
+        * already exists, silently complete
+        * regular file in the way, raise an exception
+        * parent directory(ies) does not exist, make them as well
 
     :param newdir: Directory path to create.
 
@@ -72,11 +73,12 @@ def makeblock(rasterfile, blk_rows=128):
 
     :param rasterfile: Path to a raster file.
     :param blk_rows: If > 0, number of rows for block. If <=0, the
-    block size will be 256 x 256.
+        block size will be 256 x 256.
 
     :return: A tuple of length 6 including block number, block number
-    on x axis, block number on y axis, block offsets on x axis, block
-    offsets on y axis, block sizes on x axis, block sizes on y axis.
+        on x axis, block number on y axis, block offsets on x axis,
+        block offsets on y axis, block sizes on x axis, block sizes on
+        y axis.
 
     """
 
@@ -125,9 +127,10 @@ def make_square(rasterfile, square_size=33):
     :param rasterfile: Path to a raster file.
     :param square_size: Pixel number to define square side size.
 
-    :return: A tuple of length 6 including square number, square number
-    on x axis, square number on y axis, square offsets on x axis, square
-    offsets on y axis, square sizes on x axis, square sizes on y axis.
+    :return: A tuple of length 6 including square number, square
+        number on x axis, square number on y axis, square offsets on x
+        axis, square offsets on y axis, square sizes on x axis, square
+        sizes on y axis.
 
     """
 

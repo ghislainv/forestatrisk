@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>forestatrisk.validate.diffproj &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for forestatrisk.validate.diffproj</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># author          :Ghislain Vieilledent</span>
+<span class="c1"># email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com</span>
+<span class="c1"># web             :https://ecology.ghislainv.fr</span>
+<span class="c1"># python_version  :&gt;=2.7</span>
+<span class="c1"># license         :GPLv3</span>
+<span class="c1"># ==============================================================================</span>
+
+<span class="c1"># Standard library imports</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 3 compatibility</span>
+
+<span class="c1"># Third party imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span>
+
+<span class="c1"># Local application imports</span>
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">progress_bar</span><span class="p">,</span> <span class="n">makeblock</span>
+
+
+<span class="c1"># r_diffproj</span>
+<div class="viewcode-block" id="r_diffproj"><a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.diffproj.r_diffproj">[docs]</a><span class="k">def</span> <span class="nf">r_diffproj</span><span class="p">(</span><span class="n">inputA</span><span class="p">,</span> <span class="n">inputB</span><span class="p">,</span>
+               <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;diffproj.tif&quot;</span><span class="p">,</span>
+               <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute a raster of differences for comparison.</span>
+
+<span class="sd">    This function compute a raster of differences between two rasters</span>
+<span class="sd">    of future forest cover. Rasters must have the same extent and resolution.</span>
+
+<span class="sd">    :param inputA: Path to first raster (predictions).</span>
+<span class="sd">    :param inputB: Path to second raster of (sd. predictions or observations).</span>
+<span class="sd">    :param output_file: Name of the output raster file for differences.</span>
+<span class="sd">    :param blk_rows: If &gt; 0, number of rows for computation by block.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Inputs</span>
+    <span class="n">ds_A</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">inputA</span><span class="p">)</span>
+    <span class="n">band_A</span> <span class="o">=</span> <span class="n">ds_A</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ds_B</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">inputB</span><span class="p">)</span>
+    <span class="n">band_B</span> <span class="o">=</span> <span class="n">ds_B</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Landscape variables from forest raster</span>
+    <span class="n">gt</span> <span class="o">=</span> <span class="n">ds_A</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">ds_A</span><span class="o">.</span><span class="n">RasterXSize</span>
+    <span class="n">nrow</span> <span class="o">=</span> <span class="n">ds_A</span><span class="o">.</span><span class="n">RasterYSize</span>
+    <span class="n">proj</span> <span class="o">=</span> <span class="n">ds_A</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span>
+
+    <span class="c1"># Make blocks</span>
+    <span class="n">blockinfo</span> <span class="o">=</span> <span class="n">makeblock</span><span class="p">(</span><span class="n">inputA</span><span class="p">,</span> <span class="n">blk_rows</span><span class="o">=</span><span class="n">blk_rows</span><span class="p">)</span>
+    <span class="n">nblock</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">nblock_x</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Divide region in </span><span class="si">{}</span><span class="s2"> blocks&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nblock</span><span class="p">))</span>
+
+    <span class="c1"># Raster of predictions</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Create a raster file on disk for projections&quot;</span><span class="p">)</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s2">&quot;GTiff&quot;</span><span class="p">)</span>
+    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                           <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span><span class="p">,</span>
+                           <span class="p">[</span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">])</span>
+    <span class="n">ds_out</span><span class="o">.</span><span class="n">SetGeoTransform</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
+    <span class="n">ds_out</span><span class="o">.</span><span class="n">SetProjection</span><span class="p">(</span><span class="n">proj</span><span class="p">)</span>
+    <span class="n">band_out</span> <span class="o">=</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">band_out</span><span class="o">.</span><span class="n">SetNoDataValue</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
+
+    <span class="c1"># Compute differences</span>
+    <span class="c1"># Message</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute differences&quot;</span><span class="p">)</span>
+    <span class="c1"># Loop on blocks of data</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nblock</span><span class="p">):</span>
+        <span class="c1"># Progress bar</span>
+        <span class="n">progress_bar</span><span class="p">(</span><span class="n">nblock</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Position in 1D-arrays</span>
+        <span class="n">px</span> <span class="o">=</span> <span class="n">b</span> <span class="o">%</span> <span class="n">nblock_x</span>
+        <span class="n">py</span> <span class="o">=</span> <span class="n">b</span> <span class="o">//</span> <span class="n">nblock_x</span>
+        <span class="c1"># Data for one block of the stack (shape = (nband,nrow,ncol))</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">band_A</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">py</span><span class="p">],</span> <span class="n">nx</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">ny</span><span class="p">[</span><span class="n">py</span><span class="p">])</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">band_B</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">py</span><span class="p">],</span> <span class="n">nx</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">ny</span><span class="p">[</span><span class="n">py</span><span class="p">])</span>
+        <span class="c1"># Compute differences</span>
+        <span class="n">data_diff</span> <span class="o">=</span> <span class="n">A</span>
+        <span class="n">data_diff</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">A</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">B</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">data_diff</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">A</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">B</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1"># false negative (no pred. deforestation vs. obs. deforestation)</span>
+        <span class="n">data_diff</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">A</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">B</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))]</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="c1"># false positive (pred. deforestation vs. no obs. deforestation)</span>
+        <span class="n">data_diff</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">A</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">B</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))]</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">data_diff</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">A</span> <span class="o">==</span> <span class="mi">255</span><span class="p">,</span> <span class="n">B</span> <span class="o">==</span> <span class="mi">255</span><span class="p">))]</span> <span class="o">=</span> <span class="mi">255</span>
+        <span class="c1"># Write output data</span>
+        <span class="n">band_out</span><span class="o">.</span><span class="n">WriteArray</span><span class="p">(</span><span class="n">data_diff</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">py</span><span class="p">])</span>
+
+    <span class="c1"># Compute statistics</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute statistics&quot;</span><span class="p">)</span>
+    <span class="n">band_out</span><span class="o">.</span><span class="n">FlushCache</span><span class="p">()</span>  <span class="c1"># Write cache data to disk</span>
+    <span class="n">band_out</span><span class="o">.</span><span class="n">ComputeStatistics</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Build overviews</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Build overviews&quot;</span><span class="p">)</span>
+    <span class="n">ds_out</span><span class="o">.</span><span class="n">BuildOverviews</span><span class="p">(</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">])</span>
+
+    <span class="c1"># Dereference driver</span>
+    <span class="n">band_out</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span><span class="p">(</span><span class="n">ds_out</span><span class="p">)</span></div>
+
+
+<span class="c1"># mat_diffproj</span>
+<div class="viewcode-block" id="mat_diffproj"><a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.diffproj.mat_diffproj">[docs]</a><span class="k">def</span> <span class="nf">mat_diffproj</span><span class="p">(</span><span class="n">input_raster</span><span class="p">,</span>
+                 <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute a confusion matrix from a raster of differences.</span>
+
+<span class="sd">    This function computes a confusion matrix from a raster of</span>
+<span class="sd">    differences. The raster of differences can be obtained using</span>
+<span class="sd">    function ``.r_diffproj()``\\ .</span>
+
+<span class="sd">    :param input_raster: Raster of differences obtain with</span>
+<span class="sd">        forestatrisk.r_projdiff.</span>
+
+<span class="sd">    :return: A confusion matrix. [[np00, np01], [np10, np11]].</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Inputs</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">input_raster</span><span class="p">)</span>
+    <span class="n">band</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Make blocks</span>
+    <span class="n">blockinfo</span> <span class="o">=</span> <span class="n">makeblock</span><span class="p">(</span><span class="n">input_raster</span><span class="p">,</span> <span class="n">blk_rows</span><span class="o">=</span><span class="n">blk_rows</span><span class="p">)</span>
+    <span class="n">nblock</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">nblock_x</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Divide region in </span><span class="si">{}</span><span class="s2"> blocks&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nblock</span><span class="p">))</span>
+
+    <span class="c1"># Confusion matrix</span>
+    <span class="n">n00</span> <span class="o">=</span> <span class="n">n11</span> <span class="o">=</span> <span class="n">n10</span> <span class="o">=</span> <span class="n">n01</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Compute differences</span>
+    <span class="c1"># Message</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute confusion matrix&quot;</span><span class="p">)</span>
+    <span class="c1"># Loop on blocks of data</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nblock</span><span class="p">):</span>
+        <span class="c1"># Progress bar</span>
+        <span class="n">progress_bar</span><span class="p">(</span><span class="n">nblock</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Position in 1D-arrays</span>
+        <span class="n">px</span> <span class="o">=</span> <span class="n">b</span> <span class="o">%</span> <span class="n">nblock_x</span>
+        <span class="n">py</span> <span class="o">=</span> <span class="n">b</span> <span class="o">//</span> <span class="n">nblock_x</span>
+        <span class="c1"># Data for one block of the stack (shape = (nband,nrow,ncol))</span>
+        <span class="n">data_diff</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">py</span><span class="p">],</span> <span class="n">nx</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">ny</span><span class="p">[</span><span class="n">py</span><span class="p">])</span>
+        <span class="c1"># Confusion matrix</span>
+        <span class="n">n00</span> <span class="o">+=</span> <span class="p">(</span><span class="n">data_diff</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">n11</span> <span class="o">+=</span> <span class="p">(</span><span class="n">data_diff</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">n10</span> <span class="o">+=</span> <span class="p">(</span><span class="n">data_diff</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">n01</span> <span class="o">+=</span> <span class="p">(</span><span class="n">data_diff</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+    <span class="c1"># Return confusion matrix</span>
+    <span class="n">conf_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">n00</span><span class="p">,</span> <span class="n">n01</span><span class="p">],</span> <span class="p">[</span><span class="n">n10</span><span class="p">,</span> <span class="n">n11</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">conf_mat</span></div>
+
+<span class="c1"># End</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/logo-far.svg" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contents.html">Contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
