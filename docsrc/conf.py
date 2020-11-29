@@ -79,7 +79,11 @@ html_theme_options = {
     'github_type': 'star',
     'travis_button': 'false',
     'codecov_button': 'false',
-    'logo': 'logo-far.svg'
+    'logo': 'logo-far.svg',
+    'logo_name': 'true',
+    'page_width': '1300px',
+    'body_max_width': 'auto',
+    'fixed_sidebar': 'true'
 }
 
 html_favicon = '_static/favicon.png'

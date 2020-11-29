@@ -849,7 +849,7 @@ static PyMethodDef hbm_methods[] = {
    * three.
    */
   {"binomial_iCAR", (PyCFunction)binomial_iCAR, METH_VARARGS | METH_KEYWORDS,
-   "Fit a Binomial linear model with iCAR process."},
+   "Fit a Binomial linear model with iCAR process. This function encapsulates a Gibbs sampler written in C code and using a Metropolis algorithm. It is called by the function ``.model.binonial_iCAR()``."},
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
@@ -860,7 +860,7 @@ static PyMethodDef hbm_methods[] = {
   static struct PyModuleDef hbm = {
       PyModuleDef_HEAD_INIT,
       "hbm", /* m_name */
-      "hbm module to fit hierarchical Bayesian models", /* m_doc */
+      "Fit hierarchical Bayesian models. This modules includes functions written in C to maximise computation efficiency.", /* m_doc */
       -1, /* m_size */
       hbm_methods, /* m_methods */
       NULL, /* m_reload */

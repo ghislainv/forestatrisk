@@ -34,14 +34,16 @@
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.996337.svg
    :target: https://doi.org/10.5281/zenodo.996337
    :alt: Zenodo
+
+------------------------
 	 
 Overview
 ========
 
 The ``forestatrisk`` Python package can be used to **model** and
 **forecast** deforestation in the tropics. It provides functions to
-estimate the spatial probability of deforestation in the tropics
-depending on various spatial explanatory variables.
+estimate the spatial probability of deforestation as a function of
+various spatial explanatory variables.
 
 Spatial explanatory variables can be derived from topography
 (altitude, slope, and aspect), accessibility (distance to roads,
@@ -50,7 +52,7 @@ deforestation) or land conservation status (eg. protected area) for
 example.
 
 .. image:: https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png
-   :width: 1000px
+   :width: 800px
    :align: center
    :target: https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png
    :alt: prob_AFR
@@ -67,7 +69,8 @@ Using ``virtualenv``
 
 You first need to have the ``virtualenv`` package installed (see `here <https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/>`__).
 
-Then, create a virtual environment and install the ``forestatrisk`` package with the following commands:
+Then, create a virtual environment and install the ``forestatrisk``
+package with the following commands:
 
 .. code-block:: shell
 
@@ -94,9 +97,12 @@ To deactivate and delete the virtual environment:
 Using ``conda``
 +++++++++++++++
 
-You first need to have ``miniconda3`` installed (see `here <https://docs.conda.io/en/latest/miniconda.html>`__).
+You first need to have ``miniconda3`` installed (see `here
+<https://docs.conda.io/en/latest/miniconda.html>`__).
 
-Then, create a conda environment (details `here <https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html>`__) and install the ``forestatrisk`` package with the following commands:
+Then, create a conda environment (details `here
+<https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html>`__)
+and install the ``forestatrisk`` package with the following commands:
 
 .. code-block:: shell
 		
@@ -121,38 +127,46 @@ Main functionalities
 Sample
 ++++++
 
-Function ``.sample()`` allows the random sampling of observations points
-considering historical deforestation maps. The sampling is balanced
-and stratified considering remaining forest and deforested areas after
-a given period of time. The function also retrieves information from
-environmental variables for each sampled point. The sampling is done
-by block to allow the computation on large study areas (e.g. country
-or continental scale) with a high spatial resolution (e.g. 30m).
+Function ``.sample()`` sample observations points from a forest cover
+change map. The sample is balanced and stratified between deforested
+and non-deforested pixels. The function also retrieves information
+from explanatory variables for each sampled point. Sampling is done by
+block to allow computation on large study areas (e.g. country or
+continental scale) with a high spatial resolution (e.g. 30m).
 
 Model
 +++++
 
-Function ``.model_binomial_iCAR()`` can be used to fit the deforestation
-model from the data. A linear Binomial logistic regression model is
-used to estimate the parameters of the deforestation model. The model
-includes an intrinsic Conditional Autoregressive (iCAR) process to
-account for the spatial autocorrelation of the observations
-(Vieilledent et al. 2014). Parameter inference is done in a
+Function ``.model_binomial_iCAR()`` can be used to fit the
+deforestation model. A linear Binomial logistic regression model is
+used in this case. The model includes an intrinsic Conditional
+Autoregressive (iCAR) process to account for the spatial
+autocorrelation of the observations. Parameter inference is done in a
 hierarchical Bayesian framework. The function calls a Gibbs sampler
 with a Metropolis algorithm written in pure C code to reduce
 computation time.
 
+Other models (such as a simple GLM or a Random Forest model) can also
+be used.
+
 Predict and project
 +++++++++++++++++++
 
-Function ``.predict()`` allows predicting the deforestation probability
-on the whole study area using the deforestation model fitted with the
-``.model()`` function. The prediction is done by block to allow the
-computation on large study areas (e.g. country or continental scale)
-with a high spatial resolution (e.g. 30m).
+Function ``.predict()`` allows predicting the deforestation
+probability on the whole study area using the deforestation model
+fitted with ``.model_*()`` functions. The prediction is done by block
+to allow the computation on large study areas (e.g. country or
+continental scale) with a high spatial resolution (e.g. 30m).
 
 Function ``.deforest()`` predicts the future forest cover map based on a
 raster of probability of deforestation (rescaled from 1 to 65535),
 which is obtained from function ``.predict()``, and an area (in
 hectares) to be deforested.
+
+Validate
+++++++++
+
+A set of functions (eg. ``.cross_validation()`` or
+``.map_accuracy()``\ ) is also provided to perform model and map
+validation.
 

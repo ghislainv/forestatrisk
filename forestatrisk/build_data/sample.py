@@ -60,7 +60,7 @@ def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
     """
 
     # Set random seed
-    np.random.seed(Seed)
+    np.random.seed(seed)
 
     # =============================================
     # Sampling pixels

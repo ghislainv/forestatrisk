@@ -23,7 +23,10 @@ class model_random_forest(object):
 
     """model_random_forest class.
 
-    model_random_forest class.
+    Fit a random forest model (see
+    ``sklearn.ensemble.RandomForestClassifier``\\ ) using a patsy formula
+    for explanatory variables.
+
     """
 
     def __init__(self,  # Observations
@@ -69,7 +72,7 @@ class model_random_forest(object):
         :param model: model_random_forest to predict from.
         :param new_data: A dict-like object which will be used to look \
         up data (including explicative variables and cell values).
-        :return: prediction (a probability).
+        :return: Predictions (probabilities).
 
         """
 

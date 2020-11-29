@@ -1,7 +1,7 @@
-Contents
-========
+Package contents
+================
 
-Supackages and submodules of the ``forestatrisk`` Python pakcage.
+Supackages and submodules of the ``forestatrisk`` Python package.
 
 Subpackages
 -----------
@@ -10,12 +10,12 @@ Subpackages
    :maxdepth: 4
 
    subpackages/forestatrisk.build_data
-   subpackages/forestatrisk.misc
    subpackages/forestatrisk.model
-   subpackages/forestatrisk.plot
    subpackages/forestatrisk.predict
    subpackages/forestatrisk.project
    subpackages/forestatrisk.validate
+   subpackages/forestatrisk.plot
+   subpackages/forestatrisk.misc
 
 Submodules
 ----------

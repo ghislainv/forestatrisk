@@ -42,9 +42,9 @@ def invlogit(x):
 def make_dir(newdir):
     """Make new directory
 
-        * already exists, silently complete
-        * regular file in the way, raise an exception
-        * parent directory(ies) does not exist, make them as well
+        * Already exists, silently complete
+        * Regular file in the way, raise an exception
+        * Parent directory(ies) does not exist, make them as well
 
     :param newdir: Directory path to create.
 

@@ -23,9 +23,9 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
              gdrive_folder=None):
     """Compute forest-cover change with Google EarthEngine.
 
-    Compute the forest-cover change from Global Forest Change Hansen
-    et al. data with Python and GEE API. Export the results to Google
-    Drive.
+    Compute the forest-cover change from Global Forest Change (GFC)
+    Hansen et al. data with Python and GEE API. Export the results to
+    Google Drive.
 
     Notes for Google Earth Engine (abbreviated GEE):
 
