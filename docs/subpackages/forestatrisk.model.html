@@ -19,8 +19,8 @@
     <link rel="shortcut icon" href="../_static/favicon.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="forestatrisk.plot package" href="forestatrisk.plot.html" />
-    <link rel="prev" title="forestatrisk.misc package" href="forestatrisk.misc.html" />
+    <link rel="next" title="forestatrisk.predict package" href="forestatrisk.predict.html" />
+    <link rel="prev" title="forestatrisk.build_data package" href="forestatrisk.build_data.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -28,9 +28,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo-far.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">forestatrisk</h1>
+    
+  </a>
+</p>
 
-    <div class="document">
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../articles.html">Articles</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../package_contents.html">Package contents</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../package_contents.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../package_contents.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../package_contents.html">Package contents</a><ul>
+      <li>Previous: <a href="forestatrisk.build_data.html" title="previous chapter">forestatrisk.build_data package</a></li>
+      <li>Next: <a href="forestatrisk.predict.html" title="next chapter">forestatrisk.predict package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
       <div class="documentwrapper">
         <div class="bodywrapper">
           
@@ -226,7 +298,9 @@ for a new data-set.</p>
 <em class="property">class </em><code class="sig-name descname">model_random_forest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">formula</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">NA_action</span><span class="o">=</span><span class="default_value">'drop'</span></em>, <em class="sig-param"><span class="n">eval_env</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">n_estimators</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">n_jobs</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/model/model_random_forest.html#model_random_forest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.model_random_forest.model_random_forest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>model_random_forest class.</p>
-<p>model_random_forest class.</p>
+<p>Fit a random forest model (see
+<code class="docutils literal notranslate"><span class="pre">sklearn.ensemble.RandomForestClassifier</span></code>) using a patsy formula
+for explanatory variables.</p>
 <dl class="py method">
 <dt id="forestatrisk.model.model_random_forest.model_random_forest.predict">
 <code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/model/model_random_forest.html#model_random_forest.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.model.model_random_forest.model_random_forest.predict" title="Permalink to this definition">¶</a></dt>
@@ -241,7 +315,7 @@ for a new data-set.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>prediction (a probability).</p>
+<dd class="field-even"><p>Predictions (probabilities).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -256,72 +330,8 @@ for a new data-set.</p>
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<p class="logo">
-  <a href="../index.html">
-    <img class="logo" src="../_static/logo-far.svg" alt="Logo"/>
-    
-  </a>
-</p>
-
-
-
-<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
-
-
-
-
-<p>
-<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
-  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
-</p>
-
-
-
-
-
-<h3>Navigation</h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/get_started.html">Get started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../contents.html">Contents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="../contents.html">Contents</a><ul>
-      <li>Previous: <a href="forestatrisk.misc.html" title="previous chapter">forestatrisk.misc package</a></li>
-      <li>Next: <a href="forestatrisk.plot.html" title="next chapter">forestatrisk.plot package</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
       &copy;2020, Ghislain Vieilledent.
       

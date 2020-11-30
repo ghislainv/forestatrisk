@@ -1,15 +1,18 @@
 .. include:: ../README.rst
 
-Content
-=======
-	     
+Table of contents
+================= 
+
 .. toctree::
    :maxdepth: 2
 
+   Home <self>	      
    notebooks/get_started
-   contents
+   articles
+   package_contents      
+   indices	      
    changelog
-   indices
+   license
 
 Indices and tables
 ==================

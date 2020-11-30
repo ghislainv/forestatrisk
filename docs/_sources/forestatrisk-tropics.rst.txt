@@ -1,0 +1,5 @@
+far-tropics
+###########
+
+.. raw:: html
+   :file: notebooks/forestatrisk-tropics.html

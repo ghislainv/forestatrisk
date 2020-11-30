@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="../_static/favicon.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Contents" href="../contents.html" />
+    <link rel="next" title="Articles" href="../articles.html" />
     <link rel="prev" title="forestatrisk Python package" href="../index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -28,9 +28,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo-far.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">forestatrisk</h1>
+    
+  </a>
+</p>
 
-    <div class="document">
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Sampling-the-observations">Sampling the observations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Descriptive-statistics">Descriptive statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Spatial-deforestation-model">Spatial deforestation model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Results-of-the-model">Results of the model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Predicting-the-spatial-probability-of-deforestation">Predicting the spatial probability of deforestation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Predicting-the-future-forest-cover">Predicting the future forest cover</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Model-validation">Model validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#References">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../articles.html">Articles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../package_contents.html">Package contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter"><code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package</a></li>
+      <li>Next: <a href="../articles.html" title="next chapter">Articles</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
       <div class="documentwrapper">
         <div class="bodywrapper">
           
@@ -272,19 +349,29 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Get-started">
 <h1>Get started<a class="headerlink" href="#Get-started" title="Permalink to this headline">¶</a></h1>
-<p>This notebook will show you how to use the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python module. The module can be used to estimate the spatial probability of deforestation in the tropics depending on various spatial environmental variables. We use Madagascar as a case study.</p>
+<p>This notebook provides a minimal and reproducible example for the following scientific article:</p>
+<p><strong>Vieilledent G., C. Vancutsem, and F. Achard.</strong> Spatial forecasting of forest cover change in the humid tropics over the 21st century.</p>
+<p>. We will use the <a class="reference external" href="https://en.wikipedia.org/wiki/R%C3%A9union">Réunion</a> island as a case study.</p>
 <p>We first import the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> module and the other necessary modules to run the script.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Import modules</span>
+<span></span><span class="c1"># Imports</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">copy2</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">patsy</span> <span class="kn">import</span> <span class="n">dmatrices</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">log_loss</span>
+
 <span class="kn">import</span> <span class="nn">forestatrisk</span> <span class="k">as</span> <span class="nn">far</span>
 </pre></div>
 </div>
@@ -294,10 +381,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-# ==================================================================== #
-# ForestAtRisk: modelling and forecasting deforestation in the tropics #
-# https://ecology.ghislainv.fr/forestatrisk                            #
-# ==================================================================== #
+# ForestAtRisk: Modelling and forecasting deforestation in the tropics.
+# https://ecology.ghislainv.fr/forestatrisk/
 </pre></div></div>
 </div>
 <p>We also create a directory to hold the outputs with the help of the function <code class="docutils literal notranslate"><span class="pre">.make_dir()</span></code> from the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> module.</p>
@@ -311,134 +396,15 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="section" id="Downloading-and-preparing-the-data">
-<h2>Downloading and preparing the data<a class="headerlink" href="#Downloading-and-preparing-the-data" title="Permalink to this headline">¶</a></h2>
-<p>To model the spatial probability of deforestation, we need a map of the past deforestation and maps of potential explicative environmental variables. Environmental variables can be derived from topography (altitude, slope, and aspect), accessibility (distance to roads, towns, and forest edge), deforestation history (distance to previous deforestation) or landscape policy (location inside a protected area) for example. In our example, we use the following variables :</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 32%" />
-<col style="width: 21%" />
-<col style="width: 31%" />
-<col style="width: 4%" />
-<col style="width: 13%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Product</p></th>
-<th class="head"><p>Source</p></th>
-<th class="head"><p>Variable derived</p></th>
-<th class="head"><p>Unit</p></th>
-<th class="head"><p>Resolution (m)</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Deforestation maps (1990-2000-2010)</p></td>
-<td><p>BioSceneMada (1)</p></td>
-<td><p>forest/non-forest</p></td>
-<td><ul class="simple">
-<li></li>
+<div class="section" id="Data">
+<h2>Data<a class="headerlink" href="#Data" title="Permalink to this headline">¶</a></h2>
+<p>The data folder includes:</p>
+<ul class="simple">
+<li><p>forest cover change data as GeoTraster file:</p></li>
+<li><p>spatial explanatory variables as raster files:</p></li>
 </ul>
-</td>
-<td><p>30</p></td>
-</tr>
-<tr class="row-odd"><td><p></p></td>
-<td></td>
-<td><p>distance to forest edge</p></td>
-<td><p>m</p></td>
-<td><p>30</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td></td>
-<td><p>distance to previous deforestation</p></td>
-<td><p>m</p></td>
-<td><p>30</p></td>
-</tr>
-<tr class="row-odd"><td><p>Digital Elevation Model</p></td>
-<td><p>SRTM v4.1 CSI-CGIAR (2)</p></td>
-<td><p>altitude</p></td>
-<td><p>m</p></td>
-<td><p>90</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td></td>
-<td><p>slope</p></td>
-<td><p>°</p></td>
-<td><p>90</p></td>
-</tr>
-<tr class="row-odd"><td><p></p></td>
-<td></td>
-<td><p>aspect</p></td>
-<td><p>°</p></td>
-<td><p>90</p></td>
-</tr>
-<tr class="row-even"><td><p>Highways</p></td>
-<td><p>OSM - Geofabrik (3)</p></td>
-<td><p>distance to roads</p></td>
-<td><p>m</p></td>
-<td><p>150</p></td>
-</tr>
-<tr class="row-odd"><td><p>Places</p></td>
-<td></td>
-<td><p>distance to towns</p></td>
-<td><p>m</p></td>
-<td><p>150</p></td>
-</tr>
-<tr class="row-even"><td><p>Waterways</p></td>
-<td></td>
-<td><p>distance to river</p></td>
-<td><p>m</p></td>
-<td><p>150</p></td>
-</tr>
-<tr class="row-odd"><td><p>Protected areas</p></td>
-<td><p>Rebioma (4)</p></td>
-<td><p>presence of protected area</p></td>
-<td><ul class="simple">
-<li></li>
-</ul>
-</td>
-<td><p>30</p></td>
-</tr>
-</tbody>
-</table>
-<ol class="arabic simple">
-<li><p><a class="reference external" href="http://bioscenemada.cirad.fr">http://bioscenemada.cirad.fr</a>, deforestation maps derived from Harper et al. 2007 and Hansen et al. 2013</p></li>
-<li><p><a class="reference external" href="http://srtm.csi.cgiar.org">http://srtm.csi.cgiar.org</a>, SRTM 90m Digital Elevation Database v4.1</p></li>
-<li><p><a class="reference external" href="http://www.geofabrik.de">http://www.geofabrik.de</a>, data extracts from the OpenStreetMap project for Madagascar,</p></li>
-<li><p><a class="reference external" href="http://rebioma.net">http://rebioma.net</a>, SAPM (“Système des Aires Protégées à Madagascar”), 20/12/2010 version</p></li>
-</ol>
-<p>To obtain the data, we can either (i) execute a bash script which downloads the raw data from the sources and computes the variables, or (ii) directly download the derived variables from a repository on Zenodo (<a class="reference external" href="http://doi.org/10.5281/zenodo.259582">http://doi.org/10.5281/zenodo.259582</a>).</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># =====================================</span>
-<span class="c1"># First option: execute the bash script</span>
-<span class="c1"># =====================================</span>
-
-<span class="c1"># os.system(&quot;wget https://github.com/ghislainv/forestatrisk/blob/master/notebook/scripts/dataMada.sh&quot;)</span>
-<span class="c1"># os.system(&quot;sh data_Mada.sh&quot;)</span>
-
-<span class="c1"># =====================================</span>
-<span class="c1"># Second option: download the data</span>
-<span class="c1"># =====================================</span>
-
-<span class="c1"># Make data directory</span>
-<span class="n">far</span><span class="o">.</span><span class="n">make_dir</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
-
-<span class="c1"># List of files to download</span>
-<span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fordefor2010.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;dist_edge.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;dist_defor.tif&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;altitude.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;slope.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;aspect.tif&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;dist_road.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;dist_town.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;dist_river.tif&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;sapm.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;roads.kml&quot;</span><span class="p">,</span> <span class="s2">&quot;towns.kml&quot;</span><span class="p">,</span> <span class="s2">&quot;rivers.kml&quot;</span><span class="p">,</span> <span class="s2">&quot;sapm.kml&quot;</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;wget -P data https://zenodo.org/record/259582/files/&quot;</span> <span class="o">+</span> <span class="n">i</span>
-    <span class="c1">#os.system(cmd)</span>
-</pre></div>
-</div>
-</div>
-<p>In our example, <code class="docutils literal notranslate"><span class="pre">fordefor2010.tif</span></code> is a forest raster at 30m for the year 2010 considering the deforestation on the period 2000-2010 in Madagascar. We can plot this raster and zoom on a region with function <code class="docutils literal notranslate"><span class="pre">.plot.forest()</span></code> in the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package to see the deforestation data. The remaining forest appears in green and the deforested areas appear in red.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -464,110 +430,19 @@ Build overview
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_9_1.png" src="../_images/notebooks_get_started_9_1.png" />
-</div>
-</div>
-<p>We can also plot the environmental raster files using function <code class="docutils literal notranslate"><span class="pre">.plot.var()</span></code> in the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># ========================================================</span>
-<span class="c1"># Plot environmental variables</span>
-<span class="c1"># ========================================================</span>
-<span class="n">var_fig</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
-                       <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/var.pdf&quot;</span><span class="p">,</span>
-                       <span class="n">gridsize</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
-                       <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span>
-                       <span class="n">dpi</span><span class="o">=</span><span class="mi">125</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_11_0.png" src="../_images/notebooks_get_started_11_0.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_11_1.png" src="../_images/notebooks_get_started_11_1.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_11_2.png" src="../_images/notebooks_get_started_11_2.png" />
+<img alt="../_images/notebooks_get_started_6_1.png" src="../_images/notebooks_get_started_6_1.png" />
 </div>
 </div>
 </div>
 <div class="section" id="Sampling-the-observations">
 <h2>Sampling the observations<a class="headerlink" href="#Sampling-the-observations" title="Permalink to this headline">¶</a></h2>
-<p>We use the function <code class="docutils literal notranslate"><span class="pre">.sample()</span></code> from the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> module to sample 10,000 points (pixel centers) in the deforested areas and in the remaining forest (20,000 points in total). The <code class="docutils literal notranslate"><span class="pre">input_forest_raster</span></code> argument defines the path to the forest raster including the deforested pixels (with value=0) and the remaining forest pixels (value=1) after a given period of time. The random seed can be set with argument <code class="docutils literal notranslate"><span class="pre">Seed</span></code> to reproduce the data of the random sampling.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">.sample()</span></code> function also extracts information from environmental variables for each sampled point. Sampling is done by block to allow the computation on large study areas (e.g. country or continental scale) with a fine spatial resolution (e.g. 30m). The <code class="docutils literal notranslate"><span class="pre">var_dir</span></code> argument indicates the directory including all the environmental raster files (they must be GeoTIFF files with extension <code class="docutils literal notranslate"><span class="pre">.tif</span></code>) that we want to test.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">.sample()</span></code> function identifies the spatial cell for each sample point (sample point are grouped within a spatial cell). Spatial cells and grouped observations are used to estimate the spatial autocorrelation of the deforestation process. The <code class="docutils literal notranslate"><span class="pre">csize</span></code> argument define the width (in km) of the square spatial cells. Each spatial cell will be attributed a parameter. To avoid estimating too many parameters, width of the square spatial cells must be sufficiently large. Both points sampling and
-extraction of environmental data are done by block to avoid memory problems for big datasets.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">help</span><span class="p">(</span><span class="n">far</span><span class="o">.</span><span class="n">sample</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Help on function sample in module forestatrisk.build_data.sample:
-
-sample(nsamp=10000, adapt=True, Seed=1234, csize=10, var_dir=&#39;data&#39;, input_forest_raster=&#39;forest.tif&#39;, output_file=&#39;output/sample.txt&#39;, blk_rows=0)
-    Sample points and extract raster values.
-
-    This function (i) randomly draws spatial points in deforested and
-    forested areas and (ii) extract environmental variable values for
-    each spatial point.
-
-    :param nsamp: Number of random spatial points.
-
-    :param adapt: Adapt ``nsamp`` to forest area: 1000 for 1 Mha of
-        forest, with min=10000 and max=50000.
-
-    :param seed: Seed for random number generator.
-
-    :param csize: Spatial cell size in km.
-
-    :param var_dir: Directory with raster data.
-
-    :param input_forest_raster: Name of the forest raster file
-       (1=forest, 0=deforested) in the var_dir directory.
-
-    :param output_file: Path to file to save sample points.
-
-    :param blk_rows: If &gt; 0, number of lines per block.
-
-    :return: A Pandas DataFrame, each row being one observation.
-
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># ========================================================</span>
-<span class="c1"># Sample</span>
-<span class="c1"># ========================================================</span>
-
-<span class="c1"># Sample points</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">nsamp</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">adapt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span> <span class="n">csize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span></span><span class="c1"># Sample points</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">nsamp</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">adapt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span> <span class="n">csize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                      <span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
                      <span class="n">input_forest_raster</span><span class="o">=</span><span class="s2">&quot;fcc23.tif&quot;</span><span class="p">,</span>
                      <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/sample.txt&quot;</span><span class="p">,</span>
@@ -597,17 +472,12 @@ Extract raster values for selected pixels
 Export results to file output/sample.txt
 </pre></div></div>
 </div>
-<p>A <code class="docutils literal notranslate"><span class="pre">`pandas</span></code> &lt;<a class="reference external" href="http://pandas.pydata.org/">http://pandas.pydata.org/</a>&gt;`__ <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> is returned by the function (each row being an observation) and the sampled observations are also written to a text file defined by the argument <code class="docutils literal notranslate"><span class="pre">output_file</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># To import data as pandas DataFrame if necessary</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="s2">&quot;output/sample.txt&quot;</span><span class="p">,</span>
-                         <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-
-<span class="c1"># Print the first five rows</span>
+<span></span><span class="c1"># Print the first five rows</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -670,7 +540,7 @@ Export results to file output/sample.txt
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_21_0.png" src="../_images/notebooks_get_started_21_0.png" />
+<img alt="../_images/notebooks_get_started_12_0.png" src="../_images/notebooks_get_started_12_0.png" />
 </div>
 </div>
 </div>
@@ -727,42 +597,42 @@ be set at the end of the formula.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_23_0.png" src="../_images/notebooks_get_started_23_0.png" />
+<img alt="../_images/notebooks_get_started_14_0.png" src="../_images/notebooks_get_started_14_0.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_23_1.png" src="../_images/notebooks_get_started_23_1.png" />
+<img alt="../_images/notebooks_get_started_14_1.png" src="../_images/notebooks_get_started_14_1.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_23_2.png" src="../_images/notebooks_get_started_23_2.png" />
+<img alt="../_images/notebooks_get_started_14_2.png" src="../_images/notebooks_get_started_14_2.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_23_3.png" src="../_images/notebooks_get_started_23_3.png" />
+<img alt="../_images/notebooks_get_started_14_3.png" src="../_images/notebooks_get_started_14_3.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_23_4.png" src="../_images/notebooks_get_started_23_4.png" />
+<img alt="../_images/notebooks_get_started_14_4.png" src="../_images/notebooks_get_started_14_4.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_23_5.png" src="../_images/notebooks_get_started_23_5.png" />
+<img alt="../_images/notebooks_get_started_14_5.png" src="../_images/notebooks_get_started_14_5.png" />
 </div>
 </div>
 <p>The function <code class="docutils literal notranslate"><span class="pre">.correlation()</span></code> returns a serie of graphics that can be analyzed to choose the right relationship for each continuous variable (linear or polynomial for example).</p>
@@ -781,7 +651,7 @@ be set at the end of the formula.</p>
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_25_0.png" src="../_images/notebooks_get_started_25_0.png" />
+<img alt="../_images/notebooks_get_started_16_0.png" src="../_images/notebooks_get_started_16_0.png" />
 </div>
 </div>
 <p>In this example, we can see that a linear model should be sufficient to represent the relationship between the probability of deforestation and the standardized distance to the nearest road or town. On the contrary, it could be interesting to fit a polynomial model for the the standardized distance to previous deforestation (<code class="docutils literal notranslate"><span class="pre">dist_defor</span></code> variable) for which the relationship seems non-linear. Several models can be fitted and compared to see if a second-order or third-order polynomial
@@ -944,28 +814,28 @@ Traces and posteriors will be plotted in output/mcmc.pdf
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_35_1.png" src="../_images/notebooks_get_started_35_1.png" />
+<img alt="../_images/notebooks_get_started_26_1.png" src="../_images/notebooks_get_started_26_1.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_35_2.png" src="../_images/notebooks_get_started_35_2.png" />
+<img alt="../_images/notebooks_get_started_26_2.png" src="../_images/notebooks_get_started_26_2.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_35_3.png" src="../_images/notebooks_get_started_35_3.png" />
+<img alt="../_images/notebooks_get_started_26_3.png" src="../_images/notebooks_get_started_26_3.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_35_4.png" src="../_images/notebooks_get_started_35_4.png" />
+<img alt="../_images/notebooks_get_started_26_4.png" src="../_images/notebooks_get_started_26_4.png" />
 </div>
 </div>
 </div>
@@ -1025,7 +895,7 @@ Build overview
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_38_1.png" src="../_images/notebooks_get_started_38_1.png" />
+<img alt="../_images/notebooks_get_started_29_1.png" src="../_images/notebooks_get_started_29_1.png" />
 </div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">.predict()</span></code> function of the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> module can be used to predict the spatial probability of deforestation from a <strong>binomial_iCAR</strong> model (i.e. an object of class <code class="docutils literal notranslate"><span class="pre">model_binomial_iCAR</span></code>). The function writes a raster of predictions to the disk and returns a figure with the predictions that can be plotted. The prediction is done by block to avoid memory problems for big datasets. Functions will return NA for pixels with no forest or for pixels with missing environmental
@@ -1080,7 +950,7 @@ Compute statistics
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_42_0.png" src="../_images/notebooks_get_started_42_0.png" />
+<img alt="../_images/notebooks_get_started_33_0.png" src="../_images/notebooks_get_started_33_0.png" />
 </div>
 </div>
 </div>
@@ -1147,7 +1017,7 @@ Make figure
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_47_0.png" src="../_images/notebooks_get_started_47_0.png" />
+<img alt="../_images/notebooks_get_started_38_0.png" src="../_images/notebooks_get_started_38_0.png" />
 </div>
 </div>
 <p>As a consequence, the error should be negligible compared to the number of hectares set as input.</p>
@@ -1193,7 +1063,7 @@ Error (ha): 58.10, 0.001%
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_get_started_51_0.png" src="../_images/notebooks_get_started_51_0.png" />
+<img alt="../_images/notebooks_get_started_42_0.png" src="../_images/notebooks_get_started_42_0.png" />
 </div>
 </div>
 </div>
@@ -1484,81 +1354,8 @@ Compute accuracy indices
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<p class="logo">
-  <a href="../index.html">
-    <img class="logo" src="../_static/logo-far.svg" alt="Logo"/>
-    
-  </a>
-</p>
-
-
-
-<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
-
-
-
-
-<p>
-<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
-  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
-</p>
-
-
-
-
-
-<h3>Navigation</h3>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Get started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#Downloading-and-preparing-the-data">Downloading and preparing the data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Sampling-the-observations">Sampling the observations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Descriptive-statistics">Descriptive statistics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Spatial-deforestation-model">Spatial deforestation model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Results-of-the-model">Results of the model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Predicting-the-spatial-probability-of-deforestation">Predicting the spatial probability of deforestation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Predicting-the-future-forest-cover">Predicting the future forest cover</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Model-validation">Model validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#References">References</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../contents.html">Contents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../index.html" title="previous chapter"><code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package</a></li>
-      <li>Next: <a href="../contents.html" title="next chapter">Contents</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
       &copy;2020, Ghislain Vieilledent.
       

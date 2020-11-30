@@ -19,7 +19,7 @@
     <link rel="shortcut icon" href="../_static/favicon.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Changelog" href="../changelog.html" />
+    <link rel="next" title="Indices and tables" href="../indices.html" />
     <link rel="prev" title="forestatrisk.forestatrisk module" href="forestatrisk.forestatrisk.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -28,36 +28,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
-
-          <div class="body" role="main">
-            
-  <div class="section" id="module-forestatrisk.hbm">
-<span id="forestatrisk-hbm-module"></span><h1>forestatrisk.hbm module<a class="headerlink" href="#module-forestatrisk.hbm" title="Permalink to this headline">¶</a></h1>
-<p>hbm module to fit hierarchical Bayesian models</p>
-<dl class="py function">
-<dt id="forestatrisk.hbm.binomial_iCAR">
-<code class="sig-name descname">binomial_iCAR</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#forestatrisk.hbm.binomial_iCAR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit a Binomial linear model with iCAR process.</p>
-</dd></dl>
-
-</div>
-
-
-          </div>
-          
-        </div>
-      </div>
+  <div class="document">
+    
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../index.html">
     <img class="logo" src="../_static/logo-far.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">forestatrisk</h1>
     
   </a>
 </p>
@@ -79,20 +58,27 @@
 
 
 <h3>Navigation</h3>
-<ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/get_started.html">Get started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../contents.html">Contents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../articles.html">Articles</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../package_contents.html">Package contents</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../package_contents.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../package_contents.html#submodules">Submodules</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="../contents.html">Contents</a><ul>
+  <li><a href="../package_contents.html">Package contents</a><ul>
       <li>Previous: <a href="forestatrisk.forestatrisk.html" title="previous chapter">forestatrisk.forestatrisk module</a></li>
-      <li>Next: <a href="../changelog.html" title="next chapter">Changelog</a></li>
+      <li>Next: <a href="../indices.html" title="next chapter">Indices and tables</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -117,8 +103,30 @@
 
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-forestatrisk.hbm">
+<span id="forestatrisk-hbm-module"></span><h1>forestatrisk.hbm module<a class="headerlink" href="#module-forestatrisk.hbm" title="Permalink to this headline">¶</a></h1>
+<p>Fit hierarchical Bayesian models. This modules includes functions written in C to maximise computation efficiency.</p>
+<dl class="py function">
+<dt id="forestatrisk.hbm.binomial_iCAR">
+<code class="sig-name descname">binomial_iCAR</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#forestatrisk.hbm.binomial_iCAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a Binomial linear model with iCAR process. This function encapsulates a Gibbs sampler written in C code and using a Metropolis algorithm. It is called by the function <code class="docutils literal notranslate"><span class="pre">.model.binonial_iCAR()</span></code>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
       &copy;2020, Ghislain Vieilledent.
       
