@@ -65,6 +65,7 @@ setup(name="forestatrisk",
           "forestatrisk": ["data/*.csv", "shell/data_country.sh",
                            "shell/forest_country.sh"]
       },
+      include_package_data=True,
       entry_points={
           "console_scripts": ["forestatrisk = forestatrisk.forestatrisk:main"]
       },
