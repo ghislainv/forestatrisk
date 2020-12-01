@@ -23,7 +23,7 @@
    :target: https://pypi.org/project/forestatrisk
    :alt: Python version
 
-.. image:: https://github.com/ghislainv/forestatrisk/workflows/python-package.yml/badge.svg
+.. image:: https://github.com/ghislainv/forestatrisk/workflows/PyPkg/badge.svg
    :target: https://github.com/ghislainv/forestatrisk/actions
    :alt: GitHub Actions
 	 
