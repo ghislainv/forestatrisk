@@ -23,9 +23,9 @@
    :target: https://pypi.org/project/forestatrisk
    :alt: Python version
 
-.. image:: https://api.travis-ci.org/ghislainv/forestatrisk.svg?branch=master
-   :target: https://travis-ci.org/ghislainv/forestatrisk
-   :alt: Travis CI
+.. image:: https://github.com/ghislainv/forestatrisk/workflows/python-package.yml/badge.svg
+   :target: https://github.com/ghislainv/forestatrisk/actions
+   :alt: GitHub Actions
 	 
 .. image:: https://img.shields.io/badge/licence-GPLv3-8f10cb.svg
    :target: https://www.gnu.org/licenses/gpl-3.0.html
