@@ -2,6 +2,11 @@
 docsrc/notebooks/data
 docsrc/notebooks/output
 
+# Tests
+test/output
+test/data
+test/data_GLP.zip
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
