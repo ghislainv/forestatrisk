@@ -1,0 +1,14 @@
+Binomial logistic regression with iCAR process
+  Model: I(1 - fcc23) + trial ~ 1 + scale(altitude) + scale(slope) + scale(dist_defor) + scale(dist_edge) + scale(dist_road) + scale(dist_town) + scale(dist_river) + cell
+  Posteriors:
+                        Mean        Std     CI_low    CI_high
+        Intercept      -3.79      0.231      -4.16      -3.39
+  scale(altitude)     -0.521     0.0808      -0.65     -0.401
+     scale(slope)    -0.0118     0.0394    -0.0867     0.0624
+scale(dist_defor)       -2.3      0.222      -2.56      -1.91
+ scale(dist_edge)      -6.28      0.191      -6.84      -5.95
+ scale(dist_road)    -0.0366     0.0639     -0.167     0.0852
+ scale(dist_town)    -0.0967     0.0278     -0.138    -0.0609
+scale(dist_river)    0.00779     0.0203    -0.0235     0.0523
+             Vrho       2.77      0.849       1.81       5.11
+         Deviance   1.52e+04       31.3   1.52e+04   1.53e+04
