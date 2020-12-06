@@ -34,10 +34,10 @@ deforestation) or land conservation status (eg. protected area) for
 example.
 
 .. image:: https://ecology.ghislainv.fr/forestatrisk/_static/forestatrisk.png
-   :width: 800px
    :align: center
-   :target: https://ecology.ghislainv.fr/forestatrisk/_static/forestatrisk.png
+   :target: https://ecology.ghislainv.fr/forestatrisk
    :alt: prob_AFR
+   :width: 800px
 
 Installation
 ============
