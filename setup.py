@@ -35,8 +35,8 @@ project_urls = {
 
 # Informations to compile internal hbm module (hierarchical bayesian model)
 hbm_module = Extension("forestatrisk.hbm",
-                       sources=["C/binomial_iCAR.c", "C/useful.c"])
-# extra_compile_args=['-std=c99'])
+                       sources=["C/binomial_iCAR.c", "C/useful.c"],
+                       extra_compile_args=['-std=c99'])
 
 # Setup
 setup(name="forestatrisk",
