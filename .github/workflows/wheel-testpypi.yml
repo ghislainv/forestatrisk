@@ -1,4 +1,4 @@
-name: Build wheel and upload to PyPI
+name: Build wheel and upload to TestPyPI
 
 # Build on every branch push, tag push, and pull request change:
 # For TestPyPI only !!
@@ -29,7 +29,9 @@ jobs:
 
       - name: Install NumPy and cibuildwheel
         run: |
-          python -m pip install numpy cibuildwheel==1.7.1
+          python -m pip install --upgrade pip
+          python -m pip install numpy
+          python -m pip install cibuildwheel==1.7.1
       - name: Install Visual C++ for Python 2.7
         if: runner.os == 'Windows'
         run: |
