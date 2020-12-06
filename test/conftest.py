@@ -10,12 +10,15 @@
 # ==============================================================================
 
 # # ForastAtRisk Tropics
-# 
-# This notebook provides a minimal and reproducible example for the following scientific article:
-# 
-# **Vieilledent G., C. Vancutsem, and F. Achard.** Spatial forecasting of forest cover change in the humid tropics over the 21st century.
-# 
-# We use the [Guadeloupe](https://en.wikipedia.org/wiki/Guadeloupe) archipelago as a case study.
+
+# This notebook provides a minimal and reproducible example for the
+# following scientific article:
+
+# **Vieilledent G., C. Vancutsem, and F. Achard.** Spatial forecasting
+# **of forest cover change in the humid tropics over the 21st century.
+
+# We use the [Guadeloupe](https://en.wikipedia.org/wiki/Guadeloupe)
+# archipelago as a case study.
 
 # Imports
 import os
@@ -27,20 +30,22 @@ import pytest
 
 @pytest.fixture(scope="session", autouse=True)
 def gstart():
-    # We create a directory to hold the outputs with the help of the function `.make_dir()`.
+    # We create a directory to hold the outputs with the help of the
+    # function `.make_dir()`.
 
     # Make output directory
     os.chdir("test")
     far.make_dir("output")
 
     # ## 1. Data
-    # 
+
     # ### 1.1 Import and unzip the data
 
     import urllib.request
     from zipfile import ZipFile
     # Source of the data
-    url = "https://github.com/ghislainv/forestatrisk/raw/master/docsrc/notebooks/data_GLP.zip"
+    url = ("https://github.com/ghislainv/forestatrisk/"
+           "raw/master/docsrc/notebooks/data_GLP.zip")
     if os.path.exists("data_GLP.zip") is False:
         urllib.request.urlretrieve(url, "data_GLP.zip")
 
@@ -48,16 +53,16 @@ def gstart():
         z.extractall("data")
 
     # ### 1.2 Files
-    # 
+
     # The `data` folder includes:
-    # 
+
     # - Forest cover change data for the period 2010-2020 as a GeoTiff
     #   raster file (`data/fcc23.tif`).
-    
+
     # - Spatial explanatory variables as GeoTiff raster files (`.tif`
     #   extension, eg. `data/dist_edge.tif` for distance to forest
     #   edge).
-    
+
     # - Additional folders: `forest`, `forecast`, and `emissions`, with
     #   forest cover change for different periods of time, explanatory
     #   variables at different dates used for projections in the future,
@@ -124,7 +129,7 @@ def gstart():
         # Chains
         burnin=100, mcmc=100, thin=1,
         # Starting values
-        beta_start=-99)
+        beta_start=beta_start)
 
     # ### 2.4 Model summary
 
@@ -138,7 +143,7 @@ def gstart():
         f.write(str(mod_binomial_iCAR))
 
     # ## 3. Predict
-    # 
+
     # ### 3.1 Interpolate spatial random effects
 
     # Spatial random effects
@@ -184,7 +189,6 @@ def gstart():
         val = far.countpix(input_raster=rast, value=1)
         fc.append(val["area"])  # area in ha
 
-
     # Save results to disk
     f = open("output/forest_cover.txt", "w")
     for i in fc:
@@ -193,7 +197,9 @@ def gstart():
     # Annual deforestation
     T = 10.0
     annual_defor = (fc[0] - fc[1]) / T
-    print("Mean annual deforested area during the period 2020-2030: {} ha/yr".format(annual_defor))
+    msg = ("Mean annual deforested area during "
+           "the period 2020-2030: {} ha/yr").format(annual_defor)
+    print(msg)
 
     # Projected deforestation (ha) during 2020-2050
     defor = annual_defor * 30
@@ -227,14 +233,14 @@ def gstart():
                                 borders="data/ctry_PROJ.shp",
                                 linewidth=0.5,
                                 output_file="output/rho_orig.png",
-                                figsize=(9,5), dpi=80)
+                                figsize=(9, 5), dpi=80)
 
     # Interpolated spatial random effects
     fig_rho = far.plot.rho("output/rho.tif",
                            borders="data/ctry_PROJ.shp",
                            linewidth=0.5,
                            output_file="output/rho.png",
-                           figsize=(9,5), dpi=80)
+                           figsize=(9, 5), dpi=80)
 
     # ### 5.3 Spatial probability of deforestation
 

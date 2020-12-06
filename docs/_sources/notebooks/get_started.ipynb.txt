@@ -251,7 +251,7 @@
     "    # Chains\n",
     "    burnin=1000, mcmc=1000, thin=1,\n",
     "    # Starting values\n",
-    "    beta_start=-99)"
+    "    beta_start=beta_start)"
    ]
   },
   {
