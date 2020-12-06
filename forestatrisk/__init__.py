@@ -15,6 +15,10 @@ import os
 
 # Third party imports
 import matplotlib
+# Use Agg if no display found
+if os.environ.get("DISPLAY", "") == "":
+    print("no display found. Using non-interactive Agg backend")
+    matplotlib.use("Agg")
 
 # Local imports
 # Data
@@ -44,10 +48,5 @@ from .validate import validation_npix
 # Welcome message
 print("# ForestAtRisk: Modelling and forecasting deforestation in the tropics.")
 print("# https://ecology.ghislainv.fr/forestatrisk/")
-
-# Use Agg if no display found
-if os.environ.get("DISPLAY", "") == "":
-    print("no display found. Using non-interactive Agg backend")
-    matplotlib.use("Agg")
 
 # EOF
