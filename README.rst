@@ -16,8 +16,6 @@
 *******************************
 
 |Python version| |PyPI version| |GitHub Actions| |License| |Zenodo|
-
-------------------------
 	 
 Overview
 ========
