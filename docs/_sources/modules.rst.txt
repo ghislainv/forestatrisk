@@ -1,7 +1,0 @@
-forestatrisk
-============
-
-.. toctree::
-   :maxdepth: 4
-
-   forestatrisk

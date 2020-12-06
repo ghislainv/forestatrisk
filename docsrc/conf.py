@@ -86,7 +86,7 @@ html_theme_options = {
     'fixed_sidebar': 'true'
 }
 
-html_favicon = '_static/favicon.png'
+html_favicon = '_static/favicon.ico'
 html_title = "forestatrisk — Modelling and forecasting deforestation"
 html_short_title = 'far'
 html_base_url = 'https://ecology.ghislainv.fr/forestatrisk/'

@@ -6,7 +6,7 @@
    # license         :GPLv3
    # ==============================================================================
 
-.. image:: https://ecology.ghislainv.fr/forestatrisk/_images/logo-far.svg
+.. image:: https://ecology.ghislainv.fr/forestatrisk/_static/logo-far.svg
    :align: right
    :target: https://ecology.ghislainv.fr/forestatrisk
    :alt: Logo forestatrisk
@@ -15,25 +15,7 @@
 ``forestatrisk`` Python package
 *******************************
 
-.. image:: https://badge.fury.io/py/forestatrisk.svg
-   :target: https://badge.fury.io/py/forestatrisk
-   :alt: PyPI version
-
-.. image:: https://img.shields.io/pypi/pyversions/forestatrisk.svg
-   :target: https://pypi.org/project/forestatrisk
-   :alt: Python version
-
-.. image:: https://github.com/ghislainv/forestatrisk/workflows/PyPkg/badge.svg
-   :target: https://github.com/ghislainv/forestatrisk/actions
-   :alt: GitHub Actions
-	 
-.. image:: https://img.shields.io/badge/licence-GPLv3-8f10cb.svg
-   :target: https://www.gnu.org/licenses/gpl-3.0.html
-   :alt: License GPLv3	 
-
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.996337.svg
-   :target: https://doi.org/10.5281/zenodo.996337
-   :alt: Zenodo
+|Python version| |PyPI version| |GitHub Actions| |License| |Zenodo|
 
 ------------------------
 	 
@@ -51,10 +33,10 @@ towns, and forest edge), deforestation history (distance to previous
 deforestation) or land conservation status (eg. protected area) for
 example.
 
-.. image:: https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png
+.. image:: https://ecology.ghislainv.fr/forestatrisk/_static/forestatrisk.png
    :width: 800px
    :align: center
-   :target: https://ecology.ghislainv.fr/forestatrisk/_images/forestatrisk.png
+   :target: https://ecology.ghislainv.fr/forestatrisk/_static/forestatrisk.png
    :alt: prob_AFR
 
 Installation
@@ -169,4 +151,25 @@ Validate
 A set of functions (eg. ``.cross_validation()`` or
 ``.map_accuracy()``\ ) is also provided to perform model and map
 validation.
+
+
+.. |Python version| image:: https://img.shields.io/pypi/pyversions/forestatrisk?logo=python&logoColor=ffd43b&color=306998
+   :target: https://pypi.org/project/forestatrisk
+   :alt: Python version
+
+.. |PyPI version| image:: https://img.shields.io/pypi/v/forestatrisk
+   :target: https://pypi.org/project/forestatrisk
+   :alt: PyPI version
+
+.. |GitHub Actions| image:: https://github.com/ghislainv/forestatrisk/workflows/PyPkg/badge.svg
+   :target: https://github.com/ghislainv/forestatrisk/actions
+   :alt: GitHub Actions
+	 
+.. |License| image:: https://img.shields.io/badge/licence-GPLv3-8f10cb.svg
+   :target: https://www.gnu.org/licenses/gpl-3.0.html
+   :alt: License GPLv3	 
+
+.. |Zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.996337.svg
+   :target: https://doi.org/10.5281/zenodo.996337
+   :alt: Zenodo
 
