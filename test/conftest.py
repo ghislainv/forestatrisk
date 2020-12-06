@@ -23,6 +23,11 @@
 # Imports
 import os
 from shutil import copy2
+from zipfile import ZipFile
+try:
+    from urllib.request import urlretrieve  # Python 3
+except ImportError:
+    from urllib import urlretrieve  # urlretrieve with Python 2
 
 import forestatrisk as far
 import pytest
@@ -41,13 +46,11 @@ def gstart():
 
     # ### 1.1 Import and unzip the data
 
-    import urllib.request
-    from zipfile import ZipFile
     # Source of the data
     url = ("https://github.com/ghislainv/forestatrisk/"
            "raw/master/docsrc/notebooks/data_GLP.zip")
     if os.path.exists("data_GLP.zip") is False:
-        urllib.request.urlretrieve(url, "data_GLP.zip")
+        urlretrieve(url, "data_GLP.zip")
 
     with ZipFile("data_GLP.zip", "r") as z:
         z.extractall("data")
