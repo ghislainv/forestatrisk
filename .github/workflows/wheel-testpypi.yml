@@ -2,7 +2,11 @@ name: Build wheel and upload to TestPyPI
 
 # Build on every branch push, tag push, and pull request change:
 # For TestPyPI only !!
-on: [push, pull_request]
+#on: [push, pull_request]
+on:
+  push:
+    branches:
+      - dev
 # Alternatively, to publish when a (published) GitHub Release is created, use the following:
 # on:
 #   push:
