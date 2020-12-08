@@ -2,11 +2,7 @@ name: Build wheel and upload to TestPyPI
 
 # Build on every branch push, tag push, and pull request change:
 # For TestPyPI only !!
-#on: [push, pull_request]
-on:
-  push:
-    branches:
-      - dev
+on: [push, pull_request]
 # Alternatively, to publish when a (published) GitHub Release is created, use the following:
 # on:
 #   push:
@@ -35,14 +31,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install cibuildwheel==1.7.1
-      - name: Install Visual C++ for Python 2.7
-        if: runner.os == 'Windows'
-        run: |
-          choco install vcpython27 -f -y
       - name: Build wheels
         run: |
           python -m cibuildwheel --output-dir wheelhouse
         env:
+          CIBW_SKIP: cp27-win*
           CIBW_BEFORE_BUILD: pip install numpy
       - uses: actions/upload-artifact@v2
         with:
@@ -84,3 +77,4 @@ jobs:
           user: __token__
           password: ${{ secrets.testpypi_password }}
           repository_url: https://test.pypi.org/legacy/
+
