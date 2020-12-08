@@ -2,6 +2,9 @@
 docsrc/notebooks/data
 docsrc/notebooks/output
 
+# Paper
+*.bib.bak
+
 # Tests
 test/output
 test/data

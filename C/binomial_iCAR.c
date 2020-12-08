@@ -102,8 +102,8 @@ static double rhodens_visited (double rho_i, void *dens_data) {
   // logPosterior=logL+logPrior
   int nNeighbors=d->nNeigh[i];
   double sumNeighbors=0.0;
-  for (int m=0;m<nNeighbors;m++) {
-    sumNeighbors+=d->rho_run[d->Neigh[i][m]];
+  for (int l=0; l<nNeighbors; l++) {
+    sumNeighbors+=d->rho_run[d->Neigh[i][l]];
   }
   double meanNeighbors=sumNeighbors/nNeighbors;
   double logP=logL+mydnorm(rho_i,meanNeighbors,sqrt(d->Vrho_run/nNeighbors),1); 
@@ -122,8 +122,8 @@ static double rhodens_unvisited (void *dens_data) {
   // Draw directly in the posterior distribution
   int nNeighbors=d->nNeigh[i];
   double sumNeighbors=0.0;
-  for (int m=0;m<nNeighbors;m++) {
-    sumNeighbors+=d->rho_run[d->Neigh[i][m]];
+  for (int l=0; l<nNeighbors; l++) {
+    sumNeighbors+=d->rho_run[d->Neigh[i][l]];
   }
   double meanNeighbors=sumNeighbors/nNeighbors;
   double sample=myrnorm(meanNeighbors,sqrt(d->Vrho_run/nNeighbors)); 

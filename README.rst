@@ -15,8 +15,10 @@
 ``forestatrisk`` Python package
 *******************************
 
+
 |Python version| |PyPI version| |GitHub Actions| |License| |Zenodo|
-	 
+
+
 Overview
 ========
 
@@ -170,4 +172,5 @@ validation.
 .. |Zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.996337.svg
    :target: https://doi.org/10.5281/zenodo.996337
    :alt: Zenodo
+
 

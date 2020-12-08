@@ -1,0 +1,23 @@
+{
+  "@context": "https://raw.githubusercontent.com/codemeta/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+    {
+      "@id": "http://orcid.org/0000-0002-1685-4997",
+      "@type": "Person",
+      "email": "ghislain.vieilledent@cirad.fr",
+      "name": "Ghislain Vieilledent",
+      "affiliation": "CIRAD, UMR AMAP, F--34398 Montpellier, France"
+    }
+  ],
+  "identifier": "https://doi.org/10.5281/zenodo.996337",
+  "codeRepository": "https://github.com/ghislainv/forestatrisk",
+  "datePublished": "2020-12-08",
+  "dateModified": "2020-12-08",
+  "dateCreated": "2020-12-08",
+  "description": "ForestAtRisk: A Python package for modelling and forecasting deforestation in the tropics.",
+  "keywords": "python, land use change, spatial modelling, spatial analysis, forecasting, spatial autocorrelation, tropical forests, roads, protected areas, biodiversity scenarios, IPBES, CO2 emissions, IPCC, deforestation risk",
+  "license": "GPL v3.0",
+  "title": "ForestAtRisk",
+  "version": "v0.2"
+}

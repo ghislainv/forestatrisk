@@ -10,21 +10,30 @@
 # ==============================================================================
 
 # Import
+import io
 import re
 from setuptools import setup, find_packages
 from distutils.core import Extension
 import numpy.distutils.misc_util
 
-# Version
-version = re.search(
-    '^__version__\s*=\s*"(.*)"',
-    open('forestatrisk/forestatrisk.py').read(),
-    re.M
+
+# find_version
+def find_version():
+    with open('forestatrisk/forestatrisk.py') as f:
+        far = f.read()
+    version = re.search(
+        '^__version__\s*=\s*"(.*)"',
+        far,
+        re.M
     ).group(1)
+    return version
+
+
+version = find_version()
 
 # reStructuredText README file
-with open("README.rst", "rb") as f:
-    long_description = f.read().decode("utf-8")
+with io.open("README.rst", encoding="utf-8") as f:
+    long_description = f.read()
 
 # Project URLs
 project_urls = {
@@ -35,8 +44,7 @@ project_urls = {
 
 # Informations to compile internal hbm module (hierarchical bayesian model)
 hbm_module = Extension("forestatrisk.hbm",
-                       sources=["C/binomial_iCAR.c", "C/useful.c"],
-                       extra_compile_args=['-std=c99'])
+                       sources=["C/binomial_iCAR.c", "C/useful.c"])
 
 # Setup
 setup(name="forestatrisk",
