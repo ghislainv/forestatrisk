@@ -53,32 +53,25 @@ static double betadens (double beta_k, void *dens_data) {
   struct dens_par *d;
   d=dens_data;
   // Indicating the rank of the parameter of interest
-  int k;
-  k=d->pos_beta;
+  int k=d->pos_beta;
   // logLikelihood
-  double logL;
-  logL=0.0;
-  int n;
-  for (n=0; n<d->NOBS; n++) {
+  double logL=0.0;
+  for (int n=0; n<d->NOBS; n++) {
     /* theta */
-    double Xpart_theta;
-    Xpart_theta=0.0;
-    int p;
-    for (p=0; p<(d->NP); p++) {
+    double Xpart_theta=0.0;
+    for (int p=0; p<d->NP; p++) {
       if (p!=k) {
         Xpart_theta+=d->X[n][p]*d->beta_run[p];
       }
     }
     Xpart_theta+=d->X[n][k]*beta_k;
-    double theta;
-    theta=invlogit(Xpart_theta+d->rho_run[d->IdCell[n]]);
+    double theta=invlogit(Xpart_theta+d->rho_run[d->IdCell[n]]);
     /* log Likelihood */
     //logL+=mydbinom(d->Y[n],d->T[n],theta,1);
     logL+=mylndbern(d->Y[n],theta);
   }
   // logPosterior=logL+logPrior
-  double logP;
-  logP=logL+mydnorm(beta_k,d->mubeta[k],sqrt(d->Vbeta[k]),1);
+  double logP=logL+mydnorm(beta_k,d->mubeta[k],sqrt(d->Vbeta[k]),1);
   return logP;
 }
 
@@ -91,40 +84,29 @@ static double rhodens_visited (double rho_i, void *dens_data) {
   struct dens_par *d;
   d=dens_data;
   // Indicating the rank of the parameter of interest
-  int i;
-  i=d->pos_rho;
+  int i=d->pos_rho; //
   // logLikelihood
-  double logL;
-  logL=0;
-  int m;
-  for (m=0; m<(d->nObsCell[i]); m++) {
-    int w;
-    w=d->PosCell[i][m]; // which observation
+  double logL=0;
+  for (int m=0; m<d->nObsCell[i]; m++) {
+    int w=d->PosCell[i][m]; // which observation
     /* theta */
     double Xpart_theta=0.0;
-    int p;
-    for (p=0; p<(d->NP); p++) {
+    for (int p=0; p<d->NP; p++) {
       Xpart_theta+=d->X[w][p]*d->beta_run[p];
     }
-    double theta;
-    theta=invlogit(Xpart_theta+rho_i);
+    double theta=invlogit(Xpart_theta+rho_i);
     /* log Likelihood */
     //logL+=mydbinom(d->Y[w],d->T[w],theta,1);
     logL+=mylndbern(d->Y[w],theta);
   }
   // logPosterior=logL+logPrior
-  int nNeighbors;
-  nNeighbors=d->nNeigh[i];
-  double sumNeighbors;
-  sumNeighbors=0.0;
-  int l;
-  for (l=0; l<nNeighbors; l++) {
+  int nNeighbors=d->nNeigh[i];
+  double sumNeighbors=0.0;
+  for (int l=0; l<nNeighbors; l++) {
     sumNeighbors+=d->rho_run[d->Neigh[i][l]];
   }
-  double meanNeighbors;
-  meanNeighbors=sumNeighbors/nNeighbors;
-  double logP;
-  logP=logL+mydnorm(rho_i,meanNeighbors,sqrt(d->Vrho_run/nNeighbors),1); 
+  double meanNeighbors=sumNeighbors/nNeighbors;
+  double logP=logL+mydnorm(rho_i,meanNeighbors,sqrt(d->Vrho_run/nNeighbors),1); 
   return logP;
 }
 
@@ -136,36 +118,27 @@ static double rhodens_unvisited (void *dens_data) {
   struct dens_par *d;
   d=dens_data;
   // Indicating the rank of the parameter of interest
-  int i;
-  i=d->pos_rho; //
+  int i=d->pos_rho; //
   // Draw directly in the posterior distribution
-  int nNeighbors;
-  nNeighbors=d->nNeigh[i];
-  double sumNeighbors;
-  sumNeighbors=0.0;
-  int m;
-  for (m=0; m<nNeighbors; m++) {
-    sumNeighbors+=d->rho_run[d->Neigh[i][m]];
+  int nNeighbors=d->nNeigh[i];
+  double sumNeighbors=0.0;
+  for (int l=0; l<nNeighbors; l++) {
+    sumNeighbors+=d->rho_run[d->Neigh[i][l]];
   }
-  double meanNeighbors;
-  meanNeighbors=sumNeighbors/nNeighbors;
-  double sample;
-  sample=myrnorm(meanNeighbors,sqrt(d->Vrho_run/nNeighbors)); 
+  double meanNeighbors=sumNeighbors/nNeighbors;
+  double sample=myrnorm(meanNeighbors,sqrt(d->Vrho_run/nNeighbors)); 
   return sample;
 }
 
 /* ************************************************************ */
 /* Function for transforming C array to PyList */
 static PyObject *CArray2PyList (double *CArray, int len) {
-  PyObject *PythonList;
-  PythonList=PyList_New(len);
+  PyObject *PythonList = PyList_New(len);
   if (!PythonList) {
     return NULL;
   }
-  int i;
-  for (i=0; i<len; i++) {
-    PyObject *num;
-    num=PyFloat_FromDouble(CArray[i]);
+  for (int i=0; i<len; i++) {
+    PyObject *num = PyFloat_FromDouble(CArray[i]);
     if (!num) {
       Py_DECREF(PythonList);
       return NULL;
