@@ -1,8 +1,10 @@
-name: Build wheel and upload to PyPI
+## Build wheel and upload to PyPI
+## https://github.com/joerick/cibuildwheel/blob/master/examples/github-deploy.yml
+## https://scikit-hep.org/developer/gha_wheels
 
-# Build on every branch push, tag push, and pull request change:
-#on: [push, pull_request]
-# Alternatively, to publish when a (published) GitHub Release is created, use the following:
+name: Build wheel and upload to PyPI
+  
+# Publish when a (published) GitHub Release is created, use the following:
 on:
   release:
     types:
@@ -26,14 +28,14 @@ jobs:
 
       - name: Install NumPy and cibuildwheel
         run: |
-          python -m pip install numpy cibuildwheel==1.7.1
-      - name: Install Visual C++ for Python 2.7
-        if: runner.os == 'Windows'
-        run: |
-          choco install vcpython27 -f -y
+          python -m pip install --upgrade pip
+          python -m pip install cibuildwheel==1.7.1
       - name: Build wheels
         run: |
           python -m cibuildwheel --output-dir wheelhouse
+        env:
+          CIBW_SKIP: pp* cp27-win*
+          CIBW_BEFORE_BUILD: pip install numpy
       - uses: actions/upload-artifact@v2
         with:
           path: ./wheelhouse/*.whl
@@ -49,6 +51,11 @@ jobs:
         with:
           python-version: '3.7'
 
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy
+
       - name: Build sdist
         run: python setup.py sdist
 
@@ -57,6 +64,7 @@ jobs:
           path: dist/*.tar.gz
 
   upload_pypi:
+    name: Upload to PyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     # upload to PyPI on every tag starting with 'v'
@@ -73,4 +81,4 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.pypi_password }}
-          # To test: repository_url: https://test.pypi.org/legacy/
+

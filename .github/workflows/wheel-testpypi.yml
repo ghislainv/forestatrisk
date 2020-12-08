@@ -1,8 +1,15 @@
+## Build wheel and upload to TestPyPI (!! not PyPI !!)
+## https://github.com/joerick/cibuildwheel/blob/master/examples/github-deploy.yml
+## https://scikit-hep.org/developer/gha_wheels
+
 name: Build wheel and upload to TestPyPI
 
-# Build on every branch push, tag push, and pull request change:
-# For TestPyPI only !!
-on: [push, pull_request]
+# When pushing to branch dev
+on:
+  push:
+    branches:
+      - dev
+  
 # Alternatively, to publish when a (published) GitHub Release is created, use the following:
 # on:
 #   push:
@@ -65,6 +72,7 @@ jobs:
           path: dist/*.tar.gz
 
   upload_pypi:
+    name: Upload to PyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     # upload to PyPI on every tag starting with 'v'

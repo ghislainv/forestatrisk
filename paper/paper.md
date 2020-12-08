@@ -1,5 +1,5 @@
 ---
-title: "ForestAtRisk: A Python package for spatial modelling and forecasting of tropical deforestation"
+title: "ForestAtRisk: A Python package for modelling and forecasting deforestation in the tropics"
 tags:
   - Python
   - land use change
