@@ -23,8 +23,8 @@ version = re.search(
     ).group(1)
 
 # reStructuredText README file
-with open("README.rst", "rb") as f:
-    long_description = f.read().decode("utf-8")
+with open("README.rst", encoding="utf-8") as f:
+    long_description = f.read()
 
 # Project URLs
 project_urls = {
