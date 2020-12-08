@@ -10,20 +10,29 @@
 # ==============================================================================
 
 # Import
+import io
 import re
 from setuptools import setup, find_packages
 from distutils.core import Extension
 import numpy.distutils.misc_util
 
-# Version
-version = re.search(
-    '^__version__\s*=\s*"(.*)"',
-    open('forestatrisk/forestatrisk.py').read(),
-    re.M
+
+# find_version
+def find_version():
+    with open('forestatrisk/forestatrisk.py') as f:
+        far = f.read()
+    version = re.search(
+        '^__version__\s*=\s*"(.*)"',
+        far,
+        re.M
     ).group(1)
+    return version
+
+
+version = find_version()
 
 # reStructuredText README file
-with open("README.rst", encoding="utf-8") as f:
+with io.open("README.rst", encoding="utf-8") as f:
     long_description = f.read()
 
 # Project URLs
