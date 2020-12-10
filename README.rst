@@ -44,7 +44,34 @@ Installation
 
 You will need several dependencies to run the ``forestatrisk`` Python
 package. The best way to install the package is to create a Python
-virtual environment, either through ``virtualenv`` or ``conda``.
+virtual environment, either through ``conda`` (recommended) or ``virtualenv``.
+
+Using ``conda`` (recommended)
++++++++++++++++++++++++++++++
+
+You first need to have ``miniconda3`` installed (see `here
+<https://docs.conda.io/en/latest/miniconda.html>`__).
+
+Then, create a conda environment (details `here
+<https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html>`__)
+and install the ``forestatrisk`` package with the following commands:
+
+.. code-block:: shell
+		
+   conda create --name conda-far python=3.7 gdal numpy matplotlib pandas patsy pip statsmodels --yes
+   conda activate conda-far
+   conda install -c conda-forge earthengine-api --yes
+   pip install pywdpa sklearn # Packages not available with conda
+   pip install forestatrisk # For PyPI version
+   # pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
+   # conda install -c conda-forge python-dotenv rclone --yes  # Potentially interesting libraries
+
+To deactivate and delete the conda environment:
+
+.. code-block:: shell
+		
+   conda deactivate
+   conda env remove --name conda-far
 
 Using ``virtualenv``
 ++++++++++++++++++++
@@ -65,8 +92,8 @@ package with the following commands:
    pip install numpy
    # Install gdal (the correct version) 
    pip install --global-option=build_ext --global-option="-I/usr/include/gdal" gdal==$(gdal-config --version)
-   # pip install forestatrisk # For PyPI version, this will install all other dependencies
-   pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
+   pip install forestatrisk # For PyPI version, this will install all other dependencies
+   # pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
    pip install statsmodels # Optional additional packages
 
 To deactivate and delete the virtual environment:
@@ -75,33 +102,6 @@ To deactivate and delete the virtual environment:
 		
    deactivate
    rm -R ~/venvs/venv-far # Just remove the repository
-
-Using ``conda``
-+++++++++++++++
-
-You first need to have ``miniconda3`` installed (see `here
-<https://docs.conda.io/en/latest/miniconda.html>`__).
-
-Then, create a conda environment (details `here
-<https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html>`__)
-and install the ``forestatrisk`` package with the following commands:
-
-.. code-block:: shell
-		
-   conda create --name conda-far python gdal numpy matplotlib pandas patsy pip statsmodels --yes
-   conda activate conda-far
-   conda install -c conda-forge earthengine-api --yes
-   pip install pywdpa sklearn # Packages not available with conda
-   # pip install forestatrisk # For PyPI version
-   pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
-   # conda install -c conda-forge python-dotenv rclone --yes  # Potentially interesting libraries
-
-To deactivate and delete the conda environment:
-
-.. code-block:: shell
-		
-   conda deactivate
-   conda env remove --name conda-far
 
 Main functionalities
 ====================
