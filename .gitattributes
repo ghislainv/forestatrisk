@@ -1,0 +1,2 @@
+# Preventing Linguist from counting Jupyter notebooks
+*.ipynb linguist-vendored
