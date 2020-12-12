@@ -25,7 +25,7 @@ affiliations:
     index: 2
   - name: AMAP, Univ Montpellier, CIRAD, CNRS, INRAE, IRD, Montpellier, France.
     index: 3
-  - name: European Commission, Joint Research Centre, I--21027 Ispra (VA), Italy.
+  - name: European Commission, Joint Research Centre (JRC), I--21027 Ispra (VA), Italy.
     index: 4
 date: 6 December 2020
 output:
@@ -99,6 +99,6 @@ The Python package `ForestAtRisk` was recently used to model the spatial probabi
 
 # Acknowledgements
 
-I am grateful to Clovis Grinand, Romuald Vaudry and Matthieu Tiberghien who gave me the opportunity to work on deforestation modelling when we were leading forest conservation projects in Madagascar. I also warmly thank Frédéric Achard and all the members of the IFORCE group for their invaluable support during the first phase of development of the package, while I was seconded to the JRC in Ispra. I would also like to thank Chris Garrad for writing the book _"Geoprocessing with Python"_ [@Garrard2016] which has been of great help for the development of the `ForestAtRisk` package. This work benefited from funding by FRB-FFEM (BioSceneMada project, AAP-SCEN-2013 I), the European Commission (Roadless Forest project), and CNRT (RELIQUES project).
+I am grateful to Clovis Grinand, Romuald Vaudry and Matthieu Tiberghien who gave me the opportunity to work on deforestation modelling when we were leading forest conservation projects in Madagascar. I also warmly thank Frédéric Achard and all the members of the IFORCE group for their invaluable support during the first phase of development of the package, while I was seconded to the JRC in Ispra. I would also like to thank Chris Garrard for writing the book _"Geoprocessing with Python"_ [@Garrard2016] which has been of great help for the development of the `ForestAtRisk` package. This work benefited from funding by FRB-FFEM (BioSceneMada project, AAP-SCEN-2013 I), the European Commission (Roadless Forest project), and CNRT (RELIQUES project).
 
 # References
