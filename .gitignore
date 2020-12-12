@@ -4,6 +4,7 @@ docsrc/notebooks/output
 
 # Paper
 *.bib.bak
+*.bib.sav
 
 # Tests
 test/output
