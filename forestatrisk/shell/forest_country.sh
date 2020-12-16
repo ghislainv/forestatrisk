@@ -33,17 +33,11 @@ echo "Forest data obtained with Google Earth Engine\n"
 echo "Mosaicing and reprojecting\n"
 # Mosaicing
 gdalbuildvrt forest.vrt forest_$iso*.tif
-# Remove RGBA interpretation of the four bands
-gdal_translate -co "PHOTOMETRIC=MINISBLACK" -co "ALPHA=NO" \
-               -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-               forest.vrt forest_norgba.tif
 # Reprojecting
-gdalwarp -overwrite -multi -te $extent -tap -t_srs "$proj" \
+gdalwarp -overwrite -te $extent -tap -t_srs "$proj" \
          -tr 30 30 -r near \
-         -co "PHOTOMETRIC=MINISBLACK" -co "ALPHA=NO" \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-	 -wo "NUM_THREADS=3" -wm 1024 \
-         forest_norgba.tif forest_src.tif
+         forest.vrt forest_src.tif
 
 # Separate bands
 # b1=2000, b2=2005, b3=2010, b4=2015, b5=2020
