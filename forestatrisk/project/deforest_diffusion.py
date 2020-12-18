@@ -40,7 +40,8 @@ def deforest_diffusion(forest_t0, t0, annual_defor, t):
     nctry = len(forest_t0)
     ctry_for = 1 * (forest_t0 > 0)  # Transform in 0,1
     ti = t - t0  # time-interval
-    defor = (annual_defor * ti)
+    # Defor as np.float (because nfor is of type np.float)
+    defor = (annual_defor * ti).astype(np.float)
     nfor = forest_t0
 
     # While a country has defor > nfor
@@ -53,7 +54,7 @@ def deforest_diffusion(forest_t0, t0, annual_defor, t):
                 # Compute excess of deforestation
                 excess = excess + (defor[i] - nfor[i])
                 # Set defor to nfor to remove all the forest
-                defor[i] = nfor[i]
+                defor[i] = nfor[i]  # Both must be as type np.float
         # Number of countries with forest
         ncf = np.sum(ctry_for == 1)
         # We split the excess of deforestation among countries with forest
@@ -91,7 +92,7 @@ def deforest_diffusion_t_nofor(forest_t0, t0, annual_defor):
     # Variables
     nctry = len(forest_t0)
     ctry_for = 1 * (forest_t0 > 0)  # Transform in 0,1
-    defor = annual_defor  # Here time step of 1 year
+    defor = annual_defor.astype(np.float)  # Here time step of 1 year
     nfor = forest_t0
     ny = np.array([0] * nctry)
     t = 0
