@@ -13,7 +13,7 @@ Table of contents
    indices	      
    changelog
    license
-
+   
 Indices and tables
 ==================
 
