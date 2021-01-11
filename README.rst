@@ -103,6 +103,28 @@ To deactivate and delete the virtual environment:
    deactivate
    rm -R ~/venvs/venv-far # Just remove the repository
 
+Installation testing
+++++++++++++++++++++
+
+You can test that the package has been correctly installed using the
+command ``forestatrisk`` in a terminal:
+
+.. code-block:: shell
+
+  forestatrisk
+
+This should return a short description of the ``forestatrisk`` package
+and the version number:
+
+.. code-block:: shell
+
+  # ForestAtRisk: Modelling and forecasting deforestation in the tropics.
+  # https://ecology.ghislainv.fr/forestatrisk/
+  # ForestAtRisk version 0.2.
+
+You can also test the package executing the commands in the `Get
+started <notebooks/get_started.html>`__ tutorial.
+   
 Main functionalities
 ====================
 
@@ -151,6 +173,15 @@ Validate
 A set of functions (eg. ``.cross_validation()`` or
 ``.map_accuracy()``\ ) is also provided to perform model and map
 validation.
+
+Contributing
+============
+
+The ``forestatrisk`` Python package is Open Source and released under
+the `GNU GPL version 3 license <license.html>`__. Anybody who is interested can
+contribute to the package development following our `Community
+guidelines <contributing.html>`__. Every contributor must agree to
+follow the project's `Code of conduct <code_of_conduct.html>`__.
 
 
 .. |Python version| image:: https://img.shields.io/pypi/pyversions/forestatrisk?logo=python&logoColor=ffd43b&color=306998

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Changelog &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <title>Community guidelines &#8212; forestatrisk — Modelling and forecasting deforestation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -19,8 +19,6 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="License" href="license.html" />
-    <link rel="prev" title="Indices and tables" href="indices.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -58,19 +56,13 @@
 
 
 <h3>Navigation</h3>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/get_started.html">Get started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="articles.html">Articles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_contents.html">Package contents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="indices.html">Indices and tables</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#forestatrisk-dev">forestatrisk dev</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#forestatrisk-0-2">forestatrisk 0.2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#forestatrisk-0-1-1">forestatrisk 0.1.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#forestatrisk-0-1">forestatrisk 0.1</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 </ul>
 
@@ -78,8 +70,6 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="indices.html" title="previous chapter">Indices and tables</a></li>
-      <li>Next: <a href="license.html" title="next chapter">License</a></li>
   </ul></li>
 </ul>
 </div>
@@ -109,44 +99,39 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="changelog">
-<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="forestatrisk-dev">
-<h2>forestatrisk dev<a class="headerlink" href="#forestatrisk-dev" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>Code of conduct</p></li>
-<li><p>Contributing section</p></li>
-</ul>
+  <div class="section" id="community-guidelines">
+<h1>Community guidelines<a class="headerlink" href="#community-guidelines" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package is Open Source and released under
+the <a class="reference external" href="license.html">GNU GPL version 3 license</a>. Anybody who is
+interested can contribute to the package development. There are many
+ways to contribute, such as writing tutorials, examples or tests,
+improving documentation, submitting bug reports and feature requests,
+or writing code to provide new functionalities which can be
+incorporated into future versions of the package. Every contributor
+must agree to follow the project’s <a class="reference external" href="code_of_conduct.html">Code Of Conduct</a>.</p>
+<div class="section" id="report-an-issue">
+<h2>Report an issue<a class="headerlink" href="#report-an-issue" title="Permalink to this headline">¶</a></h2>
+<p>If you want to report a bug, request a feature, or discuss an issue,
+please open an <a class="reference external" href="https://github.com/ghislainv/forestatrisk/issues">issue</a> on the GitHub
+project page.</p>
 </div>
-<div class="section" id="forestatrisk-0-2">
-<h2>forestatrisk 0.2<a class="headerlink" href="#forestatrisk-0-2" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>New module organization.</p></li>
-<li><p>Adding a logo for the package.</p></li>
-<li><p>Package website at <a class="reference external" href="https://ecology.ghislainv.fr/forestatrisk/">https://ecology.ghislainv.fr/forestatrisk/</a>.</p></li>
-<li><p>Update docstring in Python functions.</p></li>
-<li><p>New documentation with Sphinx.</p></li>
-<li><p>Continuous Integration with GitHub Actions.</p></li>
-<li><p>CI: Automated tests with pytest</p></li>
-<li><p>CI: Wheel build for PyPI.</p></li>
-</ul>
-</div>
-<div class="section" id="forestatrisk-0-1-1">
-<h2>forestatrisk 0.1.1<a class="headerlink" href="#forestatrisk-0-1-1" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>New <code class="docutils literal notranslate"><span class="pre">ee_jrc</span></code> function to compute forest cover with GEE.</p></li>
-<li><p>Use of <code class="docutils literal notranslate"><span class="pre">rclone</span></code> to interact with GoogleDrive.</p></li>
-<li><p>Updated dependencies.</p></li>
-<li><p>Use of <code class="docutils literal notranslate"><span class="pre">pywdpa</span></code> to download protected areas.</p></li>
-<li><p>New tutorial at <a class="reference external" href="https://forestatrisk.cirad.fr/tutorial/">https://forestatrisk.cirad.fr/tutorial/</a>.</p></li>
-<li><p>Tests have been added.</p></li>
-</ul>
-</div>
-<div class="section" id="forestatrisk-0-1">
-<h2>forestatrisk 0.1<a class="headerlink" href="#forestatrisk-0-1" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>First release of the package.</p></li>
-</ul>
+<div class="section" id="contribute-to-code">
+<h2>Contribute to code<a class="headerlink" href="#contribute-to-code" title="Permalink to this headline">¶</a></h2>
+<p>Changes to the source code and documentation should be made via GitHub
+pull requests (PR).</p>
+<p>You can learn how to do this from this <em>free</em> video series <a class="reference external" href="https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github">How to
+Contribute to an Open Source Project on GitHub</a>,
+Aaron Meurer’s <a class="reference external" href="https://www.asmeurer.com/git-workflow/">tutorial on the git workflow</a>, or the guide <a class="reference external" href="https://opensource.guide/how-to-contribute/">How to
+Contribute to Open Source</a>.</p>
+<p>The important steps to follow are:</p>
+<ol class="arabic simple">
+<li><p>Start by creating a fork of the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> repository</p></li>
+<li><p>Make changes to the source code on a development branch, not the default <em>master</em> branch</p></li>
+<li><p>Keep your fork’s master and development branches up to date with changes in the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> repository</p></li>
+<li><p>Commit the changes you made. Chris Beams has written a <a class="reference external" href="https://chris.beams.io/posts/git-commit/">guide</a>
+on how to write good commit messages.</p></li>
+<li><p>Push to your fork and submit a pull request.</p></li>
+</ol>
 </div>
 </div>
 
@@ -165,7 +150,7 @@
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="_sources/changelog.rst.txt"
+      <a href="_sources/contributing.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

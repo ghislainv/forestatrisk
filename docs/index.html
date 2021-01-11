@@ -122,7 +122,27 @@ example.</p>
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>You will need several dependencies to run the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python
 package. The best way to install the package is to create a Python
-virtual environment, either through <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code> or <code class="docutils literal notranslate"><span class="pre">conda</span></code>.</p>
+virtual environment, either through <code class="docutils literal notranslate"><span class="pre">conda</span></code> (recommended) or <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code>.</p>
+<div class="section" id="using-conda-recommended">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">conda</span></code> (recommended)<a class="headerlink" href="#using-conda-recommended" title="Permalink to this headline">¶</a></h3>
+<p>You first need to have <code class="docutils literal notranslate"><span class="pre">miniconda3</span></code> installed (see <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">here</a>).</p>
+<p>Then, create a conda environment (details <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">here</a>)
+and install the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package with the following commands:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda create --name conda-far <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.7 gdal numpy matplotlib pandas patsy pip statsmodels --yes
+conda activate conda-far
+conda install -c conda-forge earthengine-api --yes
+pip install pywdpa sklearn <span class="c1"># Packages not available with conda</span>
+pip install forestatrisk <span class="c1"># For PyPI version</span>
+<span class="c1"># pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version</span>
+<span class="c1"># conda install -c conda-forge python-dotenv rclone --yes  # Potentially interesting libraries</span>
+</pre></div>
+</div>
+<p>To deactivate and delete the conda environment:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda deactivate
+conda env remove --name conda-far
+</pre></div>
+</div>
+</div>
 <div class="section" id="using-virtualenv">
 <h3>Using <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code><a class="headerlink" href="#using-virtualenv" title="Permalink to this headline">¶</a></h3>
 <p>You first need to have the <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code> package installed (see <a class="reference external" href="https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/">here</a>).</p>
@@ -137,8 +157,8 @@ virtualenv --python<span class="o">=</span>/usr/bin/python3 venv-far
 pip install numpy
 <span class="c1"># Install gdal (the correct version)</span>
 pip install --global-option<span class="o">=</span>build_ext --global-option<span class="o">=</span><span class="s2">&quot;-I/usr/include/gdal&quot;</span> <span class="nv">gdal</span><span class="o">==</span><span class="k">$(</span>gdal-config --version<span class="k">)</span>
-<span class="c1"># pip install forestatrisk # For PyPI version, this will install all other dependencies</span>
-pip install https://github.com/ghislainv/forestatrisk/archive/master.zip <span class="c1"># For GitHub dev version</span>
+pip install forestatrisk <span class="c1"># For PyPI version, this will install all other dependencies</span>
+<span class="c1"># pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version</span>
 pip install statsmodels <span class="c1"># Optional additional packages</span>
 </pre></div>
 </div>
@@ -148,25 +168,22 @@ rm -R ~/venvs/venv-far <span class="c1"># Just remove the repository</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="using-conda">
-<h3>Using <code class="docutils literal notranslate"><span class="pre">conda</span></code><a class="headerlink" href="#using-conda" title="Permalink to this headline">¶</a></h3>
-<p>You first need to have <code class="docutils literal notranslate"><span class="pre">miniconda3</span></code> installed (see <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">here</a>).</p>
-<p>Then, create a conda environment (details <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">here</a>)
-and install the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package with the following commands:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda create --name conda-far python gdal numpy matplotlib pandas patsy pip statsmodels --yes
-conda activate conda-far
-conda install -c conda-forge earthengine-api --yes
-pip install pywdpa sklearn <span class="c1"># Packages not available with conda</span>
-<span class="c1"># pip install forestatrisk # For PyPI version</span>
-pip install https://github.com/ghislainv/forestatrisk/archive/master.zip <span class="c1"># For GitHub dev version</span>
-<span class="c1"># conda install -c conda-forge python-dotenv rclone --yes  # Potentially interesting libraries</span>
+<div class="section" id="installation-testing">
+<h3>Installation testing<a class="headerlink" href="#installation-testing" title="Permalink to this headline">¶</a></h3>
+<p>You can test that the package has been correctly installed using the
+command <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> in a terminal:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>forestatrisk
 </pre></div>
 </div>
-<p>To deactivate and delete the conda environment:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda deactivate
-conda env remove --name conda-far
+<p>This should return a short description of the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package
+and the version number:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># ForestAtRisk: Modelling and forecasting deforestation in the tropics.</span>
+<span class="c1"># https://ecology.ghislainv.fr/forestatrisk/</span>
+<span class="c1"># ForestAtRisk version 0.2.</span>
 </pre></div>
 </div>
+<p>You can also test the package executing the commands in the <a class="reference external" href="notebooks/get_started.html">Get
+started</a> tutorial.</p>
 </div>
 </div>
 <div class="section" id="main-functionalities">
@@ -212,6 +229,14 @@ hectares) to be deforested.</p>
 validation.</p>
 </div>
 </div>
+<div class="section" id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package is Open Source and released under
+the <a class="reference external" href="license.html">GNU GPL version 3 license</a>. Anybody who is interested can
+contribute to the package development following our <a class="reference external" href="contributing.html">Community
+guidelines</a>. Every contributor must agree to
+follow the project’s <a class="reference external" href="code_of_conduct.html">Code of conduct</a>.</p>
+</div>
 <div class="section" id="table-of-contents">
 <h2>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -237,6 +262,7 @@ validation.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="indices.html">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#forestatrisk-dev">forestatrisk dev</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#forestatrisk-0-2">forestatrisk 0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#forestatrisk-0-1-1">forestatrisk 0.1.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#forestatrisk-0-1">forestatrisk 0.1</a></li>

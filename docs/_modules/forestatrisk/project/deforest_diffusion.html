@@ -144,7 +144,8 @@
     <span class="n">nctry</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">forest_t0</span><span class="p">)</span>
     <span class="n">ctry_for</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">forest_t0</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Transform in 0,1</span>
     <span class="n">ti</span> <span class="o">=</span> <span class="n">t</span> <span class="o">-</span> <span class="n">t0</span>  <span class="c1"># time-interval</span>
-    <span class="n">defor</span> <span class="o">=</span> <span class="p">(</span><span class="n">annual_defor</span> <span class="o">*</span> <span class="n">ti</span><span class="p">)</span>
+    <span class="c1"># Defor as np.float (because nfor is of type np.float)</span>
+    <span class="n">defor</span> <span class="o">=</span> <span class="p">(</span><span class="n">annual_defor</span> <span class="o">*</span> <span class="n">ti</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
     <span class="n">nfor</span> <span class="o">=</span> <span class="n">forest_t0</span>
 
     <span class="c1"># While a country has defor &gt; nfor</span>
@@ -157,7 +158,7 @@
                 <span class="c1"># Compute excess of deforestation</span>
                 <span class="n">excess</span> <span class="o">=</span> <span class="n">excess</span> <span class="o">+</span> <span class="p">(</span><span class="n">defor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">nfor</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                 <span class="c1"># Set defor to nfor to remove all the forest</span>
-                <span class="n">defor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">defor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="c1"># Both must be as type np.float</span>
         <span class="c1"># Number of countries with forest</span>
         <span class="n">ncf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ctry_for</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
         <span class="c1"># We split the excess of deforestation among countries with forest</span>
@@ -195,7 +196,7 @@
     <span class="c1"># Variables</span>
     <span class="n">nctry</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">forest_t0</span><span class="p">)</span>
     <span class="n">ctry_for</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">forest_t0</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Transform in 0,1</span>
-    <span class="n">defor</span> <span class="o">=</span> <span class="n">annual_defor</span>  <span class="c1"># Here time step of 1 year</span>
+    <span class="n">defor</span> <span class="o">=</span> <span class="n">annual_defor</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>  <span class="c1"># Here time step of 1 year</span>
     <span class="n">nfor</span> <span class="o">=</span> <span class="n">forest_t0</span>
     <span class="n">ny</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">nctry</span><span class="p">)</span>
     <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>

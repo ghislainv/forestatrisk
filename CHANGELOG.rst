@@ -1,6 +1,12 @@
 Changelog
 =========
 
+forestatrisk dev
+++++++++++++++++
+
+* Code of conduct
+* Contributing section
+  
 forestatrisk 0.2
 ++++++++++++++++
 
