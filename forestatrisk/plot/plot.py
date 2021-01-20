@@ -681,7 +681,6 @@ def prob(input_prob_raster,
     :param output_file: Name of the plot file.
     :param maxpixels: Maximum number of pixels to plot.
     :param borders: Vector file to be plotted.
-    :param zoom: Zoom to region (xmin, xmax, ymin, ymax).
     :param legend: Add colorbar if True.
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
