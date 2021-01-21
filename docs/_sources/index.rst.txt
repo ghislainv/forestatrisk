@@ -10,7 +10,8 @@ Table of contents
    notebooks/get_started
    articles
    package_contents      
-   indices	      
+   indices
+   citation
    changelog
    license
    
