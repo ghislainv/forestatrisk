@@ -1,7 +1,7 @@
 Citation
 ========
 
-Please cite `Vieilledent (2021) <https://doi.org/10.21105/joss.02975>`__ if you use the ``forestatrisk`` Python package for a scientific publication. You can use the BibTeX entry available below.
+Please cite `Vieilledent (2021) <https://doi.org/10.21105/joss.XXXXX>`__ if you use the ``forestatrisk`` Python package for a scientific publication. You can use the BibTeX entry available below.
 
 **Vieilledent G.** 2021. forestatrisk: a Python package for modelling and forecasting deforestation in the tropics. *Journal of Open Source Software (JOSS)*. in review. |pdf|
 
@@ -13,8 +13,8 @@ Please cite `Vieilledent (2021) <https://doi.org/10.21105/joss.02975>`__ if you 
       journal   = {{Journal of Open Source Software (JOSS)}},
       year      = {2021},
       pages     = {in review},
-      doi       = {10.21105/joss.02975},
-      url       = {https://doi.org/10.21105/joss.02975},
+      doi       = {10.21105/joss.XXXXX},
+      url       = {https://doi.org/10.21105/joss.XXXXX},
       publisher = {The Open Journal}
     }
 
