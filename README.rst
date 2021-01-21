@@ -16,7 +16,7 @@
 *******************************
 
 
-|Python version| |PyPI version| |GitHub Actions| |License| |Zenodo|
+|Python version| |PyPI version| |GitHub Actions| |License| |Zenodo| |JOSS|
 
 
 Overview
@@ -204,4 +204,6 @@ follow the project's `Code of conduct <code_of_conduct.html>`__.
    :target: https://doi.org/10.5281/zenodo.996337
    :alt: Zenodo
 
-
+.. |JOSS| image:: https://joss.theoj.org/papers/b8fe1d3815c7385a1c3e454270bee041/status.svg
+   :target: https://joss.theoj.org/papers/b8fe1d3815c7385a1c3e454270bee041
+   :alt: JOSS
