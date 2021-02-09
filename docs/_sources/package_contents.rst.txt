@@ -1,5 +1,5 @@
-Package contents
-================
+Python API
+==========
 
 Supackages and submodules of the ``forestatrisk`` Python package.
 
