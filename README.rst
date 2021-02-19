@@ -123,7 +123,7 @@ and the version number:
   # ForestAtRisk version 0.2.
 
 You can also test the package executing the commands in the `Get
-started <notebooks/get_started.html>`__ tutorial.
+started <https://ecology.ghislainv.fr/forestatrisk/notebooks/get_started.html>`__ tutorial.
    
 Main functionalities
 ====================
