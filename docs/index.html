@@ -108,16 +108,52 @@
 <p><a class="reference external" href="https://pypi.org/project/forestatrisk"><img alt="Python version" src="https://img.shields.io/pypi/pyversions/forestatrisk?logo=python&amp;logoColor=ffd43b&amp;color=306998" /></a> <a class="reference external" href="https://pypi.org/project/forestatrisk"><img alt="PyPI version" src="https://img.shields.io/pypi/v/forestatrisk" /></a> <a class="reference external" href="https://github.com/ghislainv/forestatrisk/actions"><img alt="GitHub Actions" src="https://github.com/ghislainv/forestatrisk/workflows/PyPkg/badge.svg" /></a> <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.html"><img alt="License GPLv3" src="https://img.shields.io/badge/licence-GPLv3-8f10cb.svg" /></a> <a class="reference external" href="https://doi.org/10.5281/zenodo.996337"><img alt="Zenodo" src="https://zenodo.org/badge/DOI/10.5281/zenodo.996337.svg" /></a> <a class="reference external" href="https://joss.theoj.org/papers/b8fe1d3815c7385a1c3e454270bee041"><img alt="JOSS" src="https://joss.theoj.org/papers/b8fe1d3815c7385a1c3e454270bee041/status.svg" /></a></p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package can be used to <strong>model</strong> and
-<strong>forecast</strong> deforestation in the tropics. It provides functions to
-estimate the spatial probability of deforestation as a function of
-various spatial explanatory variables.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package can be used to <strong>model</strong> the
+tropical deforestation spatially, <strong>predict</strong> the spatial risk of
+deforestation, and <strong>forecast</strong> the future forest cover in the
+tropics. It provides functions to estimate the spatial probability of
+deforestation as a function of various spatial explanatory variables.</p>
 <p>Spatial explanatory variables can be derived from topography
 (altitude, slope, and aspect), accessibility (distance to roads,
 towns, and forest edge), deforestation history (distance to previous
-deforestation) or land conservation status (eg. protected area) for
+deforestation), or land conservation status (eg. protected area) for
 example.</p>
 <a class="reference external image-reference" href="https://ecology.ghislainv.fr/forestatrisk"><img alt="prob_AFR" class="align-center" src="https://ecology.ghislainv.fr/forestatrisk/_static/forestatrisk.png" style="width: 800px;" /></a>
+</div>
+<div class="section" id="statement-of-need">
+<h2>Statement of Need<a class="headerlink" href="#statement-of-need" title="Permalink to this headline">¶</a></h2>
+<p>Spatial modelling of the deforestation allows identifying the main
+factors determining the spatial risk of deforestation and quantifying
+their relative effects. Forecasting forest cover change is paramount
+as it allows anticipating the consequences of deforestation (in terms
+of carbon emissions or biodiversity loss) under various technological,
+political and socio-economic scenarios, and informs decision makers
+accordingly. Because both biodiversity and carbon vary greatly in
+space, it is necessary to provide spatial forecasts of forest cover
+change to properly quantify biodiversity loss and carbon emissions
+associated with future deforestation.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package can be used to model the tropical
+deforestation spatially, predict the spatial risk of deforestation,
+and forecast the future forest cover in the tropics. The spatial data
+used to model deforestation come from georeferenced raster files,
+which can be very large (several gigabytes). The functions available
+in the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package process large rasters by blocks of
+data, making calculations fast and efficient. This allows
+deforestation to be modeled over large geographic areas (e.g. at the
+scale of a country) and at high spatial resolution
+(eg. <span class="math notranslate nohighlight">\(\leq\)</span> 30 m). The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package offers the possibility
+of using logistic regression with auto-correlated spatial random
+effects to model the deforestation process. The spatial random effects
+make possible to structure the residual spatial variability of the
+deforestation process, not explained by the variables of the model and
+often very large. In addition to these new features, the
+<code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package is open source (GPLv3 license),
+cross-platform, scriptable (via Python), user-friendly (functions
+provided with full documentation and examples), and easily extendable
+(with additional statistical models for example). The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code>
+Python package has been used to model deforestation and predict future
+forest cover by 2100 across the humid tropics
+(<a class="reference external" href="https://forestatrisk.cirad.fr">https://forestatrisk.cirad.fr</a>).</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
@@ -178,13 +214,14 @@ command <code class="docutils literal notranslate"><span class="pre">forestatris
 </div>
 <p>This should return a short description of the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package
 and the version number:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># ForestAtRisk: Modelling and forecasting deforestation in the tropics.</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># forestatrisk: modelling and forecasting deforestation in the tropics.</span>
 <span class="c1"># https://ecology.ghislainv.fr/forestatrisk/</span>
-<span class="c1"># ForestAtRisk version 0.2.</span>
+<span class="c1"># forestatrisk version x.x.</span>
 </pre></div>
 </div>
-<p>You can also test the package executing the commands in the <a class="reference external" href="notebooks/get_started.html">Get
-started</a> tutorial.</p>
+<p>You can also test the package executing the commands in the <a class="reference external" href="https://ecology.ghislainv.fr/forestatrisk/notebooks/get_started.html">Get
+started</a>
+tutorial.</p>
 </div>
 </div>
 <div class="section" id="main-functionalities">
@@ -233,10 +270,10 @@ validation.</p>
 <div class="section" id="contributing">
 <h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package is Open Source and released under
-the <a class="reference external" href="license.html">GNU GPL version 3 license</a>. Anybody who is interested can
-contribute to the package development following our <a class="reference external" href="contributing.html">Community
-guidelines</a>. Every contributor must agree to
-follow the project’s <a class="reference external" href="code_of_conduct.html">Code of conduct</a>.</p>
+the <a class="reference external" href="https://ecology.ghislainv.fr/forestatrisk/license.html">GNU GPL version 3 license</a>. Anybody
+who is interested can contribute to the package development following
+our <a class="reference external" href="https://ecology.ghislainv.fr/forestatrisk/contributing.html">Community guidelines</a>. Every
+contributor must agree to follow the project’s <a class="reference external" href="https://ecology.ghislainv.fr/forestatrisk/code_of_conduct.html">Code of conduct</a>.</p>
 </div>
 <div class="section" id="table-of-contents">
 <h2>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>

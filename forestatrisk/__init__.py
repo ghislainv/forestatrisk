@@ -46,7 +46,7 @@ from .validate import resample_sum
 from .validate import validation_npix
 
 # Welcome message
-print("# ForestAtRisk: Modelling and forecasting deforestation in the tropics.")
+print("# forestatrisk: modelling and forecasting deforestation in the tropics.")
 print("# https://ecology.ghislainv.fr/forestatrisk/")
 
 # EOF

@@ -22,15 +22,16 @@
 Overview
 ========
 
-The ``forestatrisk`` Python package can be used to **model** and
-**forecast** deforestation in the tropics. It provides functions to
-estimate the spatial probability of deforestation as a function of
-various spatial explanatory variables.
+The ``forestatrisk`` Python package can be used to **model** the
+tropical deforestation spatially, **predict** the spatial risk of
+deforestation, and **forecast** the future forest cover in the
+tropics. It provides functions to estimate the spatial probability of
+deforestation as a function of various spatial explanatory variables.
 
 Spatial explanatory variables can be derived from topography
 (altitude, slope, and aspect), accessibility (distance to roads,
 towns, and forest edge), deforestation history (distance to previous
-deforestation) or land conservation status (eg. protected area) for
+deforestation), or land conservation status (eg. protected area) for
 example.
 
 .. image:: https://ecology.ghislainv.fr/forestatrisk/_static/forestatrisk.png
@@ -38,6 +39,43 @@ example.
    :target: https://ecology.ghislainv.fr/forestatrisk
    :alt: prob_AFR
    :width: 800px
+
+Statement of Need
+=================
+
+Spatial modelling of the deforestation allows identifying the main
+factors determining the spatial risk of deforestation and quantifying
+their relative effects. Forecasting forest cover change is paramount
+as it allows anticipating the consequences of deforestation (in terms
+of carbon emissions or biodiversity loss) under various technological,
+political and socio-economic scenarios, and informs decision makers
+accordingly. Because both biodiversity and carbon vary greatly in
+space, it is necessary to provide spatial forecasts of forest cover
+change to properly quantify biodiversity loss and carbon emissions
+associated with future deforestation.
+
+The ``forestatrisk`` Python package can be used to model the tropical
+deforestation spatially, predict the spatial risk of deforestation,
+and forecast the future forest cover in the tropics. The spatial data
+used to model deforestation come from georeferenced raster files,
+which can be very large (several gigabytes). The functions available
+in the ``forestatrisk`` package process large rasters by blocks of
+data, making calculations fast and efficient. This allows
+deforestation to be modeled over large geographic areas (e.g. at the
+scale of a country) and at high spatial resolution
+(eg. :math:`\leq` 30 m). The ``forestatrisk`` package offers the possibility
+of using logistic regression with auto-correlated spatial random
+effects to model the deforestation process. The spatial random effects
+make possible to structure the residual spatial variability of the
+deforestation process, not explained by the variables of the model and
+often very large. In addition to these new features, the
+``forestatrisk`` Python package is open source (GPLv3 license),
+cross-platform, scriptable (via Python), user-friendly (functions
+provided with full documentation and examples), and easily extendable
+(with additional statistical models for example). The ``forestatrisk``
+Python package has been used to model deforestation and predict future
+forest cover by 2100 across the humid tropics
+(`<https://forestatrisk.cirad.fr>`__).
 
 Installation
 ============
@@ -118,12 +156,14 @@ and the version number:
 
 .. code-block:: shell
 
-  # ForestAtRisk: Modelling and forecasting deforestation in the tropics.
+  # forestatrisk: modelling and forecasting deforestation in the tropics.
   # https://ecology.ghislainv.fr/forestatrisk/
-  # ForestAtRisk version 0.2.
+  # forestatrisk version x.x.
 
 You can also test the package executing the commands in the `Get
-started <https://ecology.ghislainv.fr/forestatrisk/notebooks/get_started.html>`__ tutorial.
+started
+<https://ecology.ghislainv.fr/forestatrisk/notebooks/get_started.html>`__
+tutorial.
    
 Main functionalities
 ====================
@@ -178,9 +218,10 @@ Contributing
 ============
 
 The ``forestatrisk`` Python package is Open Source and released under
-the `GNU GPL version 3 license <https://ecology.ghislainv.fr/forestatrisk/license.html>`__. Anybody who is
-interested can contribute to the package development following our
-`Community guidelines
+the `GNU GPL version 3 license
+<https://ecology.ghislainv.fr/forestatrisk/license.html>`__. Anybody
+who is interested can contribute to the package development following
+our `Community guidelines
 <https://ecology.ghislainv.fr/forestatrisk/contributing.html>`__. Every
 contributor must agree to follow the project's `Code of conduct
 <https://ecology.ghislainv.fr/forestatrisk/code_of_conduct.html>`__.
