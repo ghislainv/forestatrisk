@@ -178,10 +178,12 @@ Contributing
 ============
 
 The ``forestatrisk`` Python package is Open Source and released under
-the `GNU GPL version 3 license <license.html>`__. Anybody who is interested can
-contribute to the package development following our `Community
-guidelines <contributing.html>`__. Every contributor must agree to
-follow the project's `Code of conduct <code_of_conduct.html>`__.
+the `GNU GPL version 3 license <https://ecology.ghislainv.fr/forestatrisk/license.html>`__. Anybody who is
+interested can contribute to the package development following our
+`Community guidelines
+<https://ecology.ghislainv.fr/forestatrisk/contributing.html>`__. Every
+contributor must agree to follow the project's `Code of conduct
+<https://ecology.ghislainv.fr/forestatrisk/code_of_conduct.html>`__.
 
 
 .. |Python version| image:: https://img.shields.io/pypi/pyversions/forestatrisk?logo=python&logoColor=ffd43b&color=306998

@@ -849,7 +849,7 @@ static PyMethodDef hbm_methods[] = {
    * three.
    */
   {"binomial_iCAR", (PyCFunction)binomial_iCAR, METH_VARARGS | METH_KEYWORDS,
-   "Fit a Binomial linear model with iCAR process. This function encapsulates a Gibbs sampler written in C code and using a Metropolis algorithm. It is called by the function ``.model.binonial_iCAR()``."},
+   "Fit a Binomial linear model with iCAR process. This function encapsulates a Gibbs sampler written in C code and using a Metropolis algorithm. It is called by the function ``.model.binomial_iCAR()``."},
   {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
