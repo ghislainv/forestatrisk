@@ -22,7 +22,7 @@ def main():
     ``forestatrisk`` Python package can be correctly imported.
 
     """
-    print("# ForestAtRisk version {}.".format(__version__))
+    print("# forestatrisk version {}.".format(__version__))
     return None
 
 # End
