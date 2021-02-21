@@ -63,7 +63,7 @@ in the ``forestatrisk`` package process large rasters by blocks of
 data, making calculations fast and efficient. This allows
 deforestation to be modeled over large geographic areas (e.g. at the
 scale of a country) and at high spatial resolution
-(eg. :math:`\leq` 30 m). The ``forestatrisk`` package offers the possibility
+(eg. ≤ 30 m). The ``forestatrisk`` package offers the possibility
 of using logistic regression with auto-correlated spatial random
 effects to model the deforestation process. The spatial random effects
 make possible to structure the residual spatial variability of the
