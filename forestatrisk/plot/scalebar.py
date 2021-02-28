@@ -41,7 +41,7 @@ def _upper_bound(start, direction, distance, dist_func):
         Coordinates of a point (a (2, 1)-shaped NumPy array).
     """
     if distance <= 0:
-        raise ValueError("Minimum distance is not positive: {distance}")
+        raise ValueError("Minimum distance is not positive: {}".format(distance))
 
     if np.linalg.norm(direction) == 0:
         raise ValueError("Direction vector must not be zero.")
@@ -76,11 +76,11 @@ def _distance_along_line(start, end, distance, dist_func, tol):
     """
     initial_distance = dist_func(start, end)
     if initial_distance < distance:
-        raise ValueError(f"End is closer to start ({initial_distance}) than "
-                         f"given distance ({distance}).")
+        raise ValueError("End is closer to start ({}) than "
+                         "given distance ({}).".format(initial_distance, distance))
 
     if tol <= 0:
-        raise ValueError(f"Tolerance is not positive: {tol}")
+        raise ValueError("Tolerance is not positive: {}".format(tol))
 
     # Binary search for a point at the given distance.
     left = start
@@ -190,7 +190,7 @@ def scale_bar(ax, location, length, metres_per_unit=1000, unit_name='km',
     text_location = midpoint + offset
 
     # 'rotation' keyword argument is in text_kwargs.
-    ax.text(*text_location, f"{length} {unit_name}", rotation_mode='anchor',
+    ax.text(*text_location, "{} {}".format(length, unit_name), rotation_mode='anchor',
             transform=ax.transAxes, **text_kwargs)
 
 # End
