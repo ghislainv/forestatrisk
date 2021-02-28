@@ -21,7 +21,7 @@ def _axes_to_lonlat(ax, coords):
     """(lon, lat) from axes coordinates."""
     display = ax.transAxes.transform(coords)
     data = ax.transData.inverted().transform(display)
-    lonlat = ccrs.PlateCarree().transform_point(*data, ax.projection)
+    lonlat = ccrs.PlateCarree().transform_point(*data, src_crs=ax.projection)
 
     return lonlat
 
@@ -179,11 +179,12 @@ def scale_bar(ax, location, length, metres_per_unit=1000, unit_name='km',
                             tol=tol)
 
     # Coordinates are currently in axes coordinates, so use transAxes to
-    # put into data coordinates. *zip(a, b) produces a list of x-coords,
+    # put into data coordinates. zip(a, b) produces a list of x-coords,
     # then a list of y-coords.
     plot_kwargs = dict(itertools.chain(plot_kwargs.items(), kwargs.items()))
-    ax.plot(*zip(location, end), transform=ax.transAxes, **plot_kwargs)
-    
+    (x_coords, y_coords) = zip(location, end)
+    ax.plot(x_coords, y_coords, transform=ax.transAxes, **plot_kwargs)
+
     # Push text away from bar in the perpendicular direction.
     midpoint = (location + end) / 2
     offset = text_offset * np.array([-np.sin(angle_rad), np.cos(angle_rad)])
@@ -191,7 +192,8 @@ def scale_bar(ax, location, length, metres_per_unit=1000, unit_name='km',
 
     # 'rotation' keyword argument is in text_kwargs.
     text_kwargs = dict(itertools.chain(text_kwargs.items(), kwargs.items()))
-    ax.text(*text_location, "{} {}".format(length, unit_name), rotation_mode='anchor',
+    ax.text(text_location[0], text_location[1], "{} {}".format(length, unit_name),
+            rotation_mode='anchor',
             transform=ax.transAxes, **text_kwargs)
 
 # End
