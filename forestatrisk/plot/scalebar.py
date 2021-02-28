@@ -133,8 +133,7 @@ def _point_along_line(ax, start, distance, angle=0, tol=0.01):
 
 def scale_bar(ax, location, length, metres_per_unit=1000, unit_name='km',
               tol=0.01, angle=0, color='black', linewidth=3, text_offset=0.005,
-              ha='center', va='bottom', plot_kwargs=None, text_kwargs=None,
-              **kwargs):
+              ha='center', va='bottom', plot_kwargs=None, text_kwargs=None, **kwargs):
     """Add a scale bar to CartoPy axes.
 
     For angles between 0 and 90 the text and line may be plotted at
@@ -159,16 +158,15 @@ def scale_bar(ax, location, length, metres_per_unit=1000, unit_name='km',
         **text_kwargs:   Keyword arguments for text, overridden by **kwargs.
         **kwargs:        Keyword arguments for both plot and text.
     """
+
     # Setup kwargs, update plot_kwargs and text_kwargs.
     if plot_kwargs is None:
         plot_kwargs = {}
     if text_kwargs is None:
         text_kwargs = {}
 
-    plot_kwargs = {'linewidth': linewidth, 'color': color, **plot_kwargs,
-                   **kwargs}
-    text_kwargs = {'ha': ha, 'va': va, 'rotation': angle, 'color': color,
-                   **text_kwargs, **kwargs}
+    plot_kwargs.update({'linewidth': linewidth, 'color': color})
+    text_kwargs.update({'ha': ha, 'va': va, 'rotation': angle, 'color': color})
 
     # Convert all units and types.
     location = np.asarray(location)  # For vector addition.
@@ -182,7 +180,7 @@ def scale_bar(ax, location, length, metres_per_unit=1000, unit_name='km',
     # Coordinates are currently in axes coordinates, so use transAxes to
     # put into data coordinates. *zip(a, b) produces a list of x-coords,
     # then a list of y-coords.
-    ax.plot(*zip(location, end), transform=ax.transAxes, **plot_kwargs)
+    ax.plot(*zip(location, end), transform=ax.transAxes, **plot_kwargs, **kwargs)
 
     # Push text away from bar in the perpendicular direction.
     midpoint = (location + end) / 2
@@ -191,6 +189,6 @@ def scale_bar(ax, location, length, metres_per_unit=1000, unit_name='km',
 
     # 'rotation' keyword argument is in text_kwargs.
     ax.text(*text_location, "{} {}".format(length, unit_name), rotation_mode='anchor',
-            transform=ax.transAxes, **text_kwargs)
+            transform=ax.transAxes, **text_kwargs, **kwargs)
 
 # End
