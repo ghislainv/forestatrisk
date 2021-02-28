@@ -41,7 +41,7 @@ def _upper_bound(start, direction, distance, dist_func):
         Coordinates of a point (a (2, 1)-shaped NumPy array).
     """
     if distance <= 0:
-        raise ValueError(f"Minimum distance is not positive: {distance}")
+        raise ValueError("Minimum distance is not positive: {distance}")
 
     if np.linalg.norm(direction) == 0:
         raise ValueError("Direction vector must not be zero.")
