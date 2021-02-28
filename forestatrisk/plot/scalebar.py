@@ -11,6 +11,7 @@
 
 # Source: https://stackoverflow.com/questions/32333870/how-can-i-show-a-km-ruler-on-a-cartopy-matplotlib-plot/50674451#50674451
 
+import itertools
 import numpy as np
 import cartopy.crs as ccrs
 import cartopy.geodesic as cgeo
@@ -180,15 +181,17 @@ def scale_bar(ax, location, length, metres_per_unit=1000, unit_name='km',
     # Coordinates are currently in axes coordinates, so use transAxes to
     # put into data coordinates. *zip(a, b) produces a list of x-coords,
     # then a list of y-coords.
-    ax.plot(*zip(location, end), transform=ax.transAxes, **plot_kwargs, **kwargs)
-
+    plot_kwargs = dict(itertools.chain(plot_kwargs.items(), kwargs.items()))
+    ax.plot(*zip(location, end), transform=ax.transAxes, **plot_kwargs)
+    
     # Push text away from bar in the perpendicular direction.
     midpoint = (location + end) / 2
     offset = text_offset * np.array([-np.sin(angle_rad), np.cos(angle_rad)])
     text_location = midpoint + offset
 
     # 'rotation' keyword argument is in text_kwargs.
+    text_kwargs = dict(itertools.chain(text_kwargs.items(), kwargs.items()))
     ax.text(*text_location, "{} {}".format(length, unit_name), rotation_mode='anchor',
-            transform=ax.transAxes, **text_kwargs, **kwargs)
+            transform=ax.transAxes, **text_kwargs)
 
 # End
