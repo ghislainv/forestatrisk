@@ -169,7 +169,7 @@ def nice_plot_prob(input_prob_raster,
     color_map.set_under(color=(1, 1, 1, 0))
 
     # Plot
-    fig = plt.figure(figsize=figsize, dpi=dpi, frameon=False)
+    fig = plt.figure(figsize=figsize, dpi=dpi)
     plt.subplot(111, projection=projection)
     # Raster data
     plt.imshow(ov_arr, cmap=color_map, extent=extent,
@@ -206,8 +206,8 @@ gl = ax.gridlines(crs=ccrs.PlateCarree(), linewidth=0.3, alpha=0.5,
                   ylocs=[15.8, 16.0, 16.2, 16.4], draw_labels=True)
 gl.top_labels = False
 gl.right_labels = False
-gl.xlabel_style = {'size': 5}
-gl.ylabel_style = {'size': 5}
+gl.xlabel_style = {'size': 6}
+gl.ylabel_style = {'size': 6}
 
 # Save
 fig.savefig("output/prob_joss.png", dpi="figure", bbox_inches="tight")
