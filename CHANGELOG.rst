@@ -1,11 +1,12 @@
 Changelog
 =========
 
-forestatrisk dev
+forestatrisk 1.0
 ++++++++++++++++
 
-* Code of conduct
-* Contributing section
+* Version associated to the publication in JOSS.
+* Adding a Contributing section.
+* Adding Community guidelines and a Code of conduct.
   
 forestatrisk 0.2
 ++++++++++++++++
@@ -26,12 +27,11 @@ forestatrisk 0.1.1
 * Use of ``rclone`` to interact with GoogleDrive.
 * Updated dependencies.
 * Use of ``pywdpa`` to download protected areas.
-* New tutorial at `<https://forestatrisk.cirad.fr/tutorial/>`_\ .
+* New tutorials.
 * Tests have been added.
-
 
 forestatrisk 0.1
 ++++++++++++++++
 
-* First release of the package.
+* First release of the package (previously called ``deforestprob``).
   
