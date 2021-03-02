@@ -40,6 +40,14 @@ example.
    :alt: prob_AFR
    :width: 800px
 
+Scientific publication
+======================
+
+**Vieilledent G.** 2021. ``forestatrisk``: a Python package for
+modelling and forecasting deforestation in the tropics.
+*Journal of Open Source Software*. 6(59): 2975.
+[doi: `10.21105/joss.02975 <https://doi.org/10.21105/joss.02975>`__]. |pdf|
+	   
 Statement of Need
 =================
 
@@ -247,6 +255,10 @@ contributor must agree to follow the project's `Code of conduct
    :target: https://doi.org/10.5281/zenodo.996337
    :alt: Zenodo
 
-.. |JOSS| image:: https://joss.theoj.org/papers/b8fe1d3815c7385a1c3e454270bee041/status.svg
-   :target: https://joss.theoj.org/papers/b8fe1d3815c7385a1c3e454270bee041
+.. |JOSS| image:: https://joss.theoj.org/papers/10.21105/joss.02975/status.svg
+   :target: https://doi.org/10.21105/joss.02975
    :alt: JOSS
+
+.. |pdf| image:: https://ecology.ghislainv.fr/forestatrisk/_static/logo-pdf.png
+   :target: https://www.theoj.org/joss-papers/joss.02975/10.21105.joss.02975.pdf
+   :alt: pdf
