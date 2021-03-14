@@ -10,22 +10,13 @@
 # ==============================================================================
 
 # Annual product legend
-# 1. Tropical moist forest (TMF including bamboo-dominated forest and mangroves)
-# 2. TMF converted later in a tree plantation
-# 3. NEW degradation
-# 4. Ongoing degradation (disturbances still detected - can be few years after first degrad if several degradation stages)
-# 5. Degraded forest (former degradation, no disturbances detected anymore)
-# 6. NEW deforestation (may follow degradation)
-# 7. Ongoing deforestation (disturbances still detected)
-# 8. NEW Regrowth
-# 9. Regrowthing
-# 10. Other land cover (not water)
-# 11. Permanent Water (pekel et al.2015)
-# 12. Seasonal Water (pekel et al.2015)
-# 13. Init period without valid data - Init class = TMF
-# 14. Init period with min 1 valid obs - Init class = TMF
-# 15. Nodata  - Init class = other LC
-# 16. Init period without valid data - Init class = Plantation
+# ---------------------
+# 1. Undisturbed Tropical moist forest (TMF)
+# 2. Degraded TMF
+# 3. Deforested land
+# 4. Forest regrowth
+# 5. Permanent or seasonal water
+# 6. Other land cover
 
 # Standard library imports
 from __future__ import division, print_function  # Python 3 compatibility
@@ -74,7 +65,7 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     AP = AP.clip(region)
 
     # ap_allYear: forest if Y = 1 or 2.
-    AP_forest = AP.where(AP.eq(1).Or(AP.eq(2)), 1)
+    AP_forest = AP.where(AP.eq(2), 1)
     ap_allYear = AP_forest.where(AP_forest.neq(1), 0)
 
     # Forest in Jan 2020
@@ -82,23 +73,19 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
 
     # Forest cover Jan 2015
     ap_2015_2020 = ap_allYear.select(list(range(25, 31)))
-    forest2015 = ap_2015_2020.reduce(ee.Reducer.sum())
-    forest2015 = forest2015.gte(1)
+    forest2015 = ap_2015_2020.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest cover Jan 2010
     ap_2010_2020 = ap_allYear.select(list(range(20, 31)))
-    forest2010 = ap_2010_2020.reduce(ee.Reducer.sum())
-    forest2010 = forest2010.gte(1)
+    forest2010 = ap_2010_2020.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest cover Jan 2005
     ap_2005_2020 = ap_allYear.select(list(range(15, 31)))
-    forest2005 = ap_2005_2020.reduce(ee.Reducer.sum())
-    forest2005 = forest2005.gte(1)
+    forest2005 = ap_2005_2020.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest cover Jan 2000
     ap_2000_2020 = ap_allYear.select(list(range(10, 31)))
-    forest2000 = ap_2000_2020.reduce(ee.Reducer.sum())
-    forest2000 = forest2000.gte(1)
+    forest2000 = ap_2000_2020.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest raster with five bands
     forest = forest2000.addBands(forest2005).addBands(
