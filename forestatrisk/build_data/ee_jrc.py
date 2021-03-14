@@ -68,41 +68,35 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     region = region.buffer(10000).bounds()
     export_coord = region.getInfo()["coordinates"]
 
-    # Path to JRC products
-    # path = "users/ghislainv/jrc/"
-
     # JRC annual product (AP)
-    # AP = ee.ImageCollection(path + "AnnualChanges1982_2019")
-    AP = ee.ImageCollection(
-        "users/ClassifLandsat072015/Roadless2019/AnnualChanges_1982_2019")
+    AP = ee.ImageCollection("projects/JRC/TMF/v1_2019/AnnualChanges")
     AP = AP.mosaic().toByte()
     AP = AP.clip(region)
 
-    # ap_allYear: forest if Y = 1, 2, 3, 4, 5, 13, or 14.
-    AP_forest = AP.where(AP.eq(2).Or(AP.eq(3)).Or(AP.eq(4)).Or(
-        AP.eq(5)).Or(AP.eq(13)).Or(AP.eq(14)), 1)
+    # ap_allYear: forest if Y = 1 or 2.
+    AP_forest = AP.where(AP.eq(1).Or(AP.eq(2)), 1)
     ap_allYear = AP_forest.where(AP_forest.neq(1), 0)
 
     # Forest in Jan 2020
-    forest2020 = ap_allYear.select(37)
+    forest2020 = ap_allYear.select(30)
 
     # Forest cover Jan 2015
-    ap_2015_2020 = ap_allYear.select(list(range(32, 38)))
+    ap_2015_2020 = ap_allYear.select(list(range(25, 31)))
     forest2015 = ap_2015_2020.reduce(ee.Reducer.sum())
     forest2015 = forest2015.gte(1)
 
     # Forest cover Jan 2010
-    ap_2010_2020 = ap_allYear.select(list(range(27, 38)))
+    ap_2010_2020 = ap_allYear.select(list(range(20, 31)))
     forest2010 = ap_2010_2020.reduce(ee.Reducer.sum())
     forest2010 = forest2010.gte(1)
 
     # Forest cover Jan 2005
-    ap_2005_2020 = ap_allYear.select(list(range(22, 38)))
+    ap_2005_2020 = ap_allYear.select(list(range(15, 31)))
     forest2005 = ap_2005_2020.reduce(ee.Reducer.sum())
     forest2005 = forest2005.gte(1)
 
     # Forest cover Jan 2000
-    ap_2000_2020 = ap_allYear.select(list(range(17, 38)))
+    ap_2000_2020 = ap_allYear.select(list(range(10, 31)))
     forest2000 = ap_2000_2020.reduce(ee.Reducer.sum())
     forest2000 = forest2000.gte(1)
 
