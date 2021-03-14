@@ -127,9 +127,10 @@ gdal_translate -ot Int16 \
 # Message
 echo "Protected area network from Protected Planet\n"
 
-# Reproject
+# Reproject and filter
 input_file="pa_"$iso".shp"
-ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' -progress \
+ogr2ogr -overwrite -skipfailures -f "ESRI Shapefile" \
+	-where "status='Designated' OR status='Inscribed' OR status='Established' OR (status='Proposed' AND CAST(SUBSTR(date,7,4) AS INTEGER) <= 2010)" \
         -s_srs EPSG:4326 -t_srs "$proj" \
         -lco ENCODING=UTF-8 pa_PROJ.shp $input_file
 
