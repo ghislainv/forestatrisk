@@ -69,22 +69,22 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     ap_allYear = AP_forest.where(AP_forest.neq(1), 0)
 
     # Forest in Jan 2020
-    forest2020 = ap_allYear.select(30)
+    forest2020 = ap_allYear.select(29)
 
     # Forest cover Jan 2015
-    ap_2015_2020 = ap_allYear.select(list(range(25, 31)))
+    ap_2015_2020 = ap_allYear.select(list(range(24, 30)))
     forest2015 = ap_2015_2020.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest cover Jan 2010
-    ap_2010_2020 = ap_allYear.select(list(range(20, 31)))
+    ap_2010_2020 = ap_allYear.select(list(range(19, 30)))
     forest2010 = ap_2010_2020.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest cover Jan 2005
-    ap_2005_2020 = ap_allYear.select(list(range(15, 31)))
+    ap_2005_2020 = ap_allYear.select(list(range(14, 30)))
     forest2005 = ap_2005_2020.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest cover Jan 2000
-    ap_2000_2020 = ap_allYear.select(list(range(10, 31)))
+    ap_2000_2020 = ap_allYear.select(list(range(9, 30)))
     forest2000 = ap_2000_2020.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest raster with five bands
