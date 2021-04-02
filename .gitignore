@@ -20,6 +20,11 @@ __pycache__/
 # C extensions
 *.so
 
+# R notebooks
+docsrc/notebooks_R/*
+!docsrc/notebooks_R/get_started_R.Rmd
+!docsrc/notebooks_R/get_started_R.html
+
 # Distribution / packaging
 .Python
 build/

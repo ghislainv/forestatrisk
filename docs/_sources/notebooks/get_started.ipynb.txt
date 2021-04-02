@@ -161,7 +161,7 @@
    ],
    "source": [
     "# Remove NA from data-set (otherwise scale() and\n",
-    "# model_binomial_iCAR doesn't work)\n",
+    "# model_binomial_iCAR do not work)\n",
     "dataset = dataset.dropna(axis=0)\n",
     "# Set number of trials to one for far.model_binomial_iCAR()\n",
     "dataset[\"trial\"] = 1\n",
@@ -223,7 +223,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "### 2.3 iCAR model"
+    "### 2.2 iCAR model"
    ]
   },
   {
@@ -240,7 +240,7 @@
     }
    ],
    "source": [
-    "# Re-run the model with longer MCMC and estimated initial values\n",
+    "# Run the model\n",
     "mod_binomial_iCAR = far.model_binomial_iCAR(\n",
     "    # Observations\n",
     "    suitability_formula=formula, data=dataset,\n",
@@ -258,7 +258,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "### 2.4 Model summary"
+    "### 2.3 Model summary"
    ]
   },
   {
@@ -295,7 +295,7 @@
     "# Summary\n",
     "print(mod_binomial_iCAR)\n",
     "# Write summary in file\n",
-    "with open(\"output/summary_hSDM.txt\", \"w\") as f:\n",
+    "with open(\"output/summary_icar.txt\", \"w\") as f:\n",
     "    f.write(str(mod_binomial_iCAR))"
    ]
   },
@@ -406,7 +406,7 @@
       "Compute the number of pixels with value=1\n",
       "100%\n",
       "Compute the corresponding area in ha\n",
-      "Mean annual deforested area during the period 2020-2030: 498.375 ha/yr\n"
+      "Mean annual deforested area during the period 2010-2020: 498.375 ha/yr\n"
      ]
     }
    ],
@@ -427,7 +427,7 @@
     "# Annual deforestation\n",
     "T = 10.0\n",
     "annual_defor = (fc[0] - fc[1]) / T\n",
-    "print(\"Mean annual deforested area during the period 2020-2030: {} ha/yr\".format(annual_defor))"
+    "print(\"Mean annual deforested area during the period 2010-2020: {} ha/yr\".format(annual_defor))"
    ]
   },
   {
