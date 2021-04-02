@@ -6,16 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>forestatrisk.project package &#8212; forestatrisk — Modelling and forecasting deforestation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -116,7 +113,7 @@
 <span id="forestatrisk-project-deforest-module"></span><h2>forestatrisk.project.deforest module<a class="headerlink" href="#module-forestatrisk.project.deforest" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="forestatrisk.project.deforest.deforest">
-<code class="sig-name descname">deforest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_raster</span></em>, <em class="sig-param"><span class="n">hectares</span></em>, <em class="sig-param"><span class="n">output_file</span><span class="o">=</span><span class="default_value">'output/fcc.tif'</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/deforest.html#deforest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.project.deforest.deforest" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">deforest</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_raster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hectares</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output/fcc.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/deforest.html#deforest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.project.deforest.deforest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to map the future forest-cover change.</p>
 <p>This function computes the future forest cover map based on (i) a
 raster of probability of deforestation (rescaled from 1 to 65535),
@@ -145,7 +142,7 @@ threshold, error).</p>
 <span id="forestatrisk-project-deforest-diffusion-module"></span><h2>forestatrisk.project.deforest_diffusion module<a class="headerlink" href="#module-forestatrisk.project.deforest_diffusion" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="forestatrisk.project.deforest_diffusion.deforest_diffusion">
-<code class="sig-name descname">deforest_diffusion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">forest_t0</span></em>, <em class="sig-param"><span class="n">t0</span></em>, <em class="sig-param"><span class="n">annual_defor</span></em>, <em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/deforest_diffusion.html#deforest_diffusion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.project.deforest_diffusion.deforest_diffusion" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">deforest_diffusion</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forest_t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annual_defor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/deforest_diffusion.html#deforest_diffusion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.project.deforest_diffusion.deforest_diffusion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Diffusion of the deforestation between states of a country.</p>
 <p>Diffusion of the deforestation between states of a country. We
 suppose that the deforestation is constant at the country
@@ -172,7 +169,7 @@ time t (“forest_t”) and deforestation between t0 and t
 
 <dl class="py function">
 <dt id="forestatrisk.project.deforest_diffusion.deforest_diffusion_t_nofor">
-<code class="sig-name descname">deforest_diffusion_t_nofor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">forest_t0</span></em>, <em class="sig-param"><span class="n">t0</span></em>, <em class="sig-param"><span class="n">annual_defor</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/deforest_diffusion.html#deforest_diffusion_t_nofor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.project.deforest_diffusion.deforest_diffusion_t_nofor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">deforest_diffusion_t_nofor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forest_t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annual_defor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/deforest_diffusion.html#deforest_diffusion_t_nofor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.project.deforest_diffusion.deforest_diffusion_t_nofor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the number of years until there is no forest in each state
 for of a deforestation with diffusion.</p>
 <p>Compute the number of years until there is no forest in each state
@@ -202,7 +199,7 @@ the beginning of the year).</p>
 <span id="forestatrisk-project-emissions-module"></span><h2>forestatrisk.project.emissions module<a class="headerlink" href="#module-forestatrisk.project.emissions" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="forestatrisk.project.emissions.emissions">
-<code class="sig-name descname">emissions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_stocks</span><span class="o">=</span><span class="default_value">'data/emissions/AGB.tif'</span></em>, <em class="sig-param"><span class="n">input_forest</span><span class="o">=</span><span class="default_value">'output/forest_cover_2050.tif'</span></em>, <em class="sig-param"><span class="n">coefficient</span><span class="o">=</span><span class="default_value">0.47</span></em>, <em class="sig-param"><span class="n">blk_rows</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/emissions.html#emissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#forestatrisk.project.emissions.emissions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">emissions</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_stocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/emissions/AGB.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_forest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output/forest_cover_2050.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.47</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/emissions.html#emissions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.project.emissions.emissions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict the carbon emissions associated to future deforestation.</p>
 <p>This function predicts the carbon emissions associated to future
 deforestation. Computation are done by block and can be performed
@@ -236,7 +233,7 @@ on large geographical areas.</p>
       &copy;2020, Ghislain Vieilledent.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -17,5 +17,5 @@ R notebooks
 .. toctree::
    :maxdepth: 1
 
-   R notebook <https://forestatrisk.cirad.fr/tutorial/R-training.html>
+   notebooks_R/get_started_R
 	      

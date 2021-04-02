@@ -6,16 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Get started &#8212; forestatrisk — Modelling and forecasting deforestation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -116,21 +113,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -231,7 +242,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -297,6 +308,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -455,7 +467,7 @@ Export results to file output/sample.txt
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Remove NA from data-set (otherwise scale() and</span>
-<span class="c1"># model_binomial_iCAR doesn&#39;t work)</span>
+<span class="c1"># model_binomial_iCAR do not work)</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="c1"># Set number of trials to one for far.model_binomial_iCAR()</span>
 <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;trial&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
@@ -527,14 +539,14 @@ Identify adjacent cells and compute number of neighbors
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="2.3-iCAR-model">
-<h3>2.3 iCAR model<a class="headerlink" href="#2.3-iCAR-model" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="2.2-iCAR-model">
+<h3>2.2 iCAR model<a class="headerlink" href="#2.2-iCAR-model" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Re-run the model with longer MCMC and estimated initial values</span>
+<span></span><span class="c1"># Run the model</span>
 <span class="n">mod_binomial_iCAR</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">model_binomial_iCAR</span><span class="p">(</span>
     <span class="c1"># Observations</span>
     <span class="n">suitability_formula</span><span class="o">=</span><span class="n">formula</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
@@ -558,8 +570,8 @@ Using estimates from classic logistic regression as starting values for betas
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="2.4-Model-summary">
-<h3>2.4 Model summary<a class="headerlink" href="#2.4-Model-summary" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="2.3-Model-summary">
+<h3>2.3 Model summary<a class="headerlink" href="#2.3-Model-summary" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -571,7 +583,7 @@ Using estimates from classic logistic regression as starting values for betas
 <span class="c1"># Summary</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">mod_binomial_iCAR</span><span class="p">)</span>
 <span class="c1"># Write summary in file</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output/summary_hSDM.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output/summary_icar.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mod_binomial_iCAR</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -699,7 +711,7 @@ Compute statistics
 <span class="c1"># Annual deforestation</span>
 <span class="n">T</span> <span class="o">=</span> <span class="mf">10.0</span>
 <span class="n">annual_defor</span> <span class="o">=</span> <span class="p">(</span><span class="n">fc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">fc</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">T</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean annual deforested area during the period 2020-2030: </span><span class="si">{}</span><span class="s2"> ha/yr&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">annual_defor</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean annual deforested area during the period 2010-2020: </span><span class="si">{}</span><span class="s2"> ha/yr&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">annual_defor</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -716,7 +728,7 @@ Divide region in 168 blocks
 Compute the number of pixels with value=1
 100%
 Compute the corresponding area in ha
-Mean annual deforested area during the period 2020-2030: 498.375 ha/yr
+Mean annual deforested area during the period 2010-2020: 498.375 ha/yr
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -893,7 +905,7 @@ Build overview
       &copy;2020, Ghislain Vieilledent.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -1,0 +1,361 @@
+---
+title: ""
+output:
+  bookdown::html_document2:
+    highlight: tango
+    number_sections: no
+    toc: yes
+    toc_float: no
+---
+
+```{r setup, echo=FALSE, message=FALSE}
+library(knitr)
+opts_chunk$set(
+  fig.align="center",
+  echo=TRUE,
+  message=FALSE,
+  warning=FALSE,
+  cache=TRUE,
+  cache.lazy=FALSE 
+)
+```
+
+### Prerequisites {-}
+
+#### Download the Rmd file
+
+The `.Rmd` file for this R notebook is available [here](https://github.com/ghislainv/forestatrisk/blob/master/docsrc/notebooks_R/get_started_R.Rmd) for download.
+
+#### Install Python and the `reticulate` R package {-}
+
+To use the `forestatrisk` Python package within R, you first need to install Python for your system. The recommended way is to install the latest version of `miniconda3` (which includes Python) following the recommendations [here](https://docs.conda.io/en/latest/miniconda.html).
+
+Second, you need to install the [`reticulate`](https://rstudio.github.io/reticulate/) R package which provides a comprehensive set of tools for interoperability between Python and R.
+
+```{r R_libraries, cache=FALSE}
+# Set Miniconda path if necessary
+# conda_path <- "/home/ghislain/.pyenv/versions/miniconda3-latest"
+# Sys.setenv(RETICULATE_MINICONDA_PATH=conda_path)
+
+# Install library
+if (!require("reticulate", character.only=TRUE)) {
+  install.packages("reticulate")
+  require("reticulate", character.only=TRUE)
+}
+```
+
+#### Create a Python virtual environment {-}
+
+Using functions from the `reticulate` R package, install the Python virtual environment with a selection of Python packages. Use Python 3.7 and the `conda-forge` channel to install the packages.
+
+```{r condaenv, cache=FALSE}
+if (!("conda-far" %in% conda_list()$name)) {
+	# Vector of packages
+	conda_pkg <- c("python=3.7", "gdal", "numpy", "matplotlib",
+				   "pandas", "patsy", "pip", "statsmodels",
+				   "earthengine-api")
+	# Create conda virtual environment and install packages
+	conda_create("conda-far", packages=conda_pkg, forge=TRUE)
+	# Install packages not available with conda using pip
+	pip_pkg <- c("pywdpa", "sklearn")
+	conda_install("conda-far", pip_pkg, pip=TRUE,
+				  pip_ignore_installed=FALSE)
+	# Install the forestatrisk package
+	conda_install("conda-far", "forestatrisk", pip=TRUE,
+				  pip_ignore_installed=FALSE)
+}
+```
+
+Note: for a manual installation of the virtual environment, execute the following command lines in a miniconda terminal.
+
+```
+conda create --name conda-far -c conda-forge python=3.7 gdal numpy matplotlib pandas patsy pip statsmodels earthengine-api --yes
+conda activate conda-far
+pip install pywdpa sklearn
+pip install forestatrisk
+```
+
+#### Use the Python virtual environment in R {-}
+
+Specify the Python version to use with `reticulate` and check that it is the right one. Function `py_config` will inform you on the Python and Numpy versions detected. If everything is fine, you should obtain an output similar to the following one indicating that the `conda-far` virtual environment is being used.
+
+```{r python_env, cache=FALSE}
+# Specify the Python environment to use
+use_condaenv("conda-far", required=TRUE)
+
+# Check python configuration
+py_config()
+```
+
+You are now ready to import the `forestatrisk` Python module in R.
+
+```{r importpy, cache=FALSE}
+far <- import("forestatrisk")
+```
+
+We will follow the steps of the `Get started` tutorial in Python [here](https://ecology.ghislainv.fr/forestatrisk/notebooks/get_started.html#) and adapt the commands to use the functions from the `forestatrisk` Python package in R. See more in details the [documentation](https://rstudio.github.io/reticulate/) of the `reticulate` R package to see how to adapt Python commands and objects to R.
+
+We first create a directory to hold the outputs.
+
+```{r output-dir}
+# Make output directory
+dir.create("output")
+```
+
+### 1. Data
+
+#### 1.1 Import and unzip the data
+
+We use the [Guadeloupe](https://en.wikipedia.org/wiki/Guadeloupe) archipelago as a case study.
+
+```{r import-data}
+# Source of the data
+url <- "https://github.com/ghislainv/forestatrisk/raw/master/docsrc/notebooks/data_GLP.zip"
+
+if (!file.exists("data_GLP.zip")) {
+  download.file(url, "data_GLP.zip")
+  unzip("data_GLP.zip", exdir="data")
+}
+```
+
+#### 1.2 Files
+
+The `data` folder includes, among other files:
+
+- The forest cover change data for the period 2010--2020 as a GeoTiff raster file (`data/fcc23.tif`).
+- Spatial variables as GeoTiff raster files (`.tif` extension, eg. `data/dist_edge.tif `for distance to forest edge).
+
+#### 1.3 Sampling the observations
+
+```{r sampling}
+# Sample points
+dataset <- far$sample(nsamp=10000L, adapt=TRUE, seed=1234L, csize=10L,
+                     var_dir="data",
+                     input_forest_raster="fcc23.tif",
+                     output_file="output/sample.txt",
+                     blk_rows=0L)
+```
+
+```{r dataset}
+# Remove NA from data-set (otherwise scale() and
+# model_binomial_iCAR do not work)
+dataset <- dataset[complete.cases(dataset), ]
+# Set number of trials to one for far.model_binomial_iCAR()
+dataset$trial <- 1
+# Print the first five rows
+head(dataset)
+```
+
+### 2. Model
+
+#### 2.1 Model preparation
+
+```{r model-prep}
+# Neighborhood for spatial-autocorrelation
+neighborhood <- far$cellneigh(raster="data/fcc23.tif", csize=10L, rank=1L)
+nneigh <- neighborhood[[1]]
+adj <- neighborhood[[2]]
+
+# List of variables
+variables <- c("scale(altitude)", "scale(slope)",
+             "scale(dist_defor)", "scale(dist_edge)", "scale(dist_road)",
+             "scale(dist_town)", "scale(dist_river)")
+
+# Formula
+right_part <- paste0(" + ", paste(variables, collapse=" + "), " + cell")
+left_part <- "I(1-fcc23) + trial ~ "
+formula <- paste0(left_part, right_part)
+
+# Starting values
+beta_start <- -99  # Simple GLM estimates
+
+# Priors
+priorVrho <- -1  # -1="1/Gamma"
+```
+
+#### 2.2 iCAR model
+
+```{r icar-model}
+# Run the model
+mod_binomial_iCAR <- far$model_binomial_iCAR(
+    # Observations
+    suitability_formula=formula, data=dataset,
+    # Spatial structure
+    n_neighbors=np_array(nneigh,dtype="int32"),
+    neighbors=np_array(adj,dtype="int32"),
+    # Environment
+    eval_env=-1L,
+    # Priors
+    priorVrho=priorVrho,
+    # Chains
+    burnin=1000L, mcmc=1000L, thin=1L,
+    # Starting values
+    beta_start=beta_start)
+```
+
+#### 2.3 Model summary
+
+```{r mod-summary}
+# Predictions
+pred_icar <- mod_binomial_iCAR$theta_pred
+
+# Summary
+print(mod_binomial_iCAR)
+```
+
+```{r save-summary, results='hide'}
+# Write summary in file
+sink("output/summary_icar.txt")
+mod_binomial_iCAR
+sink()
+```
+
+
+### 3 Predict
+
+#### 3.1 Interpolate spatial random effects
+
+```{r interpolate}
+# Spatial random effects
+rho <- mod_binomial_iCAR$rho
+
+# Interpolate
+far$interpolate_rho(rho=rho, input_raster="data/fcc23.tif",
+                    output_file="output/rho.tif",
+                    csize_orig=10L, csize_new=1L)
+```
+
+#### 3.2 Predict deforestation probability
+
+```{r predict, results='hide'}
+# Update dist_edge and dist_defor at t3
+file.rename("data/dist_edge.tif", "data/dist_edge.tif.bak")
+file.rename("data/dist_defor.tif", "data/dist_defor.tif.bak")
+file.copy("data/forecast/dist_edge_forecast.tif", "data/dist_edge.tif")
+file.copy("data/forecast/dist_defor_forecast.tif", "data/dist_defor.tif")
+
+# Compute predictions
+far$predict_raster_binomial_iCAR(
+    mod_binomial_iCAR, var_dir="data",
+    input_cell_raster="output/rho.tif",
+    input_forest_raster="data/forest/forest_t3.tif",
+    output_file="output/prob.tif",
+    blk_rows=10L  # Reduced number of lines to avoid memory problems
+)
+
+# Reinitialize data
+file.remove("data/dist_edge.tif")
+file.remove("data/dist_defor.tif")
+file.rename("data/dist_edge.tif.bak", "data/dist_edge.tif")
+file.rename("data/dist_defor.tif.bak", "data/dist_defor.tif")
+```
+
+### 4. Project future forest cover change
+
+```{r annual-defor}
+# Forest cover
+fc <- vector()
+dates <- c("t2", "t3")
+ndates <- length(dates)
+for (i in 1:ndates) {
+  rast <- paste0("data/forest/forest_", dates[i], ".tif")
+  val <- far$countpix(input_raster=rast, value=1)
+  fc <- c(fc, val$area)  # area in ha
+}
+# Save results to disk
+fileConn <- file("output/forest_cover.txt")
+writeLines(as.character(fc), fileConn)
+close(fileConn)
+# Annual deforestation
+T <- 10.0
+annual_defor <- (fc[1] - fc[2]) / T
+cat(paste0("Mean annual deforested area during the period 2010-2020: ",
+		   annual_defor,
+		   " ha/yr"))
+```
+
+```{r project}
+# Projected deforestation (ha) during 2020-2050
+defor <- annual_defor * 30
+
+# Compute future forest cover in 2050
+stats <- far$deforest(
+    input_raster="output/prob.tif",
+    hectares=defor,
+    output_file="output/fcc_2050.tif",
+    blk_rows=128L)
+```
+
+### 5. Figures
+
+#### 5.1 Historical forest cover change
+
+Forest cover change for the period 2000-2010-2020
+
+```{r plot-fcc123}
+# Plot forest
+fig_fcc123 <- far$plot$fcc123(
+    input_fcc_raster="data/forest/fcc123.tif",
+    maxpixels=1e8,
+    output_file="output/fcc123.png",
+    borders="data/ctry_PROJ.shp",
+    linewidth=0.2,
+    figsize=c(5, 4), dpi=800)
+
+knitr::include_graphics("output/fcc123.png")
+```
+
+#### 5.2 Spatial random effects
+
+```{r plot-rho-orig}
+# Original spatial random effects
+fig_rho_orig <- far$plot$rho("output/rho_orig.tif",
+                            borders="data/ctry_PROJ.shp",
+                            linewidth=0.5,
+                            output_file="output/rho_orig.png",
+                            figsize=c(9,5), dpi=150)
+
+knitr::include_graphics("output/rho_orig.png")
+```
+
+```{r plot-rho}
+# Interpolated spatial random effects
+fig_rho <- far$plot$rho("output/rho.tif",
+                       borders="data/ctry_PROJ.shp",
+                       linewidth=0.5,
+                       output_file="output/rho.png",
+                       figsize=c(9,5), dpi=150)
+
+knitr::include_graphics("output/rho.png")
+```
+
+#### 5.3 Spatial probability of deforestation
+
+```{r plot-prob}
+# Spatial probability of deforestation
+fig_prob <- far$plot$prob("output/prob.tif",
+                         maxpixels=1e8,
+                         borders="data/ctry_PROJ.shp",
+                         linewidth=0.2,
+                         legend=TRUE,
+                         output_file="output/prob.png",
+                         figsize=c(5, 4), dpi=800)
+
+knitr::include_graphics("output/prob.png")
+```
+
+#### 5.4 Future forest cover
+
+```{r plot-proj}
+# Projected forest cover change (2020-2050)
+fcc_2050 <- far$plot$fcc("output/fcc_2050.tif",
+                        maxpixels=1e8,
+                        borders="data/ctry_PROJ.shp",
+                        linewidth=0.2,
+                        output_file="output/fcc_2050.png",
+                        figsize=c(5, 4), dpi=800)
+
+knitr::include_graphics("output/fcc_2050.png")
+```
+
+
