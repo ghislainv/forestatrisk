@@ -104,9 +104,8 @@ and install the ``forestatrisk`` package with the following commands:
 
 .. code-block:: shell
 		
-   conda create --name conda-far python=3.7 gdal numpy matplotlib pandas patsy pip statsmodels --yes
+   conda create --name conda-far -c conda-forge python=3.7 gdal numpy matplotlib pandas patsy pip statsmodels earthengine-api --yes
    conda activate conda-far
-   conda install -c conda-forge earthengine-api --yes
    pip install pywdpa sklearn # Packages not available with conda
    pip install forestatrisk # For PyPI version
    # pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
