@@ -184,7 +184,7 @@ def correlation(y, data,
         plt.hist(Arr, facecolor="#808080", alpha=0.75)
         plt.xlabel(varname, fontsize=16)
         plt.ylabel("Nb. of observations", fontsize=16)
-        # Corelation
+        # Correlation
         plt.subplot2grid(grid_size, (i % nb_plots_per_page, 1))
         plt.plot(x, theta, color="#000000", marker='o', linestyle='--')
         plt.xlabel(varname, fontsize=16)
@@ -741,11 +741,13 @@ def prob(input_prob_raster,
     colors.append((0, (34 / cmax, 139 / cmax, 34 / cmax, 1)))  # green
     colors.append((1 / vmax, (34 / cmax, 139 / cmax, 34 / cmax, 1)))  # green
     colors.append((39322 / vmax, (1, 165 / cmax, 0, 1)))  # orange, p=0.60
-    colors.append((52429 / vmax, (227 / cmax, 26 / cmax, 28 / cmax, 1)))  # red, p=0.80
+    # red, p=0.80
+    colors.append((52429 / vmax, (227 / cmax, 26 / cmax, 28 / cmax, 1)))
     colors.append((1, (0, 0, 0, 1)))  # black
     color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
                                                   N=65535, gamma=1.0)
-    color_map.set_under(color=(1, 1, 1, 0))  # transparent, must be associated with vmin
+    # transparent, must be associated with vmin
+    color_map.set_under(color=(1, 1, 1, 0))
 
     # Plot raster
     fig = plt.figure(figsize=figsize, dpi=dpi)
