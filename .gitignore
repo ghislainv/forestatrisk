@@ -1,7 +1,8 @@
 # Notebook data
 docsrc/notebooks/data
 docsrc/notebooks/outputs
-docsrc/notebooks/new_caledonia
+docsrc/notebooks/new_caledonia/*
+!docsrc/notebooks/new_caledonia/new_caledonia.org
 
 # Paper
 *.bib.bak

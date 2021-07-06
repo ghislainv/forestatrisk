@@ -9,7 +9,7 @@ Python notebooks
 
    notebooks/get_started.ipynb
    notebooks/far_tropics.ipynb
-   notebooks/new_caledonia
+   notebooks/new_caledonia/new_caledonia
 
    
 R notebooks
