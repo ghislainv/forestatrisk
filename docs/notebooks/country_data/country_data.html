@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Country data &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ForastAtRisk Tropics" href="../far_tropics.html" />
+    <link rel="prev" title="Articles" href="../../articles.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/logo-far.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">forestatrisk</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started.html">Get started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../articles.html">Articles</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../articles.html#python-notebooks">Python notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../articles.html#r-notebooks">R notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../package_contents.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../../articles.html">Articles</a><ul>
+      <li>Previous: <a href="../../articles.html" title="previous chapter">Articles</a></li>
+      <li>Next: <a href="../far_tropics.html" title="next chapter">ForastAtRisk Tropics</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="country-data">
+<h1>Country data<a class="headerlink" href="#country-data" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>1 Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This notebook presents the functions of the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python
+package that can be used to collect the spatial data needed for
+modeling and forecasting deforestation in a given country.</p>
+<p>Data are retrieved from global (or pantropical) datasets freely
+available on the internet. Of course, the user can add any additional
+variables to the analyses manually. To do so, the user must add
+GeoTIFF raster files with extension <code class="docutils literal notranslate"><span class="pre">.tif</span></code> in the <code class="docutils literal notranslate"><span class="pre">data</span></code> folder of the
+working directory.</p>
+<div class="section" id="importing-python-modules">
+<h3>1.1 Importing Python modules<a class="headerlink" href="#importing-python-modules" title="Permalink to this headline">¶</a></h3>
+<p>We import the Python modules needed for collecting the data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Imports</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
+<span class="kn">import</span> <span class="nn">ee</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">tabulate</span> <span class="kn">import</span> <span class="n">tabulate</span>
+
+<span class="kn">from</span> <span class="nn">pywdpa</span> <span class="kn">import</span> <span class="n">get_token</span>
+<span class="kn">import</span> <span class="nn">forestatrisk</span> <span class="k">as</span> <span class="nn">far</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># forestatrisk: modelling and forecasting deforestation in the tropics.</span>
+<span class="c1"># https://ecology.ghislainv.fr/forestatrisk/</span>
+</pre></div>
+</div>
+<p>We create some directories to hold the data and the ouputs with the
+function <code class="docutils literal notranslate"><span class="pre">far.make_dir()</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">far</span><span class="o">.</span><span class="n">make_dir</span><span class="p">(</span><span class="s2">&quot;data_raw&quot;</span><span class="p">)</span>
+<span class="n">far</span><span class="o">.</span><span class="n">make_dir</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="n">far</span><span class="o">.</span><span class="n">make_dir</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We increase the cache for GDAL to increase computational speed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># GDAL</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;GDAL_CACHEMAX&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1024&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-credentials">
+<h3>1.2 Set credentials<a class="headerlink" href="#set-credentials" title="Permalink to this headline">¶</a></h3>
+<p>We need to configure and set credentials for:</p>
+<ul class="simple">
+<li><p>Google Earth Engine (GEE) API</p></li>
+<li><p>RClone to access Google Drive</p></li>
+<li><p>WDPA API</p></li>
+</ul>
+<p>You will need a <a class="reference external" href="https://www.google.com/account/about/">Google account</a> for using the GEE API and accessing
+Google Drive.</p>
+<div class="section" id="access-to-google-earth-engine-api">
+<h4>1.2.1 Access to Google Earth Engine API<a class="headerlink" href="#access-to-google-earth-engine-api" title="Permalink to this headline">¶</a></h4>
+<p>Google Earth Engine is used to compute the past forest cover change
+from Vancutsem et al. 2021 or Hansen et al. 2013. To get credentials
+for using the Google Earth Engine API, follow these
+<a class="reference external" href="https://developers.google.com/earth-engine/guides/python_install-conda#get_credentials">instructions</a>. While authentication with <code class="docutils literal notranslate"><span class="pre">ee.Authenticate()</span></code> should be
+necessary only once, you have to execute the command <code class="docutils literal notranslate"><span class="pre">ee.Initialize()</span></code>
+at each session.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Uncomment to authenticate for the first time.</span>
+<span class="c1"># ee.Authenticate()</span>
+<span class="n">ee</span><span class="o">.</span><span class="n">Initialize</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Under Linux and Mac, credentials are stored in
+<code class="docutils literal notranslate"><span class="pre">$HOME/.config/earthengine/credentials</span></code>.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cat <span class="nv">$HOME</span>/.config/earthengine/credentials
+</pre></div>
+</div>
+</div>
+<div class="section" id="access-to-google-drive-with-rclone">
+<h4>1.2.2 Access to Google Drive with RClone<a class="headerlink" href="#access-to-google-drive-with-rclone" title="Permalink to this headline">¶</a></h4>
+<p>RClone is used to download the forest cover change raster locally from
+Google Drive. To install RClone, follow these <a class="reference external" href="https://rclone.org/install/">instructions</a>. To
+configure the access to your Google Drive, follow these <a class="reference external" href="https://rclone.org/drive/">instructions</a>.</p>
+</div>
+<div class="section" id="access-to-wdpa-api">
+<h4>1.2.3 Access to WDPA API<a class="headerlink" href="#access-to-wdpa-api" title="Permalink to this headline">¶</a></h4>
+<p>We will be using the <a class="reference external" href="https://ecology.ghislainv.fr/pywdpa/">pywda</a> Python package to collect the data on
+protected areas from the World Database on Protected Areas (WDPA) at
+<a class="reference external" href="https://www.protectedplanet.net">https://www.protectedplanet.net</a>. To access the Protected Planet API,
+you must first obtain a Personal API Token by filling in the form
+available at <a class="reference external" href="https://api.protectedplanet.net/request">https://api.protectedplanet.net/request</a>. Then you need to
+set an environment variable (we recommend using the name <code class="docutils literal notranslate"><span class="pre">WDPA_KEY</span></code>)
+using either the command <code class="docutils literal notranslate"><span class="pre">os.environ[&quot;WDPA_KEY&quot;]=&quot;your_token&quot;</span></code> or
+<a class="reference external" href="https://github.com/theskumar/python-dotenv">python-dotenv</a>.</p>
+<p>The validity of your token can be checked with the function
+<code class="docutils literal notranslate"><span class="pre">pywdpa.get_token()</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># WDPA API</span>
+<span class="n">load_dotenv</span><span class="p">(</span><span class="s2">&quot;.env&quot;</span><span class="p">)</span>
+<span class="n">get_token</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If your token is valid, the function will return its value. Otherwise
+it will print an error message.</p>
+</div>
+</div>
+</div>
+<div class="section" id="data">
+<h2>2 Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="compute-forest-cover-change">
+<h3>2.1 Compute forest cover change<a class="headerlink" href="#compute-forest-cover-change" title="Permalink to this headline">¶</a></h3>
+<p>We specify the <a class="reference external" href="https://fr.wikipedia.org/wiki/ISO_3166-1#Table_de_codage">iso3</a> code of the country we want the data for, for example <a class="reference external" href="https://en.wikipedia.org/wiki/Martinique">Martinique</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">iso3</span> <span class="o">=</span> <span class="s2">&quot;MTQ&quot;</span>
+</pre></div>
+</div>
+<p>We compute the past forest cover change from Vancutsem et al. 2021
+using Google Earth Engine. The argument <code class="docutils literal notranslate"><span class="pre">gdrive_remote_rclone</span></code> of the
+function <a class="reference external" href="https://ecology.ghislainv.fr/forestatrisk/subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_forest_run">far.data.country_forest_run()</a> specifies the name of the
+Google Drive remote for rclone. The argument <code class="docutils literal notranslate"><span class="pre">gdrive_folder</span></code> specifies
+the name of the Google Drive folder to use.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute gee forest data</span>
+<span class="n">far</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">country_forest_run</span><span class="p">(</span>
+    <span class="n">iso3</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
+    <span class="n">keep_dir</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fcc_source</span><span class="o">=</span><span class="s2">&quot;jrc&quot;</span><span class="p">,</span> <span class="n">perc</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">gdrive_remote_rclone</span><span class="o">=</span><span class="s2">&quot;gdrive_gv&quot;</span><span class="p">,</span>
+    <span class="n">gdrive_folder</span><span class="o">=</span><span class="s2">&quot;GEE-forestatrisk-notebooks&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Run</span> <span class="n">Google</span> <span class="n">Earth</span> <span class="n">Engine</span>
+<span class="n">GEE</span> <span class="n">running</span> <span class="n">on</span> <span class="n">the</span> <span class="n">following</span> <span class="n">extent</span><span class="p">:</span>
+<span class="p">(</span><span class="o">-</span><span class="mf">61.22902679</span><span class="p">,</span> <span class="mf">14.38819408</span><span class="p">,</span> <span class="o">-</span><span class="mf">60.80875015</span><span class="p">,</span> <span class="mf">14.87902832</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="download-raw-data">
+<h3>2.2 Download raw data<a class="headerlink" href="#download-raw-data" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download data</span>
+<span class="n">far</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">country_download</span><span class="p">(</span>
+    <span class="n">iso3</span><span class="p">,</span>
+    <span class="n">gdrive_remote_rclone</span><span class="o">=</span><span class="s2">&quot;gdrive_gv&quot;</span><span class="p">,</span>
+    <span class="n">gdrive_folder</span><span class="o">=</span><span class="s2">&quot;GEE-forestatrisk-notebooks&quot;</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Downloading</span> <span class="n">data</span> <span class="k">for</span> <span class="n">country</span> <span class="n">MTQ</span>
+<span class="n">SRTM</span> <span class="ow">not</span> <span class="n">existing</span> <span class="k">for</span> <span class="n">tile</span><span class="p">:</span> <span class="mi">25_09</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="compute-explanatory-variables">
+<h3>2.3 Compute explanatory variables<a class="headerlink" href="#compute-explanatory-variables" title="Permalink to this headline">¶</a></h3>
+<p>We first set the projection in which we want the data to be, for example <a class="reference external" href="https://epsg.io/5490">EPSG:5490</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Projection</span>
+<span class="n">proj</span> <span class="o">=</span> <span class="s2">&quot;EPSG:5490&quot;</span>
+</pre></div>
+</div>
+<p>We compute the explanatory variables from the raw data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute variables</span>
+<span class="n">far</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">country_compute</span><span class="p">(</span>
+    <span class="n">iso3</span><span class="p">,</span>
+    <span class="n">temp_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
+    <span class="n">proj</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+    <span class="n">data_country</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">data_forest</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">keep_temp_dir</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="files">
+<h3>2.4 Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">data</span></code> folder includes:</p>
+<ul class="simple">
+<li><p>Forest cover change data for the period 2010-2020 as a GeoTiff raster
+file (<code class="docutils literal notranslate"><span class="pre">data/fcc23.tif</span></code>).</p></li>
+<li><p>Spatial explanatory variables as GeoTiff raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>
+extension, eg. <code class="docutils literal notranslate"><span class="pre">data/dist_edge.tif</span></code> for distance to forest edge).</p></li>
+<li><p>Additional folders: <code class="docutils literal notranslate"><span class="pre">forest</span></code>, <code class="docutils literal notranslate"><span class="pre">forecast</span></code>, and <code class="docutils literal notranslate"><span class="pre">emissions</span></code>, with forest
+cover change for different periods of time, explanatory variables at
+different dates used for projections in the future, and forest carbon
+data for computing carbon emissions.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot forest</span>
+<span class="n">fig_fcc23</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">fcc</span><span class="p">(</span>
+    <span class="n">input_fcc_raster</span><span class="o">=</span><span class="s2">&quot;data/fcc23.tif&quot;</span><span class="p">,</span>
+    <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/fcc23.png&quot;</span><span class="p">,</span>
+    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Variable characteristics are summarized in the following table:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 21%" />
+<col style="width: 29%" />
+<col style="width: 7%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Product</p></th>
+<th class="head"><p>Source</p></th>
+<th class="head"><p>Variable</p></th>
+<th class="head"><p>Unit</p></th>
+<th class="head"><p>Resolution (m)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Forest maps (2000-2010-2020)</p></td>
+<td><p>Vancutsem et al. 2021</p></td>
+<td><p>distance to forest edge</p></td>
+<td><p>m</p></td>
+<td><p>30</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p></p></td>
+<td><p>distance to past deforestation</p></td>
+<td><p>m</p></td>
+<td><p>30</p></td>
+</tr>
+<tr class="row-even"><td><p>Digital Elevation Model</p></td>
+<td><p>SRTM v4.1 CSI-CGIAR</p></td>
+<td><p>altitude</p></td>
+<td><p>m</p></td>
+<td><p>90</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p></p></td>
+<td><p>slope</p></td>
+<td><p>degree</p></td>
+<td><p>90</p></td>
+</tr>
+<tr class="row-even"><td><p>Highways</p></td>
+<td><p>OSM-Geofabrik</p></td>
+<td><p>distance to roads</p></td>
+<td><p>m</p></td>
+<td><p>150</p></td>
+</tr>
+<tr class="row-odd"><td><p>Places</p></td>
+<td><p></p></td>
+<td><p>distance to towns</p></td>
+<td><p>m</p></td>
+<td><p>150</p></td>
+</tr>
+<tr class="row-even"><td><p>Waterways</p></td>
+<td><p></p></td>
+<td><p>distance to river</p></td>
+<td><p>m</p></td>
+<td><p>150</p></td>
+</tr>
+<tr class="row-odd"><td><p>Protected areas</p></td>
+<td><p>WDPA</p></td>
+<td><p>protected area presence</p></td>
+<td><p>–</p></td>
+<td><p>30</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="plots">
+<h3>2.5 Plots<a class="headerlink" href="#plots" title="Permalink to this headline">¶</a></h3>
+<p>We can plot the past deforestation on the period 2000–2010–2020:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot forest</span>
+<span class="n">ofile</span> <span class="o">=</span> <span class="s2">&quot;output/nb_ctrydata_fcc123.png&quot;</span>
+<span class="n">fig_fcc123</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">fcc123</span><span class="p">(</span>
+    <span class="n">input_fcc_raster</span><span class="o">=</span><span class="s2">&quot;data/forest/fcc123.tif&quot;</span><span class="p">,</span>
+    <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="n">ofile</span><span class="p">,</span>
+    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">ofile</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/nb_ctrydata_fcc123.png"><img alt="../../_images/nb_ctrydata_fcc123.png" src="../../_images/nb_ctrydata_fcc123.png" style="width: 600px;" /></a>
+<p>We can also plot the explicative variables:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot explicative variables</span>
+<span class="n">ofile_pdf</span> <span class="o">=</span> <span class="s2">&quot;output/nb_ctrydata_var.pdf&quot;</span>
+<span class="n">ofile</span> <span class="o">=</span> <span class="s2">&quot;output/nb_ctrydata_var.png&quot;</span>
+<span class="n">fig_var</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">var</span><span class="p">(</span>
+    <span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="n">ofile_pdf</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">fig_var</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">ofile</span><span class="p">)</span>
+<span class="n">ofile</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/nb_ctrydata_var.png"><img alt="../../_images/nb_ctrydata_var.png" src="../../_images/nb_ctrydata_var.png" style="width: 600px;" /></a>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/notebooks/country_data/country_data.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

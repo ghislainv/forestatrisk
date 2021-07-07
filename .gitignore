@@ -3,6 +3,8 @@ docsrc/notebooks/data
 docsrc/notebooks/outputs
 docsrc/notebooks/new_caledonia/*
 !docsrc/notebooks/new_caledonia/new_caledonia.org
+docsrc/notebooks/country_data/*
+!docsrc/notebooks/country_data/country_data.org
 
 # Paper
 *.bib.bak
