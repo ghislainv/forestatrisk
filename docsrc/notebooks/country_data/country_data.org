@@ -1,0 +1,351 @@
+# -*- mode: org -*-
+# -*- coding: utf-8 -*-
+# -*- org-src-preserve-indentation: t; org-edit-src-content: 0; -*-
+# ==============================================================================
+# author          :Ghislain Vieilledent
+# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+# web             :https://ecology.ghislainv.fr
+# license         :GPLv3
+# ==============================================================================
+
+#+title: Country data
+#+author:
+# #+author: Ghislain Vieilledent
+# #+email: ghislain.vieilledent@cirad.fr
+
+#+LANGUAGE: en
+#+TAGS: Blog(B) noexport(n) Stats(S)
+#+TAGS: Ecology(E) R(R) OrgMode(O) Python(P)
+#+EXPORT_SELECT_TAGS: Blog
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
+#+OPTIONS: html-postamble:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+HTML_DOCTYPE: html5
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css"/>
+
+# For math display
+#+LATEX_HEADER: \usepackage{amsfonts}
+#+LATEX_HEADER: \usepackage{unicode-math}
+
+#+PROPERTY: header-args :eval never-export
+
+* Version information    :noexport:
+
+#+begin_src emacs-lisp -n :exports both
+(princ (concat
+        (format "Emacs version: %s\n"
+                (emacs-version))
+        (format "org version: %s\n"
+                (org-version))))        
+#+end_src
+
+#+RESULTS:
+: Emacs version: GNU Emacs 27.1 (build 1, x86_64-pc-linux-gnu, GTK+ Version 3.24.24, cairo version 1.16.0)
+:  of 2021-03-28, modified by Debian
+: org version: 9.3
+
+* Introduction
+
+This notebook presents the functions of the =forestatrisk= Python
+package that can be used to collect the spatial data needed for
+modeling and forecasting deforestation in a given country.
+
+Data are retrieved from global (or pantropical) datasets freely
+available on the internet. Of course, the user can add any additional
+variables to the analyses manually. To do so, the user must add
+GeoTIFF raster files with extension =.tif= in the =data= folder of the
+working directory.
+
+** Importing Python modules
+
+
+We import the Python modules needed for collecting the data.
+
+#+begin_src python :results output :session :exports both
+# Imports
+import os
+
+from dotenv import load_dotenv
+import ee
+import pandas as pd
+from tabulate import tabulate
+
+from pywdpa import get_token
+import forestatrisk as far
+#+end_src
+
+#+RESULTS:
+: # forestatrisk: modelling and forecasting deforestation in the tropics.
+: # https://ecology.ghislainv.fr/forestatrisk/
+
+We create some directories to hold the data and the ouputs with the
+function =far.make_dir()=.
+
+#+begin_src python :results output :session :exports both
+far.make_dir("data_raw")
+far.make_dir("data")
+far.make_dir("output")
+#+end_src
+
+#+RESULTS:
+
+We increase the cache for GDAL to increase computational speed.
+
+#+begin_src python :results output :session :exports both
+# GDAL
+os.environ["GDAL_CACHEMAX"] = "1024"
+#+end_src
+
+#+RESULTS:
+
+** Set credentials
+
+We need to configure and set credentials for:
+ - Google Earth Engine (GEE) API
+ - RClone to access Google Drive
+ - WDPA API
+
+You will need a [[https://www.google.com/account/about/][Google account]] for using the GEE API and accessing
+Google Drive.
+
+*** Access to Google Earth Engine API
+
+Google Earth Engine is used to compute the past forest cover change
+from Vancutsem et al. 2021 or Hansen et al. 2013. To get credentials
+for using the Google Earth Engine API, follow these
+[[https://developers.google.com/earth-engine/guides/python_install-conda#get_credentials][instructions]]. While authentication with =ee.Authenticate()= should be
+necessary only once, you have to execute the command =ee.Initialize()=
+at each session.
+
+#+begin_src python :results output :session :exports both
+# Uncomment to authenticate for the first time.
+# ee.Authenticate()
+ee.Initialize()
+#+end_src
+
+#+RESULTS:
+
+Under Linux and Mac, credentials are stored in
+=$HOME/.config/earthengine/credentials=.
+
+#+begin_src shell :results none :session :exports code
+cat $HOME/.config/earthengine/credentials
+#+end_src
+
+
+*** Access to Google Drive with RClone
+
+RClone is used to download the forest cover change raster locally from
+Google Drive. To install RClone, follow these [[https://rclone.org/install/][instructions]]. To
+configure the access to your Google Drive, follow these [[https://rclone.org/drive/][instructions]].
+
+*** Access to WDPA API
+
+We will be using the [[https://ecology.ghislainv.fr/pywdpa/][pywda]] Python package to collect the data on
+protected areas from the World Database on Protected Areas (WDPA) at
+[[https://www.protectedplanet.net]]. To access the Protected Planet API,
+you must first obtain a Personal API Token by filling in the form
+available at https://api.protectedplanet.net/request. Then you need to
+set an environment variable (we recommend using the name =WDPA_KEY=)
+using either the command ~os.environ["WDPA_KEY"]="your_token"~ or
+[[https://github.com/theskumar/python-dotenv][python-dotenv]].
+
+The validity of your token can be checked with the function
+=pywdpa.get_token()=.
+
+#+begin_src python :results none :session :exports code
+# WDPA API
+load_dotenv(".env")
+get_token()
+#+end_src
+
+If your token is valid, the function will return its value. Otherwise
+it will print an error message.
+
+* Data
+** Compute forest cover change
+
+We specify the [[https://fr.wikipedia.org/wiki/ISO_3166-1#Table_de_codage][iso3]] code of the country we want the data for, for example [[https://en.wikipedia.org/wiki/Martinique][Martinique]]. 
+
+#+begin_src python :results output :session :exports both
+iso3 = "MTQ"
+#+end_src
+
+#+RESULTS:
+
+We compute the past forest cover change from Vancutsem et al. 2021
+using Google Earth Engine. The argument =gdrive_remote_rclone= of the
+function [[https://ecology.ghislainv.fr/forestatrisk/subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_forest_run][far.data.country_forest_run()]] specifies the name of the
+Google Drive remote for rclone. The argument =gdrive_folder= specifies
+the name of the Google Drive folder to use.
+
+#+begin_src python :results output :session :exports both
+# Compute gee forest data
+far.data.country_forest_run(
+    iso3, proj="EPSG:4326",
+    output_dir="data_raw",
+    keep_dir=True,
+    fcc_source="jrc", perc=50,
+    gdrive_remote_rclone="gdrive_gv",
+    gdrive_folder="GEE-forestatrisk-notebooks")
+#+end_src
+
+#+RESULTS:
+: Run Google Earth Engine
+: GEE running on the following extent:
+: (-61.22902679, 14.38819408, -60.80875015, 14.87902832)
+
+** Download raw data
+
+#+begin_src python :results output :session :exports both
+# Download data
+far.data.country_download(
+    iso3,
+    gdrive_remote_rclone="gdrive_gv",
+    gdrive_folder="GEE-forestatrisk-notebooks",
+    output_dir="data_raw")   
+#+end_src
+
+#+RESULTS:
+: Downloading data for country MTQ
+: SRTM not existing for tile: 25_09
+
+** Compute explanatory variables
+
+We first set the projection in which we want the data to be, for example [[https://epsg.io/5490][EPSG:5490]].
+
+#+begin_src python :results output :session :exports both
+# Projection
+proj = "EPSG:5490"
+#+end_src
+
+#+RESULTS:
+
+We compute the explanatory variables from the raw data.
+
+#+begin_src python :results output :session :exports both
+# Compute variables
+far.data.country_compute(
+    iso3,
+    temp_dir="data_raw",
+    output_dir="data",
+    proj=proj,
+    data_country=True,
+    data_forest=True,
+    keep_temp_dir=True)
+#+end_src
+
+** Files
+
+The =data= folder includes:
+
+- Forest cover change data for the period 2010-2020 as a GeoTiff raster
+  file (=data/fcc23.tif=).
+- Spatial explanatory variables as GeoTiff raster files (=.tif=
+  extension, eg. =data/dist_edge.tif= for distance to forest edge).
+- Additional folders: =forest=, =forecast=, and =emissions=, with forest
+  cover change for different periods of time, explanatory variables at
+  different dates used for projections in the future, and forest carbon
+  data for computing carbon emissions.
+
+#+begin_src python :results output :session :exports code
+# Plot forest
+fig_fcc23 = far.plot.fcc(
+    input_fcc_raster="data/fcc23.tif",
+    maxpixels=1e8,
+    output_file="output/fcc23.png",
+    borders="data/ctry_PROJ.shp",
+    linewidth=0.3, dpi=500)
+#+end_src
+
+#+RESULTS:
+: Build overview
+
+Variable characteristics are summarized in the following table:
+
+#+begin_src python :results value raw :session :exports results
+var = pd.read_csv("tables/variables.txt", na_filter=False)
+col_names = ["Product", "Source", "Variable", "Unit", "Resolution (m)"]
+tabulate(var, headers=col_names, tablefmt="orgtbl", showindex=False)
+#+end_src
+
+#+RESULTS:
+| Product                      | Source                | Variable                       | Unit   | Resolution (m) |
+|------------------------------+-----------------------+--------------------------------+--------+----------------|
+| Forest maps (2000-2010-2020) | Vancutsem et al. 2021 | distance to forest edge        | m      |             30 |
+|                              |                       | distance to past deforestation | m      |             30 |
+| Digital Elevation Model      | SRTM v4.1 CSI-CGIAR   | altitude                       | m      |             90 |
+|                              |                       | slope                          | degree |             90 |
+| Highways                     | OSM-Geofabrik         | distance to roads              | m      |            150 |
+| Places                       |                       | distance to towns              | m      |            150 |
+| Waterways                    |                       | distance to river              | m      |            150 |
+| Protected areas              | WDPA                  | protected area presence        | --     |             30 |
+
+** Plots
+
+We can plot the past deforestation on the period 2000--2010--2020:
+
+#+begin_src python :results file :session :exports both
+# Plot forest
+ofile = "output/nb_ctrydata_fcc123.png"
+fig_fcc123 = far.plot.fcc123(
+    input_fcc_raster="data/forest/fcc123.tif",
+    maxpixels=1e8,
+    output_file=ofile,
+    borders="data/ctry_PROJ.shp",
+    linewidth=0.3,
+    figsize=(6, 5), dpi=500)
+ofile
+#+end_src
+
+#+ATTR_RST: :width 600
+#+RESULTS:
+[[file:output/nb_ctrydata_fcc123.png]]
+
+We can also plot the explicative variables:
+
+#+begin_src python :results file :session :exports both
+# Plot explicative variables
+ofile_pdf = "output/nb_ctrydata_var.pdf"
+ofile = "output/nb_ctrydata_var.png"
+fig_var = far.plot.var(
+    var_dir="data",
+    output_file=ofile_pdf,
+    figsize=(6, 5), dpi=500)
+fig_var[0].savefig(ofile)
+ofile
+#+end_src
+
+#+ATTR_RST: :width 600
+#+RESULTS:
+[[file:output/nb_ctrydata_var.png]]
+
+* Environment setup and test :noexport:
+
+#+BEGIN_SRC python :results value
+import sys
+return(sys.executable)
+#+END_SRC
+
+#+RESULTS:
+: /home/ghislain/.pyenv/versions/miniconda3-latest/envs/conda-far/bin/python
+
+
+These definitions are necessary for having babel use the correct
+virtual environment.
+
+Before using the anaconda python distribution I was a heavy user of python
+virtualenv. I do not use this much any more, but these are the relevant
+options:
+- python-shell-virtualenv-path: only affects sessions via the run-python function
+- org-babel-python-command: defines executable for non-session src blocks
+
+# python-shell-virtualenv-path: "/home/dfeich/py-virtualenv/notebook"
+# org-babel-python-command: "/home/dfeich/py-virtualenv/notebook/bin/python"
+
+Local Variables:
+org-babel-python-command: "/home/ghislain/.pyenv/versions/miniconda3-latest/envs/conda-far/bin/python"
+org-babel-sh-command: "/bin/bash"
+End:
+

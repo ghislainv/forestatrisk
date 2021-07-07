@@ -16,7 +16,7 @@ The approach is based on a methodology described in the following
 article:
 
 **Vieilledent G., C. Vancutsem, and F. Achard.** Forest refuge areas and
-carbon emissions from tropical deforestation in the 21^st century.
+carbon emissions from tropical deforestation in the 21\ :sup:`st`\ century.
 
 More information on the method can be find at the ForestAtRisk
 website: `https://forestatrisk.cirad.fr <https://forestatrisk.cirad.fr>`_.
@@ -24,7 +24,7 @@ website: `https://forestatrisk.cirad.fr <https://forestatrisk.cirad.fr>`_.
 1.1 Importing Python modules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We import the Python modules necessary for running our analysis.
+We import the Python modules needed for running the analysis.
 
 .. code:: python
 
@@ -167,7 +167,7 @@ the name of the Google Drive folder to use.
         keep_dir=True,
         fcc_source="jrc", perc=50,
         gdrive_remote_rclone="gdrive_gv",
-        gdrive_folder="GEE-forestatrisk-NCL")
+        gdrive_folder="GEE-forestatrisk-notebooks")
 
 2.2 Download raw data
 ~~~~~~~~~~~~~~~~~~~~~
@@ -178,7 +178,7 @@ the name of the Google Drive folder to use.
     far.data.country_download(
         iso3,
         gdrive_remote_rclone="gdrive_gv",
-        gdrive_folder="GEE-forestatrisk-NCL",
+        gdrive_folder="GEE-forestatrisk-notebooks",
         output_dir="data_raw")   
 
 ::

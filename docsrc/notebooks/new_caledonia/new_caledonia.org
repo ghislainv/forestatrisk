@@ -57,7 +57,7 @@ The approach is based on a methodology described in the following
 article:
 
 *Vieilledent G., C. Vancutsem, and F. Achard.* Forest refuge areas and
-carbon emissions from tropical deforestation in the 21^st century.
+carbon emissions from tropical deforestation in the 21^{st} century.
 
 More information on the method can be find at the ForestAtRisk
 website: [[https://forestatrisk.cirad.fr]].
@@ -65,7 +65,7 @@ website: [[https://forestatrisk.cirad.fr]].
 ** Importing Python modules
 
 
-We import the Python modules necessary for running our analysis.
+We import the Python modules needed for running the analysis.
 
 #+begin_src python :results output :session :exports both
 # Imports
@@ -145,12 +145,9 @@ ee.Initialize()
 Under Linux and Mac, credentials are stored in
 =$HOME/.config/earthengine/credentials=.
 
-#+begin_src shell :results output :session :exports code
+#+begin_src shell :results none :session :exports code
 cat $HOME/.config/earthengine/credentials
 #+end_src
-
-#+RESULTS:
-: {"refresh_token": "1/fNSaVTv3IBReD_tB4o6OFafnuTexl95PJ-y4a-GkrEI"}
 
 *** Access to Google Drive with RClone
 
@@ -172,14 +169,11 @@ using either the command ~os.environ["WDPA_KEY"]="your_token"~ or
 The validity of your token can be checked with the function
 =pywdpa.get_token()=.
 
-#+begin_src python :results value :session :exports code
+#+begin_src python :results none :session :exports code
 # WDPA API
 load_dotenv(".env")
 get_token()
 #+end_src
-
-#+RESULTS:
-: 3e404871700e77c453c4e189d848f739
 
 If your token is valid, the function will return its value. Otherwise
 it will print an error message.
@@ -209,7 +203,7 @@ far.data.country_forest_run(
     keep_dir=True,
     fcc_source="jrc", perc=50,
     gdrive_remote_rclone="gdrive_gv",
-    gdrive_folder="GEE-forestatrisk-NCL")
+    gdrive_folder="GEE-forestatrisk-notebooks")
 #+end_src
 
 #+RESULTS:
@@ -221,7 +215,7 @@ far.data.country_forest_run(
 far.data.country_download(
     iso3,
     gdrive_remote_rclone="gdrive_gv",
-    gdrive_folder="GEE-forestatrisk-NCL",
+    gdrive_folder="GEE-forestatrisk-notebooks",
     output_dir="data_raw")   
 #+end_src
 
@@ -1239,7 +1233,6 @@ ofile
 
 #+BEGIN_SRC python :results value
 import sys
-import pandas
 return(sys.executable)
 #+END_SRC
 

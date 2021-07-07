@@ -8,6 +8,7 @@ Python notebooks
    :maxdepth: 1
 
    notebooks/get_started.ipynb
+   notebooks/country_data/country_data
    notebooks/far_tropics.ipynb
    notebooks/new_caledonia/new_caledonia
 
