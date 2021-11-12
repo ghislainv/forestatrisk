@@ -1229,6 +1229,26 @@ ofile
 #+RESULTS:
 [[file:output/nb_newcal_fcc_2100.png]]
 
+* COG :noexport:
+
+Transform rasters into Cloud Optimized GeoTIFFs (COGs).
+
+#+begin_src shell 
+gdal_translate data/forest/fcc123.tif output/fcc123_NCL.tif -of COG -co COMPRESS=LZW -co PREDICTOR=2
+gdal_translate output/prob.tif output/prob_NCL.tif -of COG -co COMPRESS=LZW -co PREDICTOR=2
+gdal_translate output/fcc_2050.tif output/fcc_2050_NCL.tif -of COG -co COMPRESS=LZW -co PREDICTOR=2
+gdal_translate output/fcc_2100.tif output/fcc_2100_NCL.tif -of COG -co COMPRESS=LZW -co PREDICTOR=2
+#+end_src
+
+Export COGs to the forestatrisk website
+
+#+begin_src shell
+scp output/fcc123_NCL.tif fdb:/home/www/forestatrisk/newcal/tif
+scp output/prob_NCL.tif fdb:/home/www/forestatrisk/newcal/tif
+scp output/fcc_2050_NCL.tif fdb:/home/www/forestatrisk/newcal/tif
+scp output/fcc_2100_NCL.tif fdb:/home/www/forestatrisk/newcal/tif
+#+end_src
+
 * Environment setup and test :noexport:
 
 #+BEGIN_SRC python :results value

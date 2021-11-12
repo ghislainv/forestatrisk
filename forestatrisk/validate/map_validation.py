@@ -5,12 +5,9 @@
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
 # web             :https://ecology.ghislainv.fr
-# python_version  :>=2.7
+# python_version  :>=3
 # license         :GPLv3
 # ==============================================================================
-
-# Standard library imports
-from __future__ import division, print_function  # Python 3 compatibility
 
 # Third party imports
 import numpy as np
