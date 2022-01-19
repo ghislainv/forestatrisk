@@ -33,8 +33,8 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     """Compute forest-cover change with Google Earth Engine.
 
     Compute the forest-cover change from Joint Research Center (JRC)
-    Vancutsem et al. data with Python and GEE API. Export the results
-    to Google Drive.
+    Vancutsem et al. data (v1_2020) with Python and GEE API. Export
+    the results to Google Drive.
 
     Notes for Google Earth Engine (abbreviated GEE):
 
@@ -60,7 +60,7 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     export_coord = region.getInfo()["coordinates"]
 
     # JRC annual product (AP)
-    AP = ee.ImageCollection("projects/JRC/TMF/v1_2019/AnnualChanges")
+    AP = ee.ImageCollection("projects/JRC/TMF/v1_2020/AnnualChanges")
     AP = AP.mosaic().toByte()
     AP = AP.clip(region)
 
@@ -69,23 +69,24 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     ap_allYear = AP_forest.where(AP_forest.neq(1), 0)
 
     # Forest in Jan 2020
-    forest2020 = ap_allYear.select(29)
+    ap_2020_2021 = ap_allYear.select(list(range(29, 31)))
+    forest2020 = ap_2020_2021.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest cover Jan 2015
-    ap_2015_2020 = ap_allYear.select(list(range(24, 30)))
-    forest2015 = ap_2015_2020.reduce(ee.Reducer.sum()).gte(1)
+    ap_2015_2021 = ap_allYear.select(list(range(24, 31)))
+    forest2015 = ap_2015_2021.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest cover Jan 2010
-    ap_2010_2020 = ap_allYear.select(list(range(19, 30)))
-    forest2010 = ap_2010_2020.reduce(ee.Reducer.sum()).gte(1)
+    ap_2010_2021 = ap_allYear.select(list(range(19, 31)))
+    forest2010 = ap_2010_2021.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest cover Jan 2005
-    ap_2005_2020 = ap_allYear.select(list(range(14, 30)))
-    forest2005 = ap_2005_2020.reduce(ee.Reducer.sum()).gte(1)
+    ap_2005_2021 = ap_allYear.select(list(range(14, 31)))
+    forest2005 = ap_2005_2021.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest cover Jan 2000
-    ap_2000_2020 = ap_allYear.select(list(range(9, 30)))
-    forest2000 = ap_2000_2020.reduce(ee.Reducer.sum()).gte(1)
+    ap_2000_2021 = ap_allYear.select(list(range(9, 31)))
+    forest2000 = ap_2000_2021.reduce(ee.Reducer.sum()).gte(1)
 
     # Forest raster with five bands
     forest = forest2000.addBands(forest2005).addBands(
