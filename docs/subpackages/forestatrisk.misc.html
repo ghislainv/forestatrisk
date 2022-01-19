@@ -6,9 +6,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>forestatrisk.misc package &#8212; forestatrisk — Modelling and forecasting deforestation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -85,7 +85,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -112,8 +112,8 @@
 <div class="section" id="module-forestatrisk.misc.countpix">
 <span id="forestatrisk-misc-countpix-module"></span><h2>forestatrisk.misc.countpix module<a class="headerlink" href="#module-forestatrisk.misc.countpix" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="forestatrisk.misc.countpix.countpix">
-<code class="sig-name descname"><span class="pre">countpix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_raster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/countpix.html#countpix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.countpix.countpix" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="forestatrisk.misc.countpix.countpix">
+<span class="sig-name descname"><span class="pre">countpix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_raster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/countpix.html#countpix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.countpix.countpix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Count the number of pixels having a specific value.</p>
 <p>Count the number of pixels (and the corresponding area in ha)
 having a specific value.</p>
@@ -135,8 +135,8 @@ having a specific value.</p>
 <div class="section" id="module-forestatrisk.misc.miscellaneous">
 <span id="forestatrisk-misc-miscellaneous-module"></span><h2>forestatrisk.misc.miscellaneous module<a class="headerlink" href="#module-forestatrisk.misc.miscellaneous" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="forestatrisk.misc.miscellaneous.invlogit">
-<code class="sig-name descname"><span class="pre">invlogit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#invlogit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.miscellaneous.invlogit" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="forestatrisk.misc.miscellaneous.invlogit">
+<span class="sig-name descname"><span class="pre">invlogit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#invlogit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.miscellaneous.invlogit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the inverse-logit of a numpy array.</p>
 <p>We differenciate the positive and negative values to avoid
 under/overflow with the use of exp().</p>
@@ -151,8 +151,8 @@ under/overflow with the use of exp().</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="forestatrisk.misc.miscellaneous.make_dir">
-<code class="sig-name descname"><span class="pre">make_dir</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#make_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.miscellaneous.make_dir" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="forestatrisk.misc.miscellaneous.make_dir">
+<span class="sig-name descname"><span class="pre">make_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#make_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.miscellaneous.make_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make new directory</p>
 <blockquote>
 <div><ul class="simple">
@@ -169,8 +169,8 @@ under/overflow with the use of exp().</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="forestatrisk.misc.miscellaneous.make_square">
-<code class="sig-name descname"><span class="pre">make_square</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rasterfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">square_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">33</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#make_square"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.miscellaneous.make_square" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="forestatrisk.misc.miscellaneous.make_square">
+<span class="sig-name descname"><span class="pre">make_square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rasterfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">square_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">33</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#make_square"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.miscellaneous.make_square" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute square information.</p>
 <p>This function computes block information from the caracteristics
 of a raster file and an indication on the number of rows to
@@ -192,8 +192,8 @@ sizes on y axis.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="forestatrisk.misc.miscellaneous.makeblock">
-<code class="sig-name descname"><span class="pre">makeblock</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rasterfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#makeblock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.miscellaneous.makeblock" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="forestatrisk.misc.miscellaneous.makeblock">
+<span class="sig-name descname"><span class="pre">makeblock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rasterfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#makeblock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.miscellaneous.makeblock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute block information.</p>
 <p>This function computes block information from the caracteristics
 of a raster file and an indication on the number of rows to
@@ -216,8 +216,8 @@ y axis.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="forestatrisk.misc.miscellaneous.progress_bar">
-<code class="sig-name descname"><span class="pre">progress_bar</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">niter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#progress_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.miscellaneous.progress_bar" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="forestatrisk.misc.miscellaneous.progress_bar">
+<span class="sig-name descname"><span class="pre">progress_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">niter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#progress_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.miscellaneous.progress_bar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draw progress_bar</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -233,8 +233,8 @@ y axis.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="forestatrisk.misc.miscellaneous.rescale">
-<code class="sig-name descname"><span class="pre">rescale</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#rescale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.miscellaneous.rescale" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="forestatrisk.misc.miscellaneous.rescale">
+<span class="sig-name descname"><span class="pre">rescale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#rescale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.misc.miscellaneous.rescale" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rescale probability values to 1-65535.</p>
 <p>This function rescales probability values (float in [0, 1]) to
 integer values in [1, 65535]. Raster data can then be of type
@@ -263,7 +263,7 @@ UInt16 with 0 as nodata value.</p>
       &copy;2020, Ghislain Vieilledent.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

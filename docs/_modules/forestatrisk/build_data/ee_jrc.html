@@ -6,9 +6,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>forestatrisk.build_data.ee_jrc &#8212; forestatrisk — Modelling and forecasting deforestation</title>
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
@@ -77,7 +77,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -112,22 +112,13 @@
 <span class="c1"># ==============================================================================</span>
 
 <span class="c1"># Annual product legend</span>
-<span class="c1"># 1. Tropical moist forest (TMF including bamboo-dominated forest and mangroves)</span>
-<span class="c1"># 2. TMF converted later in a tree plantation</span>
-<span class="c1"># 3. NEW degradation</span>
-<span class="c1"># 4. Ongoing degradation (disturbances still detected - can be few years after first degrad if several degradation stages)</span>
-<span class="c1"># 5. Degraded forest (former degradation, no disturbances detected anymore)</span>
-<span class="c1"># 6. NEW deforestation (may follow degradation)</span>
-<span class="c1"># 7. Ongoing deforestation (disturbances still detected)</span>
-<span class="c1"># 8. NEW Regrowth</span>
-<span class="c1"># 9. Regrowthing</span>
-<span class="c1"># 10. Other land cover (not water)</span>
-<span class="c1"># 11. Permanent Water (pekel et al.2015)</span>
-<span class="c1"># 12. Seasonal Water (pekel et al.2015)</span>
-<span class="c1"># 13. Init period without valid data - Init class = TMF</span>
-<span class="c1"># 14. Init period with min 1 valid obs - Init class = TMF</span>
-<span class="c1"># 15. Nodata  - Init class = other LC</span>
-<span class="c1"># 16. Init period without valid data - Init class = Plantation</span>
+<span class="c1"># ---------------------</span>
+<span class="c1"># 1. Undisturbed Tropical moist forest (TMF)</span>
+<span class="c1"># 2. Degraded TMF</span>
+<span class="c1"># 3. Deforested land</span>
+<span class="c1"># 4. Forest regrowth</span>
+<span class="c1"># 5. Permanent or seasonal water</span>
+<span class="c1"># 6. Other land cover</span>
 
 <span class="c1"># Standard library imports</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 3 compatibility</span>
@@ -144,8 +135,8 @@
     <span class="sd">&quot;&quot;&quot;Compute forest-cover change with Google Earth Engine.</span>
 
 <span class="sd">    Compute the forest-cover change from Joint Research Center (JRC)</span>
-<span class="sd">    Vancutsem et al. data with Python and GEE API. Export the results</span>
-<span class="sd">    to Google Drive.</span>
+<span class="sd">    Vancutsem et al. data (v1\\_2020) with Python and GEE API. Export</span>
+<span class="sd">    the results to Google Drive.</span>
 
 <span class="sd">    Notes for Google Earth Engine (abbreviated GEE):</span>
 
@@ -170,43 +161,34 @@
     <span class="n">region</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span><span class="o">.</span><span class="n">bounds</span><span class="p">()</span>
     <span class="n">export_coord</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">getInfo</span><span class="p">()[</span><span class="s2">&quot;coordinates&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Path to JRC products</span>
-    <span class="c1"># path = &quot;users/ghislainv/jrc/&quot;</span>
-
     <span class="c1"># JRC annual product (AP)</span>
-    <span class="c1"># AP = ee.ImageCollection(path + &quot;AnnualChanges1982_2019&quot;)</span>
-    <span class="n">AP</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">ImageCollection</span><span class="p">(</span>
-        <span class="s2">&quot;users/ClassifLandsat072015/Roadless2019/AnnualChanges_1982_2019&quot;</span><span class="p">)</span>
+    <span class="n">AP</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">ImageCollection</span><span class="p">(</span><span class="s2">&quot;projects/JRC/TMF/v1_2020/AnnualChanges&quot;</span><span class="p">)</span>
     <span class="n">AP</span> <span class="o">=</span> <span class="n">AP</span><span class="o">.</span><span class="n">mosaic</span><span class="p">()</span><span class="o">.</span><span class="n">toByte</span><span class="p">()</span>
     <span class="n">AP</span> <span class="o">=</span> <span class="n">AP</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
 
-    <span class="c1"># ap_allYear: forest if Y = 1, 2, 3, 4, 5, 13, or 14.</span>
-    <span class="n">AP_forest</span> <span class="o">=</span> <span class="n">AP</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span>
-        <span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">13</span><span class="p">))</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">14</span><span class="p">)),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># ap_allYear: forest if Y = 1 or 2.</span>
+    <span class="n">AP_forest</span> <span class="o">=</span> <span class="n">AP</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">AP</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">ap_allYear</span> <span class="o">=</span> <span class="n">AP_forest</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">AP_forest</span><span class="o">.</span><span class="n">neq</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="c1"># Forest in Jan 2020</span>
-    <span class="n">forest2020</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="mi">37</span><span class="p">)</span>
+    <span class="n">ap_2020_2021</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">29</span><span class="p">,</span> <span class="mi">31</span><span class="p">)))</span>
+    <span class="n">forest2020</span> <span class="o">=</span> <span class="n">ap_2020_2021</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Forest cover Jan 2015</span>
-    <span class="n">ap_2015_2020</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">38</span><span class="p">)))</span>
-    <span class="n">forest2015</span> <span class="o">=</span> <span class="n">ap_2015_2020</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
-    <span class="n">forest2015</span> <span class="o">=</span> <span class="n">forest2015</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ap_2015_2021</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">31</span><span class="p">)))</span>
+    <span class="n">forest2015</span> <span class="o">=</span> <span class="n">ap_2015_2021</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Forest cover Jan 2010</span>
-    <span class="n">ap_2010_2020</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">27</span><span class="p">,</span> <span class="mi">38</span><span class="p">)))</span>
-    <span class="n">forest2010</span> <span class="o">=</span> <span class="n">ap_2010_2020</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
-    <span class="n">forest2010</span> <span class="o">=</span> <span class="n">forest2010</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ap_2010_2021</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">19</span><span class="p">,</span> <span class="mi">31</span><span class="p">)))</span>
+    <span class="n">forest2010</span> <span class="o">=</span> <span class="n">ap_2010_2021</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Forest cover Jan 2005</span>
-    <span class="n">ap_2005_2020</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="mi">38</span><span class="p">)))</span>
-    <span class="n">forest2005</span> <span class="o">=</span> <span class="n">ap_2005_2020</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
-    <span class="n">forest2005</span> <span class="o">=</span> <span class="n">forest2005</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ap_2005_2021</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">31</span><span class="p">)))</span>
+    <span class="n">forest2005</span> <span class="o">=</span> <span class="n">ap_2005_2021</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Forest cover Jan 2000</span>
-    <span class="n">ap_2000_2020</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">38</span><span class="p">)))</span>
-    <span class="n">forest2000</span> <span class="o">=</span> <span class="n">ap_2000_2020</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
-    <span class="n">forest2000</span> <span class="o">=</span> <span class="n">forest2000</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ap_2000_2021</span> <span class="o">=</span> <span class="n">ap_allYear</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">31</span><span class="p">)))</span>
+    <span class="n">forest2000</span> <span class="o">=</span> <span class="n">ap_2000_2021</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">ee</span><span class="o">.</span><span class="n">Reducer</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Forest raster with five bands</span>
     <span class="n">forest</span> <span class="o">=</span> <span class="n">forest2000</span><span class="o">.</span><span class="n">addBands</span><span class="p">(</span><span class="n">forest2005</span><span class="p">)</span><span class="o">.</span><span class="n">addBands</span><span class="p">(</span>
@@ -328,7 +310,7 @@
       &copy;2020, Ghislain Vieilledent.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
