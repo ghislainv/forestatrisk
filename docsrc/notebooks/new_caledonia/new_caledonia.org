@@ -152,8 +152,9 @@ cat $HOME/.config/earthengine/credentials
 *** Access to Google Drive with RClone
 
 RClone is used to download the forest cover change raster locally from
-Google Drive. To install RClone, follow these [[https://rclone.org/install/][instructions]]. To
-configure the access to your Google Drive, follow these [[https://rclone.org/drive/][instructions]].
+Google Drive. To install RClone, follow these [[https://rclone.org/install/][instructions for
+RClone]]. To configure the access to your Google Drive, follow these
+[[https://rclone.org/drive/][instructions for accessing Google Drive]].
 
 *** Access to WDPA API
 
@@ -397,6 +398,7 @@ tabulate(var, headers=col_names, tablefmt="orgtbl", showindex=False)
 | Waterways                    |                       | distance to river              | m      |            150 |
 | Protected areas              | WDPA                  | protected area presence        | --     |             30 |
 | Geology                      | Géorep 1/50.000       | peridotite bed presence        | --     |             30 |
+
 * Sampling
 ** Sampling the observations
  
