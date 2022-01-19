@@ -113,8 +113,9 @@ Under Linux and Mac, credentials are stored in
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 RClone is used to download the forest cover change raster locally from
-Google Drive. To install RClone, follow these `instructions <https://rclone.org/install/>`_. To
-configure the access to your Google Drive, follow these `instructions <https://rclone.org/drive/>`_.
+Google Drive. To install RClone, follow these `instructions for
+RClone <https://rclone.org/install/>`_. To configure the access to your Google Drive, follow these
+`instructions for accessing Google Drive <https://rclone.org/drive/>`_.
 
 1.2.3 Access to WDPA API
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -146,7 +147,7 @@ it will print an error message.
 2.1 Compute forest cover change
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We specify the `iso3 <https://fr.wikipedia.org/wiki/ISO_3166-1#Table_de_codage>`_ code of New Caledonia which is "NCL". 
+We specify the `iso3 <https://fr.wikipedia.org/wiki/ISO_3166-1#Table_de_codage>`_ code of New Caledonia which is “NCL”. 
 
 .. code:: python
 
@@ -557,7 +558,7 @@ We save the model using pickle.
     with open("output/mod_icar.pickle", "wb") as pickle_file:
       pickle.dump(mod_icar_pickle, pickle_file)
 
-We get model's predictions.
+We get model’s predictions.
 
 .. code:: python
 
@@ -640,7 +641,7 @@ We get model's predictions.
     7     K  0.5801  0.5897  0.6018  0.6022  0.5821  0.5912
 
 
-The "icar" model has the best accuracy indices for the cross-validation.
+The “icar” model has the best accuracy indices for the cross-validation.
 
 5.2 Deviance
 ~~~~~~~~~~~~
@@ -704,7 +705,7 @@ The "icar" model has the best accuracy indices for the cross-validation.
     4  full       0.0  100.0
 
 
-While the "rf" had lower accuracy indices than the "icar" model for the cross-validation, the "rf" model explains 84% of the deviance against 42% for the "icar" model. This shows clearly that the "rf" model overfits the data. Moreover, the "glm" explains only 34% of the deviance. This means that fixed variables included in the model only explain a part of the spatial variability in the deforestation process and that adding spatial random effects allow to structure a significant part of the residual variability (8%). We thus use the "icar" model to predict the spatial location of the deforestation in the future.
+While the “rf” had lower accuracy indices than the “icar” model for the cross-validation, the “rf” model explains 84% of the deviance against 42% for the “icar” model. This shows clearly that the “rf” model overfits the data. Moreover, the “glm” explains only 34% of the deviance. This means that fixed variables included in the model only explain a part of the spatial variability in the deforestation process and that adding spatial random effects allow to structure a significant part of the residual variability (8%). We thus use the “icar” model to predict the spatial location of the deforestation in the future.
 
 .. code:: python
 
@@ -716,10 +717,10 @@ While the "rf" had lower accuracy indices than the "icar" model for the cross-va
     obs_pred["icar"] = pred_icar
     obs_pred.to_csv("output/obs_pred.csv", header=True, index=False)
 
-6 Variables' effects
+6 Variables’ effects
 --------------------
 
-6.1 Model's coefficients
+6.1 Model’s coefficients
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
