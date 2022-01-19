@@ -33,7 +33,7 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     """Compute forest-cover change with Google Earth Engine.
 
     Compute the forest-cover change from Joint Research Center (JRC)
-    Vancutsem et al. data (v1_2020) with Python and GEE API. Export
+    Vancutsem et al. data (v1\\_2020) with Python and GEE API. Export
     the results to Google Drive.
 
     Notes for Google Earth Engine (abbreviated GEE):
