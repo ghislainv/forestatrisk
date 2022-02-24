@@ -39,8 +39,8 @@ def deforest(input_raster,
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
 
-    :return: A tuple of statistics (hectares, frequence,
-        threshold, error).
+    :return: A tuple of statistics (counts, hectares, threshold, error,
+        error_perc, ndefor, nfp).
 
     """
 
@@ -54,7 +54,7 @@ def deforest(input_raster,
 
     # Number of pixels to deforest
     surface_pixel = -gt[1] * gt[5]
-    ndefor = np.around((hectares * 10000) / surface_pixel).astype(np.int)
+    ndefor = np.around((hectares * 10000) / surface_pixel).astype(int)
 
     # Make blocks
     blockinfo = makeblock(input_raster, blk_rows=blk_rows)
@@ -82,7 +82,7 @@ def deforest(input_raster,
         nfp += len(forpix[0])
 
     # Compute the histogram of values
-    nvalues = 65635
+    nvalues = 65535
     counts = probB.GetHistogram(0.5, 65535.5, nvalues, 0, 0)
 
     # If deforestation < forest
@@ -92,7 +92,7 @@ def deforest(input_raster,
         print("Identify threshold")
         quant = ndefor / (nfp * 1.0)
         cS = 0.0
-        cumSum = np.zeros(nvalues, dtype=np.float)
+        cumSum = np.zeros(nvalues, dtype=float)
         go_on = True
         for i in np.arange(nvalues - 1, -1, -1):
             cS += counts[i] / (nfp * 1.0)
@@ -158,10 +158,26 @@ def deforest(input_raster,
     del(fccR)
 
     # Estimates of error on deforested hectares
-    error = (ndc * surface_pixel / 10000.0) - hectares
+    # If deforestation < forest
+    if (ndefor < nfp):
+        error = (ndc * surface_pixel / 10000.0) - hectares
+        error_perc = np.round(100 * error / hectares, 2)
+        if error_perc >= 1.0:
+            msg = ("The error on deforested area (in ha) is too high (>= 1%). "
+                   "This means that the number of categories for the "
+                   "deforestation probability [1, 65535] is too low to find "
+                   "an accurate probability threshold for deforestation. "
+                   "You might either i) reduce the size of the study area, "
+                   "or ii) project deforestation on a shorter period of time")
+            raise ValueError(msg)
+    # If deforestation > forest (everything is deforested)
+    else:
+        ndc = nfp
+        error = 0
+        error_perc = 0.0
 
     # Return results
-    stats = (counts, threshold, error, hectares)
+    stats = (counts, hectares, threshold, error, error_perc, ndc, nfp)
     return stats
 
 # End
