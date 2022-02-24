@@ -38,8 +38,8 @@ def computeAUC(pos_scores, neg_scores, n_sample=100000):
 
     """
 
-    pos_scores = np.array(pos_scores, dtype=np.float)
-    neg_scores = np.array(neg_scores, dtype=np.float)
+    pos_scores = np.array(pos_scores, dtype=float)
+    neg_scores = np.array(neg_scores, dtype=float)
     pos_sample = np.random.choice(pos_scores, size=n_sample, replace=True)
     neg_sample = np.random.choice(neg_scores, size=n_sample, replace=True)
     AUC = np.mean(1.0*(pos_sample > neg_sample) + 0.5*(pos_sample == neg_sample))

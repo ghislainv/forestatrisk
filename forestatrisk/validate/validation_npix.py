@@ -49,8 +49,8 @@ def make_square(rasterfile, square_size=33):
     nsquare_y = int(np.ceil(nrow / square_size))
     nsquare = nsquare_x * nsquare_y
     # Upper-left coordinates of each square
-    x = np.arange(0, ncol, square_size, dtype=np.int).tolist()
-    y = np.arange(0, nrow, square_size, dtype=np.int).tolist()
+    x = np.arange(0, ncol, square_size, dtype=int).tolist()
+    y = np.arange(0, nrow, square_size, dtype=int).tolist()
     # Size (number of col and row) of each square
     nx = [square_size] * nsquare_x
     ny = [square_size] * nsquare_y
@@ -103,10 +103,10 @@ def validation_npix(r_pred, r_obs, value_f=1, value_d=0,
     print("Divide region in {} squares".format(nsquare))
 
     # Initialize the number of pixels per square
-    npix_pred_f = np.zeros(nsquare, dtype=np.int)
-    npix_obs_f = np.zeros(nsquare, dtype=np.int)
-    npix_pred_d = np.zeros(nsquare, dtype=np.int)
-    npix_obs_d = np.zeros(nsquare, dtype=np.int)
+    npix_pred_f = np.zeros(nsquare, dtype=int)
+    npix_obs_f = np.zeros(nsquare, dtype=int)
+    npix_pred_d = np.zeros(nsquare, dtype=int)
+    npix_obs_d = np.zeros(nsquare, dtype=int)
 
     # Compute the number of pixels
     print("Compute the number of pixels per square")

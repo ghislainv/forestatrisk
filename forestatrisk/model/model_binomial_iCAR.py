@@ -489,7 +489,7 @@ class model_binomial_iCAR(object):
             (new_x,) = build_design_matrices([self._x_design_info],
                                              new_data)
         X = new_x[:, :-1]
-        cell = new_x[:, -1].astype(np.int)
+        cell = new_x[:, -1].astype(np.int32)
 
         # Rho
         if (len(self.rho.shape) == 1):
