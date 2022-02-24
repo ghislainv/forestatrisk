@@ -74,7 +74,7 @@ def map_confmat(r_obs0, r_obs1, r_pred0, r_pred1,
     print("Divide region in {} blocks".format(nblock))
 
     # Confusion matrix
-    conf_mat = np.zeros((2, 2), dtype=np.int32)
+    conf_mat = np.zeros((2, 2), dtype=int)
 
     # Loop on blocks of data
     for b in range(nblock):

@@ -86,9 +86,9 @@ def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
     # Number of defor/forest pixels by block
     print("Compute number of deforested and forest pixels per block")
     ndc = 0
-    ndc_block = np.zeros(nblock, dtype=np.int)
+    ndc_block = np.zeros(nblock, dtype=int)
     nfc = 0
-    nfc_block = np.zeros(nblock, dtype=np.int)
+    nfc_block = np.zeros(nblock, dtype=int)
 
     # Loop on blocks of data
     for b in range(nblock):
@@ -133,8 +133,8 @@ def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
     block_draw_f = np.random.choice(list(range(nblock)), size=nsamp,
                                     replace=True, p=proba_block_f)
     # Number of times the block is drawn
-    nblock_draw_d = np.zeros(nblock, dtype=np.int)
-    nblock_draw_f = np.zeros(nblock, dtype=np.int)
+    nblock_draw_d = np.zeros(nblock, dtype=int)
+    nblock_draw_f = np.zeros(nblock, dtype=int)
     for s in range(nsamp):
         nblock_draw_d[block_draw_d[s]] += 1
         nblock_draw_f[block_draw_f[s]] += 1
@@ -142,8 +142,8 @@ def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
     # Draw defor/forest pixels in blocks
     print("Draw pixels at random in blocks")
     # Object to store coordinates of selected pixels
-    deforselect = np.empty(shape=(0, 2), dtype=np.int)
-    forselect = np.empty(shape=(0, 2), dtype=np.int)
+    deforselect = np.empty(shape=(0, 2), dtype=int)
+    forselect = np.empty(shape=(0, 2), dtype=int)
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
@@ -227,8 +227,8 @@ def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
     print("... {} cells ({} x {})".format(ncell, nrow, ncol))
     # bigI and bigJ are the coordinates of the cells and start at zero
     print("Identify cell number from XY coordinates")
-    bigJ = ((pts_x - Xmin) / csize).astype(np.int)
-    bigI = ((Ymax - pts_y) / csize).astype(np.int)
+    bigJ = ((pts_x - Xmin) / csize).astype(int)
+    bigI = ((Ymax - pts_y) / csize).astype(int)
     cell = bigI * ncol + bigJ  # Cell number starts at zero
 
     # =============================================
@@ -263,7 +263,7 @@ def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
 
     # Numpy array to store values
     nobs = select.shape[0]
-    val = np.zeros(shape=(nobs, nband), dtype=np.float32)
+    val = np.zeros(shape=(nobs, nband), dtype=float)
 
     # Extract raster values
     print("Extract raster values for selected pixels")

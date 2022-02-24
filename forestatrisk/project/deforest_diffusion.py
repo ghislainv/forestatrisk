@@ -41,7 +41,7 @@ def deforest_diffusion(forest_t0, t0, annual_defor, t):
     ctry_for = 1 * (forest_t0 > 0)  # Transform in 0,1
     ti = t - t0  # time-interval
     # Defor as np.float (because nfor is of type np.float)
-    defor = (annual_defor * ti).astype(np.float)
+    defor = (annual_defor * ti).astype(float)
     nfor = forest_t0
 
     # While a country has defor > nfor
@@ -92,7 +92,7 @@ def deforest_diffusion_t_nofor(forest_t0, t0, annual_defor):
     # Variables
     nctry = len(forest_t0)
     ctry_for = 1 * (forest_t0 > 0)  # Transform in 0,1
-    defor = annual_defor.astype(np.float)  # Here time step of 1 year
+    defor = annual_defor.astype(float)  # Here time step of 1 year
     nfor = forest_t0
     ny = np.array([0] * nctry)
     t = 0
