@@ -9,8 +9,9 @@ on:
   push:
     branches:
       - 'dev'
-  tags:
-      - v*
+  release:
+    types:
+      - published
   
 # Alternatively, to publish when a (published) GitHub Release is created, use the following:
 # on:
