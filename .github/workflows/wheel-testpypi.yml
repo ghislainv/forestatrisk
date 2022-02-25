@@ -6,9 +6,11 @@ name: Build wheel and upload to TestPyPI
 
 # When pushing to branch dev
 on:
-  release:
-    types:
-      - published
+  push:
+    branches:
+      - 'dev'
+  tags:
+      - v*
   
 # Alternatively, to publish when a (published) GitHub Release is created, use the following:
 # on:
