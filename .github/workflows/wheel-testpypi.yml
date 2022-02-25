@@ -4,14 +4,13 @@
 
 name: Build wheel and upload to TestPyPI
 
-# When pushing to branch dev
+# When pushing to branch dev with tag starting with v
 on:
   push:
     branches:
       - 'dev'
-  release:
-    types:
-      - published
+    tags:
+      - 'v*'
   
 # Alternatively, to publish when a (published) GitHub Release is created, use the following:
 # on:
