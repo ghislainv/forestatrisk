@@ -39,8 +39,18 @@ def deforest(input_raster,
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
 
-    :return: A tuple of statistics (counts, hectares, threshold, error,
-        error_perc, ndefor, nfp).
+    :return: A dictionary of statistics (counts, hectares, threshold,
+        error, error_perc, ndp, nfp).
+
+        - counts: histogram of deforestation probabilities.
+        - hectares: number of hectares to be deforested.
+        - threshold: probability threshold above which (>=) pixels are
+          deforested.
+        - error: difference between hectares to be deforested and
+          hectares trully deforested (in ha).
+        - error_perc: percentage of error (must be < 1%).
+        - ndp: number of deforested pixels.
+        - nfp: number of forest pixels before deforestation.
 
     """
 
@@ -56,38 +66,15 @@ def deforest(input_raster,
     surface_pixel = -gt[1] * gt[5]
     ndefor = np.around((hectares * 10000) / surface_pixel).astype(int)
 
-    # Make blocks
-    blockinfo = makeblock(input_raster, blk_rows=blk_rows)
-    nblock = blockinfo[0]
-    nblock_x = blockinfo[1]
-    x = blockinfo[3]
-    y = blockinfo[4]
-    nx = blockinfo[5]
-    ny = blockinfo[6]
-    print("Divide region in {} blocks".format(nblock))
-
-    # Compute the total number of forest pixels
-    print("Compute the total number of forest pixels")
-    nfp = 0
-    # Loop on blocks of data
-    for b in range(nblock):
-        # Progress bar
-        progress_bar(nblock, b + 1)
-        # Position in 1D-arrays
-        px = b % nblock_x
-        py = b // nblock_x
-        # Data for one block
-        data = probB.ReadAsArray(x[px], y[py], nx[px], ny[py])
-        forpix = np.nonzero(data != 0)
-        nfp += len(forpix[0])
-
     # Compute the histogram of values
     nvalues = 65535
     counts = probB.GetHistogram(0.5, 65535.5, nvalues, 0, 0)
 
+    # Number of forest pixels
+    nfp = np.sum(counts)
+
     # If deforestation < forest
     if (ndefor < nfp):
-
         # Identify threshold
         print("Identify threshold")
         quant = ndefor / (nfp * 1.0)
@@ -101,7 +88,6 @@ def deforest(input_raster,
                 go_on = False
                 index = i
                 threshold = index + 1
-
         # Minimize error
         print("Minimize error on deforested hectares")
         diff_inf = ndefor - cumSum[index + 1] * nfp
@@ -109,11 +95,35 @@ def deforest(input_raster,
         if diff_sup >= diff_inf:
             index = index + 1
             threshold = index + 1
+        # Number of deforested pixels
+        ndp = np.sum(counts[index:])
 
     # If deforestation > forest (everything is deforested)
     else:
         index = 0
         threshold = 1
+        ndp = nfp
+
+    # Estimates of error on deforested hectares
+    # If deforestation < forest
+    if (ndefor < nfp):
+        error = (ndp * surface_pixel / 10000.0) - hectares
+        error_perc = np.round(100 * error / hectares, 2)
+        error_perc_abs = abs(error_perc)
+        if error_perc_abs >= 1.0:
+            msg = ("The error on deforested area (in ha) is too high "
+                   "({}% >= 1%). "
+                   "This means that the number of categories for the "
+                   "deforestation probability [1, 65535] is too low to find "
+                   "an accurate probability threshold for deforestation. "
+                   "You might either i) reduce the size of the study area, "
+                   "or ii) project deforestation on a shorter "
+                   "period of time.").format(error_perc_abs)
+            raise ValueError(msg)
+    # If deforestation > forest (everything is deforested)
+    else:
+        error = 0
+        error_perc = 0.0
 
     # Raster of predictions
     print("Create a raster file on disk for forest-cover change")
@@ -126,9 +136,18 @@ def deforest(input_raster,
     fccB = fccR.GetRasterBand(1)
     fccB.SetNoDataValue(255)
 
+    # Make blocks
+    blockinfo = makeblock(input_raster, blk_rows=blk_rows)
+    nblock = blockinfo[0]
+    nblock_x = blockinfo[1]
+    x = blockinfo[3]
+    y = blockinfo[4]
+    nx = blockinfo[5]
+    ny = blockinfo[6]
+    print("Divide region in {} blocks".format(nblock))
+
     # Write raster of future fcc
     print("Write raster of future forest-cover change")
-    ndc = 0
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
@@ -140,7 +159,6 @@ def deforest(input_raster,
         prob_data = probB.ReadAsArray(x[px], y[py], nx[px], ny[py])
         # Number of pixels that are really deforested
         deforpix = np.nonzero(prob_data >= threshold)
-        ndc += len(deforpix[0])
         # Forest-cover change
         for_data = np.ones(shape=prob_data.shape, dtype=np.int8)
         for_data = for_data * 255  # nodata
@@ -157,27 +175,10 @@ def deforest(input_raster,
     fccB = None
     del(fccR)
 
-    # Estimates of error on deforested hectares
-    # If deforestation < forest
-    if (ndefor < nfp):
-        error = (ndc * surface_pixel / 10000.0) - hectares
-        error_perc = np.round(100 * error / hectares, 2)
-        if error_perc >= 1.0:
-            msg = ("The error on deforested area (in ha) is too high (>= 1%). "
-                   "This means that the number of categories for the "
-                   "deforestation probability [1, 65535] is too low to find "
-                   "an accurate probability threshold for deforestation. "
-                   "You might either i) reduce the size of the study area, "
-                   "or ii) project deforestation on a shorter period of time")
-            raise ValueError(msg)
-    # If deforestation > forest (everything is deforested)
-    else:
-        ndc = nfp
-        error = 0
-        error_perc = 0.0
-
     # Return results
-    stats = (counts, hectares, threshold, error, error_perc, ndc, nfp)
+    stats = {"counts": counts, "hectares": hectares, "threshold":
+             threshold, "error": error, "error_perc": error_perc, "ndp": ndp,
+             "nfp": nfp}
     return stats
 
 # End

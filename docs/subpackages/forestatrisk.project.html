@@ -131,8 +131,20 @@ with 0 as nodata value).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A tuple of statistics (counts, hectares, threshold, error,
-error_perc, ndefor, nfp).</p>
+<dd class="field-even"><p><p>A dictionary of statistics (counts, hectares, threshold,
+error, error_perc, ndp, nfp).</p>
+<ul class="simple">
+<li><p>counts: histogram of deforestation probabilities.</p></li>
+<li><p>hectares: number of hectares to be deforested.</p></li>
+<li><p>threshold: probability threshold above which (&gt;=) pixels are
+deforested.</p></li>
+<li><p>error: difference between hectares to be deforested and
+hectares trully deforested (in ha).</p></li>
+<li><p>error_perc: percentage of error (must be &lt; 1%).</p></li>
+<li><p>ndp: number of deforested pixels.</p></li>
+<li><p>nfp: number of forest pixels before deforestation.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
