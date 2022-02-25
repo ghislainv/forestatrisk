@@ -20,7 +20,6 @@ on:
 
 jobs:
   build_wheels:
-    if: startsWith(github.event.ref, 'refs/tags/v')
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -50,7 +49,6 @@ jobs:
           path: ./wheelhouse/*.whl
 
   build_sdist:
-    if: startsWith(github.event.ref, 'refs/tags/v')
     name: Build source distribution
     runs-on: ubuntu-latest
     steps:
