@@ -1143,8 +1143,9 @@ def freq_prob(stats,
 
     This function plots the distribution of the probability values.
 
-    :param stats: Tuple of statistics (counts, threshold, error,
-        hectares) returned by deforestprob.deforest().
+    :param stats: Dictionary of statistics (counts, hectares,
+        threshold, error, error_perc, ndp, nfp) returned by
+        ``.deforest()``.
     :param output_file: Name of the plot file.
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
@@ -1155,8 +1156,8 @@ def freq_prob(stats,
     """
 
     # Get data from stats
-    frequences = stats[0]
-    threshold = stats[1]
+    frequences = stats["counts"]
+    threshold = stats["threshold"]
 
     # Plot figure and save
     fig = plt.figure(figsize=figsize, dpi=dpi)

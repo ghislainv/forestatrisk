@@ -39,8 +39,18 @@ def deforest(input_raster,
     :param figsize: Figure size in inches.
     :param dpi: Resolution for output image.
 
-    :return: A tuple of statistics (counts, hectares, threshold, error,
-        error_perc, ndefor, nfp).
+    :return: A dictionary of statistics (counts, hectares, threshold,
+        error, error_perc, ndp, nfp).
+
+        - counts: histogram of deforestation probabilities.
+        - hectares: number of hectares to be deforested.
+        - threshold: probability threshold above which (>=) pixels are
+          deforested.
+        - error: difference between hectares to be deforested and
+          hectares trully deforested (in ha).
+        - error_perc: percentage of error (must be < 1%).
+        - ndp: number of deforested pixels.
+        - nfp: number of forest pixels before deforestation.
 
     """
 
@@ -99,7 +109,8 @@ def deforest(input_raster,
     if (ndefor < nfp):
         error = (ndp * surface_pixel / 10000.0) - hectares
         error_perc = np.round(100 * error / hectares, 2)
-        if error_perc >= 1.0:
+        error_perc_abs = abs(error_perc)
+        if error_perc_abs >= 1.0:
             msg = ("The error on deforested area (in ha) is too high "
                    "({}% >= 1%). "
                    "This means that the number of categories for the "
@@ -107,7 +118,7 @@ def deforest(input_raster,
                    "an accurate probability threshold for deforestation. "
                    "You might either i) reduce the size of the study area, "
                    "or ii) project deforestation on a shorter "
-                   "period of time").format(error_perc)
+                   "period of time").format(error_perc_abs)
             raise ValueError(msg)
     # If deforestation > forest (everything is deforested)
     else:
@@ -165,7 +176,9 @@ def deforest(input_raster,
     del(fccR)
 
     # Return results
-    stats = (counts, hectares, threshold, error, error_perc, ndp, nfp)
+    stats = {"counts": counts, "hectares": hectares, "threshold":
+             threshold, "error": error, "error_perc": error_perc, "ndp": ndp,
+             "nfp": nfp}
     return stats
 
 # End
