@@ -118,7 +118,7 @@ def deforest(input_raster,
                    "an accurate probability threshold for deforestation. "
                    "You might either i) reduce the size of the study area, "
                    "or ii) project deforestation on a shorter "
-                   "period of time").format(error_perc_abs)
+                   "period of time.").format(error_perc_abs)
             raise ValueError(msg)
     # If deforestation > forest (everything is deforested)
     else:

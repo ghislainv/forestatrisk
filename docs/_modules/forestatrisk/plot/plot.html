@@ -1245,8 +1245,9 @@
 
 <span class="sd">    This function plots the distribution of the probability values.</span>
 
-<span class="sd">    :param stats: Tuple of statistics (counts, threshold, error,</span>
-<span class="sd">        hectares) returned by deforestprob.deforest().</span>
+<span class="sd">    :param stats: Dictionary of statistics (counts, hectares,</span>
+<span class="sd">        threshold, error, error_perc, ndp, nfp) returned by</span>
+<span class="sd">        ``.deforest()``.</span>
 <span class="sd">    :param output_file: Name of the plot file.</span>
 <span class="sd">    :param figsize: Figure size in inches.</span>
 <span class="sd">    :param dpi: Resolution for output image.</span>
@@ -1257,8 +1258,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Get data from stats</span>
-    <span class="n">frequences</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">threshold</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">frequences</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">]</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;threshold&quot;</span><span class="p">]</span>
 
     <span class="c1"># Plot figure and save</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>

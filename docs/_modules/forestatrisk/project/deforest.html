@@ -141,8 +141,18 @@
 <span class="sd">    :param figsize: Figure size in inches.</span>
 <span class="sd">    :param dpi: Resolution for output image.</span>
 
-<span class="sd">    :return: A tuple of statistics (counts, hectares, threshold, error,</span>
-<span class="sd">        error_perc, ndefor, nfp).</span>
+<span class="sd">    :return: A dictionary of statistics (counts, hectares, threshold,</span>
+<span class="sd">        error, error_perc, ndp, nfp).</span>
+
+<span class="sd">        - counts: histogram of deforestation probabilities.</span>
+<span class="sd">        - hectares: number of hectares to be deforested.</span>
+<span class="sd">        - threshold: probability threshold above which (&gt;=) pixels are</span>
+<span class="sd">          deforested.</span>
+<span class="sd">        - error: difference between hectares to be deforested and</span>
+<span class="sd">          hectares trully deforested (in ha).</span>
+<span class="sd">        - error_perc: percentage of error (must be &lt; 1%).</span>
+<span class="sd">        - ndp: number of deforested pixels.</span>
+<span class="sd">        - nfp: number of forest pixels before deforestation.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -158,38 +168,15 @@
     <span class="n">surface_pixel</span> <span class="o">=</span> <span class="o">-</span><span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
     <span class="n">ndefor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">((</span><span class="n">hectares</span> <span class="o">*</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">/</span> <span class="n">surface_pixel</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
-    <span class="c1"># Make blocks</span>
-    <span class="n">blockinfo</span> <span class="o">=</span> <span class="n">makeblock</span><span class="p">(</span><span class="n">input_raster</span><span class="p">,</span> <span class="n">blk_rows</span><span class="o">=</span><span class="n">blk_rows</span><span class="p">)</span>
-    <span class="n">nblock</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">nblock_x</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-    <span class="n">nx</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
-    <span class="n">ny</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Divide region in </span><span class="si">{}</span><span class="s2"> blocks&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nblock</span><span class="p">))</span>
-
-    <span class="c1"># Compute the total number of forest pixels</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute the total number of forest pixels&quot;</span><span class="p">)</span>
-    <span class="n">nfp</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="c1"># Loop on blocks of data</span>
-    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nblock</span><span class="p">):</span>
-        <span class="c1"># Progress bar</span>
-        <span class="n">progress_bar</span><span class="p">(</span><span class="n">nblock</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="c1"># Position in 1D-arrays</span>
-        <span class="n">px</span> <span class="o">=</span> <span class="n">b</span> <span class="o">%</span> <span class="n">nblock_x</span>
-        <span class="n">py</span> <span class="o">=</span> <span class="n">b</span> <span class="o">//</span> <span class="n">nblock_x</span>
-        <span class="c1"># Data for one block</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">probB</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">py</span><span class="p">],</span> <span class="n">nx</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">ny</span><span class="p">[</span><span class="n">py</span><span class="p">])</span>
-        <span class="n">forpix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">data</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">nfp</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">forpix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
     <span class="c1"># Compute the histogram of values</span>
     <span class="n">nvalues</span> <span class="o">=</span> <span class="mi">65535</span>
     <span class="n">counts</span> <span class="o">=</span> <span class="n">probB</span><span class="o">.</span><span class="n">GetHistogram</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">65535.5</span><span class="p">,</span> <span class="n">nvalues</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
+    <span class="c1"># Number of forest pixels</span>
+    <span class="n">nfp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+
     <span class="c1"># If deforestation &lt; forest</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">ndefor</span> <span class="o">&lt;</span> <span class="n">nfp</span><span class="p">):</span>
-
         <span class="c1"># Identify threshold</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Identify threshold&quot;</span><span class="p">)</span>
         <span class="n">quant</span> <span class="o">=</span> <span class="n">ndefor</span> <span class="o">/</span> <span class="p">(</span><span class="n">nfp</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">)</span>
@@ -203,7 +190,6 @@
                 <span class="n">go_on</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="n">index</span> <span class="o">=</span> <span class="n">i</span>
                 <span class="n">threshold</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
-
         <span class="c1"># Minimize error</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Minimize error on deforested hectares&quot;</span><span class="p">)</span>
         <span class="n">diff_inf</span> <span class="o">=</span> <span class="n">ndefor</span> <span class="o">-</span> <span class="n">cumSum</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nfp</span>
@@ -211,11 +197,35 @@
         <span class="k">if</span> <span class="n">diff_sup</span> <span class="o">&gt;=</span> <span class="n">diff_inf</span><span class="p">:</span>
             <span class="n">index</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="n">threshold</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="c1"># Number of deforested pixels</span>
+        <span class="n">ndp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="n">index</span><span class="p">:])</span>
 
     <span class="c1"># If deforestation &gt; forest (everything is deforested)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">threshold</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">ndp</span> <span class="o">=</span> <span class="n">nfp</span>
+
+    <span class="c1"># Estimates of error on deforested hectares</span>
+    <span class="c1"># If deforestation &lt; forest</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ndefor</span> <span class="o">&lt;</span> <span class="n">nfp</span><span class="p">):</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="p">(</span><span class="n">ndp</span> <span class="o">*</span> <span class="n">surface_pixel</span> <span class="o">/</span> <span class="mf">10000.0</span><span class="p">)</span> <span class="o">-</span> <span class="n">hectares</span>
+        <span class="n">error_perc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">error</span> <span class="o">/</span> <span class="n">hectares</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">error_perc_abs</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">error_perc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">error_perc_abs</span> <span class="o">&gt;=</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;The error on deforested area (in ha) is too high &quot;</span>
+                   <span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">% &gt;= 1%). &quot;</span>
+                   <span class="s2">&quot;This means that the number of categories for the &quot;</span>
+                   <span class="s2">&quot;deforestation probability [1, 65535] is too low to find &quot;</span>
+                   <span class="s2">&quot;an accurate probability threshold for deforestation. &quot;</span>
+                   <span class="s2">&quot;You might either i) reduce the size of the study area, &quot;</span>
+                   <span class="s2">&quot;or ii) project deforestation on a shorter &quot;</span>
+                   <span class="s2">&quot;period of time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">error_perc_abs</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="c1"># If deforestation &gt; forest (everything is deforested)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">error_perc</span> <span class="o">=</span> <span class="mf">0.0</span>
 
     <span class="c1"># Raster of predictions</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Create a raster file on disk for forest-cover change&quot;</span><span class="p">)</span>
@@ -228,9 +238,18 @@
     <span class="n">fccB</span> <span class="o">=</span> <span class="n">fccR</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">fccB</span><span class="o">.</span><span class="n">SetNoDataValue</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
 
+    <span class="c1"># Make blocks</span>
+    <span class="n">blockinfo</span> <span class="o">=</span> <span class="n">makeblock</span><span class="p">(</span><span class="n">input_raster</span><span class="p">,</span> <span class="n">blk_rows</span><span class="o">=</span><span class="n">blk_rows</span><span class="p">)</span>
+    <span class="n">nblock</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">nblock_x</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Divide region in </span><span class="si">{}</span><span class="s2"> blocks&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nblock</span><span class="p">))</span>
+
     <span class="c1"># Write raster of future fcc</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Write raster of future forest-cover change&quot;</span><span class="p">)</span>
-    <span class="n">ndc</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="c1"># Loop on blocks of data</span>
     <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nblock</span><span class="p">):</span>
         <span class="c1"># Progress bar</span>
@@ -242,7 +261,6 @@
         <span class="n">prob_data</span> <span class="o">=</span> <span class="n">probB</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">py</span><span class="p">],</span> <span class="n">nx</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">ny</span><span class="p">[</span><span class="n">py</span><span class="p">])</span>
         <span class="c1"># Number of pixels that are really deforested</span>
         <span class="n">deforpix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">prob_data</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">)</span>
-        <span class="n">ndc</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">deforpix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="c1"># Forest-cover change</span>
         <span class="n">for_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">prob_data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
         <span class="n">for_data</span> <span class="o">=</span> <span class="n">for_data</span> <span class="o">*</span> <span class="mi">255</span>  <span class="c1"># nodata</span>
@@ -259,27 +277,10 @@
     <span class="n">fccB</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">del</span><span class="p">(</span><span class="n">fccR</span><span class="p">)</span>
 
-    <span class="c1"># Estimates of error on deforested hectares</span>
-    <span class="c1"># If deforestation &lt; forest</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">ndefor</span> <span class="o">&lt;</span> <span class="n">nfp</span><span class="p">):</span>
-        <span class="n">error</span> <span class="o">=</span> <span class="p">(</span><span class="n">ndc</span> <span class="o">*</span> <span class="n">surface_pixel</span> <span class="o">/</span> <span class="mf">10000.0</span><span class="p">)</span> <span class="o">-</span> <span class="n">hectares</span>
-        <span class="n">error_perc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">error</span> <span class="o">/</span> <span class="n">hectares</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">error_perc</span> <span class="o">&gt;=</span> <span class="mf">1.0</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;The error on deforested area (in ha) is too high (&gt;= 1%). &quot;</span>
-                   <span class="s2">&quot;This means that the number of categories for the &quot;</span>
-                   <span class="s2">&quot;deforestation probability [1, 65535] is too low to find &quot;</span>
-                   <span class="s2">&quot;an accurate probability threshold for deforestation. &quot;</span>
-                   <span class="s2">&quot;You might either i) reduce the size of the study area, &quot;</span>
-                   <span class="s2">&quot;or ii) project deforestation on a shorter period of time&quot;</span><span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-    <span class="c1"># If deforestation &gt; forest (everything is deforested)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ndc</span> <span class="o">=</span> <span class="n">nfp</span>
-        <span class="n">error</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">error_perc</span> <span class="o">=</span> <span class="mf">0.0</span>
-
     <span class="c1"># Return results</span>
-    <span class="n">stats</span> <span class="o">=</span> <span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="n">hectares</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">error_perc</span><span class="p">,</span> <span class="n">ndc</span><span class="p">,</span> <span class="n">nfp</span><span class="p">)</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;counts&quot;</span><span class="p">:</span> <span class="n">counts</span><span class="p">,</span> <span class="s2">&quot;hectares&quot;</span><span class="p">:</span> <span class="n">hectares</span><span class="p">,</span> <span class="s2">&quot;threshold&quot;</span><span class="p">:</span>
+             <span class="n">threshold</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">error</span><span class="p">,</span> <span class="s2">&quot;error_perc&quot;</span><span class="p">:</span> <span class="n">error_perc</span><span class="p">,</span> <span class="s2">&quot;ndp&quot;</span><span class="p">:</span> <span class="n">ndp</span><span class="p">,</span>
+             <span class="s2">&quot;nfp&quot;</span><span class="p">:</span> <span class="n">nfp</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">stats</span></div>
 
 <span class="c1"># End</span>
