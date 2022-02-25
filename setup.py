@@ -22,7 +22,7 @@ def find_version():
     with open('forestatrisk/forestatrisk.py') as f:
         far = f.read()
     version = re.search(
-        '^__version__\s*=\s*"(.*)"',
+        '^__version__\\s*=\\s*"(.*)"',
         far,
         re.M
     ).group(1)

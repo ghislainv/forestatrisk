@@ -1,10 +1,16 @@
 Changelog
 =========
 
+forestatrisk 1.1
+++++++++++++++++
+
+* Bug correction and optimization of function ``.deforest()``.
+* New tutorial for New Caledonia.
+
 forestatrisk 1.0
 ++++++++++++++++
 
-* Version associated to the publication in JOSS.
+* Version associated to the publication in `JOSS <https://doi.org/10.21105/joss.02975>`_\ .
 * Adding a Contributing section.
 * Adding Community guidelines and a Code of conduct.
   

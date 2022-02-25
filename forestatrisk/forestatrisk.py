@@ -11,7 +11,7 @@
 
 from __future__ import print_function  # Python 3 compatibility
 
-__version__ = "1.0"
+__version__ = "1.1"
 
 
 def main():
