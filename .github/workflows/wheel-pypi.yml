@@ -11,8 +11,8 @@ on:
       - 'master'
 
 jobs:
-  if: startsWith(github.event.ref, 'refs/tags/v')
   build_wheels:
+    if: startsWith(github.event.ref, 'refs/tags/v')
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -42,6 +42,7 @@ jobs:
           path: ./wheelhouse/*.whl
 
   build_sdist:
+    if: startsWith(github.event.ref, 'refs/tags/v')
     name: Build source distribution
     runs-on: ubuntu-latest
     steps:
@@ -65,13 +66,14 @@ jobs:
           path: dist/*.tar.gz
 
   upload_pypi:
-    name: Upload to PyPI
-    needs: [build_wheels, build_sdist]
-    runs-on: ubuntu-latest
+    if: startsWith(github.event.ref, 'refs/tags/v')
     # upload to PyPI on every tag starting with 'v'
     # if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     # alternatively, to publish when a GitHub Release is created, use the following rule:
     # if: github.event_name == 'release' && github.event.action == 'published'
+    name: Upload to PyPI
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
         with:
