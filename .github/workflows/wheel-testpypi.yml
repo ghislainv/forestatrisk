@@ -4,13 +4,11 @@
 
 name: Build wheel and upload to TestPyPI
 
-# When pushing to branch dev with tag starting with v
+# When push on branch dev
 on:
   push:
     branches:
       - 'dev'
-    tags:
-      - 'v*'
   
 # Alternatively, to publish when a (published) GitHub Release is created, use the following:
 # on:
@@ -21,6 +19,7 @@ on:
 #       - published
 
 jobs:
+  if: startsWith(github.event.ref, 'refs/tags/v')
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -74,13 +73,11 @@ jobs:
           path: dist/*.tar.gz
 
   upload_pypi:
+    # alternatively, to publish when a GitHub Release is created, use the following rule:
+    # if: github.event_name == 'release' && github.event.action == 'published'
     name: Upload to PyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
-    # upload to PyPI on every tag starting with 'v'
-    # if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
-    # alternatively, to publish when a GitHub Release is created, use the following rule:
-    # if: github.event_name == 'release' && github.event.action == 'published'
     steps:
       - uses: actions/download-artifact@v2
         with:

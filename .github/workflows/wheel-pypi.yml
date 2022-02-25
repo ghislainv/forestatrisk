@@ -4,15 +4,14 @@
 
 name: Build wheel and upload to PyPI
   
-# Publish when a (published) GitHub Release is created, use the following:
+# When push on master branch
 on:
   push:
     branches:
       - 'master'
-    tags:
-      - 'v*'
 
 jobs:
+  if: startsWith(github.event.ref, 'refs/tags/v')
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
