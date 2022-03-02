@@ -23,8 +23,6 @@ jobs:
 
       - uses: actions/setup-python@v2
         name: Install Python
-        with:
-          python-version: '3.7'
 
       - name: Install NumPy and cibuildwheel
         run: |
@@ -48,8 +46,6 @@ jobs:
 
       - uses: actions/setup-python@v2
         name: Install Python
-        with:
-          python-version: '3.7'
 
       - name: Install Python dependencies
         run: |
