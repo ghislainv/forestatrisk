@@ -11,6 +11,7 @@
 
 # Standard library imports
 from __future__ import division, print_function  # Python 3 compatibility
+import warnings
 
 # Third party imports
 import numpy as np
@@ -111,7 +112,7 @@ def deforest(input_raster,
         error_perc = np.round(100 * error / hectares, 2)
         error_perc_abs = abs(error_perc)
         if error_perc_abs >= 1.0:
-            msg = ("The error on deforested area (in ha) is too high "
+            msg = ("The error on deforested area (in ha) is high "
                    "({}% >= 1%). "
                    "This means that the number of categories for the "
                    "deforestation probability [1, 65535] is too low to find "
@@ -119,7 +120,7 @@ def deforest(input_raster,
                    "You might either i) reduce the size of the study area, "
                    "or ii) project deforestation on a shorter "
                    "period of time.").format(error_perc_abs)
-            raise ValueError(msg)
+            warnings.warn(msg)
     # If deforestation > forest (everything is deforested)
     else:
         error = 0
