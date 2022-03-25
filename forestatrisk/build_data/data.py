@@ -103,6 +103,11 @@ def country_forest_run(iso3, proj="EPSG:3395",
     """Compute forest rasters per country and export them to Google Drive
     with Google Earth Engine (GEE).
 
+    This function uses the iso3 code to download the country borders
+    (as a shapefile) from `GADM <https://gadm.org>`_. Download is
+    skipped if the shapefile is already present. Country borders are
+    used to define the extent for the GEE computation.
+
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
     :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
@@ -135,7 +140,7 @@ def country_forest_run(iso3, proj="EPSG:3395",
 
         # Download the zipfile from gadm.org
         fname = output_dir + "/" + iso3 + "_shp.zip"
-        url = "http://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
+        url = "https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
         urlretrieve(url, fname)
 
         # Extract files from zip
@@ -315,7 +320,11 @@ def country_srtm(iso3, output_dir="."):
     """Function to download SRTM data for a country.
 
     Function to download SRTM data (Shuttle Radar Topographic Mission
-    v4.1) from CSI-CGIAR for a specific country.
+    v4.1) from CSI-CGIAR for a specific country. This function uses
+    the iso3 code to download the country borders (as a shapefile)
+    from `GADM <https://gadm.org>`_. Download is skipped if the
+    shapefile is already present. Country borders are used to identify
+    the SRTM tiles to be downloaded.
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
@@ -333,7 +342,7 @@ def country_srtm(iso3, output_dir="."):
 
         # Download the zipfile from gadm.org
         fname = output_dir + "/" + iso3 + "_shp.zip"
-        url = "http://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
+        url = "https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
         urlretrieve(url, fname)
 
         # Extract files from zip
@@ -399,7 +408,7 @@ def country_gadm(iso3, output_dir="."):
 
         # Download the zipfile from gadm.org
         fname = output_dir + "/" + iso3 + "_shp.zip"
-        url = "http://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
+        url = "https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
         urlretrieve(url, fname)
 
         # Extract files from zip
