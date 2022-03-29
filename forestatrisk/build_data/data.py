@@ -14,7 +14,7 @@ from __future__ import division, print_function  # Python 3 compatibility
 from glob import glob  # To explore files in a folder
 import os
 import pkg_resources
-from shutil import rmtree
+from shutil import copy2, rmtree
 import subprocess
 from zipfile import ZipFile  # To unzip files
 try:
@@ -28,13 +28,13 @@ except ImportError:
 
 # Third party imports
 import numpy as np
-from osgeo import ogr
+from osgeo import ogr, gdal
 from pywdpa import get_wdpa
 import pandas as pd
 
 # Local application imports
 from ..misc import make_dir
-from . import ee_jrc, ee_gfc
+from . import ee_jrc, ee_gfc, ee_biomass_whrc
 
 
 # Extent of a shapefile
@@ -91,6 +91,11 @@ def tiles_srtm(extent_latlong):
     tiles_long = str(tile_left).zfill(2) + "-" + str(tile_right).zfill(2)
     tiles_lat = str(tile_top).zfill(2) + "-" + str(tile_bottom).zfill(2)
     return (tiles_long, tiles_lat)
+
+
+# ===========================================================
+# Forest
+# ===========================================================
 
 
 # country_forest_run
@@ -211,8 +216,8 @@ def country_forest_download(iso3,
     """
 
     # Check for existing data locally
-    srtm_tif = output_dir + "/forest_" + iso3 + "*.tif"
-    raster_list = glob(srtm_tif)
+    files_tif = output_dir + "/forest_" + iso3 + "*.tif"
+    raster_list = glob(files_tif)
 
     # If no data locally check if available in gdrive
     if len(raster_list) == 0:
@@ -230,10 +235,199 @@ def country_forest_download(iso3,
                    remote_path, output_dir]
             cmd = " ".join(cmd)
             subprocess.call(cmd, shell=True)
-            print("Data for {0:3s} has been downloaded".format(iso3))
+            print("Data for {0:3s} have been downloaded".format(iso3))
 
         else:
-            print("Data for {0:3s} is not available".format(iso3))
+            print("Data for {0:3s} are not available".format(iso3))
+
+# ===========================================================
+# Biomass
+# ===========================================================
+
+
+# country_biomass_run
+def country_biomass_run(iso3, proj="EPSG:3395",
+                        output_dir="data_raw",
+                        keep_dir=True,
+                        gdrive_remote_rclone=None,
+                        gdrive_folder=None):
+    """Export biomass maps to Google Drive with Google Earth Engine (GEE).
+
+    This function uses the iso3 code to download the country borders
+    (as a shapefile) from `GADM <https://gadm.org>`_. Download is
+    skipped if the shapefile is already present. Country borders are
+    used to define the extent for the GEE computation. Biomass map by
+    WHRC (doi: `10.1111/gcb.13153
+    <https://doi.org/10.1111/gcb.13153>`) is used.
+
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
+        GDAL/OGR. Default to "EPSG:3395" (World Mercator).
+
+    :param output_dir: Directory where shapefile for country border is saved.
+
+    :param keep_dir: Boolean to keep the output_dir folder. Default
+        to "True" (directory "data_raw" is not deleted).
+
+    :param gdrive_remote_rclone: Name of the Google Drive remote for rclone.
+
+    :param gdrive_folder: Name of the Google Drive folder to use.
+
+    """
+
+    # Create directory
+    make_dir(output_dir)
+
+    # Check for existing data
+    shp_name = output_dir + "/gadm36_" + iso3 + "_0.shp"
+    if os.path.isfile(shp_name) is not True:
+
+        # Download the zipfile from gadm.org
+        fname = output_dir + "/" + iso3 + "_shp.zip"
+        url = "https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
+        urlretrieve(url, fname)
+
+        # Extract files from zip
+        destDir = output_dir
+        f = ZipFile(fname)
+        f.extractall(destDir)
+        f.close()
+
+    # Compute extent
+    extent_latlong = extent_shp(shp_name)
+
+    # Keep or remove directory
+    if not keep_dir:
+        rmtree(output_dir, ignore_errors=True)
+
+    # Check data availability
+    data_availability = ee_biomass_whrc.check(
+        gdrive_remote_rclone,
+        gdrive_folder, iso3)
+    # If not available, run GEE
+    if data_availability is False:
+        print("Run Google Earth Engine")
+        task = ee_biomass_whrc.run_task(
+            iso3=iso3,
+            extent_latlong=extent_latlong,
+            scale=30,
+            proj=proj,
+            gdrive_folder=gdrive_folder)
+        print("GEE running on the following extent:")
+        print(str(extent_latlong))
+
+
+# country_biomass_download
+def country_biomass_download(iso3,
+                             gdrive_remote_rclone,
+                             gdrive_folder,
+                             output_dir="."):
+    """Download biomass data from Google Drive.
+
+    Download biomass data from Google Drive in the current working
+    directory. Print a message if the file is not available.
+
+    RClone program is needed: `<https://rclone.org>`_\\ .
+
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :param gdrive_remote_rclone: Google Drive remote name in rclone.
+
+    :param gdrive_folder: the Google Drive folder to download from.
+
+    :param output_dir: Output directory to download files to. Default
+        to current working directory.
+
+    """
+
+    # Check for existing data locally
+    files_tif = output_dir + "/biomass_whrc_" + iso3 + "*.tif"
+    raster_list = glob(files_tif)
+
+    # If no data locally check if available in gdrive
+    if len(raster_list) == 0:
+        # Data availability in gdrive
+        data_availability = ee_biomass_whrc.check(
+            gdrive_remote_rclone,
+            gdrive_folder,
+            iso3)
+
+        # Donwload if available in gdrive
+        if data_availability is True:
+            # Commands to download results with rclone
+            remote_path = gdrive_remote_rclone + ":" + gdrive_folder
+            pattern = "'biomass_whrc_" + iso3 + "*.tif'"
+            cmd = ["rclone", "copy", "--include", pattern,
+                   remote_path, output_dir]
+            cmd = " ".join(cmd)
+            subprocess.call(cmd, shell=True)
+            print("Data for {0:3s} have been downloaded".format(iso3))
+
+        else:
+            print("Data for {0:3s} are not available".format(iso3))
+
+
+# country_biomass_compute
+def country_biomass_compute(iso3,
+                            input_dir="data_raw",
+                            output_dir="data",
+                            proj="EPSG:3395"):
+    """Function formatting biomass data from WHC.
+
+    This function mosaic and resample the biomass data. Computations
+    are done in the input directory where biomass data have been
+    downloaded (default to "data_raw"). Data are copied to an output
+    directory (default to "data").
+
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :param input_dir: Directory with input files for biomass.
+
+    :param output_dir: Output directory.
+
+    :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
+        GDAL/OGR. Default to "EPSG:3395" (World Mercator).
+
+    :param keep_temp_dir: Boolean to keep the temporary
+        directory. Default to "False".
+
+    """
+
+    # Create output directory
+    make_dir("data")
+
+    # Mosaicing
+    files_tif = input_dir + "/biomass_whrc_" + iso3 + "*.tif"
+    input_list = glob(files_tif)
+    output_file = input_dir + "/biomass_whrc.vrt"
+    gdal.BuildVRT(output_file, input_list)
+
+    # Resampling
+    input_file = input_dir + "/biomass_whrc.vrt"
+    output_file = input_dir + "/biomass_whrc.tif"
+    param = gdal.WarpOptions(options=["overwrite", "tap"],
+                             xRes=30, yRes=30,
+                             srcNodata=-9999, dstNodata=-9999,
+                             srcSRS="EPSG:4326", dstSRS=proj,
+                             resampleAlg=gdal.GRA_Bilinear,
+                             outputType=gdal.GDT_Int16,
+                             multithread=True,
+                             warpMemoryLimit=2048,
+                             warpOptions=["NUM_THREADS=ALL_CPUS"],
+                             creationOptions=["COMPRESS=LZW", "PREDICTOR=2",
+                                              "BIGTIFF=YES"])
+    gdal.Warp(output_file, input_file, options=param)
+
+    # Copy to output_dir
+    input_file = input_dir + "/biomass_whrc.tif"
+    output_file = output_dir + "/biomass_whrc.tif"
+    copy2(input_file, output_file)
+
+
+# ===========================================================
+# WDPA
+# ===========================================================
 
 
 # country_wdpa
@@ -315,6 +509,11 @@ def country_osm(iso3, output_dir="."):
             urlretrieve(url, fname)
 
 
+# ===========================================================
+# SRTM
+# ===========================================================
+
+
 # country_srtm
 def country_srtm(iso3, output_dir="."):
     """Function to download SRTM data for a country.
@@ -384,6 +583,10 @@ def country_srtm(iso3, output_dir="."):
                     else:
                         raise
 
+# ===========================================================
+# Country borders
+# ===========================================================
+
 
 # country_gadm
 def country_gadm(iso3, output_dir="."):
@@ -416,6 +619,11 @@ def country_gadm(iso3, output_dir="."):
         f = ZipFile(fname)
         f.extractall(destDir)
         f.close()
+
+
+# ===========================================================
+# Download
+# ===========================================================
 
 
 # country_download
@@ -464,6 +672,11 @@ def country_download(iso3,
         output_dir=output_dir)
 
 
+# ===========================================================
+# Compute
+# ===========================================================
+
+
 # country_compute
 def country_compute(iso3,
                     temp_dir="data_raw",
@@ -494,8 +707,8 @@ def country_compute(iso3,
     :param data_forest: Boolean for running data_forest.sh to
         compute forest landscape variables. Default to "True".
 
-    :param keep_temp_dir: Boolean to keep the temporary directory. Default
-        to "False".
+    :param keep_temp_dir: Boolean to keep the temporary
+        directory. Default to "False".
 
     """
 
