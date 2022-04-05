@@ -376,7 +376,7 @@ def country_biomass_compute(iso3,
     """Function to mosaic and resample biomass data from WHRC.
 
     This function mosaics and resamples the biomass data obtained from
-    GEE. A CRS transformation can be performed.
+    GEE. A reprojection can be performed.
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
@@ -431,17 +431,21 @@ def country_biomass_compute(iso3,
 # country_biomass_moaic
 def country_biomass_mosaic(iso3,
                            input_dir="data_raw",
-                           output_dir="data"):
+                           output_dir="data",
+                           proj="EPSG:3395"):
     """Function to mosaic biomass images from WHRC.
 
-    This function mosaics the biomass data obtained from GEE. No CRS
-    transformation is performed.
+    This function mosaics the biomass data obtained from GEE. No
+    reprojection is performed.
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
     :param input_dir: Directory with input files for biomass.
 
     :param output_dir: Output directory.
+
+    :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
+        GDAL/OGR. Default to "EPSG:3395" (World Mercator).
 
     """
 
@@ -459,6 +463,8 @@ def country_biomass_mosaic(iso3,
     output_file = output_dir + "/biomass_whrc.tif"
     param = gdal.TranslateOptions(options=["overwrite", "tap"],
                                   format="GTiff",
+                                  noData=-9999,
+                                  outputSRS=proj,
                                   creationOptions=["TILED=YES",
                                                    "BLOCKXSIZE=256",
                                                    "BLOCKYSIZE=256",
