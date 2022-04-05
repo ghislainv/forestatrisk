@@ -325,8 +325,8 @@ def country_biomass_download(iso3,
                              output_dir="."):
     """Download biomass data from Google Drive.
 
-    Download biomass data from Google Drive in the current working
-    directory. Print a message if the file is not available.
+    Download biomass data from Google Drive. Print a message if the
+    file is not available.
 
     RClone program is needed: `<https://rclone.org>`_\\ .
 
@@ -373,12 +373,10 @@ def country_biomass_compute(iso3,
                             input_dir="data_raw",
                             output_dir="data",
                             proj="EPSG:3395"):
-    """Function formatting biomass data from WHC.
+    """Function to mosaic and resample biomass data from WHRC.
 
-    This function mosaic and resample the biomass data. Computations
-    are done in the input directory where biomass data have been
-    downloaded (default to "data_raw"). Data are copied to an output
-    directory (default to "data").
+    This function mosaics and resamples the biomass data obtained from
+    GEE. A CRS transformation can be performed.
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
@@ -389,8 +387,61 @@ def country_biomass_compute(iso3,
     :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
         GDAL/OGR. Default to "EPSG:3395" (World Mercator).
 
-    :param keep_temp_dir: Boolean to keep the temporary
-        directory. Default to "False".
+    """
+
+    # Create output directory
+    make_dir("data")
+
+    # Mosaicing
+    files_tif = input_dir + "/biomass_whrc_" + iso3 + "*.tif"
+    input_list = glob(files_tif)
+    output_file = input_dir + "/biomass_whrc_gee.vrt"
+    gdal.BuildVRT(output_file, input_list)
+
+    # Resampling without compression using .vrt file
+    # See: https://trac.osgeo.org/gdal/wiki/UserDocs/GdalWarp#GeoTIFFoutput-coCOMPRESSisbroken
+    input_file = input_dir + "/biomass_whrc_gee.vrt"
+    output_file = input_dir + "/biomass_whrc_warp.vrt"
+    param = gdal.WarpOptions(options=["overwrite", "tap"],
+                             format="VRT",
+                             xRes=30, yRes=30,
+                             srcNodata=-9999, dstNodata=-9999,
+                             srcSRS="EPSG:4326", dstSRS=proj,
+                             resampleAlg=gdal.GRA_Bilinear,
+                             outputType=gdal.GDT_Int16,
+                             multithread=True,
+                             warpMemoryLimit=500,
+                             warpOptions=["NUM_THREADS=ALL_CPUS"])
+    gdal.Warp(output_file, input_file, options=param)
+
+    # Compressing
+    input_file = input_dir + "/biomass_whrc_warp.vrt"
+    output_file = output_dir + "/biomass_whrc.tif"
+    param = gdal.TranslateOptions(options=["overwrite", "tap"],
+                                  format="GTiff",
+                                  creationOptions=["TILED=YES",
+                                                   "BLOCKXSIZE=256",
+                                                   "BLOCKYSIZE=256",
+                                                   "COMPRESS=LZW",
+                                                   "PREDICTOR=2",
+                                                   "BIGTIFF=YES"])
+    gdal.Translate(output_file, input_file, options=param)
+
+
+# country_biomass_moaic
+def country_biomass_mosaic(iso3,
+                           input_dir="data_raw",
+                           output_dir="data"):
+    """Function to mosaic biomass images from WHRC.
+
+    This function mosaics the biomass data obtained from GEE. No CRS
+    transformation is performed.
+
+    :param iso3: Country ISO 3166-1 alpha-3 code.
+
+    :param input_dir: Directory with input files for biomass.
+
+    :param output_dir: Output directory.
 
     """
 
@@ -403,26 +454,18 @@ def country_biomass_compute(iso3,
     output_file = input_dir + "/biomass_whrc.vrt"
     gdal.BuildVRT(output_file, input_list)
 
-    # Resampling
+    # Compressing
     input_file = input_dir + "/biomass_whrc.vrt"
-    output_file = input_dir + "/biomass_whrc.tif"
-    param = gdal.WarpOptions(options=["overwrite", "tap"],
-                             xRes=30, yRes=30,
-                             srcNodata=-9999, dstNodata=-9999,
-                             srcSRS="EPSG:4326", dstSRS=proj,
-                             resampleAlg=gdal.GRA_Bilinear,
-                             outputType=gdal.GDT_Int16,
-                             multithread=True,
-                             warpMemoryLimit=2048,
-                             warpOptions=["NUM_THREADS=ALL_CPUS"],
-                             creationOptions=["COMPRESS=LZW", "PREDICTOR=2",
-                                              "BIGTIFF=YES"])
-    gdal.Warp(output_file, input_file, options=param)
-
-    # Copy to output_dir
-    input_file = input_dir + "/biomass_whrc.tif"
     output_file = output_dir + "/biomass_whrc.tif"
-    copy2(input_file, output_file)
+    param = gdal.TranslateOptions(options=["overwrite", "tap"],
+                                  format="GTiff",
+                                  creationOptions=["TILED=YES",
+                                                   "BLOCKXSIZE=256",
+                                                   "BLOCKYSIZE=256",
+                                                   "COMPRESS=LZW",
+                                                   "PREDICTOR=2",
+                                                   "BIGTIFF=YES"])
+    gdal.Translate(output_file, input_file, options=param)
 
 
 # ===========================================================
