@@ -26,7 +26,7 @@ import os
 # Third party imports
 import matplotlib
 # Use Agg if no display found
-if os.environ.get("DISPLAY", "") == "":
+if "DISPLAY" not in os.environ:
     print("no display found. Using non-interactive Agg backend")
     matplotlib.use("Agg")
 
