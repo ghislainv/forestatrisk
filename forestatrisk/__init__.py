@@ -11,6 +11,16 @@
 
 # Standard library imports
 from __future__ import division, print_function  # Python 3 compatibility
+
+# define double undescore variables (https://peps.python.org/pep-0008/#module-level-dunder-names)
+__author__ = "Ghislain Vieilledent"
+__email__ = "ghislain.vieilledent@cirad.fr"
+__version__ = "1.1"
+__doc__ = """
+    forestatrisk: modelling and forecasting deforestation in the tropics.
+    https://ecology.ghislainv.fr/forestatrisk/
+"""
+
 import os
 
 # Third party imports
@@ -44,9 +54,5 @@ from .validate import map_confmat, map_accuracy
 from .validate import r_diffproj, mat_diffproj
 from .validate import resample_sum
 from .validate import validation_npix
-
-# Welcome message
-print("# forestatrisk: modelling and forecasting deforestation in the tropics.")
-print("# https://ecology.ghislainv.fr/forestatrisk/")
 
 # EOF
