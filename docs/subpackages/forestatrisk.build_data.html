@@ -112,6 +112,90 @@
 <div class="section" id="module-forestatrisk.build_data.data">
 <span id="forestatrisk-build-data-data-module"></span><h2>forestatrisk.build_data.data module<a class="headerlink" href="#module-forestatrisk.build_data.data" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.build_data.data.country_biomass_compute">
+<span class="sig-name descname"><span class="pre">country_biomass_compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:3395'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/build_data/data.html#country_biomass_compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_biomass_compute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to mosaic and resample biomass data from WHRC.</p>
+<p>This function mosaics and resamples the biomass data obtained from
+GEE. A reprojection can be performed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>input_dir</strong> – Directory with input files for biomass.</p></li>
+<li><p><strong>output_dir</strong> – Output directory.</p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.build_data.data.country_biomass_download">
+<span class="sig-name descname"><span class="pre">country_biomass_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_remote_rclone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/build_data/data.html#country_biomass_download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_biomass_download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download biomass data from Google Drive.</p>
+<p>Download biomass data from Google Drive. Print a message if the
+file is not available.</p>
+<p>RClone program is needed: <a class="reference external" href="https://rclone.org">https://rclone.org</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>gdrive_remote_rclone</strong> – Google Drive remote name in rclone.</p></li>
+<li><p><strong>gdrive_folder</strong> – the Google Drive folder to download from.</p></li>
+<li><p><strong>output_dir</strong> – Output directory to download files to. Default
+to current working directory.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.build_data.data.country_biomass_mosaic">
+<span class="sig-name descname"><span class="pre">country_biomass_mosaic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:3395'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/build_data/data.html#country_biomass_mosaic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_biomass_mosaic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to mosaic biomass images from WHRC.</p>
+<p>This function mosaics the biomass data obtained from GEE. No
+reprojection is performed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>input_dir</strong> – Directory with input files for biomass.</p></li>
+<li><p><strong>output_dir</strong> – Output directory.</p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.build_data.data.country_biomass_run">
+<span class="sig-name descname"><span class="pre">country_biomass_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:3395'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_remote_rclone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/build_data/data.html#country_biomass_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_biomass_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export biomass maps to Google Drive with Google Earth Engine (GEE).</p>
+<p>This function uses the iso3 code to download the country borders
+(as a shapefile) from <a class="reference external" href="https://gadm.org">GADM</a>. Download is
+skipped if the shapefile is already present. Country borders are
+used to define the extent for the GEE computation. Biomass map by
+WHRC (doi: <cite>10.1111/gcb.13153
+&lt;https://doi.org/10.1111/gcb.13153&gt;</cite>) is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
+<li><p><strong>output_dir</strong> – Directory where shapefile for country border is saved.</p></li>
+<li><p><strong>keep_dir</strong> – Boolean to keep the output_dir folder. Default
+to “True” (directory “data_raw” is not deleted).</p></li>
+<li><p><strong>gdrive_remote_rclone</strong> – Name of the Google Drive remote for rclone.</p></li>
+<li><p><strong>gdrive_folder</strong> – Name of the Google Drive folder to use.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="forestatrisk.build_data.data.country_compute">
 <span class="sig-name descname"><span class="pre">country_compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:3395'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_country</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_forest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_temp_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/build_data/data.html#country_compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_compute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function computing and formatting country data.</p>
@@ -131,8 +215,8 @@ GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
 compute country variables. Default to “True”.</p></li>
 <li><p><strong>data_forest</strong> – Boolean for running data_forest.sh to
 compute forest landscape variables. Default to “True”.</p></li>
-<li><p><strong>keep_temp_dir</strong> – Boolean to keep the temporary directory. Default
-to “False”.</p></li>
+<li><p><strong>keep_temp_dir</strong> – Boolean to keep the temporary
+directory. Default to “False”.</p></li>
 </ul>
 </dd>
 </dl>
@@ -182,6 +266,10 @@ to current working directory.</p></li>
 <span class="sig-name descname"><span class="pre">country_forest_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:3395'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fcc_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'jrc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_remote_rclone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/build_data/data.html#country_forest_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_forest_run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute forest rasters per country and export them to Google Drive
 with Google Earth Engine (GEE).</p>
+<p>This function uses the iso3 code to download the country borders
+(as a shapefile) from <a class="reference external" href="https://gadm.org">GADM</a>. Download is
+skipped if the shapefile is already present. Country borders are
+used to define the extent for the GEE computation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -242,7 +330,11 @@ current working directory.</p></li>
 <span class="sig-name descname"><span class="pre">country_srtm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/build_data/data.html#country_srtm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.build_data.data.country_srtm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to download SRTM data for a country.</p>
 <p>Function to download SRTM data (Shuttle Radar Topographic Mission
-v4.1) from CSI-CGIAR for a specific country.</p>
+v4.1) from CSI-CGIAR for a specific country. This function uses
+the iso3 code to download the country borders (as a shapefile)
+from <a class="reference external" href="https://gadm.org">GADM</a>. Download is skipped if the
+shapefile is already present. Country borders are used to identify
+the SRTM tiles to be downloaded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
