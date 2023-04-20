@@ -12,12 +12,10 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ['3.9', '3.10', '3.11']
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -35,7 +33,10 @@ jobs:
         python3 -m pip install flake8 pytest
         # Install NumPy before GDAL
         python3 -m pip install numpy
-        python3 -m pip install --global-option=build_ext --global-option="-I/usr/include/gdal" gdal==$(gdal-config --version)
+        # Install GDAL
+        export CPLUS_INCLUDE_PATH=/usr/include/gdal
+        export C_INCLUDE_PATH=/usr/include/gdal
+        python3 -m pip install gdal==$(gdal-config --version)
         python3 -m pip install -r requirements.txt
         python3 -m pip install .
     - name: Lint with flake8
