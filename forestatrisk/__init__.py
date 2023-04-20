@@ -13,13 +13,6 @@
 from __future__ import division, print_function  # Python 3 compatibility
 import os
 
-# Third party imports
-import matplotlib
-# Use Agg if no display found
-if os.environ.get("DISPLAY", "") == "":
-    print("no display found. Using non-interactive Agg backend")
-    matplotlib.use("Agg")
-
 # Local imports
 # Data
 from .build_data import data, sample
@@ -44,9 +37,5 @@ from .validate import map_confmat, map_accuracy
 from .validate import r_diffproj, mat_diffproj
 from .validate import resample_sum
 from .validate import validation_npix
-
-# Welcome message
-print("# forestatrisk: modelling and forecasting deforestation in the tropics.")
-print("# https://ecology.ghislainv.fr/forestatrisk/")
 
 # EOF
