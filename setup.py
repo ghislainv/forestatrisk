@@ -78,7 +78,7 @@ setup(name="forestatrisk",
           "console_scripts": ["forestatrisk = forestatrisk.forestatrisk:main"]
       },
       install_requires=["earthengine-api", "gdal", "numpy", "matplotlib",
-                        "pandas", "patsy", "pywdpa", "sklearn"],
+                        "pandas", "patsy", "pywdpa", "scikit-learn"],
       extras_require={
           "interactive": ["jupyter", "python-dotenv", "geopandas",
                           "descartes", "folium"]},
