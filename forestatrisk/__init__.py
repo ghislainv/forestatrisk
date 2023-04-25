@@ -11,7 +11,6 @@
 
 # Standard library imports
 from __future__ import division, print_function  # Python 3 compatibility
-import os
 
 # Local imports
 # Data

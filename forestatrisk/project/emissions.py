@@ -99,9 +99,9 @@ def emissions(input_stocks="data/emissions/AGB.tif",
     Area = gt[1] * (-gt[5]) / 10000
     # Carbon emissions in Mg
     Carbon = sum_Stocks * coefficient * Area
-    Carbon = np.int(np.rint(Carbon))
+    Carbon = int(np.rint(Carbon))
 
     # Return carbon emissions
-    return(Carbon)
+    return Carbon
 
 # End

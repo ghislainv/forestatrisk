@@ -78,13 +78,13 @@ def tiles_srtm(extent_latlong):
     xmax_latlong = np.ceil(extent_latlong[2])
     ymax_latlong = np.ceil(extent_latlong[3])
     # Compute SRTM tile numbers
-    tile_left = np.int(np.ceil((xmin_latlong + 180.0) / 5.0))
-    tile_right = np.int(np.ceil((xmax_latlong + 180.0) / 5.0))
+    tile_left = int(np.ceil((xmin_latlong + 180.0) / 5.0))
+    tile_right = int(np.ceil((xmax_latlong + 180.0) / 5.0))
     if (tile_right == tile_left):
         # Trick to make curl globbing work in data_country.sh
         tile_right = tile_left + 1
-    tile_top = np.int(np.ceil((-ymax_latlong + 60.0) / 5.0))
-    tile_bottom = np.int(np.ceil((-ymin_latlong + 60.0) / 5.0))
+    tile_top = int(np.ceil((-ymax_latlong + 60.0) / 5.0))
+    tile_bottom = int(np.ceil((-ymin_latlong + 60.0) / 5.0))
     if (tile_bottom == tile_top):
         tile_bottom = tile_top + 1
     # Format variables, zfill is for having 01 and not 1

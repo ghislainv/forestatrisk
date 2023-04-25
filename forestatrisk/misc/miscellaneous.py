@@ -199,6 +199,6 @@ def rescale(value):
     # Avoid nodata value (0) for low proba
     value[value < 1e-06] = 1e-06
     # Rescale and round to nearest integer
-    return (np.int_(((value * 1e6 - 1) * 65534 / 999999) + 1))
+    return int(((value * 1e6 - 1) * 65534 / 999999) + 1)
 
 # End
