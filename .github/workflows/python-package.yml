@@ -29,7 +29,7 @@ jobs:
         sudo apt-get install --yes libgdal-dev gdal-bin
     - name: Install Python dependencies
       run: |
-        python3 -m pip install --upgrade pip
+        python3 -m pip install --upgrade pip setuptools wheel
         python3 -m pip install flake8 pytest
         # Install NumPy before GDAL
         python3 -m pip install numpy
