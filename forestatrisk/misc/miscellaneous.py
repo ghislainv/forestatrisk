@@ -176,7 +176,7 @@ def progress_bar(niter, i):
     elif i % step == 0:
         sys.stdout.write("\r{}%".format((100 * i) // niter))
         sys.stdout.flush()
-    if (i == niter):
+    if i == niter:
         sys.stdout.write("\r100%\n")
         sys.stdout.flush()
     return None

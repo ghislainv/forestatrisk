@@ -25,7 +25,7 @@ jobs:
           python-version: '3.10'
       - name: Install NumPy and cibuildwheel
         run: |
-          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip setuptools wheel
           python3 -m pip install cibuildwheel==2.12.3
       - name: Build wheels
         run: |
@@ -48,7 +48,7 @@ jobs:
           python-version: '3.10'
       - name: Install Python dependencies
         run: |
-          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip setuptools wheel
           python3 -m pip install numpy
       - name: Build sdist
         run: python setup.py sdist
