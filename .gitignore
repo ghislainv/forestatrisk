@@ -1,10 +1,15 @@
+# Local website
+docs
+
 # Notebook data
 docsrc/notebooks/data
 docsrc/notebooks/outputs
 docsrc/notebooks/new_caledonia/*
 !docsrc/notebooks/new_caledonia/new_caledonia.org
+!docsrc/notebooks/new_caledonia/new_caledonia.rst
 docsrc/notebooks/country_data/*
 !docsrc/notebooks/country_data/country_data.org
+!docsrc/notebooks/country_data/country_data.rst
 
 # Paper
 *.bib.bak
@@ -28,6 +33,7 @@ __pycache__/
 docsrc/notebooks_R/*
 !docsrc/notebooks_R/get_started_R.Rmd
 !docsrc/notebooks_R/get_started_R.html
+!docsrc/notebooks_R/get_started_R.rst
 
 # Distribution / packaging
 .Python

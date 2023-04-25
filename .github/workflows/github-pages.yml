@@ -20,6 +20,7 @@ jobs:
           sudo add-apt-repository --yes ppa:ubuntugis/ppa
           sudo apt-get --quiet update
           sudo apt-get install --yes gdal-bin libgdal-dev
+          sudo apt-get install pandoc
       - name: Installing Python dependencies
         run: |
           python3 -m pip install --upgrade pip setuptools wheel
