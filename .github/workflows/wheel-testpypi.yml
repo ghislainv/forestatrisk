@@ -25,14 +25,14 @@ jobs:
           python-version: '3.10'
       - name: Install NumPy and cibuildwheel
         run: |
-          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install --upgrade pip
           python3 -m pip install cibuildwheel==2.12.3
       - name: Build wheels
         run: |
           python3 -m cibuildwheel --output-dir wheelhouse
         env:
           CIBW_SKIP: pp* cp27-win*
-          CIBW_BEFORE_BUILD: pip install --upgrade pip setuptools wheel && pip install numpy
+          CIBW_BEFORE_BUILD: pip install numpy
       - uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
