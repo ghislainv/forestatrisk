@@ -4,12 +4,32 @@ docs
 # Notebook data
 docsrc/notebooks/data
 docsrc/notebooks/outputs
-docsrc/notebooks/new_caledonia/*
-!docsrc/notebooks/new_caledonia/new_caledonia.org
-!docsrc/notebooks/new_caledonia/new_caledonia.rst
+
+# Country data
 docsrc/notebooks/country_data/*
 !docsrc/notebooks/country_data/country_data.org
 !docsrc/notebooks/country_data/country_data.rst
+!docsrc/notebooks/country_data/output
+docsrc/notebooks/country_data/output/*
+!docsrc/notebooks/country_data/output/nb_ctrydata_fcc123.png
+!docsrc/notebooks/country_data/output/nb_ctrydata_var.png
+
+# New-Caledonia
+docsrc/notebooks/new_caledonia/*
+!docsrc/notebooks/new_caledonia/new_caledonia.org
+!docsrc/notebooks/new_caledonia/new_caledonia.rst
+!docsrc/notebooks/new_caledonia/images
+docsrc/notebooks/new_caledonia/images/*
+!docsrc/notebooks/new_caledonia/images/nb_newcal_banner.png
+!docsrc/notebooks/new_caledonia/output
+docsrc/notebooks/new_caledonia/output/*
+!docsrc/notebooks/new_caledonia/output/nb_newcal_dist_road_edge_effect.png
+!docsrc/notebooks/new_caledonia/output/nb_newcal_geol_effect.png
+!docsrc/notebooks/new_caledonia/output/nb_newcal_fcc123.png
+!docsrc/notebooks/new_caledonia/output/nb_newcal_rho.png
+!docsrc/notebooks/new_caledonia/output/nb_newcal_prob.png
+!docsrc/notebooks/new_caledonia/output/nb_newcal_fcc_2050.png
+!docsrc/notebooks/new_caledonia/output/nb_newcal_fcc_2100.png
 
 # Paper
 *.bib.bak
