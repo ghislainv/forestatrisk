@@ -32,7 +32,7 @@ jobs:
           python3 -m cibuildwheel --output-dir wheelhouse
         env:
           CIBW_SKIP: pp* cp27-win*
-          CIBW_BEFORE_BUILD: pip install numpy
+          CIBW_BEFORE_BUILD: pip install --upgrade pip setuptools wheel && pip install numpy
       - uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
