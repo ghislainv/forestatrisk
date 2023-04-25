@@ -1,0 +1,1311 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>ForestAtRisk Tropics &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="New Caledonia" href="new_caledonia/new_caledonia.html" />
+    <link rel="prev" title="Country data" href="country_data/country_data.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo-far.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">forestatrisk</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_started.html">Get started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../articles.html">Articles</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../articles.html#python-notebooks">Python notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../articles.html#r-notebooks">R notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../package_contents.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../articles.html">Articles</a><ul>
+      <li>Previous: <a href="country_data/country_data.html" title="previous chapter">Country data</a></li>
+      <li>Next: <a href="new_caledonia/new_caledonia.html" title="next chapter">New Caledonia</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="ForestAtRisk-Tropics">
+<h1>ForestAtRisk Tropics<a class="headerlink" href="#ForestAtRisk-Tropics" title="Permalink to this heading">¶</a></h1>
+<p>This notebook provides a minimal and reproducible example for the following scientific article:</p>
+<p><strong>Vieilledent G., C. Vancutsem, C. Bourgoin, P. Ploton, P. Verley, and F. Achard.</strong> Spatial scenario of tropical deforestation and carbon emissions for the 21st century. <em>bioRxiv</em>. [doi:<a class="reference external" href="https://doi.org/10.1101/2022.03.22.485306">10.1101/2022.03.22.485306</a>]. <a class="reference external" href="https://www.biorxiv.org/content/10.1101/2022.03.22.485306v2.full.pdf">Manuscript</a>. <a class="reference external" href="https://www.biorxiv.org/content/biorxiv/early/2022/07/23/2022.03.22.485306/DC1/embed/media-1.pdf">Supplementary Information</a>.</p>
+<p>We use the <a class="reference external" href="https://en.wikipedia.org/wiki/Guadeloupe">Guadeloupe</a> archipelago as a case study.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Imports
+import os
+import re
+from shutil import copy2
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from patsy import dmatrices
+import pickle
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import log_loss
+
+import forestatrisk as far
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+# forestatrisk: modelling and forecasting deforestation in the tropics.
+# https://ecology.ghislainv.fr/forestatrisk/
+</pre></div></div>
+</div>
+<p>We create a directory to hold the outputs with the help of the function <code class="docutils literal notranslate"><span class="pre">.make_dir()</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Make output directory
+far.make_dir(&quot;output&quot;)
+</pre></div>
+</div>
+</div>
+<section id="1.-Data">
+<h2>1. Data<a class="headerlink" href="#1.-Data" title="Permalink to this heading">¶</a></h2>
+<section id="1.1-Import-and-unzip-the-data">
+<h3>1.1 Import and unzip the data<a class="headerlink" href="#1.1-Import-and-unzip-the-data" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import urllib.request
+from zipfile import ZipFile
+
+# Source of the data
+url = &quot;https://github.com/ghislainv/forestatrisk/raw/master/docsrc/notebooks/data_GLP.zip&quot;
+
+if os.path.exists(&quot;data_GPL.zip&quot;) is False:
+    urllib.request.urlretrieve(url, &quot;data_GPL.zip&quot;)
+    with ZipFile(&quot;data_GPL.zip&quot;, &quot;r&quot;) as z:
+        z.extractall(&quot;data&quot;)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="1.2-Files">
+<h3>1.2 Files<a class="headerlink" href="#1.2-Files" title="Permalink to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">data</span></code> folder includes:</p>
+<ul class="simple">
+<li><p>Forest cover change data for the period 2010-2020 as a GeoTiff raster file (<code class="docutils literal notranslate"><span class="pre">data/fcc23.tif</span></code>).</p></li>
+<li><p>Spatial explanatory variables as GeoTiff raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code> extension, eg. <code class="docutils literal notranslate"><span class="pre">data/dist_edge.tif</span></code> for distance to forest edge).</p></li>
+<li><p>Additional folders: <code class="docutils literal notranslate"><span class="pre">forest</span></code>, <code class="docutils literal notranslate"><span class="pre">forecast</span></code>, and <code class="docutils literal notranslate"><span class="pre">emissions</span></code>, with forest cover change for different periods of time, explanatory variables at different dates used for projections in the future, and forest carbon data for computing carbon emissions.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Plot forest
+fig_fcc23 = far.plot.fcc(
+    input_fcc_raster=&quot;data/fcc23.tif&quot;,
+    maxpixels=1e8,
+    output_file=&quot;output/fcc23.png&quot;,
+    borders=&quot;data/ctry_PROJ.shp&quot;,
+    linewidth=0.3, dpi=500)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_7_0.png" src="../_images/notebooks_far_tropics_7_0.png" />
+</div>
+</div>
+</section>
+<section id="1.3-Sampling-the-observations">
+<h3>1.3 Sampling the observations<a class="headerlink" href="#1.3-Sampling-the-observations" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Sample points
+dataset = far.sample(nsamp=10000, adapt=True, seed=1234, csize=10,
+                     var_dir=&quot;data&quot;,
+                     input_forest_raster=&quot;fcc23.tif&quot;,
+                     output_file=&quot;output/sample.txt&quot;,
+                     blk_rows=0)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Sample 2x 10000 pixels (deforested vs. forest)
+Divide region in 168 blocks
+Compute number of deforested and forest pixels per block
+100%
+Draw blocks at random
+Draw pixels at random in blocks
+100%
+Compute center of pixel coordinates
+Compute number of 10 x 10 km spatial cells
+... 99 cells (9 x 11)
+Identify cell number from XY coordinates
+Make virtual raster with variables as raster bands
+Extract raster values for selected pixels
+100%
+Export results to file output/sample.txt
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Remove NA from data-set (otherwise scale() and
+# model_binomial_iCAR doesn&#39;t work)
+dataset = dataset.dropna(axis=0)
+# Set number of trials to one for far.model_binomial_iCAR()
+dataset[&quot;trial&quot;] = 1
+# Print the first five rows
+print(dataset.head(5))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+   altitude  dist_defor  dist_edge  dist_river  dist_road  dist_town  fcc23  \
+0      30.0       642.0       30.0      8448.0     1485.0     6364.0    0.0
+1      37.0       765.0       30.0      8583.0     1697.0     6576.0    0.0
+2      78.0       216.0       30.0      7722.0      949.0     5743.0    0.0
+3      80.0       277.0       30.0      8168.0     1172.0     6047.0    0.0
+4      46.0        30.0       30.0      6179.0      541.0     6690.0    0.0
+
+    pa  slope          X          Y  cell  trial
+0  0.0    8.0 -6842295.0  1851975.0   4.0      1
+1  0.0    7.0 -6842235.0  1852095.0   4.0      1
+2  0.0    5.0 -6842535.0  1851195.0   4.0      1
+3  0.0    2.0 -6842445.0  1851615.0   4.0      1
+4  0.0    1.0 -6840465.0  1849755.0   4.0      1
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Sample size
+ndefor = sum(dataset.fcc23 == 0)
+nfor = sum(dataset.fcc23 == 1)
+with open(&quot;output/sample_size.csv&quot;, &quot;w&quot;) as f:
+    f.write(&quot;var, n\n&quot;)
+    f.write(&quot;ndefor, &quot; + str(ndefor) + &quot;\n&quot;)
+    f.write(&quot;nfor, &quot; + str(nfor) + &quot;\n&quot;)
+print(&quot;ndefor = {}, nfor = {}&quot;.format(ndefor, nfor))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ndefor = 9923, nfor = 9979
+</pre></div></div>
+</div>
+</section>
+<section id="1.4-Correlation-plots">
+<h3>1.4 Correlation plots<a class="headerlink" href="#1.4-Correlation-plots" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Correlation formula
+formula_corr = &quot;fcc23 ~ dist_road + dist_town + dist_river + \
+dist_defor + dist_edge + altitude + slope - 1&quot;
+
+# Output file
+of = &quot;output/correlation.pdf&quot;
+# Data
+y, data = dmatrices(formula_corr, data=dataset,
+                    return_type=&quot;dataframe&quot;)
+# Plots
+figs = far.plot.correlation(
+    y=y, data=data,
+    plots_per_page=3,
+    figsize=(7, 8),
+    dpi=80,
+    output_file=of)
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_13_0.png" src="../_images/notebooks_far_tropics_13_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_13_1.png" src="../_images/notebooks_far_tropics_13_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_13_2.png" src="../_images/notebooks_far_tropics_13_2.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="2.-Model">
+<h2>2. Model<a class="headerlink" href="#2.-Model" title="Permalink to this heading">¶</a></h2>
+<section id="2.1-Model-preparation">
+<h3>2.1 Model preparation<a class="headerlink" href="#2.1-Model-preparation" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Neighborhood for spatial-autocorrelation
+nneigh, adj = far.cellneigh(raster=&quot;data/fcc23.tif&quot;, csize=10, rank=1)
+
+# List of variables
+variables = [&quot;C(pa)&quot;, &quot;scale(altitude)&quot;, &quot;scale(slope)&quot;,
+             &quot;scale(dist_defor)&quot;, &quot;scale(dist_edge)&quot;, &quot;scale(dist_road)&quot;,
+             &quot;scale(dist_town)&quot;, &quot;scale(dist_river)&quot;]
+# Transform into numpy array
+variables = np.array(variables)
+
+# Starting values
+beta_start = -99  # Simple GLM estimates
+# Priors
+priorVrho = -1  # -1=&quot;1/Gamma&quot;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Compute number of 10 x 10 km spatial cells
+... 99 cells (9 x 11)
+Identify adjacent cells and compute number of neighbors
+</pre></div></div>
+</div>
+</section>
+<section id="2.2-Variable-selection">
+<h3>2.2 Variable selection<a class="headerlink" href="#2.2-Variable-selection" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Run model while there is non-significant variables
+var_remove = True
+while(np.any(var_remove)):
+    # Formula
+    right_part = &quot; + &quot;.join(variables) + &quot; + cell&quot;
+    left_part = &quot;I(1-fcc23) + trial ~ &quot;
+    formula = left_part + right_part
+    # Model
+    mod_binomial_iCAR = far.model_binomial_iCAR(
+        # Observations
+        suitability_formula=formula, data=dataset,
+        # Spatial structure
+        n_neighbors=nneigh, neighbors=adj,
+        # Priors
+        priorVrho=priorVrho,
+        # Chains
+        burnin=1000, mcmc=1000, thin=1,
+        # Starting values
+        beta_start=beta_start)
+    # Ecological and statistical significance
+    effects = mod_binomial_iCAR.betas[1:]
+    # MCMC = mod_binomial_iCAR.mcmc
+    # CI_low = np.percentile(MCMC, 2.5, axis=0)[1:-2]
+    # CI_high = np.percentile(MCMC, 97.5, axis=0)[1:-2]
+    positive_effects = (effects &gt;= 0)
+    # zero_in_CI = ((CI_low * CI_high) &lt;= 0)
+    # Keeping only significant variables
+    var_remove = positive_effects
+    # var_remove = np.logical_or(positive_effects, zero_in_CI)
+    var_keep = np.logical_not(var_remove)
+    variables = variables[var_keep]
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Using estimates from classic logistic regression as starting values for betas
+Using estimates from classic logistic regression as starting values for betas
+</pre></div></div>
+</div>
+</section>
+<section id="2.3-Final-model">
+<h3>2.3 Final model<a class="headerlink" href="#2.3-Final-model" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Re-run the model with longer MCMC and estimated initial values
+mod_binomial_iCAR = far.model_binomial_iCAR(
+    # Observations
+    suitability_formula=formula, data=dataset,
+    # Spatial structure
+    n_neighbors=nneigh, neighbors=adj,
+    # Priors
+    priorVrho=priorVrho,
+    # Chains
+    burnin=5000, mcmc=5000, thin=5,
+    # Starting values
+    beta_start=mod_binomial_iCAR.betas)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2.4-Model-summary">
+<h3>2.4 Model summary<a class="headerlink" href="#2.4-Model-summary" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Predictions
+pred_icar = mod_binomial_iCAR.theta_pred
+
+# Summary
+print(mod_binomial_iCAR)
+# Write summary in file
+with open(&quot;output/summary_hSDM.txt&quot;, &quot;w&quot;) as f:
+    f.write(str(mod_binomial_iCAR))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Binomial logistic regression with iCAR process
+  Model: I(1 - fcc23) + trial ~ 1 + scale(altitude) + scale(dist_defor) + scale(dist_edge) + scale(dist_road) + scale(dist_town) + scale(dist_river) + cell
+  Posteriors:
+                        Mean        Std     CI_low    CI_high
+        Intercept      -3.98      0.303       -4.5      -3.37
+  scale(altitude)     -0.522      0.105     -0.731     -0.321
+scale(dist_defor)      -2.12      0.288      -2.71      -1.56
+ scale(dist_edge)      -7.08      0.525      -8.01      -6.08
+ scale(dist_road)    -0.0389     0.0657     -0.162     0.0885
+ scale(dist_town)     -0.092      0.041     -0.176    -0.0134
+scale(dist_river)    -0.0129     0.0319    -0.0735     0.0502
+             Vrho        3.1      0.815       1.86       4.92
+         Deviance   1.52e+04       48.1   1.52e+04   1.54e+04
+
+</pre></div></div>
+</div>
+<p>MCMC traces</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Plot
+figs = mod_binomial_iCAR.plot(
+    output_file=&quot;output/mcmc.pdf&quot;,plots_per_page=3,
+    figsize=(10, 6),
+    dpi=80)
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Traces and posteriors will be plotted in output/mcmc.pdf
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_24_1.png" src="../_images/notebooks_far_tropics_24_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_24_2.png" src="../_images/notebooks_far_tropics_24_2.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_24_3.png" src="../_images/notebooks_far_tropics_24_3.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Save model&#39;s main specifications with pickle
+mod_icar_pickle = {
+    &quot;formula&quot;: mod_binomial_iCAR.suitability_formula,
+    &quot;rho&quot;: mod_binomial_iCAR.rho,
+    &quot;betas&quot;: mod_binomial_iCAR.betas,
+    &quot;Vrho&quot;: mod_binomial_iCAR.Vrho,
+    &quot;deviance&quot;: mod_binomial_iCAR.deviance}
+with open(&quot;output/mod_icar.pickle&quot;, &quot;wb&quot;) as pickle_file:
+    pickle.dump(mod_icar_pickle, pickle_file)
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="3.-Model-comparison-and-validation">
+<h2>3. Model comparison and validation<a class="headerlink" href="#3.-Model-comparison-and-validation" title="Permalink to this heading">¶</a></h2>
+<section id="3.1-Cross-validation">
+<h3>3.1 Cross-validation<a class="headerlink" href="#3.1-Cross-validation" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Cross-validation for icar, glm and RF
+CV_df_icar = far.cross_validation(
+    dataset, formula, mod_type=&quot;icar&quot;, ratio=30, nrep=5,
+    icar_args={&quot;n_neighbors&quot;: nneigh, &quot;neighbors&quot;: adj,
+               &quot;burnin&quot;: 1000, &quot;mcmc&quot;: 1000, &quot;thin&quot;: 1,
+               &quot;beta_start&quot;: mod_binomial_iCAR.betas})
+
+CV_df_glm = far.cross_validation(dataset, formula, mod_type=&quot;glm&quot;, ratio=30, nrep=5)
+
+CV_df_rf = far.cross_validation(dataset, formula, mod_type=&quot;rf&quot;, ratio=30, nrep=5,
+                                rf_args={&quot;n_estimators&quot;: 500, &quot;n_jobs&quot;: 3})
+
+# Save result to disk
+CV_df_icar.to_csv(&quot;output/CV_icar.csv&quot;, header=True, index=False)
+CV_df_glm.to_csv(&quot;output/CV_glm.csv&quot;, header=True, index=False)
+CV_df_rf.to_csv(&quot;output/CV_rf.csv&quot;, header=True, index=False)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Repetition #: 1
+Repetition #: 2
+Repetition #: 3
+Repetition #: 4
+Repetition #: 5
+Repetition #: 1
+Repetition #: 2
+Repetition #: 3
+Repetition #: 4
+Repetition #: 5
+Repetition #: 1
+Repetition #: 2
+Repetition #: 3
+Repetition #: 4
+Repetition #: 5
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(CV_df_icar)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+  index    rep1    rep2    rep3    rep4    rep5    mean
+0   AUC  0.9070  0.9065  0.9040  0.9032  0.9037  0.9049
+1    OA  0.8245  0.8245  0.8218  0.8191  0.8164  0.8213
+2    EA  0.5001  0.5002  0.5001  0.5000  0.5000  0.5001
+3   FOM  0.7044  0.6962  0.6946  0.6952  0.6875  0.6956
+4   Sen  0.8265  0.8209  0.8198  0.8202  0.8148  0.8204
+5   Spe  0.8224  0.8279  0.8238  0.8181  0.8181  0.8220
+6   TSS  0.6489  0.6488  0.6436  0.6382  0.6329  0.6425
+7     K  0.6489  0.6488  0.6436  0.6382  0.6329  0.6425
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(CV_df_glm)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+  index    rep1    rep2    rep3    rep4    rep5    mean
+0   AUC  0.8843  0.8834  0.8810  0.8842  0.8877  0.8841
+1    OA  0.8037  0.7980  0.7937  0.8017  0.8041  0.8002
+2    EA  0.5001  0.5002  0.5001  0.5000  0.5000  0.5001
+3   FOM  0.6751  0.6583  0.6547  0.6707  0.6699  0.6657
+4   Sen  0.8060  0.7939  0.7913  0.8029  0.8023  0.7993
+5   Spe  0.8014  0.8020  0.7960  0.8005  0.8058  0.8011
+6   TSS  0.6074  0.5959  0.5873  0.6034  0.6081  0.6004
+7     K  0.6074  0.5959  0.5873  0.6034  0.6081  0.6004
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(CV_df_rf)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+  index    rep1    rep2    rep3    rep4    rep5    mean
+0   AUC  0.9133  0.9063  0.9116  0.9100  0.9107  0.9104
+1    OA  0.8339  0.8235  0.8292  0.8280  0.8282  0.8285
+2    EA  0.5001  0.5001  0.5000  0.5000  0.5000  0.5001
+3   FOM  0.7175  0.6956  0.7099  0.7089  0.7056  0.7075
+4   Sen  0.8369  0.8216  0.8303  0.8298  0.8279  0.8293
+5   Spe  0.8307  0.8253  0.8280  0.8262  0.8284  0.8277
+6   TSS  0.6677  0.6469  0.6583  0.6560  0.6563  0.6570
+7     K  0.6677  0.6469  0.6583  0.6560  0.6563  0.6570
+</pre></div></div>
+</div>
+</section>
+<section id="3.2-Deviance">
+<h3>3.2 Deviance<a class="headerlink" href="#3.2-Deviance" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Null model
+formula_null = &quot;I(1-fcc23) ~ 1&quot;
+y, x = dmatrices(formula_null, data=dataset, NA_action=&quot;drop&quot;)
+Y = y[:, 0]
+X_null = x[:, :]
+mod_null = LogisticRegression(solver=&quot;lbfgs&quot;)
+mod_null = mod_null.fit(X_null, Y)
+pred_null = mod_null.predict_proba(X_null)
+
+# Simple glm with no spatial random effects
+formula_glm = formula
+y, x = dmatrices(formula_glm, data=dataset, NA_action=&quot;drop&quot;)
+Y = y[:, 0]
+X_glm = x[:, :-1]  # We remove the last column (cells)
+mod_glm = LogisticRegression(solver=&quot;lbfgs&quot;)
+mod_glm = mod_glm.fit(X_glm, Y)
+pred_glm = mod_glm.predict_proba(X_glm)
+
+# Random forest model
+formula_rf = formula
+y, x = dmatrices(formula_rf, data=dataset, NA_action=&quot;drop&quot;)
+Y = y[:, 0]
+X_rf = x[:, :-1]  # We remove the last column (cells)
+mod_rf = RandomForestClassifier(n_estimators=500, n_jobs=3)
+mod_rf = mod_rf.fit(X_rf, Y)
+pred_rf = mod_rf.predict_proba(X_rf)
+
+# Deviances
+deviance_null = 2*log_loss(Y, pred_null, normalize=False)
+deviance_glm = 2*log_loss(Y, pred_glm, normalize=False)
+deviance_rf = 2*log_loss(Y, pred_rf, normalize=False)
+deviance_icar = mod_binomial_iCAR.deviance
+deviance_full = 0
+dev = [deviance_null, deviance_glm, deviance_rf, deviance_icar, deviance_full]
+
+# Result table
+mod_dev = pd.DataFrame({&quot;model&quot;: [&quot;null&quot;, &quot;glm&quot;, &quot;rf&quot;, &quot;icar&quot;, &quot;full&quot;],
+                        &quot;deviance&quot;: dev})
+perc = 100*(1-mod_dev.deviance/deviance_null)
+mod_dev[&quot;perc&quot;] = perc
+mod_dev = mod_dev.round(0)
+mod_dev.to_csv(&quot;output/model_deviance.csv&quot;, header=True, index=False)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(mod_dev)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+  model  deviance   perc
+0  null   27590.0    0.0
+1   glm   16542.0   40.0
+2    rf    3646.0   87.0
+3  icar   15237.0   45.0
+4  full       0.0  100.0
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Save models&#39; predictions
+obs_pred = dataset
+obs_pred[&quot;null&quot;] = pred_null[:, 1]
+obs_pred[&quot;glm&quot;] = pred_glm[:, 1]
+obs_pred[&quot;rf&quot;] = pred_rf[:, 1]
+obs_pred[&quot;icar&quot;] = pred_icar
+obs_pred.to_csv(&quot;output/obs_pred.csv&quot;, header=True, index=False)
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="4.-Predict">
+<h2>4. Predict<a class="headerlink" href="#4.-Predict" title="Permalink to this heading">¶</a></h2>
+<section id="4.1-Interpolate-spatial-random-effects">
+<h3>4.1 Interpolate spatial random effects<a class="headerlink" href="#4.1-Interpolate-spatial-random-effects" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Spatial random effects
+rho = mod_binomial_iCAR.rho
+
+# Interpolate
+far.interpolate_rho(rho=rho, input_raster=&quot;data/fcc23.tif&quot;,
+                    output_file=&quot;output/rho.tif&quot;,
+                    csize_orig=10, csize_new=1)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Write spatial random effect data to disk
+Compute statistics
+Build overview
+Resampling spatial random effects to file output/rho.tif
+</pre></div></div>
+</div>
+</section>
+<section id="4.2-Predict-deforestation-probability">
+<h3>4.2 Predict deforestation probability<a class="headerlink" href="#4.2-Predict-deforestation-probability" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Update dist_edge and dist_defor at t3
+os.rename(&quot;data/dist_edge.tif&quot;, &quot;data/dist_edge.tif.bak&quot;)
+os.rename(&quot;data/dist_defor.tif&quot;, &quot;data/dist_defor.tif.bak&quot;)
+copy2(&quot;data/forecast/dist_edge_forecast.tif&quot;, &quot;data/dist_edge.tif&quot;)
+copy2(&quot;data/forecast/dist_defor_forecast.tif&quot;, &quot;data/dist_defor.tif&quot;)
+
+# Compute predictions
+far.predict_raster_binomial_iCAR(
+    mod_binomial_iCAR, var_dir=&quot;data&quot;,
+    input_cell_raster=&quot;output/rho.tif&quot;,
+    input_forest_raster=&quot;data/forest/forest_t3.tif&quot;,
+    output_file=&quot;output/prob.tif&quot;,
+    blk_rows=10  # Reduced number of lines to avoid memory problems
+)
+
+# Reinitialize data
+os.remove(&quot;data/dist_edge.tif&quot;)
+os.remove(&quot;data/dist_defor.tif&quot;)
+os.rename(&quot;data/dist_edge.tif.bak&quot;, &quot;data/dist_edge.tif&quot;)
+os.rename(&quot;data/dist_defor.tif.bak&quot;, &quot;data/dist_defor.tif&quot;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Make virtual raster with variables as raster bands
+Divide region in 296 blocks
+Create a raster file on disk for projections
+Predict deforestation probability by block
+100%
+Compute statistics
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="5.-Project-future-forest-cover-change">
+<h2>5. Project future forest cover change<a class="headerlink" href="#5.-Project-future-forest-cover-change" title="Permalink to this heading">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Forest cover
+fc = list()
+dates = [&quot;t1&quot;, &quot;2005&quot;, &quot;t2&quot;, &quot;2015&quot;, &quot;t3&quot;]
+ndates = len(dates)
+for i in range(ndates):
+    rast = &quot;data/forest/forest_&quot; + dates[i] + &quot;.tif&quot;
+    val = far.countpix(input_raster=rast, value=1)
+    fc.append(val[&quot;area&quot;])  # area in ha
+# Save results to disk
+f = open(&quot;output/forest_cover.txt&quot;, &quot;w&quot;)
+for i in fc:
+    f.write(str(i) + &quot;\n&quot;)
+f.close()
+# Annual deforestation
+T = 10.0
+annual_defor = (fc[2] - fc[4]) / T
+
+# Dates and time intervals
+dates_fut = [&quot;2030&quot;, &quot;2035&quot;, &quot;2040&quot;, &quot;2050&quot;, &quot;2055&quot;, &quot;2060&quot;, &quot;2070&quot;, &quot;2080&quot;, &quot;2085&quot;, &quot;2090&quot;, &quot;2100&quot;]
+ndates_fut = len(dates_fut)
+ti = [10, 15, 20, 30, 35, 40, 50, 60, 65, 70, 80]
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Divide region in 168 blocks
+Compute the number of pixels with value=1
+100%
+Compute the corresponding area in ha
+Divide region in 168 blocks
+Compute the number of pixels with value=1
+100%
+Compute the corresponding area in ha
+Divide region in 168 blocks
+Compute the number of pixels with value=1
+100%
+Compute the corresponding area in ha
+Divide region in 168 blocks
+Compute the number of pixels with value=1
+100%
+Compute the corresponding area in ha
+Divide region in 168 blocks
+Compute the number of pixels with value=1
+100%
+Compute the corresponding area in ha
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Loop on dates
+for i in range(ndates_fut):
+    # Amount of deforestation (ha)
+    defor = np.rint(annual_defor * ti[i])
+    # Compute future forest cover
+    stats = far.deforest(
+        input_raster=&quot;output/prob.tif&quot;,
+        hectares=defor,
+        output_file=&quot;output/fcc_&quot; + dates_fut[i] + &quot;.tif&quot;,
+        blk_rows=128)
+    # Save some stats if date = 2050
+    if dates_fut[i] == &quot;2050&quot;:
+        # Save stats to disk with pickle
+        pickle.dump(stats, open(&quot;output/stats.pickle&quot;, &quot;wb&quot;))
+        # Plot histograms of probabilities
+        fig_freq = far.plot.freq_prob(
+            stats, output_file=&quot;output/freq_prob.png&quot;)
+        plt.close(fig_freq)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Divide region in 24 blocks
+Compute the total number of forest pixels
+100%
+Identify threshold
+Minimize error on deforested hectares
+Create a raster file on disk for forest-cover change
+Write raster of future forest-cover change
+100%
+Compute statistics
+Divide region in 24 blocks
+Compute the total number of forest pixels
+100%
+Identify threshold
+Minimize error on deforested hectares
+Create a raster file on disk for forest-cover change
+Write raster of future forest-cover change
+100%
+Compute statistics
+Divide region in 24 blocks
+Compute the total number of forest pixels
+100%
+Identify threshold
+Minimize error on deforested hectares
+Create a raster file on disk for forest-cover change
+Write raster of future forest-cover change
+100%
+Compute statistics
+Divide region in 24 blocks
+Compute the total number of forest pixels
+100%
+Identify threshold
+Minimize error on deforested hectares
+Create a raster file on disk for forest-cover change
+Write raster of future forest-cover change
+100%
+Compute statistics
+Divide region in 24 blocks
+Compute the total number of forest pixels
+100%
+Identify threshold
+Minimize error on deforested hectares
+Create a raster file on disk for forest-cover change
+Write raster of future forest-cover change
+100%
+Compute statistics
+Divide region in 24 blocks
+Compute the total number of forest pixels
+100%
+Identify threshold
+Minimize error on deforested hectares
+Create a raster file on disk for forest-cover change
+Write raster of future forest-cover change
+100%
+Compute statistics
+Divide region in 24 blocks
+Compute the total number of forest pixels
+100%
+Identify threshold
+Minimize error on deforested hectares
+Create a raster file on disk for forest-cover change
+Write raster of future forest-cover change
+100%
+Compute statistics
+Divide region in 24 blocks
+Compute the total number of forest pixels
+100%
+Identify threshold
+Minimize error on deforested hectares
+Create a raster file on disk for forest-cover change
+Write raster of future forest-cover change
+100%
+Compute statistics
+Divide region in 24 blocks
+Compute the total number of forest pixels
+100%
+Identify threshold
+Minimize error on deforested hectares
+Create a raster file on disk for forest-cover change
+Write raster of future forest-cover change
+100%
+Compute statistics
+Divide region in 24 blocks
+Compute the total number of forest pixels
+100%
+Identify threshold
+Minimize error on deforested hectares
+Create a raster file on disk for forest-cover change
+Write raster of future forest-cover change
+100%
+Compute statistics
+Divide region in 24 blocks
+Compute the total number of forest pixels
+100%
+Identify threshold
+Minimize error on deforested hectares
+Create a raster file on disk for forest-cover change
+Write raster of future forest-cover change
+100%
+Compute statistics
+</pre></div></div>
+</div>
+</section>
+<section id="6.-Carbon-emissions">
+<h2>6. Carbon emissions<a class="headerlink" href="#6.-Carbon-emissions" title="Permalink to this heading">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create dataframe
+dpast = [&quot;2020&quot;]
+dpast.extend(dates_fut)
+C_df = pd.DataFrame({&quot;date&quot;: dpast, &quot;C&quot;: np.repeat(-99, ndates_fut + 1)},
+                    columns=[&quot;date&quot;,&quot;C&quot;])
+# Loop on date
+for i in range(ndates_fut):
+    carbon = far.emissions(input_stocks=&quot;data/emissions/AGB.tif&quot;,
+                           input_forest=&quot;output/fcc_&quot; + dates_fut[i] + &quot;.tif&quot;)
+    C_df.loc[C_df[&quot;date&quot;]==dates_fut[i], [&quot;C&quot;]] = carbon
+# Past emissions
+carbon = far.emissions(input_stocks=&quot;data/emissions/AGB.tif&quot;,
+                       input_forest=&quot;data/fcc23.tif&quot;)
+C_df.loc[C_df[&quot;date&quot;]==dpast[0], [&quot;C&quot;]] = carbon
+# Save dataframe
+C_df.to_csv(&quot;output/C_emissions.csv&quot;, header=True, index=False)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Make virtual raster
+Divide region in 24 blocks
+Compute carbon emissions by block
+100%
+Make virtual raster
+Divide region in 24 blocks
+Compute carbon emissions by block
+100%
+Make virtual raster
+Divide region in 24 blocks
+Compute carbon emissions by block
+100%
+Make virtual raster
+Divide region in 24 blocks
+Compute carbon emissions by block
+100%
+Make virtual raster
+Divide region in 24 blocks
+Compute carbon emissions by block
+100%
+Make virtual raster
+Divide region in 24 blocks
+Compute carbon emissions by block
+100%
+Make virtual raster
+Divide region in 24 blocks
+Compute carbon emissions by block
+100%
+Make virtual raster
+Divide region in 24 blocks
+Compute carbon emissions by block
+100%
+Make virtual raster
+Divide region in 24 blocks
+Compute carbon emissions by block
+100%
+Make virtual raster
+Divide region in 24 blocks
+Compute carbon emissions by block
+100%
+Make virtual raster
+Divide region in 24 blocks
+Compute carbon emissions by block
+100%
+Make virtual raster
+Divide region in 24 blocks
+Compute carbon emissions by block
+100%
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(C_df)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+    date       C
+0   2020   85954
+1   2030   98242
+2   2035  151104
+3   2040  201820
+4   2050  289924
+5   2055  334290
+6   2060  381925
+7   2070  481285
+8   2080  587603
+9   2085  644809
+10  2090  705718
+11  2100  843905
+</pre></div></div>
+</div>
+</section>
+<section id="7.-Figures">
+<h2>7. Figures<a class="headerlink" href="#7.-Figures" title="Permalink to this heading">¶</a></h2>
+<section id="7.1-Historical-forest-cover-change">
+<h3>7.1 Historical forest cover change<a class="headerlink" href="#7.1-Historical-forest-cover-change" title="Permalink to this heading">¶</a></h3>
+<p>Forest cover change for the period 2000-2010-2020</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Plot forest
+fig_fcc123 = far.plot.fcc123(
+    input_fcc_raster=&quot;data/forest/fcc123.tif&quot;,
+    maxpixels=1e8,
+    output_file=&quot;output/fcc123.png&quot;,
+    borders=&quot;data/ctry_PROJ.shp&quot;,
+    linewidth=0.3,
+    figsize=(6, 5), dpi=500)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_48_0.png" src="../_images/notebooks_far_tropics_48_0.png" />
+</div>
+</div>
+</section>
+<section id="7.2-Spatial-random-effects">
+<h3>7.2 Spatial random effects<a class="headerlink" href="#7.2-Spatial-random-effects" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Original spatial random effects
+fig_rho_orig = far.plot.rho(&quot;output/rho_orig.tif&quot;,
+                            borders=&quot;data/ctry_PROJ.shp&quot;,
+                            linewidth=0.5,
+                            output_file=&quot;output/rho_orig.png&quot;,
+                            figsize=(9,5), dpi=80)
+
+# Interpolated spatial random effects
+fig_rho = far.plot.rho(&quot;output/rho.tif&quot;,
+                       borders=&quot;data/ctry_PROJ.shp&quot;,
+                       linewidth=0.5,
+                       output_file=&quot;output/rho.png&quot;,
+                       figsize=(9,5), dpi=80)
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Build overview
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_50_1.png" src="../_images/notebooks_far_tropics_50_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_50_2.png" src="../_images/notebooks_far_tropics_50_2.png" />
+</div>
+</div>
+</section>
+<section id="7.3-Spatial-probability-of-deforestation">
+<h3>7.3 Spatial probability of deforestation<a class="headerlink" href="#7.3-Spatial-probability-of-deforestation" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Spatial probability of deforestation
+fig_prob = far.plot.prob(&quot;output/prob.tif&quot;,
+                         maxpixels=1e8,
+                         borders=&quot;data/ctry_PROJ.shp&quot;,
+                         linewidth=0.3,
+                         legend=True,
+                         output_file=&quot;output/prob.png&quot;,
+                         figsize=(6, 5), dpi=500)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_52_0.png" src="../_images/notebooks_far_tropics_52_0.png" />
+</div>
+</div>
+</section>
+<section id="7.4-Future-forest-cover">
+<h3>7.4 Future forest cover<a class="headerlink" href="#7.4-Future-forest-cover" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Projected forest cover change (2020-2050)
+fcc_2050 = far.plot.fcc(&quot;output/fcc_2050.tif&quot;,
+                        maxpixels=1e8,
+                        borders=&quot;data/ctry_PROJ.shp&quot;,
+                        linewidth=0.3,
+                        output_file=&quot;output/fcc_&quot; + dates_fut[i] + &quot;.png&quot;,
+                        figsize=(6, 5), dpi=500)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_54_0.png" src="../_images/notebooks_far_tropics_54_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Projected forest cover change (2020-2100)
+fcc_2100 = far.plot.fcc(&quot;output/fcc_2100.tif&quot;,
+                        maxpixels=1e8,
+                        borders=&quot;data/ctry_PROJ.shp&quot;,
+                        linewidth=0.3,
+                        output_file=&quot;output/fcc_&quot; + dates_fut[i] + &quot;.png&quot;,
+                        figsize=(6, 5), dpi=500)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_far_tropics_55_0.png" src="../_images/notebooks_far_tropics_55_0.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/notebooks/far_tropics.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

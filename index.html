@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>forestatrisk Python package &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Get started" href="notebooks/get_started.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="#">
+    <img class="logo" src="_static/logo-far.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">forestatrisk</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="articles.html">Articles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_contents.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="notebooks/get_started.html" title="next chapter">Get started</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <a class="reference external image-reference" href="https://ecology.ghislainv.fr/forestatrisk"><img alt="Logo forestatrisk" class="align-right" src="https://ecology.ghislainv.fr/forestatrisk/_static/logo-far.svg" width="140px" /></a>
+<section id="forestatrisk-python-package">
+<h1><code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package<a class="headerlink" href="#forestatrisk-python-package" title="Permalink to this heading">¶</a></h1>
+<p><a class="reference external" href="https://pypi.org/project/forestatrisk"><img alt="Python version" src="https://img.shields.io/pypi/pyversions/forestatrisk?logo=python&amp;logoColor=ffd43b&amp;color=306998" /></a> <a class="reference external" href="https://pypi.org/project/forestatrisk"><img alt="PyPI version" src="https://img.shields.io/pypi/v/forestatrisk" /></a> <a class="reference external" href="https://github.com/ghislainv/forestatrisk/actions"><img alt="GitHub Actions" src="https://github.com/ghislainv/forestatrisk/workflows/PyPkg/badge.svg" /></a> <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.html"><img alt="License GPLv3" src="https://img.shields.io/badge/licence-GPLv3-8f10cb.svg" /></a> <a class="reference external" href="https://doi.org/10.5281/zenodo.996337"><img alt="Zenodo" src="https://zenodo.org/badge/DOI/10.5281/zenodo.996337.svg" /></a> <a class="reference external" href="https://doi.org/10.21105/joss.02975"><img alt="JOSS" src="https://joss.theoj.org/papers/10.21105/joss.02975/status.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package can be used to <strong>model</strong> the
+tropical deforestation spatially, <strong>predict</strong> the spatial risk of
+deforestation, and <strong>forecast</strong> the future forest cover in the
+tropics. It provides functions to estimate the spatial probability of
+deforestation as a function of various spatial explanatory variables.</p>
+<p>Spatial explanatory variables can be derived from topography
+(altitude, slope, and aspect), accessibility (distance to roads,
+towns, and forest edge), deforestation history (distance to previous
+deforestation), or land conservation status (eg. protected area) for
+example.</p>
+<a class="reference external image-reference" href="https://ecology.ghislainv.fr/forestatrisk"><img alt="prob_AFR" class="align-center" src="https://ecology.ghislainv.fr/forestatrisk/_static/forestatrisk.png" style="width: 800px;" /></a>
+</section>
+<section id="scientific-publication">
+<h2>Scientific publication<a class="headerlink" href="#scientific-publication" title="Permalink to this heading">¶</a></h2>
+<p><strong>Vieilledent G.</strong> 2021. <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code>: a Python package for
+modelling and forecasting deforestation in the tropics.
+<em>Journal of Open Source Software</em>. 6(59): 2975.
+[doi: <a class="reference external" href="https://doi.org/10.21105/joss.02975">10.21105/joss.02975</a>]. <a class="reference external" href="https://www.theoj.org/joss-papers/joss.02975/10.21105.joss.02975.pdf"><img alt="pdf" src="https://ecology.ghislainv.fr/forestatrisk/_static/logo-pdf.png" /></a></p>
+</section>
+<section id="statement-of-need">
+<h2>Statement of Need<a class="headerlink" href="#statement-of-need" title="Permalink to this heading">¶</a></h2>
+<p>Spatial modelling of the deforestation allows identifying the main
+factors determining the spatial risk of deforestation and quantifying
+their relative effects. Forecasting forest cover change is paramount
+as it allows anticipating the consequences of deforestation (in terms
+of carbon emissions or biodiversity loss) under various technological,
+political and socio-economic scenarios, and informs decision makers
+accordingly. Because both biodiversity and carbon vary greatly in
+space, it is necessary to provide spatial forecasts of forest cover
+change to properly quantify biodiversity loss and carbon emissions
+associated with future deforestation.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package can be used to model the tropical
+deforestation spatially, predict the spatial risk of deforestation,
+and forecast the future forest cover in the tropics. The spatial data
+used to model deforestation come from georeferenced raster files,
+which can be very large (several gigabytes). The functions available
+in the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package process large rasters by blocks of
+data, making calculations fast and efficient. This allows
+deforestation to be modeled over large geographic areas (e.g. at the
+scale of a country) and at high spatial resolution
+(eg. ≤ 30 m). The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package offers the possibility
+of using logistic regression with auto-correlated spatial random
+effects to model the deforestation process. The spatial random effects
+make possible to structure the residual spatial variability of the
+deforestation process, not explained by the variables of the model and
+often very large. In addition to these new features, the
+<code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package is open source (GPLv3 license),
+cross-platform, scriptable (via Python), user-friendly (functions
+provided with full documentation and examples), and easily extendable
+(with additional statistical models for example). The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code>
+Python package has been used to model deforestation and predict future
+forest cover by 2100 across the humid tropics
+(<a class="reference external" href="https://forestatrisk.cirad.fr">https://forestatrisk.cirad.fr</a>).</p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
+<p>You will need several dependencies to run the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python
+package. The best way to install the package is to create a Python
+virtual environment, either through <code class="docutils literal notranslate"><span class="pre">conda</span></code> (recommended) or <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code>.</p>
+<section id="using-conda-recommended">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">conda</span></code> (recommended)<a class="headerlink" href="#using-conda-recommended" title="Permalink to this heading">¶</a></h3>
+<p>You first need to have <code class="docutils literal notranslate"><span class="pre">miniconda3</span></code> installed (see <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">here</a>).</p>
+<p>Then, create a conda environment (details <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">here</a>)
+and install the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package with the following commands:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>conda-far<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span>gdal<span class="w"> </span>numpy<span class="w"> </span>matplotlib<span class="w"> </span>pandas<span class="w"> </span>patsy<span class="w"> </span>pip<span class="w"> </span>statsmodels<span class="w"> </span>earthengine-api<span class="w"> </span>--yes
+conda<span class="w"> </span>activate<span class="w"> </span>conda-far
+pip<span class="w"> </span>install<span class="w"> </span>pywdpa<span class="w"> </span>scikit-learn<span class="w"> </span><span class="c1"># Packages not available with conda</span>
+pip<span class="w"> </span>install<span class="w"> </span>forestatrisk<span class="w"> </span><span class="c1"># For PyPI version</span>
+<span class="c1"># pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version</span>
+<span class="c1"># conda install -c conda-forge python-dotenv rclone --yes  # Potentially interesting libraries</span>
+</pre></div>
+</div>
+<p>To deactivate and delete the conda environment:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>deactivate
+conda<span class="w"> </span>env<span class="w"> </span>remove<span class="w"> </span>--name<span class="w"> </span>conda-far
+</pre></div>
+</div>
+</section>
+<section id="using-virtualenv">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code><a class="headerlink" href="#using-virtualenv" title="Permalink to this heading">¶</a></h3>
+<p>You first need to have the <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code> package installed (see <a class="reference external" href="https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/">here</a>).</p>
+<p>Then, create a virtual environment and install the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code>
+package with the following commands:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~
+mkdir<span class="w"> </span>venvs<span class="w"> </span><span class="c1"># Directory for virtual environments</span>
+<span class="nb">cd</span><span class="w"> </span>venvs
+virtualenv<span class="w"> </span>--python<span class="o">=</span>/usr/bin/python3<span class="w"> </span>venv-far
+<span class="nb">source</span><span class="w"> </span>~/venvs/venv-far/bin/activate
+<span class="c1"># Install numpy first</span>
+pip<span class="w"> </span>install<span class="w"> </span>numpy
+<span class="c1"># Install gdal (the correct version)</span>
+pip<span class="w"> </span>install<span class="w"> </span>--global-option<span class="o">=</span>build_ext<span class="w"> </span>--global-option<span class="o">=</span><span class="s2">&quot;-I/usr/include/gdal&quot;</span><span class="w"> </span><span class="nv">gdal</span><span class="o">==</span><span class="k">$(</span>gdal-config<span class="w"> </span>--version<span class="k">)</span>
+pip<span class="w"> </span>install<span class="w"> </span>forestatrisk<span class="w"> </span><span class="c1"># For PyPI version, this will install all other dependencies</span>
+<span class="c1"># pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version</span>
+pip<span class="w"> </span>install<span class="w"> </span>statsmodels<span class="w"> </span><span class="c1"># Optional additional packages</span>
+</pre></div>
+</div>
+<p>To deactivate and delete the virtual environment:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>deactivate
+rm<span class="w"> </span>-R<span class="w"> </span>~/venvs/venv-far<span class="w"> </span><span class="c1"># Just remove the repository</span>
+</pre></div>
+</div>
+</section>
+<section id="installation-testing">
+<h3>Installation testing<a class="headerlink" href="#installation-testing" title="Permalink to this heading">¶</a></h3>
+<p>You can test that the package has been correctly installed using the
+command <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> in a terminal:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>forestatrisk
+</pre></div>
+</div>
+<p>This should return a short description of the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package
+and the version number:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># forestatrisk: modelling and forecasting deforestation in the tropics.</span>
+<span class="c1"># https://ecology.ghislainv.fr/forestatrisk/</span>
+<span class="c1"># forestatrisk version x.x.</span>
+</pre></div>
+</div>
+<p>You can also test the package executing the commands in the <a class="reference external" href="https://ecology.ghislainv.fr/forestatrisk/notebooks/get_started.html">Get
+started</a>
+tutorial.</p>
+</section>
+</section>
+<section id="main-functionalities">
+<h2>Main functionalities<a class="headerlink" href="#main-functionalities" title="Permalink to this heading">¶</a></h2>
+<section id="sample">
+<h3>Sample<a class="headerlink" href="#sample" title="Permalink to this heading">¶</a></h3>
+<p>Function <code class="docutils literal notranslate"><span class="pre">.sample()</span></code> sample observations points from a forest cover
+change map. The sample is balanced and stratified between deforested
+and non-deforested pixels. The function also retrieves information
+from explanatory variables for each sampled point. Sampling is done by
+block to allow computation on large study areas (e.g. country or
+continental scale) with a high spatial resolution (e.g. 30m).</p>
+</section>
+<section id="model">
+<h3>Model<a class="headerlink" href="#model" title="Permalink to this heading">¶</a></h3>
+<p>Function <code class="docutils literal notranslate"><span class="pre">.model_binomial_iCAR()</span></code> can be used to fit the
+deforestation model. A linear Binomial logistic regression model is
+used in this case. The model includes an intrinsic Conditional
+Autoregressive (iCAR) process to account for the spatial
+autocorrelation of the observations. Parameter inference is done in a
+hierarchical Bayesian framework. The function calls a Gibbs sampler
+with a Metropolis algorithm written in pure C code to reduce
+computation time.</p>
+<p>Other models (such as a simple GLM or a Random Forest model) can also
+be used.</p>
+</section>
+<section id="predict-and-project">
+<h3>Predict and project<a class="headerlink" href="#predict-and-project" title="Permalink to this heading">¶</a></h3>
+<p>Function <code class="docutils literal notranslate"><span class="pre">.predict()</span></code> allows predicting the deforestation
+probability on the whole study area using the deforestation model
+fitted with <code class="docutils literal notranslate"><span class="pre">.model_*()</span></code> functions. The prediction is done by block
+to allow the computation on large study areas (e.g. country or
+continental scale) with a high spatial resolution (e.g. 30m).</p>
+<p>Function <code class="docutils literal notranslate"><span class="pre">.deforest()</span></code> predicts the future forest cover map based on a
+raster of probability of deforestation (rescaled from 1 to 65535),
+which is obtained from function <code class="docutils literal notranslate"><span class="pre">.predict()</span></code>, and an area (in
+hectares) to be deforested.</p>
+</section>
+<section id="validate">
+<h3>Validate<a class="headerlink" href="#validate" title="Permalink to this heading">¶</a></h3>
+<p>A set of functions (eg. <code class="docutils literal notranslate"><span class="pre">.cross_validation()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">.map_accuracy()</span></code>) is also provided to perform model and map
+validation.</p>
+</section>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package is Open Source and released under
+the <a class="reference external" href="https://ecology.ghislainv.fr/forestatrisk/license.html">GNU GPL version 3 license</a>. Anybody
+who is interested can contribute to the package development following
+our <a class="reference external" href="https://ecology.ghislainv.fr/forestatrisk/contributing.html">Community guidelines</a>. Every
+contributor must agree to follow the project’s <a class="reference external" href="https://ecology.ghislainv.fr/forestatrisk/code_of_conduct.html">Code of conduct</a>.</p>
+</section>
+<section id="table-of-contents">
+<h2>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/get_started.html">Get started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#1.-Data">1. Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#2.-Model">2. Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#3.-Predict">3. Predict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#4.-Project-future-forest-cover-change">4. Project future forest cover change</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/get_started.html#5.-Figures">5. Figures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="articles.html">Articles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="articles.html#python-notebooks">Python notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="articles.html#r-notebooks">R notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="package_contents.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="package_contents.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="package_contents.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#forestatrisk-1-1">forestatrisk 1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#forestatrisk-1-0">forestatrisk 1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#forestatrisk-0-2">forestatrisk 0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#forestatrisk-0-1-1">forestatrisk 0.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#forestatrisk-0-1">forestatrisk 0.1</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="license.html#gnu-general-public-license">GNU General Public License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html#preamble">Preamble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html#terms-and-conditions">TERMS AND CONDITIONS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html#how-to-apply-these-terms-to-your-new-programs">How to Apply These Terms to Your New Programs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

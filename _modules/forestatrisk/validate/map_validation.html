@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>forestatrisk.validate.map_validation &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/logo-far.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">forestatrisk</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../articles.html">Articles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../package_contents.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for forestatrisk.validate.map_validation</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># ==============================================================================</span>
+<span class="c1"># author          :Ghislain Vieilledent</span>
+<span class="c1"># email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com</span>
+<span class="c1"># web             :https://ecology.ghislainv.fr</span>
+<span class="c1"># python_version  :&gt;=3</span>
+<span class="c1"># license         :GPLv3</span>
+<span class="c1"># ==============================================================================</span>
+
+<span class="c1"># Third party imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Local application imports</span>
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">progress_bar</span><span class="p">,</span> <span class="n">makeblock</span>
+
+
+<span class="c1"># map_validation</span>
+<div class="viewcode-block" id="map_validation"><a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.map_validation.map_validation">[docs]</a><span class="k">def</span> <span class="nf">map_validation</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute accuracy indices based on predicted and observed</span>
+<span class="sd">    forest-cover change (fcc) maps.</span>
+
+<span class="sd">    Compute the Overall Accuracy, the Figure of Merit, the</span>
+<span class="sd">    Specificity, the Sensitivity, the True Skill Statistics and the</span>
+<span class="sd">    Cohen&#39;s Kappa from a confusion matrix built on predictions</span>
+<span class="sd">    vs. observations.</span>
+
+<span class="sd">    :param pred: Raster of predicted fcc.</span>
+<span class="sd">    :param obs: Raster of observed fcc.</span>
+<span class="sd">    :param blk_rows: If &gt; 0, number of rows for block (else 256x256).</span>
+
+<span class="sd">    :return: A dictionnary of accuracy indices.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Load raster and band</span>
+    <span class="n">predR</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+    <span class="n">predB</span> <span class="o">=</span> <span class="n">predR</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">obsR</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+    <span class="n">obsB</span> <span class="o">=</span> <span class="n">obsR</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Make blocks</span>
+    <span class="n">blockinfo</span> <span class="o">=</span> <span class="n">makeblock</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">blk_rows</span><span class="o">=</span><span class="n">blk_rows</span><span class="p">)</span>
+    <span class="n">nblock</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">nblock_x</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">blockinfo</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Divide region in </span><span class="si">{}</span><span class="s2"> blocks&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nblock</span><span class="p">))</span>
+
+    <span class="c1"># Initialize the confusion matrix</span>
+    <span class="n">n00</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">n10</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">n01</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">n11</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="c1"># Compute the confusion matrix</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute the confusion matrix&quot;</span><span class="p">)</span>
+    <span class="c1"># Loop on blocks of data</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nblock</span><span class="p">):</span>
+        <span class="c1"># Progress bar</span>
+        <span class="n">progress_bar</span><span class="p">(</span><span class="n">nblock</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Position in 1D-arrays</span>
+        <span class="n">px</span> <span class="o">=</span> <span class="n">b</span> <span class="o">%</span> <span class="n">nblock_x</span>
+        <span class="n">py</span> <span class="o">=</span> <span class="n">b</span> <span class="o">//</span> <span class="n">nblock_x</span>
+        <span class="c1"># Data for one block</span>
+        <span class="n">df_pred</span> <span class="o">=</span> <span class="n">predB</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">py</span><span class="p">],</span> <span class="n">nx</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">ny</span><span class="p">[</span><span class="n">py</span><span class="p">])</span>
+        <span class="n">df_pred</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">df_pred</span>
+        <span class="n">df_obs</span> <span class="o">=</span> <span class="n">obsB</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">py</span><span class="p">],</span> <span class="n">nx</span><span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="n">ny</span><span class="p">[</span><span class="n">py</span><span class="p">])</span>
+        <span class="n">df_obs</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">df_obs</span>
+        <span class="c1"># Update confusion matrix</span>
+        <span class="n">n00</span> <span class="o">=</span> <span class="n">n00</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">df_pred</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_obs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">n10</span> <span class="o">=</span> <span class="n">n10</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">df_pred</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_obs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">n01</span> <span class="o">=</span> <span class="n">n01</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">df_pred</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_obs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">n11</span> <span class="o">=</span> <span class="n">n11</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">df_pred</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_obs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Dereference driver</span>
+    <span class="n">predB</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span><span class="p">(</span><span class="n">predR</span><span class="p">)</span>
+    <span class="n">obsB</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span><span class="p">(</span><span class="n">obsR</span><span class="p">)</span>
+
+    <span class="c1"># Print confusion matrix</span>
+    <span class="n">mat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;obs0&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">n00</span><span class="p">,</span> <span class="n">n10</span><span class="p">],</span>
+                                          <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pred0&quot;</span><span class="p">,</span> <span class="s2">&quot;pred1&quot;</span><span class="p">]),</span>
+                        <span class="s2">&quot;obs1&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">n01</span><span class="p">,</span> <span class="n">n11</span><span class="p">],</span>
+                                          <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pred0&quot;</span><span class="p">,</span> <span class="s2">&quot;pred1&quot;</span><span class="p">])})</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+
+    <span class="c1"># Accuracy indices</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute accuracy indices&quot;</span><span class="p">)</span>
+    <span class="n">OA</span> <span class="o">=</span> <span class="p">(</span><span class="n">n11</span> <span class="o">+</span> <span class="n">n00</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n11</span> <span class="o">+</span> <span class="n">n10</span> <span class="o">+</span> <span class="n">n00</span> <span class="o">+</span> <span class="n">n01</span><span class="p">)</span>
+    <span class="n">FOM</span> <span class="o">=</span> <span class="n">n11</span> <span class="o">/</span> <span class="p">(</span><span class="n">n11</span> <span class="o">+</span> <span class="n">n10</span> <span class="o">+</span> <span class="n">n01</span><span class="p">)</span>
+    <span class="n">Sensitivity</span> <span class="o">=</span> <span class="n">n11</span> <span class="o">/</span> <span class="p">(</span><span class="n">n11</span> <span class="o">+</span> <span class="n">n01</span><span class="p">)</span>
+    <span class="n">Specificity</span> <span class="o">=</span> <span class="n">n00</span> <span class="o">/</span> <span class="p">(</span><span class="n">n00</span> <span class="o">+</span> <span class="n">n10</span><span class="p">)</span>
+    <span class="n">TSS</span> <span class="o">=</span> <span class="n">Sensitivity</span> <span class="o">+</span> <span class="n">Specificity</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">n11</span> <span class="o">+</span> <span class="n">n10</span> <span class="o">+</span> <span class="n">n00</span> <span class="o">+</span> <span class="n">n01</span>
+    <span class="n">Observed_accuracy</span> <span class="o">=</span> <span class="p">(</span><span class="n">n11</span> <span class="o">+</span> <span class="n">n00</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+    <span class="n">Expected_accuracy</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">n11</span> <span class="o">+</span> <span class="n">n10</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="n">n11</span> <span class="o">+</span> <span class="n">n01</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">n00</span> <span class="o">+</span> <span class="n">n01</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="n">n00</span> <span class="o">+</span> <span class="n">n10</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">))</span> <span class="o">/</span> <span class="n">N</span>
+    <span class="n">Kappa</span> <span class="o">=</span> <span class="p">(</span><span class="n">Observed_accuracy</span> <span class="o">-</span> <span class="n">Expected_accuracy</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">Expected_accuracy</span><span class="p">)</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;OA&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">OA</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">&quot;FOM&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">FOM</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+         <span class="s2">&quot;Sen&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">Sensitivity</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+         <span class="s2">&quot;Spe&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">Specificity</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+         <span class="s2">&quot;TSS&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">TSS</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">Kappa</span><span class="p">,</span> <span class="mi">2</span><span class="p">)}</span>
+
+    <span class="k">return</span> <span class="n">r</span></div>
+
+<span class="c1"># End</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
