@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""Installation setup.
+"""
+
 # ==============================================================================
 # author          :Ghislain Vieilledent
 # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
@@ -20,11 +23,11 @@ import numpy.distutils.misc_util
 # find_version
 def find_version():
     """Finding package version."""
-    with open('forestatrisk/forestatrisk.py', encoding="utf-8") as far_file:
-        far = far_file.read()
+    with open('forestatrisk/__init__.py', encoding="utf-8") as init_file:
+        init_text = init_file.read()
     far_version = re.search(
         '^__version__\\s*=\\s*"(.*)"',
-        far, re.M).group(1)
+        init_text, re.M).group(1)
     return far_version
 
 

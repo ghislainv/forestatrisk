@@ -11,7 +11,7 @@
 
 from __future__ import print_function  # Python 3 compatibility
 
-__version__ = "1.1"
+import forestatrisk as far
 
 
 def main():
@@ -22,7 +22,6 @@ def main():
     ``forestatrisk`` Python package can be correctly imported.
 
     """
-    print("# forestatrisk version {}.".format(__version__))
-    return None
+    print("# forestatrisk version {}.".format(far.__version__))
 
 # End
