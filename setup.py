@@ -12,21 +12,20 @@
 # Import
 import io
 import re
-from setuptools import setup, find_packages
 from distutils.core import Extension
+from setuptools import setup, find_packages
 import numpy.distutils.misc_util
 
 
 # find_version
 def find_version():
-    with open('forestatrisk/forestatrisk.py') as f:
-        far = f.read()
-    version = re.search(
+    """Finding package version."""
+    with open('forestatrisk/forestatrisk.py', encoding="utf-8") as far_file:
+        far = far_file.read()
+    far_version = re.search(
         '^__version__\\s*=\\s*"(.*)"',
-        far,
-        re.M
-    ).group(1)
-    return version
+        far, re.M).group(1)
+    return far_version
 
 
 version = find_version()
@@ -78,7 +77,7 @@ setup(name="forestatrisk",
           "console_scripts": ["forestatrisk = forestatrisk.forestatrisk:main"]
       },
       install_requires=["earthengine-api", "gdal", "numpy", "matplotlib",
-                        "pandas", "patsy", "pywdpa", "sklearn"],
+                        "pandas", "patsy", "pywdpa", "scikit-learn"],
       extras_require={
           "interactive": ["jupyter", "python-dotenv", "geopandas",
                           "descartes", "folium"]},

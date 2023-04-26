@@ -10,14 +10,6 @@ on:
     branches:
       - 'dev'
   
-# Alternatively, to publish when a (published) GitHub Release is created, use the following:
-# on:
-#   push:
-#   pull_request:
-#   release:
-#     types:
-#       - published
-
 jobs:
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
@@ -25,24 +17,23 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-
     steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         name: Install Python
-
+        with:
+          python-version: '3.10'
       - name: Install NumPy and cibuildwheel
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install cibuildwheel==2.3.1
+          python3 -m pip install --upgrade pip
+          python3 -m pip install cibuildwheel==2.12.3
       - name: Build wheels
         run: |
-          python -m cibuildwheel --output-dir wheelhouse
+          python3 -m cibuildwheel --output-dir wheelhouse
         env:
           CIBW_SKIP: pp* cp27-win*
           CIBW_BEFORE_BUILD: pip install numpy
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
 
@@ -50,20 +41,18 @@ jobs:
     name: Build source distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         name: Install Python
-
+        with:
+          python-version: '3.10'
       - name: Install Python dependencies
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install numpy
-
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install numpy
       - name: Build sdist
         run: python setup.py sdist
-
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           path: dist/*.tar.gz
 
@@ -77,14 +66,14 @@ jobs:
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: artifact
           path: dist
-
-      - uses: pypa/gh-action-pypi-publish@master
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.testpypi_password }}
           repository_url: https://test.pypi.org/legacy/
 
+# End

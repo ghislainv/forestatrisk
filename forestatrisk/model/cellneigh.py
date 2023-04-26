@@ -54,8 +54,8 @@ def cellneigh(raster=None, region=None, csize=10, rank=1):
     # Cell number from region
     print("Compute number of {} x {} km spatial cells".format(csize, csize))
     csize = csize * 1000  # Transform km in m
-    ncol = np.int(np.ceil((Xmax - Xmin) / csize))
-    nrow = np.int(np.ceil((Ymax - Ymin) / csize))
+    ncol = int(np.ceil((Xmax - Xmin) / csize))
+    nrow = int(np.ceil((Ymax - Ymin) / csize))
     ncell = ncol * nrow
     print("... {} cells ({} x {})".format(ncell, nrow, ncol))
 
@@ -123,8 +123,8 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
     # Cell number from region
     print("Compute number of {} x {} km spatial cells".format(csize, csize))
     csize = csize * 1000  # Transform km in m
-    ncol = np.int(np.ceil((Xmax - Xmin) / csize))
-    nrow = np.int(np.ceil((Ymax - Ymin) / csize))
+    ncol = int(np.ceil((Xmax - Xmin) / csize))
+    nrow = int(np.ceil((Ymax - Ymin) / csize))
     Xmax_new = Xmin + ncol * csize
     Ymin_new = Ymax + nrow * (-csize)
     ncell = ncol * nrow

@@ -176,7 +176,7 @@ def progress_bar(niter, i):
     elif i % step == 0:
         sys.stdout.write("\r{}%".format((100 * i) // niter))
         sys.stdout.flush()
-    if (i == niter):
+    if i == niter:
         sys.stdout.write("\r100%\n")
         sys.stdout.flush()
     return None
@@ -199,6 +199,6 @@ def rescale(value):
     # Avoid nodata value (0) for low proba
     value[value < 1e-06] = 1e-06
     # Rescale and round to nearest integer
-    return (np.int_(((value * 1e6 - 1) * 65534 / 999999) + 1))
+    return np.int_(((value * 1e6 - 1) * 65534 / 999999) + 1)
 
 # End

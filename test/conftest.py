@@ -29,8 +29,8 @@ try:
 except ImportError:
     from urllib import urlretrieve  # urlretrieve with Python 2
 
-import forestatrisk as far
 import pytest
+import forestatrisk as far
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -183,7 +183,7 @@ def gstart():
     # ## 4. Project future forest cover change
 
     # Forest cover
-    fc = list()
+    fc = []
     dates = ["t2", "t3"]
     ndates = len(dates)
 
