@@ -23,7 +23,7 @@ import numpy.distutils.misc_util
 # find_version
 def find_version():
     """Finding package version."""
-    with open('forestatrisk/__init__.py', encoding="utf-8") as init_file:
+    with open("forestatrisk/__init__.py", encoding="utf-8") as init_file:
         init_text = init_file.read()
     far_version = re.search(
         '^__version__\\s*=\\s*"(.*)"',
