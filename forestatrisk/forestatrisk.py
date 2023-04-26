@@ -17,11 +17,13 @@ import forestatrisk as far
 def main():
     """forestatrisk.forestatrisk: provides entry point main().
 
-    Running ``forestatrisk`` in the terminal prints ForestAtRisk
+    Running ``forestatrisk`` in the terminal prints ``forestatrisk``
     description and version. Can be used to check that the
-    ``forestatrisk`` Python package can be correctly imported.
+    ``forestatrisk`` Python package has been correctly imported.
 
     """
-    print("# forestatrisk version {}.".format(far.__version__))
+
+    print(far.__doc__)
+    print("version {}.".format(far.__version__))
 
 # End
