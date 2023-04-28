@@ -35,7 +35,7 @@ def invlogit(x):
     r = x
     r[x > 0] = 1.0 / (1.0 + np.exp(-x[x > 0]))
     r[x <= 0] = np.exp(x[x <= 0]) / (1 + np.exp(x[x <= 0]))
-    return (r)
+    return r
 
 
 # Function to make a directory
@@ -52,8 +52,12 @@ def make_dir(newdir):
     if os.path.isdir(newdir):
         pass
     elif os.path.isfile(newdir):
-        raise OSError("a file with the same name as the desired \
-                      dir, '{}', already exists.".format(newdir))
+        raise OSError(
+            "a file with the same name as the desired \
+                      dir, '{}', already exists.".format(
+                newdir
+            )
+        )
     else:
         head, tail = os.path.split(newdir)
         if head and not os.path.isdir(head):
@@ -160,7 +164,7 @@ def make_square(rasterfile, square_size=33):
 
 # Progress_bar
 def progress_bar(niter, i):
-    """ Draw progress_bar
+    """Draw progress_bar
 
     :param niter: Total number of iterations.
     :param i: Current number of iteration (starts at 1).
@@ -200,5 +204,6 @@ def rescale(value):
     value[value < 1e-06] = 1e-06
     # Rescale and round to nearest integer
     return np.int_(((value * 1e6 - 1) * 65534 / 999999) + 1)
+
 
 # End

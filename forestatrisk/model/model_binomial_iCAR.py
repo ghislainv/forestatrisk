@@ -130,29 +130,39 @@ class model_binomial_iCAR(object):
 
     """
 
-    def __init__(self,  # Observations
-                 suitability_formula, data,
-                 # Spatial structure
-                 n_neighbors, neighbors,
-                 # NA action
-                 NA_action="drop",
-                 # Predictions
-                 data_pred=None,
-                 # Environment
-                 eval_env=0,
-                 # Chains
-                 burnin=1000, mcmc=1000, thin=1,
-                 # Starting values
-                 beta_start=0,
-                 Vrho_start=1,
-                 # Priors
-                 mubeta=0, Vbeta=1000,
-                 priorVrho=-1.0,  # -1="1/Gamma"
-                 shape=0.5, rate=0.0005,
-                 Vrho_max=10,
-                 # Various
-                 seed=1234, verbose=1,
-                 save_rho=0, save_p=0):
+    def __init__(
+        self,  # Observations
+        suitability_formula,
+        data,
+        # Spatial structure
+        n_neighbors,
+        neighbors,
+        # NA action
+        NA_action="drop",
+        # Predictions
+        data_pred=None,
+        # Environment
+        eval_env=0,
+        # Chains
+        burnin=1000,
+        mcmc=1000,
+        thin=1,
+        # Starting values
+        beta_start=0,
+        Vrho_start=1,
+        # Priors
+        mubeta=0,
+        Vbeta=1000,
+        priorVrho=-1.0,  # -1="1/Gamma"
+        shape=0.5,
+        rate=0.0005,
+        Vrho_max=10,
+        # Various
+        seed=1234,
+        verbose=1,
+        save_rho=0,
+        save_p=0,
+    ):
         """Function to fit a model_binomial_iCAR model.
 
         The function model_binomial_iCAR estimates the parameters of a
@@ -290,8 +300,7 @@ class model_binomial_iCAR(object):
 
         # Patsy
         eval_env = EvalEnvironment.capture(eval_env, reference=1)
-        y, x = dmatrices(suitability_formula, data,
-                         eval_env, NA_action)
+        y, x = dmatrices(suitability_formula, data, eval_env, NA_action)
         self._y_design_info = y.design_info
         self._x_design_info = x.design_info
 
@@ -307,13 +316,12 @@ class model_binomial_iCAR(object):
         ncell = len(n_neighbors)
         cells = x[:, -1]  # Last column of x
         # Predictions
-        if (data_pred is None):
+        if data_pred is None:
             X_pred = X
             cells_pred = cells
             npred = nobs
-        if (data_pred is not None):
-            (x_pred,) = build_design_matrices([self._x_design_info],
-                                              data_pred)
+        if data_pred is not None:
+            (x_pred,) = build_design_matrices([self._x_design_info], data_pred)
             X_pred = x_pred[:, :-1]
             X_pred = X_pred.flatten("F")  # Flatten X_pred
             cells_pred = x_pred[:, -1]
@@ -329,14 +337,16 @@ class model_binomial_iCAR(object):
         # Initial starting values for M-H
         # ========
 
-        if (np.size(beta_start) == 1 and beta_start == -99):
+        if np.size(beta_start) == 1 and beta_start == -99:
             # Use starting coefficient from logistic regression
-            print("Using estimates from classic logistic regression as"
-                  " starting values for betas")
+            print(
+                "Using estimates from classic logistic regression as"
+                " starting values for betas"
+            )
             mod_LR = LogisticRegression(solver="lbfgs")
             mod_LR = mod_LR.fit(X_arr, Y)
             beta_start = np.ravel(mod_LR.coef_)
-        if (np.size(beta_start) == 1 and beta_start != -99):
+        if np.size(beta_start) == 1 and beta_start != -99:
             beta_start = np.ones(npar) * beta_start
         else:
             beta_start = beta_start
@@ -346,11 +356,11 @@ class model_binomial_iCAR(object):
         # ========
         # Form and check priors
         # ========
-        if (np.size(mubeta) == 1):
+        if np.size(mubeta) == 1:
             mubeta = np.ones(npar) * mubeta
         else:
             mubeta = mubeta
-        if (np.size(Vbeta) == 1):
+        if np.size(Vbeta) == 1:
             Vbeta = np.ones(npar) * Vbeta
         else:
             Vbeta = Vbeta
@@ -399,7 +409,8 @@ class model_binomial_iCAR(object):
             verbose=int(verbose),
             # Save rho and p
             save_rho=int(save_rho),
-            save_p=int(save_p))
+            save_p=int(save_p),
+        )
 
         # Array of MCMC samples
         MCMC = np.zeros(shape=(nsamp, npar + 2))
@@ -413,17 +424,16 @@ class model_binomial_iCAR(object):
         self.deviance = posterior_means[-1]
 
         # Save rho
-        if (save_rho == 0):
+        if save_rho == 0:
             self.rho = np.array(Sample[1])
-        if (save_rho == 1):
+        if save_rho == 1:
             self.rho = np.array(Sample[1]).reshape(ncell, nsamp).transpose()
 
         # Save pred
-        if (save_p == 0):
+        if save_p == 0:
             self.theta_pred = np.array(Sample[5])
-        if (save_p == 1):
-            self.theta_pred = np.array(
-                Sample[5]).reshape(npred, nsamp).transpose()
+        if save_p == 1:
+            self.theta_pred = np.array(Sample[5]).reshape(npred, nsamp).transpose()
 
         # theta_latent
         self.theta_latent = np.array(Sample[4])
@@ -437,11 +447,12 @@ class model_binomial_iCAR(object):
         estimate for model comparison.
         """
 
-        summary = ("Binomial logistic regression with iCAR process\n"
-                   "  Model: %s ~ %s\n"
-                   "  Posteriors:\n"
-                   % (self._y_design_info.describe(),
-                      self._x_design_info.describe()))
+        summary = (
+            "Binomial logistic regression with iCAR process\n"
+            "  Model: %s ~ %s\n"
+            "  Posteriors:\n"
+            % (self._y_design_info.describe(), self._x_design_info.describe())
+        )
         # Varnames
         varnames = self._x_design_info.column_names[:-1]
         varnames = np.concatenate((varnames, ["Vrho", "Deviance"]))
@@ -454,17 +465,22 @@ class model_binomial_iCAR(object):
         CI_low = np.percentile(MCMC, 2.5, axis=0)
         CI_high = np.percentile(MCMC, 97.5, axis=0)
         # Titles
-        summary += ("%" + str(name_width) +
-                    "s %10s %10s %10s %10s\n") % ("", "Mean", "Std",
-                                                  "CI_low", "CI_high")
+        summary += ("%" + str(name_width) + "s %10s %10s %10s %10s\n") % (
+            "",
+            "Mean",
+            "Std",
+            "CI_low",
+            "CI_high",
+        )
         # Loop on varnames
         for i in range(nvar):
-            summary += ("%" + str(name_width) +
-                        "s %10.3g %10.3g %10.3g %10.3g\n") % (varnames[i],
-                                                              post_mean[i],
-                                                              post_std[i],
-                                                              CI_low[i],
-                                                              CI_high[i])
+            summary += ("%" + str(name_width) + "s %10.3g %10.3g %10.3g %10.3g\n") % (
+                varnames[i],
+                post_mean[i],
+                post_std[i],
+                CI_low[i],
+                CI_high[i],
+            )
         return summary
 
     def predict(self, new_data=None):
@@ -482,24 +498,23 @@ class model_binomial_iCAR(object):
         """
 
         # Data
-        if (new_data is None):
-            (new_x,) = build_design_matrices([self._x_design_info],
-                                             self.data)
+        if new_data is None:
+            (new_x,) = build_design_matrices([self._x_design_info], self.data)
         else:
-            (new_x,) = build_design_matrices([self._x_design_info],
-                                             new_data)
+            (new_x,) = build_design_matrices([self._x_design_info], new_data)
         X = new_x[:, :-1]
         cell = new_x[:, -1].astype(np.int32)
 
         # Rho
-        if (len(self.rho.shape) == 1):
+        if len(self.rho.shape) == 1:
             rho = self.rho[cell]
         else:
             rho = np.mean(self.rho, axis=0)[cell]
         return invlogit(np.dot(X, self.betas) + rho)
 
-    def plot(self, output_file="mcmc.pdf", plots_per_page=5,
-             figsize=(8.27, 11.69), dpi=100):
+    def plot(
+        self, output_file="mcmc.pdf", plots_per_page=5, figsize=(8.27, 11.69), dpi=100
+    ):
         """Plot traces and posterior distributions.
 
         This function plots the traces and posterior distributions of
@@ -538,10 +553,15 @@ class model_binomial_iCAR(object):
             ax = plt.subplot2grid(grid_size, (i % plots_per_page, 0))
             plt.axhline(y=posterior_means[i], linewidth=1, color="r")
             plt.plot(MCMC[:, i], color="#000000")
-            plt.text(0, 1, varnames[i],
-                     horizontalalignment="left",
-                     verticalalignment="bottom", fontsize=11,
-                     transform=ax.transAxes)
+            plt.text(
+                0,
+                1,
+                varnames[i],
+                horizontalalignment="left",
+                verticalalignment="bottom",
+                fontsize=11,
+                transform=ax.transAxes,
+            )
             # Posterior distribution
             plt.subplot2grid(grid_size, (i % plots_per_page, 1))
             plt.hist(MCMC[:, i], density=1, bins=20, color="#808080")
@@ -554,5 +574,6 @@ class model_binomial_iCAR(object):
         # Write the PDF document to the disk
         pdf_pages.close()
         return figures
+
 
 # End

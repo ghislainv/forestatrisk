@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 
 # Plot vector objects
 # (https://github.com/cgarrard/osgeopy-code/blob/master/Chapter13/listing13_3.py)
-def plot_polygon(poly, symbol='k-', **kwargs):
+def plot_polygon(poly, symbol="k-", **kwargs):
     """Plots a polygon using the given symbol."""
     for i in range(poly.GetGeometryCount()):
         subgeom = poly.GetGeometryRef(i)
@@ -35,20 +35,20 @@ def plot_polygon(poly, symbol='k-', **kwargs):
 
 
 # Use this function to fill polygons.
-def plot_polygon_fill(poly, symbol='w', **kwargs):
+def plot_polygon_fill(poly, symbol="w", **kwargs):
     """Plots a polygon using the given symbol."""
     for i in range(poly.GetGeometryCount()):
         x, y = zip(*poly.GetGeometryRef(i).GetPoints())
         plt.fill(x, y, symbol, **kwargs)
 
 
-def plot_line(line, symbol='k-', **kwargs):
+def plot_line(line, symbol="k-", **kwargs):
     """Plots a line using the given symbol."""
     x, y = zip(*line.GetPoints())
     plt.plot(x, y, symbol, **kwargs)
 
 
-def plot_point(point, symbol='ko', **kwargs):
+def plot_point(point, symbol="ko", **kwargs):
     """Plots a point using the given symbol."""
     x, y = point.GetX(), point.GetY()
     plt.plot(x, y, symbol, **kwargs)
@@ -113,11 +113,14 @@ def figure_as_image(fig, output_file):
 
 
 # plot.correlation
-def correlation(y, data,
-                output_file="correlation.pdf",
-                plots_per_page=4,
-                figsize=(8.27, 11.69),
-                dpi=300):
+def correlation(
+    y,
+    data,
+    output_file="correlation.pdf",
+    plots_per_page=4,
+    figsize=(8.27, 11.69),
+    dpi=300,
+):
     """
     Correlation between variables and the probability of deforestation.
 
@@ -165,8 +168,7 @@ def correlation(y, data,
             inf = quantiles[j]
             sup = quantiles[j + 1]
             x[j] = inf + (sup - inf) / 2
-            y_bin = y[(data[varname] > inf) &
-                      (data[varname] <= sup)]
+            y_bin = y[(data[varname] > inf) & (data[varname] <= sup)]
             y_bin = np.array(y_bin)  # Transform into np.array to compute sum
             s = float(sum(y_bin == 1))  # success
             n = len(y_bin)  # trials
@@ -186,7 +188,7 @@ def correlation(y, data,
         plt.ylabel("Nb. of observations", fontsize=16)
         # Correlation
         plt.subplot2grid(grid_size, (i % nb_plots_per_page, 1))
-        plt.plot(x, theta, color="#000000", marker='o', linestyle='--')
+        plt.plot(x, theta, color="#000000", marker="o", linestyle="--")
         plt.xlabel(varname, fontsize=16)
         plt.ylabel("Defor. probability", fontsize=16)
         # Close the page if needed
@@ -196,19 +198,22 @@ def correlation(y, data,
             pdf_pages.savefig(fig)
     # Write the PDF document to the disk
     pdf_pages.close()
-    return(figures)
+    return figures
 
 
 # plot.fcc
-def fcc(input_fcc_raster,
-        output_file="fcc.png",
-        maxpixels=500000,
-        borders=None,
-        zoom=None,
-        col_for=(34, 139, 34, 255),
-        col_defor=(227, 26, 28, 255),
-        figsize=(11.69, 8.27),
-        dpi=300, **kwargs):
+def fcc(
+    input_fcc_raster,
+    output_file="fcc.png",
+    maxpixels=500000,
+    borders=None,
+    zoom=None,
+    col_for=(34, 139, 34, 255),
+    col_defor=(227, 26, 28, 255),
+    figsize=(11.69, 8.27),
+    dpi=300,
+    **kwargs
+):
     """Plot forest-cover change (fcc) map.
 
     This function plots the forest-cover change map. Green is the
@@ -248,7 +253,7 @@ def fcc(input_fcc_raster,
     # Total number of pixels
     npixels_orig = ncol * nrow
     # Check number of pixels is inferior to maxpixels
-    if (npixels_orig > maxpixels):
+    if npixels_orig > maxpixels:
         # Remove potential existing external overviews
         if os.path.isfile(input_fcc_raster + ".ovr"):
             os.remove(input_fcc_raster + ".ovr")
@@ -261,7 +266,7 @@ def fcc(input_fcc_raster,
             npixels_ov = npixels_orig // np.power(ov_level, 2)
         # Build overview
         print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        gdal.SetConfigOption("COMPRESS_OVERVIEW", "DEFLATE")
         rasterR.BuildOverviews("nearest", [ov_level])
         # Get data from overview
         ov_band = rasterB.GetOverview(0)
@@ -275,7 +280,7 @@ def fcc(input_fcc_raster,
 
     # Dereference driver
     rasterB = None
-    del(rasterR)
+    del rasterR
 
     # Num of forest pixels
     nfor = np.sum(ov_arr == 1)
@@ -286,7 +291,7 @@ def fcc(input_fcc_raster,
     col_defor = tuple(np.array(col_defor) / cmax)
     col_for = tuple(np.array(col_for) / cmax)
     colors.append(col_defor)
-    if (nfor > 0):
+    if nfor > 0:
         colors.append(col_for)
     colors.append((0, 0, 0, 0))  # transparent
     color_map = ListedColormap(colors)
@@ -304,10 +309,7 @@ def fcc(input_fcc_raster,
     plt.axis("off")
     if zoom is not None:
         z = Rectangle(
-            (zoom[0], zoom[2]),
-            zoom[1] - zoom[0],
-            zoom[3] - zoom[2],
-            fill=False
+            (zoom[0], zoom[2]), zoom[1] - zoom[0], zoom[3] - zoom[2], fill=False
         )
         ax1.add_patch(z)
         ax2 = plt.subplot(222)
@@ -320,22 +322,27 @@ def fcc(input_fcc_raster,
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi="figure", bbox_inches="tight")
-    return(fig)
+    return fig
 
 
 # plot.fcc12345
-def fcc12345(input_fcc_raster,
-             output_file="fcc12345.png",
-             maxpixels=500000,
-             borders=None,
-             zoom=None,
-             col=[(255, 165, 0, 255),
-                  (235, 100, 0, 255),
-                  (227, 26, 28, 255),
-                  (163, 26, 28, 255),
-                  (34, 139, 34, 255)],
-             figsize=(11.69, 8.27),
-             dpi=300, **kwargs):
+def fcc12345(
+    input_fcc_raster,
+    output_file="fcc12345.png",
+    maxpixels=500000,
+    borders=None,
+    zoom=None,
+    col=[
+        (255, 165, 0, 255),
+        (235, 100, 0, 255),
+        (227, 26, 28, 255),
+        (163, 26, 28, 255),
+        (34, 139, 34, 255),
+    ],
+    figsize=(11.69, 8.27),
+    dpi=300,
+    **kwargs
+):
     """Plot forest-cover change (fcc12345) map.
 
     This function plots the forest-cover change map with 4
@@ -373,7 +380,7 @@ def fcc12345(input_fcc_raster,
     # Total number of pixels
     npixels_orig = ncol * nrow
     # Check number of pixels is inferior to maxpixels
-    if (npixels_orig > maxpixels):
+    if npixels_orig > maxpixels:
         # Remove potential existing external overviews
         if os.path.isfile(input_fcc_raster + ".ovr"):
             os.remove(input_fcc_raster + ".ovr")
@@ -386,7 +393,7 @@ def fcc12345(input_fcc_raster,
             npixels_ov = npixels_orig // np.power(ov_level, 2)
         # Build overview
         print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        gdal.SetConfigOption("COMPRESS_OVERVIEW", "DEFLATE")
         rasterR.BuildOverviews("nearest", [ov_level])
         # Get data from overview
         ov_band = rasterB.GetOverview(0)
@@ -397,7 +404,7 @@ def fcc12345(input_fcc_raster,
 
     # Dereference driver
     rasterB = None
-    del(rasterR)
+    del rasterR
 
     # Colormap
     colors = [(1, 1, 1, 0)]  # transparent white for 0
@@ -420,10 +427,7 @@ def fcc12345(input_fcc_raster,
     plt.axis("off")
     if zoom is not None:
         z = Rectangle(
-            (zoom[0], zoom[2]),
-            zoom[1] - zoom[0],
-            zoom[3] - zoom[2],
-            fill=False
+            (zoom[0], zoom[2]), zoom[1] - zoom[0], zoom[3] - zoom[2], fill=False
         )
         ax1.add_patch(z)
         ax2 = plt.subplot(222)
@@ -436,20 +440,21 @@ def fcc12345(input_fcc_raster,
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi="figure", bbox_inches="tight")
-    return(fig)
+    return fig
 
 
 # plot.fcc123
-def fcc123(input_fcc_raster,
-           output_file="fcc123.png",
-           maxpixels=500000,
-           borders=None,
-           zoom=None,
-           col=[(255, 165, 0, 255),
-                (227, 26, 28, 255),
-                (34, 139, 34, 255)],
-           figsize=(11.69, 8.27),
-           dpi=300, **kwargs):
+def fcc123(
+    input_fcc_raster,
+    output_file="fcc123.png",
+    maxpixels=500000,
+    borders=None,
+    zoom=None,
+    col=[(255, 165, 0, 255), (227, 26, 28, 255), (34, 139, 34, 255)],
+    figsize=(11.69, 8.27),
+    dpi=300,
+    **kwargs
+):
     """Plot forest-cover change (fcc123) map.
 
     This function plots the forest-cover change map with 2
@@ -487,7 +492,7 @@ def fcc123(input_fcc_raster,
     # Total number of pixels
     npixels_orig = ncol * nrow
     # Check number of pixels is inferior to maxpixels
-    if (npixels_orig > maxpixels):
+    if npixels_orig > maxpixels:
         # Remove potential existing external overviews
         if os.path.isfile(input_fcc_raster + ".ovr"):
             os.remove(input_fcc_raster + ".ovr")
@@ -500,7 +505,7 @@ def fcc123(input_fcc_raster,
             npixels_ov = npixels_orig // np.power(ov_level, 2)
         # Build overview
         print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        gdal.SetConfigOption("COMPRESS_OVERVIEW", "DEFLATE")
         rasterR.BuildOverviews("nearest", [ov_level])
         # Get data from overview
         ov_band = rasterB.GetOverview(0)
@@ -511,7 +516,7 @@ def fcc123(input_fcc_raster,
 
     # Dereference driver
     rasterB = None
-    del(rasterR)
+    del rasterR
 
     # Colormap
     colors = [(1, 1, 1, 0)]  # transparent white for 0
@@ -534,10 +539,7 @@ def fcc123(input_fcc_raster,
     plt.axis("off")
     if zoom is not None:
         z = Rectangle(
-            (zoom[0], zoom[2]),
-            zoom[1] - zoom[0],
-            zoom[3] - zoom[2],
-            fill=False
+            (zoom[0], zoom[2]), zoom[1] - zoom[0], zoom[3] - zoom[2], fill=False
         )
         ax1.add_patch(z)
         ax2 = plt.subplot(222)
@@ -550,17 +552,20 @@ def fcc123(input_fcc_raster,
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi="figure", bbox_inches="tight")
-    return(fig)
+    return fig
 
 
 # plot.forest
-def forest(input_forest_raster,
-           output_file="forest.png",
-           maxpixels=500000,
-           borders=None,
-           zoom=None,
-           figsize=(11.69, 8.27),
-           dpi=300, **kwargs):
+def forest(
+    input_forest_raster,
+    output_file="forest.png",
+    maxpixels=500000,
+    borders=None,
+    zoom=None,
+    figsize=(11.69, 8.27),
+    dpi=300,
+    **kwargs
+):
     """Plot forest map.
 
     This function plots the forest map in green. Raster values must be
@@ -597,7 +602,7 @@ def forest(input_forest_raster,
     # Total number of pixels
     npixels_orig = ncol * nrow
     # Check number of pixels is inferior to maxpixels
-    if (npixels_orig > maxpixels):
+    if npixels_orig > maxpixels:
         # Remove potential existing external overviews
         if os.path.isfile(input_forest_raster + ".ovr"):
             os.remove(input_forest_raster + ".ovr")
@@ -610,7 +615,7 @@ def forest(input_forest_raster,
             npixels_ov = npixels_orig // np.power(ov_level, 2)
         # Build overview
         print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        gdal.SetConfigOption("COMPRESS_OVERVIEW", "DEFLATE")
         rasterR.BuildOverviews("nearest", [ov_level])
         # Get data from overview
         ov_band = rasterB.GetOverview(0)
@@ -624,7 +629,7 @@ def forest(input_forest_raster,
 
     # Dereference driver
     rasterB = None
-    del(rasterR)
+    del rasterR
 
     # Colormap
     colors = []
@@ -646,10 +651,7 @@ def forest(input_forest_raster,
     plt.axis("off")
     if zoom is not None:
         z = Rectangle(
-            (zoom[0], zoom[2]),
-            zoom[1] - zoom[0],
-            zoom[3] - zoom[2],
-            fill=False
+            (zoom[0], zoom[2]), zoom[1] - zoom[0], zoom[3] - zoom[2], fill=False
         )
         ax1.add_patch(z)
         ax2 = plt.subplot(222)
@@ -662,17 +664,20 @@ def forest(input_forest_raster,
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi="figure", bbox_inches="tight")
-    return(fig)
+    return fig
 
 
 # plot.prob
-def prob(input_prob_raster,
-         output_file="prob.png",
-         maxpixels=500000,
-         borders=None,
-         legend=False,
-         figsize=(11.69, 8.27),
-         dpi=300, **kwargs):
+def prob(
+    input_prob_raster,
+    output_file="prob.png",
+    maxpixels=500000,
+    borders=None,
+    legend=False,
+    figsize=(11.69, 8.27),
+    dpi=300,
+    **kwargs
+):
     """Plot map of spatial probability of deforestation.
 
     This function plots the spatial probability of deforestation.
@@ -708,7 +713,7 @@ def prob(input_prob_raster,
     # Total number of pixels
     npixels_orig = ncol * nrow
     # Check number of pixels is inferior to maxpixels
-    if (npixels_orig > maxpixels):
+    if npixels_orig > maxpixels:
         # Remove potential existing external overviews
         if os.path.isfile(input_prob_raster + ".ovr"):
             os.remove(input_prob_raster + ".ovr")
@@ -721,7 +726,7 @@ def prob(input_prob_raster,
             npixels_ov = npixels_orig // np.power(ov_level, 2)
         # Build overview
         print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        gdal.SetConfigOption("COMPRESS_OVERVIEW", "DEFLATE")
         rasterR.BuildOverviews("nearest", [ov_level])
         # Get data from overview
         ov_band = rasterB.GetOverview(0)
@@ -732,7 +737,7 @@ def prob(input_prob_raster,
 
     # Dereference driver
     rasterB = None
-    del(rasterR)
+    del rasterR
 
     # Colormap
     colors = []
@@ -744,24 +749,23 @@ def prob(input_prob_raster,
     # red, p=0.80
     colors.append((52429 / vmax, (227 / cmax, 26 / cmax, 28 / cmax, 1)))
     colors.append((1, (0, 0, 0, 1)))  # black
-    color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
-                                                  N=65535, gamma=1.0)
+    color_map = LinearSegmentedColormap.from_list(
+        name="mycm", colors=colors, N=65535, gamma=1.0
+    )
     # transparent, must be associated with vmin
     color_map.set_under(color=(1, 1, 1, 0))
 
     # Plot raster
     fig = plt.figure(figsize=figsize, dpi=dpi)
     plt.subplot(111)
-    plt.imshow(ov_arr, cmap=color_map, extent=extent,
-               vmin=0.01, vmax=65535)
+    plt.imshow(ov_arr, cmap=color_map, extent=extent, vmin=0.01, vmax=65535)
     if borders is not None:
         plot_layer(borders, symbol="k-", **kwargs)
 
     # Legend
     if legend is True:
         t = np.linspace(1, 65535, 5, endpoint=True)
-        cbar = plt.colorbar(ticks=t, orientation="vertical",
-                            shrink=0.5, aspect=20)
+        cbar = plt.colorbar(ticks=t, orientation="vertical", shrink=0.5, aspect=20)
         vl = np.linspace(0, 1, 5, endpoint=True)
         cbar.ax.set_yticklabels(vl)
 
@@ -769,18 +773,20 @@ def prob(input_prob_raster,
     figure_as_image(fig, output_file)
 
     # Return figure
-    return(fig)
+    return fig
 
 
 # plot.obs
-def obs(sample,
-        name_forest_var,
-        input_fcc_raster,
-        output_file="obs.png",
-        zoom=None,
-        s=20,
-        figsize=(11.69, 8.27),
-        dpi=300):
+def obs(
+    sample,
+    name_forest_var,
+    input_fcc_raster,
+    output_file="obs.png",
+    zoom=None,
+    s=20,
+    figsize=(11.69, 8.27),
+    dpi=300,
+):
     """Plot the sample points over the forest map.
 
     This function plots the sample points over the forest map. Green
@@ -817,7 +823,7 @@ def obs(sample,
     if rasterB.GetOverviewCount() == 0:
         # Build overviews
         print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        gdal.SetConfigOption("COMPRESS_OVERVIEW", "DEFLATE")
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Get data from finest overview
@@ -827,7 +833,7 @@ def obs(sample,
 
     # Dereference driver
     rasterB = None
-    del(rasterR)
+    del rasterR
 
     # Colormap
     colors = []
@@ -853,10 +859,8 @@ def obs(sample,
     y_defor = sample[sample[f] == 0]["Y"]
     x_for = sample[sample[f] == 1]["X"]
     y_for = sample[sample[f] == 1]["Y"]
-    plt.scatter(x_defor, y_defor,
-                color="darkred", s=s)
-    plt.scatter(x_for, y_for,
-                color="darkgreen", s=s)
+    plt.scatter(x_defor, y_defor, color="darkred", s=s)
+    plt.scatter(x_for, y_for, color="darkgreen", s=s)
     if zoom is not None:
         plt.xlim(zoom[0], zoom[1])
         plt.ylim(zoom[2], zoom[3])
@@ -864,16 +868,19 @@ def obs(sample,
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi=dpi, bbox_inches="tight")
-    return(fig)
+    return fig
 
 
 # plot.differences
-def differences(input_raster,
-                output_file="differences.png",
-                borders=None,
-                zoom=None,
-                figsize=(11.69, 8.27),
-                dpi=300, **kwargs):
+def differences(
+    input_raster,
+    output_file="differences.png",
+    borders=None,
+    zoom=None,
+    figsize=(11.69, 8.27),
+    dpi=300,
+    **kwargs
+):
     """Plot a map to compare outputs.
 
     This function plots a map of differences between two rasters of
@@ -907,10 +914,10 @@ def differences(input_raster,
     extent = [Xmin, Xmax, Ymin, Ymax]
 
     # Overviews
-    if (rasterB.GetOverviewCount() == 0):
+    if rasterB.GetOverviewCount() == 0:
         # Build overviews
         print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        gdal.SetConfigOption("COMPRESS_OVERVIEW", "DEFLATE")
         rasterR.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Get data from finest overview
@@ -920,7 +927,7 @@ def differences(input_raster,
 
     # Dereference driver
     rasterB = None
-    del(rasterR)
+    del rasterR
 
     # Colormap
     colors = []
@@ -949,10 +956,7 @@ def differences(input_raster,
     plt.axis("off")
     if zoom is not None:
         z = Rectangle(
-            (zoom[0], zoom[2]),
-            zoom[1] - zoom[0],
-            zoom[3] - zoom[2],
-            fill=False
+            (zoom[0], zoom[2]), zoom[1] - zoom[0], zoom[3] - zoom[2], fill=False
         )
         ax1.add_patch(z)
         ax2 = plt.subplot(222)
@@ -965,15 +969,13 @@ def differences(input_raster,
     # Save and return figure
     fig.tight_layout()
     fig.savefig(output_file, dpi="figure", bbox_inches="tight")
-    return(fig)
+    return fig
 
 
 # plot.var
-def var(var_dir,
-        output_file="var.pdf",
-        gridsize=(3, 3),
-        figsize=(11.69, 8.27),
-        dpi=300):
+def var(
+    var_dir, output_file="var.pdf", gridsize=(3, 3), figsize=(11.69, 8.27), dpi=300
+):
     """Plot variable maps.
 
     This function plots variable maps.
@@ -1014,8 +1016,11 @@ def var(var_dir,
         b = r.GetRasterBand(1)
         ND = b.GetNoDataValue()
         if ND is None:
-            print("NoData value is not specified \
-            for input raster file " + raster_list[i])
+            print(
+                "NoData value is not specified \
+            for input raster file "
+                + raster_list[i]
+            )
             sys.exit(1)
 
         # Raster name
@@ -1037,15 +1042,14 @@ def var(var_dir,
         if b.GetOverviewCount() == 0:
             # Build overviews
             print("Build overview")
-            gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+            gdal.SetConfigOption("COMPRESS_OVERVIEW", "DEFLATE")
             r.BuildOverviews("nearest", [4, 8, 16, 32])
         # Get data from finest overview
         ov_band = b.GetOverview(0)
         ov_arr = ov_band.ReadAsArray()
         mov_arr = np.ma.array(ov_arr, mask=(ov_arr == ND))
         # Plot raster
-        ax = plt.subplot2grid(gridsize,
-                              ((i % nplot_per_page) // nx, i % nx))
+        ax = plt.subplot2grid(gridsize, ((i % nplot_per_page) // nx, i % nx))
         ax.set_frame_on(False)
         ax.set_xticks([])
         ax.set_yticks([])
@@ -1061,15 +1065,18 @@ def var(var_dir,
 
     # Write the PDF document to the disk
     pdf_pages.close()
-    return(figures)
+    return figures
 
 
 # plot.rho
-def rho(input_rho_raster,
-        output_file="rho.png",
-        borders=None,
-        figsize=(11.69, 8.27),
-        dpi=300, **kwargs):
+def rho(
+    input_rho_raster,
+    output_file="rho.png",
+    borders=None,
+    figsize=(11.69, 8.27),
+    dpi=300,
+    **kwargs
+):
     """Plot map of spatial random effects (rho).
 
     This function plots the spatial random effects.
@@ -1103,7 +1110,7 @@ def rho(input_rho_raster,
     if rasterB.GetOverviewCount() == 0:
         # Build overviews
         print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        gdal.SetConfigOption("COMPRESS_OVERVIEW", "DEFLATE")
         rasterR.BuildOverviews("average", [2, 4, 8, 16, 32])
 
     # Get data
@@ -1118,27 +1125,23 @@ def rho(input_rho_raster,
 
     # Dereference driver
     rasterB = None
-    del(rasterR)
+    del rasterR
 
     # Plot raster and save
     fig = plt.figure(figsize=figsize, dpi=dpi)
     plt.subplot(111)
-    plt.imshow(ov_arr, cmap="RdYlGn_r", extent=extent,
-               vmin=-rho_bound, vmax=rho_bound)
+    plt.imshow(ov_arr, cmap="RdYlGn_r", extent=extent, vmin=-rho_bound, vmax=rho_bound)
     if borders is not None:
         plot_layer(borders, symbol="k-", **kwargs)
     plt.colorbar()
     figure_as_image(fig, output_file)
 
     # Return figure
-    return(fig)
+    return fig
 
 
 # freq_prob
-def freq_prob(stats,
-              output_file="freq_prob.png",
-              figsize=None,
-              dpi=300):
+def freq_prob(stats, output_file="freq_prob.png", figsize=None, dpi=300):
     """Plot distribution of probability values.
 
     This function plots the distribution of the probability values.
@@ -1164,10 +1167,11 @@ def freq_prob(stats,
     plt.subplot(111)
     plt.plot(frequences, "bo")
     plt.title("Frequencies of deforestation probabilities")
-    plt.axvline(x=threshold, color='k', linestyle='--')
+    plt.axvline(x=threshold, color="k", linestyle="--")
 
     # Save and return figure
     fig.savefig(output_file)
-    return(fig)
+    return fig
+
 
 # End

@@ -27,7 +27,7 @@ from osgeo import gdal, ogr
 from scalebar import scale_bar
 
 
-def _plot_polygon(poly, symbol='k-', **kwargs):
+def _plot_polygon(poly, symbol="k-", **kwargs):
     """Plots a polygon using the given symbol."""
     for i in range(poly.GetGeometryCount()):
         subgeom = poly.GetGeometryRef(i)
@@ -35,13 +35,13 @@ def _plot_polygon(poly, symbol='k-', **kwargs):
         plt.plot(x, y, symbol, **kwargs)
 
 
-def _plot_line(line, symbol='k-', **kwargs):
+def _plot_line(line, symbol="k-", **kwargs):
     """Plots a line using the given symbol."""
     x, y = zip(*line.GetPoints())
     plt.plot(x, y, symbol, **kwargs)
 
 
-def _plot_point(point, symbol='ko', **kwargs):
+def _plot_point(point, symbol="ko", **kwargs):
     """Plots a point using the given symbol."""
     x, y = point.GetX(), point.GetY()
     plt.plot(x, y, symbol, **kwargs)
@@ -85,13 +85,16 @@ def _plot_layer(filename, symbol, layer_index=0, **kwargs):
                 _plot_point(subgeom, symbol, **kwargs)
 
 
-def nice_plot_prob(input_prob_raster,
-                   projection=ccrs.Mercator(),
-                   maxpixels=500000,
-                   borders=None,
-                   legend=False,
-                   figsize=(11.69, 8.27),
-                   dpi=300, **kwargs):
+def nice_plot_prob(
+    input_prob_raster,
+    projection=ccrs.Mercator(),
+    maxpixels=500000,
+    borders=None,
+    legend=False,
+    figsize=(11.69, 8.27),
+    dpi=300,
+    **kwargs
+):
     """Plot map of spatial probability of deforestation.
 
     This function plots the spatial probability of deforestation.
@@ -127,7 +130,7 @@ def nice_plot_prob(input_prob_raster,
     # Total number of pixels
     npixels_orig = ncol * nrow
     # Check number of pixels is inferior to maxpixels
-    if (npixels_orig > maxpixels):
+    if npixels_orig > maxpixels:
         # Remove potential existing external overviews
         if os.path.isfile(input_prob_raster + ".ovr"):
             os.remove(input_prob_raster + ".ovr")
@@ -140,7 +143,7 @@ def nice_plot_prob(input_prob_raster,
             npixels_ov = npixels_orig // np.power(ov_level, 2)
         # Build overview
         print("Build overview")
-        gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
+        gdal.SetConfigOption("COMPRESS_OVERVIEW", "DEFLATE")
         rasterR.BuildOverviews("nearest", [ov_level])
         # Get data from overview
         ov_band = rasterB.GetOverview(0)
@@ -151,7 +154,7 @@ def nice_plot_prob(input_prob_raster,
 
     # Dereference driver
     rasterB = None
-    del(rasterR)
+    del rasterR
 
     # Colormap
     colors = []
@@ -163,8 +166,9 @@ def nice_plot_prob(input_prob_raster,
     # red, p=0.80
     colors.append((52429 / vmax, (227 / cmax, 26 / cmax, 28 / cmax, 1)))
     colors.append((1, (0, 0, 0, 1)))  # black
-    color_map = LinearSegmentedColormap.from_list(name="mycm", colors=colors,
-                                                  N=65535, gamma=1.0)
+    color_map = LinearSegmentedColormap.from_list(
+        name="mycm", colors=colors, N=65535, gamma=1.0
+    )
     # transparent, must be associated with vmin
     color_map.set_under(color=(1, 1, 1, 0))
 
@@ -172,42 +176,56 @@ def nice_plot_prob(input_prob_raster,
     fig = plt.figure(figsize=figsize, dpi=dpi)
     plt.subplot(111, projection=projection)
     # Raster data
-    plt.imshow(ov_arr, cmap=color_map, extent=extent,
-               vmin=0.01, vmax=65535)
+    plt.imshow(ov_arr, cmap=color_map, extent=extent, vmin=0.01, vmax=65535)
     if borders is not None:
         _plot_layer(borders, symbol="k-", **kwargs)
 
     # Legend
     if legend is True:
         t = np.linspace(1, 65535, 5, endpoint=True)
-        cbar = plt.colorbar(ticks=t, orientation="vertical",
-                            shrink=0.5, aspect=20)
+        cbar = plt.colorbar(ticks=t, orientation="vertical", shrink=0.5, aspect=20)
         vl = np.linspace(0, 1, 5, endpoint=True)
         cbar.ax.set_yticklabels(vl)
 
     # Return figure
-    return(fig)
+    return fig
 
 
 # Plot
-fig = nice_plot_prob("output/prob.tif",
-                     maxpixels=1e8,
-                     borders="data/ctry_PROJ.shp",
-                     linewidth=0.2,
-                     legend=True,
-                     figsize=(5, 4), dpi=800)
+fig = nice_plot_prob(
+    "output/prob.tif",
+    maxpixels=1e8,
+    borders="data/ctry_PROJ.shp",
+    linewidth=0.2,
+    legend=True,
+    figsize=(5, 4),
+    dpi=800,
+)
 ax = fig.gca()
 # Scale bar
-scale_bar(ax, (0.8, 0.1), 10, metres_per_unit=1000,
-          unit_name="km", color="black", linewidth=1, text_kwargs={'size': 7})
+scale_bar(
+    ax,
+    (0.8, 0.1),
+    10,
+    metres_per_unit=1000,
+    unit_name="km",
+    color="black",
+    linewidth=1,
+    text_kwargs={"size": 7},
+)
 # Gridlines from Cartopy
-gl = ax.gridlines(crs=ccrs.PlateCarree(), linewidth=0.3, alpha=0.5,
-                  xlocs=[-61.8, -61.6, -61.4, -61.2, -61.0],
-                  ylocs=[15.8, 16.0, 16.2, 16.4], draw_labels=True)
+gl = ax.gridlines(
+    crs=ccrs.PlateCarree(),
+    linewidth=0.3,
+    alpha=0.5,
+    xlocs=[-61.8, -61.6, -61.4, -61.2, -61.0],
+    ylocs=[15.8, 16.0, 16.2, 16.4],
+    draw_labels=True,
+)
 gl.top_labels = False
 gl.right_labels = False
-gl.xlabel_style = {'size': 6}
-gl.ylabel_style = {'size': 6}
+gl.xlabel_style = {"size": 6}
+gl.ylabel_style = {"size": 6}
 
 # Save
 fig.savefig("output/prob_joss.png", dpi="figure", bbox_inches="tight")

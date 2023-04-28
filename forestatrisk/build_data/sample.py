@@ -25,11 +25,16 @@ from ..misc import makeblock, progress_bar
 
 
 # sample()
-def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
-           var_dir="data",
-           input_forest_raster="forest.tif",
-           output_file="output/sample.txt",
-           blk_rows=0):
+def sample(
+    nsamp=10000,
+    adapt=True,
+    seed=1234,
+    csize=10,
+    var_dir="data",
+    input_forest_raster="forest.tif",
+    output_file="output/sample.txt",
+    blk_rows=0,
+):
 
     """Sample points and extract raster values.
 
@@ -128,10 +133,12 @@ def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
     proba_block_d = ndc_block / ndc
     proba_block_f = nfc_block / nfc
     # Draw block number nsamp times
-    block_draw_d = np.random.choice(list(range(nblock)), size=nsamp,
-                                    replace=True, p=proba_block_d)
-    block_draw_f = np.random.choice(list(range(nblock)), size=nsamp,
-                                    replace=True, p=proba_block_f)
+    block_draw_d = np.random.choice(
+        list(range(nblock)), size=nsamp, replace=True, p=proba_block_d
+    )
+    block_draw_f = np.random.choice(
+        list(range(nblock)), size=nsamp, replace=True, p=proba_block_f
+    )
     # Number of times the block is drawn
     nblock_draw_d = np.zeros(nblock, dtype=int)
     nblock_draw_f = np.zeros(nblock, dtype=int)
@@ -159,36 +166,28 @@ def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
         # Identify pixels (x/y coordinates) which are deforested
         # !! Values returned in row-major, C-style order (y/x) !!
         deforpix = np.nonzero(forest == 0)
-        deforpix = np.transpose((x[px] + deforpix[1],
-                                 y[py] + deforpix[0]))
+        deforpix = np.transpose((x[px] + deforpix[1], y[py] + deforpix[0]))
         ndc_block = len(deforpix)
         # Identify pixels (x/y coordinates) which are forested
         forpix = np.nonzero(forest == 1)
-        forpix = np.transpose((x[px] + forpix[1],
-                               y[py] + forpix[0]))
+        forpix = np.transpose((x[px] + forpix[1], y[py] + forpix[0]))
         nfc_block = len(forpix)
         # Sample deforested pixels
         if nbdraw_d > 0:
             if nbdraw_d < ndc_block:
-                i = np.random.choice(ndc_block, size=nbdraw_d,
-                                     replace=False)
-                deforselect = np.concatenate((deforselect, deforpix[i]),
-                                             axis=0)
+                i = np.random.choice(ndc_block, size=nbdraw_d, replace=False)
+                deforselect = np.concatenate((deforselect, deforpix[i]), axis=0)
             else:
                 # nbdraw = ndc_block
-                deforselect = np.concatenate((deforselect, deforpix),
-                                             axis=0)
+                deforselect = np.concatenate((deforselect, deforpix), axis=0)
         # Sample forest pixels
         if nbdraw_f > 0:
             if nbdraw_f < nfc_block:
-                i = np.random.choice(nfc_block, size=nbdraw_f,
-                                     replace=False)
-                forselect = np.concatenate((forselect, forpix[i]),
-                                           axis=0)
+                i = np.random.choice(nfc_block, size=nbdraw_f, replace=False)
+                forselect = np.concatenate((forselect, forpix[i]), axis=0)
             else:
                 # nbdraw = ndc_block
-                forselect = np.concatenate((forselect, forpix),
-                                           axis=0)
+                forselect = np.concatenate((forselect, forpix), axis=0)
 
     # =============================================
     # Compute center of pixel coordinates
@@ -243,10 +242,13 @@ def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
     # Make vrt with gdal.BuildVRT
     # Note: Extent and resolution from forest raster!
     print("Make virtual raster with variables as raster bands")
-    param = gdal.BuildVRTOptions(resolution="user",
-                                 outputBounds=(Xmin, Ymin, Xmax, Ymax),
-                                 xRes=gt[1], yRes=-gt[5],
-                                 separate=True)
+    param = gdal.BuildVRTOptions(
+        resolution="user",
+        outputBounds=(Xmin, Ymin, Xmax, Ymax),
+        xRes=gt[1],
+        yRes=-gt[5],
+        separate=True,
+    )
     gdal.BuildVRT("/vsimem/var.vrt", raster_list, options=param)
     stack = gdal.Open("/vsimem/var.vrt")
 
@@ -257,8 +259,11 @@ def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
         band = stack.GetRasterBand(k + 1)
         bandND[k] = band.GetNoDataValue()
         if bandND[k] is None:
-            print("NoData value is not specified \
-            for input raster file " + raster_list[k])
+            print(
+                "NoData value is not specified \
+            for input raster file "
+                + raster_list[k]
+            )
             sys.exit(1)
 
     # Numpy array to store values
@@ -272,7 +277,9 @@ def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
         progress_bar(nobs, i + 1)
         # ReadArray for extract
         extract = stack.ReadAsArray(int(xOffset[i]), int(yOffset[i]), 1, 1)
-        val[i, :] = extract.reshape(nband,)
+        val[i, :] = extract.reshape(
+            nband,
+        )
 
     # Close stack
     del stack
@@ -303,12 +310,12 @@ def sample(nsamp=10000, adapt=True, seed=1234, csize=10,
         colname[i] = base_name[:index_dot]
 
     varname = ",".join(colname) + ",X,Y,cell"
-    np.savetxt(output_file, val, header=varname, fmt="%s",
-               delimiter=",", comments="")
+    np.savetxt(output_file, val, header=varname, fmt="%s", delimiter=",", comments="")
 
     # Convert to pandas DataFrame and return the result
     colname.extend(["X", "Y", "cell"])
     val_DF = pd.DataFrame(val, columns=colname)
     return val_DF
+
 
 # End

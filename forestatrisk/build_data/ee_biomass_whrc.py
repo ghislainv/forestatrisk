@@ -19,8 +19,7 @@ import ee
 
 
 # ee_biomass_whrc.run_task
-def run_task(iso3, extent_latlong, scale=30, proj=None,
-             gdrive_folder=None):
+def run_task(iso3, extent_latlong, scale=30, proj=None, gdrive_folder=None):
     """Extract a biomass map using Google Earth Engine.
 
     Based on country extent, extract a biomass map from the Woods Hole
@@ -45,14 +44,12 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
     """
 
     # Region
-    region = ee.Geometry.Rectangle(extent_latlong, proj="EPSG:4326",
-                                   geodesic=False)
+    region = ee.Geometry.Rectangle(extent_latlong, proj="EPSG:4326", geodesic=False)
     region = region.buffer(1000).bounds()
     export_coord = region.getInfo()["coordinates"]
 
     # WHRC product
-    biomass = ee.Image(
-        "projects/forestatrisk/assets/biomass/biomass_whrc_v1_2016")
+    biomass = ee.Image("projects/forestatrisk/assets/biomass/biomass_whrc_v1_2016")
     biomass = biomass.toInt16().clip(region)
 
     # maxPixels
@@ -69,7 +66,8 @@ def run_task(iso3, extent_latlong, scale=30, proj=None,
         region=export_coord,
         scale=scale,
         maxPixels=maxpix,
-        crs=proj)
+        crs=proj,
+    )
     task.start()
 
     # Return task
@@ -109,10 +107,7 @@ def check(gdrive_remote_rclone, gdrive_folder, iso3):
 
 
 # ee_biomass_whrc.download
-def download(gdrive_remote_rclone,
-             gdrive_folder,
-             iso3,
-             output_dir="."):
+def download(gdrive_remote_rclone, gdrive_folder, iso3, output_dir="."):
     """Download biomass data from Google Drive.
 
     Check that GEE task is completed. Wait for the task to be
@@ -133,18 +128,14 @@ def download(gdrive_remote_rclone,
     """
 
     # Data availability
-    data_availability = check(gdrive_remote_rclone,
-                              gdrive_folder,
-                              iso3)
+    data_availability = check(gdrive_remote_rclone, gdrive_folder, iso3)
 
     # Check task status
     while data_availability is False:
         # We wait 1 min
         time.sleep(60)
         # We reactualize the status
-        data_availability = check(gdrive_remote_rclone,
-                                  gdrive_folder,
-                                  iso3)
+        data_availability = check(gdrive_remote_rclone, gdrive_folder, iso3)
 
     # Commands to download results with rclone
     remote_path = gdrive_remote_rclone + ":" + gdrive_folder
@@ -152,5 +143,6 @@ def download(gdrive_remote_rclone,
     cmd = ["rclone", "copy", "--include", pattern, remote_path, output_dir]
     cmd = " ".join(cmd)
     subprocess.call(cmd, shell=True)
+
 
 # End

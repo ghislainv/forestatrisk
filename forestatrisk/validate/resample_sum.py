@@ -30,25 +30,21 @@ def coarsen_sum(a, c):
     :param c: Coarseness, in number of cells
     """
 
-    if ((a.shape[0] % c == 0) and (
-            a.shape[1] % c == 0)):
-        temp = a.reshape(a.shape[0] // c, c,
-                         a.shape[1] // c, c)
+    if (a.shape[0] % c == 0) and (a.shape[1] % c == 0):
+        temp = a.reshape(a.shape[0] // c, c, a.shape[1] // c, c)
     else:
         shape = np.array(a.shape, dtype=int)
         # New shape
         ns = c * np.ceil(shape / c).astype(int)
         a_ns = np.zeros(ns)
-        a_ns[:shape[0], :shape[1]] = a
-        temp = a_ns.reshape(ns[0] // c, c,
-                            ns[1] // c, c)
+        a_ns[: shape[0], : shape[1]] = a
+        temp = a_ns.reshape(ns[0] // c, c, ns[1] // c, c)
     b = np.sum(temp, axis=(1, 3))
     return b
 
 
 # Resample to coarser resolution with sum
-def resample_sum(input_raster, output_raster, val=0,
-                 window_size=2):
+def resample_sum(input_raster, output_raster, val=0, window_size=2):
     """Resample to coarser resolution with counts.
 
     This function resamples to coarser resolution counting pixel
@@ -63,7 +59,7 @@ def resample_sum(input_raster, output_raster, val=0,
     """
 
     # Limit window_size to 1000
-    if (window_size > 1000):
+    if window_size > 1000:
         window_size = 1000
         square_size = 1000
 
@@ -89,9 +85,14 @@ def resample_sum(input_raster, output_raster, val=0,
     # Raster of result
     print("Create output raster file on disk")
     driver = gdal.GetDriverByName("GTiff")
-    ds_out = driver.Create(output_raster, ncol_out, nrow_out, 1,
-                           gdal.GDT_UInt32,
-                           ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"])
+    ds_out = driver.Create(
+        output_raster,
+        ncol_out,
+        nrow_out,
+        1,
+        gdal.GDT_UInt32,
+        ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
+    )
     ds_out.SetGeoTransform(gt_out)
     ds_out.SetProjection(ds_in.GetProjection())  # Copy projection info
     band_out = ds_out.GetRasterBand(1)
@@ -123,8 +124,7 @@ def resample_sum(input_raster, output_raster, val=0,
         data_val = (data_in == val).astype(int)
         # Coarsen data
         data_out = coarsen_sum(data_val, window_size)
-        band_out.WriteArray(data_out, x[px] // window_size,
-                            y[py] // window_size)
+        band_out.WriteArray(data_out, x[px] // window_size, y[py] // window_size)
 
     # Compute statistics
     print("Compute statistics")
@@ -137,7 +137,8 @@ def resample_sum(input_raster, output_raster, val=0,
 
     # Dereference driver
     band_out = None
-    del(ds_out)
+    del ds_out
+
 
 # End
 

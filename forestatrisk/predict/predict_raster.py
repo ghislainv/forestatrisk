@@ -26,10 +26,14 @@ from ..misc import progress_bar, makeblock
 
 
 # predict_raster
-def predict_raster(model, var_dir="data",
-                   input_forest_raster="data/forest.tif",
-                   output_file="predictions.tif",
-                   blk_rows=128, **kwargs):
+def predict_raster(
+    model,
+    var_dir="data",
+    input_forest_raster="data/forest.tif",
+    output_file="predictions.tif",
+    blk_rows=128,
+    **kwargs
+):
     """Predict the spatial probability of deforestation from a model.
 
     This function predicts the spatial probability of deforestation
@@ -78,10 +82,13 @@ def predict_raster(model, var_dir="data",
 
     # Make vrt with gdalbuildvrt
     print("Make virtual raster with variables as raster bands")
-    param = gdal.BuildVRTOptions(resolution="user",
-                                 outputBounds=(Xmin, Ymin, Xmax, Ymax),
-                                 xRes=gt[1], yRes=-gt[5],
-                                 separate=True)
+    param = gdal.BuildVRTOptions(
+        resolution="user",
+        outputBounds=(Xmin, Ymin, Xmax, Ymax),
+        xRes=gt[1],
+        yRes=-gt[5],
+        separate=True,
+    )
     gdal.BuildVRT("/vsimem/var.vrt", raster_list, options=param)
     stack = gdal.Open("/vsimem/var.vrt")
     nband = stack.RasterCount
@@ -93,8 +100,7 @@ def predict_raster(model, var_dir="data",
         band = stack.GetRasterBand(k + 1)
         bandND[k] = band.GetNoDataValue()
         if (bandND[k] is None) or (bandND[k] is np.nan):
-            print("NoData value is not specified for"
-                  " input raster file {}".format(k))
+            print("NoData value is not specified for" " input raster file {}".format(k))
             sys.exit(1)
     bandND = bandND.astype(np.float32)
 
@@ -111,9 +117,14 @@ def predict_raster(model, var_dir="data",
     # Raster of predictions
     print("Create a raster file on disk for projections")
     driver = gdal.GetDriverByName("GTiff")
-    Pdrv = driver.Create(output_file, ncol, nrow, 1,
-                         gdal.GDT_UInt16,
-                         ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"])
+    Pdrv = driver.Create(
+        output_file,
+        ncol,
+        nrow,
+        1,
+        gdal.GDT_UInt16,
+        ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
+    )
     Pdrv.SetGeoTransform(gt)
     Pdrv.SetProjection(proj)
     Pband = Pdrv.GetRasterBand(1)
@@ -137,12 +148,14 @@ def predict_raster(model, var_dir="data",
         for i in range(nband):
             data[i][np.nonzero(data[i] == bandND[i])] = -9999
         # Coordinates of the center of the pixels of the block
-        X_col = gt[0] + x[px] * gt[1] \
-            + (np.arange(nx[px]) + 0.5) * gt[1]  # +0.5 for center of pixels
+        X_col = (
+            gt[0] + x[px] * gt[1] + (np.arange(nx[px]) + 0.5) * gt[1]
+        )  # +0.5 for center of pixels
         X = np.repeat(X_col[np.newaxis, :], ny[py], axis=0)
         X = X[np.newaxis, :, :]
-        Y_row = gt[3] + y[py] * gt[5] \
-            + (np.arange(ny[py]) + 0.5) * gt[5]  # +0.5 for center of pixels
+        Y_row = (
+            gt[3] + y[py] * gt[5] + (np.arange(ny[py]) + 0.5) * gt[5]
+        )  # +0.5 for center of pixels
         Y = np.repeat(Y_row[:, np.newaxis], nx[px], axis=1)
         Y = Y[np.newaxis, :, :]
         # Forest mask
@@ -184,6 +197,7 @@ def predict_raster(model, var_dir="data",
 
     # Dereference driver
     Pband = None
-    del(Pdrv)
+    del Pdrv
+
 
 # End

@@ -19,8 +19,7 @@ import ee
 
 
 # ee_gfc.run_task
-def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
-             gdrive_folder=None):
+def run_task(perc, iso3, extent_latlong, scale=30, proj=None, gdrive_folder=None):
     """Compute forest-cover change with Google EarthEngine.
 
     Compute the forest-cover change from Global Forest Change (GFC)
@@ -46,8 +45,7 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     """
 
     # Region
-    region = ee.Geometry.Rectangle(extent_latlong, proj="EPSG:4326",
-                                   geodesic=False)
+    region = ee.Geometry.Rectangle(extent_latlong, proj="EPSG:4326", geodesic=False)
     region = region.buffer(10000).bounds()
     export_coord = region.getInfo()["coordinates"]
 
@@ -74,14 +72,20 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
     forest2020 = forest2000.where(lossyear.gte(1), 0)
 
     # Forest raster with five bands
-    forest = forest2000.addBands(forest2005).addBands(
-        forest2010).addBands(forest2015).addBands(forest2020)
-    forest = forest.select([0, 1, 2, 3, 4], ["forest2000", "forest2005",
-                                             "forest2010", "forest2015",
-                                             "forest2020"])
-    forest = forest.set("system:bandNames", ["forest2000", "forest2005",
-                                             "forest2010", "forest2015",
-                                             "forest2020"])
+    forest = (
+        forest2000.addBands(forest2005)
+        .addBands(forest2010)
+        .addBands(forest2015)
+        .addBands(forest2020)
+    )
+    forest = forest.select(
+        [0, 1, 2, 3, 4],
+        ["forest2000", "forest2005", "forest2010", "forest2015", "forest2020"],
+    )
+    forest = forest.set(
+        "system:bandNames",
+        ["forest2000", "forest2005", "forest2010", "forest2015", "forest2020"],
+    )
 
     # maxPixels
     maxPix = 1e13
@@ -96,11 +100,12 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None,
         region=export_coord,
         scale=scale,
         maxPixels=maxPix,
-        crs=proj)
+        crs=proj,
+    )
     task.start()
 
     # Return task
-    return(task)
+    return task
 
 
 # ee_gfc.check
@@ -132,14 +137,11 @@ def check(gdrive_remote_rclone, gdrive_folder, iso3):
     if fname in out:
         present_in_folder = True
     # Return
-    return(present_in_folder)
+    return present_in_folder
 
 
 # ee_gfc.download
-def download(gdrive_remote_rclone,
-             gdrive_folder,
-             iso3,
-             output_dir="."):
+def download(gdrive_remote_rclone, gdrive_folder, iso3, output_dir="."):
     """Download forest-cover data from Google Drive.
 
     Check that GEE task is completed. Wait for the task to be
@@ -160,18 +162,14 @@ def download(gdrive_remote_rclone,
     """
 
     # Data availability
-    data_availability = check(gdrive_remote_rclone,
-                              gdrive_folder,
-                              iso3)
+    data_availability = check(gdrive_remote_rclone, gdrive_folder, iso3)
 
     # Check task status
     while data_availability is False:
         # We wait 1 min
         time.sleep(60)
         # We reactualize the status
-        data_availability = check(gdrive_remote_rclone,
-                                  gdrive_folder,
-                                  iso3)
+        data_availability = check(gdrive_remote_rclone, gdrive_folder, iso3)
 
     # Commands to download results with rclone
     remote_path = gdrive_remote_rclone + ":" + gdrive_folder
@@ -179,5 +177,6 @@ def download(gdrive_remote_rclone,
     cmd = ["rclone", "copy", "--include", pattern, remote_path, output_dir]
     cmd = " ".join(cmd)
     subprocess.call(cmd, shell=True)
+
 
 # End

@@ -17,6 +17,7 @@ import pkg_resources
 from shutil import copy2, rmtree
 import subprocess
 from zipfile import ZipFile  # To unzip files
+
 try:
     from urllib.request import urlretrieve  # Python 3
 except ImportError:
@@ -55,7 +56,7 @@ def extent_shp(inShapefile):
     inLayer = inDataSource.GetLayer()
     extent = inLayer.GetExtent()
     extent = (extent[0], extent[2], extent[1], extent[3])
-    return(extent)  # (xmin, ymin, xmax, ymax)
+    return extent  # (xmin, ymin, xmax, ymax)
 
 
 # tiles_srtm
@@ -80,12 +81,12 @@ def tiles_srtm(extent_latlong):
     # Compute SRTM tile numbers
     tile_left = int(np.ceil((xmin_latlong + 180.0) / 5.0))
     tile_right = int(np.ceil((xmax_latlong + 180.0) / 5.0))
-    if (tile_right == tile_left):
+    if tile_right == tile_left:
         # Trick to make curl globbing work in data_country.sh
         tile_right = tile_left + 1
     tile_top = int(np.ceil((-ymax_latlong + 60.0) / 5.0))
     tile_bottom = int(np.ceil((-ymin_latlong + 60.0) / 5.0))
-    if (tile_bottom == tile_top):
+    if tile_bottom == tile_top:
         tile_bottom = tile_top + 1
     # Format variables, zfill is for having 01 and not 1
     tiles_long = str(tile_left).zfill(2) + "-" + str(tile_right).zfill(2)
@@ -99,12 +100,16 @@ def tiles_srtm(extent_latlong):
 
 
 # country_forest_run
-def country_forest_run(iso3, proj="EPSG:3395",
-                       output_dir="data_raw",
-                       keep_dir=True,
-                       fcc_source="jrc", perc=50,
-                       gdrive_remote_rclone=None,
-                       gdrive_folder=None):
+def country_forest_run(
+    iso3,
+    proj="EPSG:3395",
+    output_dir="data_raw",
+    keep_dir=True,
+    fcc_source="jrc",
+    perc=50,
+    gdrive_remote_rclone=None,
+    gdrive_folder=None,
+):
     """Compute forest rasters per country and export them to Google Drive
     with Google Earth Engine (GEE).
 
@@ -162,41 +167,41 @@ def country_forest_run(iso3, proj="EPSG:3395",
         rmtree(output_dir, ignore_errors=True)
 
     # Google Earth Engine task
-    if (fcc_source == "jrc"):
+    if fcc_source == "jrc":
         # Check data availability
-        data_availability = ee_jrc.check(gdrive_remote_rclone,
-                                         gdrive_folder, iso3)
+        data_availability = ee_jrc.check(gdrive_remote_rclone, gdrive_folder, iso3)
         # If not available, run GEE
         if data_availability is False:
             print("Run Google Earth Engine")
-            task = ee_jrc.run_task(iso3=iso3,
-                                   extent_latlong=extent_latlong,
-                                   scale=30,
-                                   proj=proj,
-                                   gdrive_folder=gdrive_folder)
+            task = ee_jrc.run_task(
+                iso3=iso3,
+                extent_latlong=extent_latlong,
+                scale=30,
+                proj=proj,
+                gdrive_folder=gdrive_folder,
+            )
             print("GEE running on the following extent:")
             print(str(extent_latlong))
-    if (fcc_source == "gfc"):
+    if fcc_source == "gfc":
         # Check data availability
-        data_availability = ee_gfc.check(gdrive_remote_rclone,
-                                         gdrive_folder, iso3)
+        data_availability = ee_gfc.check(gdrive_remote_rclone, gdrive_folder, iso3)
         # If not available, run GEE
         if data_availability is False:
             print("Run Google Earth Engine")
-            task = ee_gfc.run_task(perc=perc, iso3=iso3,
-                                   extent_latlong=extent_latlong,
-                                   scale=30,
-                                   proj=proj,
-                                   gdrive_folder=gdrive_folder)
+            task = ee_gfc.run_task(
+                perc=perc,
+                iso3=iso3,
+                extent_latlong=extent_latlong,
+                scale=30,
+                proj=proj,
+                gdrive_folder=gdrive_folder,
+            )
             print("GEE running on the following extent:")
             print(str(extent_latlong))
 
 
 # country_forest_download
-def country_forest_download(iso3,
-                            gdrive_remote_rclone,
-                            gdrive_folder,
-                            output_dir="."):
+def country_forest_download(iso3, gdrive_remote_rclone, gdrive_folder, output_dir="."):
     """Download forest cover data from Google Drive.
 
     Download forest cover data from Google Drive in the current
@@ -222,17 +227,14 @@ def country_forest_download(iso3,
     # If no data locally check if available in gdrive
     if len(raster_list) == 0:
         # Data availability in gdrive
-        data_availability = ee_jrc.check(gdrive_remote_rclone,
-                                         gdrive_folder,
-                                         iso3)
+        data_availability = ee_jrc.check(gdrive_remote_rclone, gdrive_folder, iso3)
 
         # Donwload if available in gdrive
         if data_availability is True:
             # Commands to download results with rclone
             remote_path = gdrive_remote_rclone + ":" + gdrive_folder
             pattern = "'forest_" + iso3 + "*.tif'"
-            cmd = ["rclone", "copy", "--include", pattern,
-                   remote_path, output_dir]
+            cmd = ["rclone", "copy", "--include", pattern, remote_path, output_dir]
             cmd = " ".join(cmd)
             subprocess.call(cmd, shell=True)
             print("Data for {0:3s} have been downloaded".format(iso3))
@@ -240,17 +242,21 @@ def country_forest_download(iso3,
         else:
             print("Data for {0:3s} are not available".format(iso3))
 
+
 # ===========================================================
 # Biomass
 # ===========================================================
 
 
 # country_biomass_run
-def country_biomass_run(iso3, proj="EPSG:3395",
-                        output_dir="data_raw",
-                        keep_dir=True,
-                        gdrive_remote_rclone=None,
-                        gdrive_folder=None):
+def country_biomass_run(
+    iso3,
+    proj="EPSG:3395",
+    output_dir="data_raw",
+    keep_dir=True,
+    gdrive_remote_rclone=None,
+    gdrive_folder=None,
+):
     """Export biomass maps to Google Drive with Google Earth Engine (GEE).
 
     This function uses the iso3 code to download the country borders
@@ -302,9 +308,7 @@ def country_biomass_run(iso3, proj="EPSG:3395",
         rmtree(output_dir, ignore_errors=True)
 
     # Check data availability
-    data_availability = ee_biomass_whrc.check(
-        gdrive_remote_rclone,
-        gdrive_folder, iso3)
+    data_availability = ee_biomass_whrc.check(gdrive_remote_rclone, gdrive_folder, iso3)
     # If not available, run GEE
     if data_availability is False:
         print("Run Google Earth Engine")
@@ -313,16 +317,14 @@ def country_biomass_run(iso3, proj="EPSG:3395",
             extent_latlong=extent_latlong,
             scale=30,
             proj=proj,
-            gdrive_folder=gdrive_folder)
+            gdrive_folder=gdrive_folder,
+        )
         print("GEE running on the following extent:")
         print(str(extent_latlong))
 
 
 # country_biomass_download
-def country_biomass_download(iso3,
-                             gdrive_remote_rclone,
-                             gdrive_folder,
-                             output_dir="."):
+def country_biomass_download(iso3, gdrive_remote_rclone, gdrive_folder, output_dir="."):
     """Download biomass data from Google Drive.
 
     Download biomass data from Google Drive. Print a message if the
@@ -349,17 +351,15 @@ def country_biomass_download(iso3,
     if len(raster_list) == 0:
         # Data availability in gdrive
         data_availability = ee_biomass_whrc.check(
-            gdrive_remote_rclone,
-            gdrive_folder,
-            iso3)
+            gdrive_remote_rclone, gdrive_folder, iso3
+        )
 
         # Donwload if available in gdrive
         if data_availability is True:
             # Commands to download results with rclone
             remote_path = gdrive_remote_rclone + ":" + gdrive_folder
             pattern = "'biomass_whrc_" + iso3 + "*.tif'"
-            cmd = ["rclone", "copy", "--include", pattern,
-                   remote_path, output_dir]
+            cmd = ["rclone", "copy", "--include", pattern, remote_path, output_dir]
             cmd = " ".join(cmd)
             subprocess.call(cmd, shell=True)
             print("Data for {0:3s} have been downloaded".format(iso3))
@@ -369,10 +369,9 @@ def country_biomass_download(iso3,
 
 
 # country_biomass_compute
-def country_biomass_compute(iso3,
-                            input_dir="data_raw",
-                            output_dir="data",
-                            proj="EPSG:3395"):
+def country_biomass_compute(
+    iso3, input_dir="data_raw", output_dir="data", proj="EPSG:3395"
+):
     """Function to mosaic and resample biomass data from WHRC.
 
     This function mosaics and resamples the biomass data obtained from
@@ -402,37 +401,45 @@ def country_biomass_compute(iso3,
     # See: https://trac.osgeo.org/gdal/wiki/UserDocs/GdalWarp#GeoTIFFoutput-coCOMPRESSisbroken
     input_file = input_dir + "/biomass_whrc_gee.vrt"
     output_file = input_dir + "/biomass_whrc_warp.vrt"
-    param = gdal.WarpOptions(options=["overwrite", "tap"],
-                             format="VRT",
-                             xRes=30, yRes=30,
-                             srcNodata=-9999, dstNodata=-9999,
-                             srcSRS="EPSG:4326", dstSRS=proj,
-                             resampleAlg=gdal.GRA_Bilinear,
-                             outputType=gdal.GDT_Int16,
-                             multithread=True,
-                             warpMemoryLimit=500,
-                             warpOptions=["NUM_THREADS=ALL_CPUS"])
+    param = gdal.WarpOptions(
+        options=["overwrite", "tap"],
+        format="VRT",
+        xRes=30,
+        yRes=30,
+        srcNodata=-9999,
+        dstNodata=-9999,
+        srcSRS="EPSG:4326",
+        dstSRS=proj,
+        resampleAlg=gdal.GRA_Bilinear,
+        outputType=gdal.GDT_Int16,
+        multithread=True,
+        warpMemoryLimit=500,
+        warpOptions=["NUM_THREADS=ALL_CPUS"],
+    )
     gdal.Warp(output_file, input_file, options=param)
 
     # Compressing
     input_file = input_dir + "/biomass_whrc_warp.vrt"
     output_file = output_dir + "/biomass_whrc.tif"
-    param = gdal.TranslateOptions(options=["overwrite", "tap"],
-                                  format="GTiff",
-                                  creationOptions=["TILED=YES",
-                                                   "BLOCKXSIZE=256",
-                                                   "BLOCKYSIZE=256",
-                                                   "COMPRESS=LZW",
-                                                   "PREDICTOR=2",
-                                                   "BIGTIFF=YES"])
+    param = gdal.TranslateOptions(
+        options=["overwrite", "tap"],
+        format="GTiff",
+        creationOptions=[
+            "TILED=YES",
+            "BLOCKXSIZE=256",
+            "BLOCKYSIZE=256",
+            "COMPRESS=LZW",
+            "PREDICTOR=2",
+            "BIGTIFF=YES",
+        ],
+    )
     gdal.Translate(output_file, input_file, options=param)
 
 
 # country_biomass_moaic
-def country_biomass_mosaic(iso3,
-                           input_dir="data_raw",
-                           output_dir="data",
-                           proj="EPSG:3395"):
+def country_biomass_mosaic(
+    iso3, input_dir="data_raw", output_dir="data", proj="EPSG:3395"
+):
     """Function to mosaic biomass images from WHRC.
 
     This function mosaics the biomass data obtained from GEE. No
@@ -461,16 +468,20 @@ def country_biomass_mosaic(iso3,
     # Compressing
     input_file = input_dir + "/biomass_whrc.vrt"
     output_file = output_dir + "/biomass_whrc.tif"
-    param = gdal.TranslateOptions(options=["overwrite", "tap"],
-                                  format="GTiff",
-                                  noData=-9999,
-                                  outputSRS=proj,
-                                  creationOptions=["TILED=YES",
-                                                   "BLOCKXSIZE=256",
-                                                   "BLOCKYSIZE=256",
-                                                   "COMPRESS=LZW",
-                                                   "PREDICTOR=2",
-                                                   "BIGTIFF=YES"])
+    param = gdal.TranslateOptions(
+        options=["overwrite", "tap"],
+        format="GTiff",
+        noData=-9999,
+        outputSRS=proj,
+        creationOptions=[
+            "TILED=YES",
+            "BLOCKXSIZE=256",
+            "BLOCKYSIZE=256",
+            "COMPRESS=LZW",
+            "PREDICTOR=2",
+            "BIGTIFF=YES",
+        ],
+    )
     gdal.Translate(output_file, input_file, options=param)
 
 
@@ -527,8 +538,7 @@ def country_osm(iso3, output_dir="."):
     fname = output_dir + "/" + "country.osm.pbf"
     if os.path.isfile(fname) is not True:
         # Identify continent and country from iso3
-        file_run = pkg_resources.resource_filename("forestatrisk",
-                                                   "data/ctry_run.csv")
+        file_run = pkg_resources.resource_filename("forestatrisk", "data/ctry_run.csv")
         data_run = pd.read_csv(file_run, sep=";", header=0)
         # Check if data is available on Geofabrik
         if not pd.isna(data_run.ctry_geofab[data_run.iso3 == iso3].iloc[0]):
@@ -539,8 +549,13 @@ def country_osm(iso3, output_dir="."):
             continent = data_run.cont_geofab[data_run.iso3 == iso3]
             continent = continent.iloc[0]
             # Download OSM data from Geofabrik
-            url = ["http://download.geofabrik.de/", continent, "/",
-                   country, "-latest.osm.pbf"]
+            url = [
+                "http://download.geofabrik.de/",
+                continent,
+                "/",
+                country,
+                "-latest.osm.pbf",
+            ]
             url = "".join(url)
             urlretrieve(url, fname)
         # Else use openstreetmap.fr
@@ -552,8 +567,13 @@ def country_osm(iso3, output_dir="."):
             continent = data_run.cont_osmfr[data_run.iso3 == iso3]
             continent = continent.iloc[0]
             # Download OSM data from openstreetmap.fr
-            url = ["https://download.openstreetmap.fr/extracts/", continent,
-                   "/", country, ".osm.pbf"]
+            url = [
+                "https://download.openstreetmap.fr/extracts/",
+                continent,
+                "/",
+                country,
+                ".osm.pbf",
+            ]
             url = "".join(url)
             urlretrieve(url, fname)
 
@@ -620,9 +640,14 @@ def country_srtm(iso3, output_dir="."):
             fname = output_dir + "/SRTM_V41_" + tlong + "_" + tlat + ".zip"
             if os.path.isfile(fname) is not True:
                 # Download
-                url = ["http://srtm.csi.cgiar.org/",
-                       "wp-content/uploads/files/srtm_5x5/TIFF/srtm_", tlong,
-                       "_", tlat, ".zip"]
+                url = [
+                    "http://srtm.csi.cgiar.org/",
+                    "wp-content/uploads/files/srtm_5x5/TIFF/srtm_",
+                    tlong,
+                    "_",
+                    tlat,
+                    ".zip",
+                ]
                 url = "".join(url)
                 try:
                     urlretrieve(url, fname)
@@ -631,6 +656,7 @@ def country_srtm(iso3, output_dir="."):
                         print("SRTM not existing for tile: " + tlong + "_" + tlat)
                     else:
                         raise
+
 
 # ===========================================================
 # Country borders
@@ -676,9 +702,7 @@ def country_gadm(iso3, output_dir="."):
 
 
 # country_download
-def country_download(iso3,
-                     gdrive_remote_rclone, gdrive_folder,
-                     output_dir="."):
+def country_download(iso3, gdrive_remote_rclone, gdrive_folder, output_dir="."):
     """Function to download data for a specific country.
 
     Function to download all the data for a specific country. It
@@ -718,7 +742,8 @@ def country_download(iso3,
         iso3=iso3,
         gdrive_remote_rclone=gdrive_remote_rclone,
         gdrive_folder=gdrive_folder,
-        output_dir=output_dir)
+        output_dir=output_dir,
+    )
 
 
 # ===========================================================
@@ -727,13 +752,15 @@ def country_download(iso3,
 
 
 # country_compute
-def country_compute(iso3,
-                    temp_dir="data_raw",
-                    output_dir="data",
-                    proj="EPSG:3395",
-                    data_country=True,
-                    data_forest=True,
-                    keep_temp_dir=False):
+def country_compute(
+    iso3,
+    temp_dir="data_raw",
+    output_dir="data",
+    proj="EPSG:3395",
+    data_country=True,
+    data_forest=True,
+    keep_temp_dir=False,
+):
     """Function computing and formatting country data.
 
     This function computes and formats the country data. Computations
@@ -762,8 +789,18 @@ def country_compute(iso3,
     """
 
     # Reproject GADM
-    cmd = "ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs '" + proj + "' -f 'ESRI Shapefile' \
-    -lco ENCODING=UTF-8 " + temp_dir + "/ctry_PROJ.shp " + temp_dir + "/gadm36_" + iso3 + "_0.shp"
+    cmd = (
+        "ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs '"
+        + proj
+        + "' -f 'ESRI Shapefile' \
+    -lco ENCODING=UTF-8 "
+        + temp_dir
+        + "/ctry_PROJ.shp "
+        + temp_dir
+        + "/gadm36_"
+        + iso3
+        + "_0.shp"
+    )
     subprocess.call(cmd, shell=True)
 
     # Compute extent
@@ -780,25 +817,42 @@ def country_compute(iso3,
     extent = " ".join(map(str, extent_reg))
 
     # Call data_country.sh
-    if (data_country):
-        script = pkg_resources.resource_filename("forestatrisk",
-                                                 "shell/data_country.sh")
-        args = ["sh ", script, iso3, "'" + proj + "'", "'" + extent + "'",
-                temp_dir, output_dir]
+    if data_country:
+        script = pkg_resources.resource_filename(
+            "forestatrisk", "shell/data_country.sh"
+        )
+        args = [
+            "sh ",
+            script,
+            iso3,
+            "'" + proj + "'",
+            "'" + extent + "'",
+            temp_dir,
+            output_dir,
+        ]
         cmd = " ".join(args)
         subprocess.call(cmd, shell=True)
 
     # Call forest_country.sh
-    if (data_forest):
-        script = pkg_resources.resource_filename("forestatrisk",
-                                                 "shell/forest_country.sh")
-        args = ["sh ", script, iso3, "'" + proj + "'", "'" + extent + "'",
-                temp_dir, output_dir]
+    if data_forest:
+        script = pkg_resources.resource_filename(
+            "forestatrisk", "shell/forest_country.sh"
+        )
+        args = [
+            "sh ",
+            script,
+            iso3,
+            "'" + proj + "'",
+            "'" + extent + "'",
+            temp_dir,
+            output_dir,
+        ]
         cmd = " ".join(args)
         subprocess.call(cmd, shell=True)
 
     # Keep or remove directory
     if not keep_temp_dir:
         rmtree(temp_dir, ignore_errors=True)
+
 
 # End

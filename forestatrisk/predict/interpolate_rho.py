@@ -19,8 +19,9 @@ from osgeo import gdal
 
 
 # Interpolate_rho
-def interpolate_rho(rho, input_raster, output_file="output/rho.tif",
-                    csize_orig=10, csize_new=1):
+def interpolate_rho(
+    rho, input_raster, output_file="output/rho.tif", csize_orig=10, csize_new=1
+):
     """Resample rho values with interpolation.
 
     This function resamples the spatial random effects (rho values)
@@ -61,8 +62,7 @@ def interpolate_rho(rho, input_raster, output_file="output/rho.tif",
     dirname = os.path.dirname(output_file)
     rho_orig_filename = os.path.join(dirname, "rho_orig.tif")
     driver = gdal.GetDriverByName("GTiff")
-    rho_R = driver.Create(rho_orig_filename, ncell_X, ncell_Y, 1,
-                          gdal.GDT_Float64)
+    rho_R = driver.Create(rho_orig_filename, ncell_X, ncell_Y, 1, gdal.GDT_Float64)
     rho_R.SetProjection(r.GetProjection())
     gt = list(gt)
     gt[1] = csize_orig
@@ -91,12 +91,15 @@ def interpolate_rho(rho, input_raster, output_file="output/rho.tif",
 
     # Cubicspline interpolation to csize_new*1000 km
     print("Resampling spatial random effects to file " + output_file)
-    param = gdal.WarpOptions(srcNodata=-9999, xRes=csize_new * 1000,
-                             yRes=csize_new * 1000,
-                             resampleAlg=gdal.GRA_CubicSpline,
-                             outputType=gdal.GDT_Float32,
-                             creationOptions=["COMPRESS=LZW", "PREDICTOR=3",
-                                              "BIGTIFF=YES"])
+    param = gdal.WarpOptions(
+        srcNodata=-9999,
+        xRes=csize_new * 1000,
+        yRes=csize_new * 1000,
+        resampleAlg=gdal.GRA_CubicSpline,
+        outputType=gdal.GDT_Float32,
+        creationOptions=["COMPRESS=LZW", "PREDICTOR=3", "BIGTIFF=YES"],
+    )
     gdal.Warp(output_file, rho_orig_filename, options=param)
+
 
 # End

@@ -65,8 +65,9 @@ def make_square(rasterfile, square_size=33):
 
 
 # validation_Dha
-def validation_npix(r_pred, r_obs, value_f=1, value_d=0,
-                    square_size=33, output_file="npix.txt"):
+def validation_npix(
+    r_pred, r_obs, value_f=1, value_d=0, square_size=33, output_file="npix.txt"
+):
     """Compute non-deforested and deforested pixels per
     square. **(deprecated)**
 
@@ -138,15 +139,16 @@ def validation_npix(r_pred, r_obs, value_f=1, value_d=0,
     print("Export results to file " + output_file)
 
     # Export to file
-    npix_arr = np.column_stack((npix_obs_f, npix_pred_f,
-                                npix_obs_d, npix_pred_d))
+    npix_arr = np.column_stack((npix_obs_f, npix_pred_f, npix_obs_d, npix_pred_d))
     varname_str = "obs_f, pred_f, obs_d, pred_d"
-    np.savetxt(output_file, npix_arr, header=varname_str,
-               fmt="%s", delimiter=",", comments="")
+    np.savetxt(
+        output_file, npix_arr, header=varname_str, fmt="%s", delimiter=",", comments=""
+    )
 
     # Convert to pandas DataFrame and return the result
     varname_list = ["obs_f", "pred_f", "obs_d", "pred_d"]
     npix_DF = pd.DataFrame(npix_arr, columns=varname_list)
     return npix_DF
+
 
 # End

@@ -74,6 +74,7 @@ def countpix(input_raster, value=1, blk_rows=0):
     area = pix_area * npix / 10000
 
     # Results
-    return {'npix': npix, 'area': area}
+    return {"npix": npix, "area": area}
+
 
 # End
