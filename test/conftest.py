@@ -24,6 +24,7 @@
 import os
 from shutil import copy2
 from zipfile import ZipFile
+
 try:
     from urllib.request import urlretrieve  # Python 3
 except ImportError:
@@ -47,8 +48,10 @@ def gstart():
     # ### 1.1 Import and unzip the data
 
     # Source of the data
-    url = ("https://github.com/ghislainv/forestatrisk/"
-           "raw/master/docsrc/notebooks/data_GLP.zip")
+    url = (
+        "https://github.com/ghislainv/forestatrisk/"
+        "raw/master/docsrc/notebooks/data_GLP.zip"
+    )
     if os.path.exists("data_GLP.zip") is False:
         urlretrieve(url, "data_GLP.zip")
 
@@ -77,16 +80,23 @@ def gstart():
         maxpixels=1e8,
         output_file="output/fcc23.png",
         borders="data/ctry_PROJ.shp",
-        linewidth=0.3, dpi=500)
+        linewidth=0.3,
+        dpi=500,
+    )
 
     # ### 1.3 Sampling the observations
 
     # Sample points
-    dataset = far.sample(nsamp=10000, adapt=True, seed=1234, csize=10,
-                         var_dir="data",
-                         input_forest_raster="fcc23.tif",
-                         output_file="output/sample.txt",
-                         blk_rows=0)
+    dataset = far.sample(
+        nsamp=10000,
+        adapt=True,
+        seed=1234,
+        csize=10,
+        var_dir="data",
+        input_forest_raster="fcc23.tif",
+        output_file="output/sample.txt",
+        blk_rows=0,
+    )
 
     # Remove NA from data-set (otherwise scale() and
     # model_binomial_iCAR doesn't work)
@@ -104,9 +114,15 @@ def gstart():
     nneigh, adj = far.cellneigh(raster="data/fcc23.tif", csize=10, rank=1)
 
     # List of variables
-    variables = ["scale(altitude)", "scale(slope)",
-                 "scale(dist_defor)", "scale(dist_edge)", "scale(dist_road)",
-                 "scale(dist_town)", "scale(dist_river)"]
+    variables = [
+        "scale(altitude)",
+        "scale(slope)",
+        "scale(dist_defor)",
+        "scale(dist_edge)",
+        "scale(dist_road)",
+        "scale(dist_town)",
+        "scale(dist_river)",
+    ]
 
     # Formula
     right_part = " + ".join(variables) + " + cell"
@@ -124,15 +140,20 @@ def gstart():
     # Run the model
     mod_binomial_iCAR = far.model_binomial_iCAR(
         # Observations
-        suitability_formula=formula, data=dataset,
+        suitability_formula=formula,
+        data=dataset,
         # Spatial structure
-        n_neighbors=nneigh, neighbors=adj,
+        n_neighbors=nneigh,
+        neighbors=adj,
         # Priors
         priorVrho=priorVrho,
         # Chains
-        burnin=100, mcmc=100, thin=1,
+        burnin=100,
+        mcmc=100,
+        thin=1,
         # Starting values
-        beta_start=beta_start)
+        beta_start=beta_start,
+    )
 
     # ### 2.4 Model summary
 
@@ -153,9 +174,13 @@ def gstart():
     rho = mod_binomial_iCAR.rho
 
     # Interpolate
-    far.interpolate_rho(rho=rho, input_raster="data/fcc23.tif",
-                        output_file="output/rho.tif",
-                        csize_orig=10, csize_new=1)
+    far.interpolate_rho(
+        rho=rho,
+        input_raster="data/fcc23.tif",
+        output_file="output/rho.tif",
+        csize_orig=10,
+        csize_new=1,
+    )
 
     # ### 3.2 Predict deforestation probability
 
@@ -167,11 +192,12 @@ def gstart():
 
     # Compute predictions
     far.predict_raster_binomial_iCAR(
-        mod_binomial_iCAR, var_dir="data",
+        mod_binomial_iCAR,
+        var_dir="data",
         input_cell_raster="output/rho.tif",
         input_forest_raster="data/forest/forest_t3.tif",
         output_file="output/prob.tif",
-        blk_rows=10  # Reduced number of lines to avoid memory problems
+        blk_rows=10,  # Reduced number of lines to avoid memory problems
     )
 
     # Reinitialize data
@@ -200,8 +226,9 @@ def gstart():
     # Annual deforestation
     T = 10.0
     annual_defor = (fc[0] - fc[1]) / T
-    msg = ("Mean annual deforested area during "
-           "the period 2020-2030: {} ha/yr").format(annual_defor)
+    msg = (
+        "Mean annual deforested area during " "the period 2020-2030: {} ha/yr"
+    ).format(annual_defor)
     print(msg)
 
     # Projected deforestation (ha) during 2020-2050
@@ -212,7 +239,8 @@ def gstart():
         input_raster="output/prob.tif",
         hectares=defor,
         output_file="output/fcc_2050.tif",
-        blk_rows=128)
+        blk_rows=128,
+    )
 
     # ## 5. Figures
 
@@ -227,46 +255,67 @@ def gstart():
         output_file="output/fcc123.png",
         borders="data/ctry_PROJ.shp",
         linewidth=0.3,
-        figsize=(6, 5), dpi=500)
+        figsize=(6, 5),
+        dpi=500,
+    )
 
     # ### 5.2 Spatial random effects
 
     # Original spatial random effects
-    fig_rho_orig = far.plot.rho("output/rho_orig.tif",
-                                borders="data/ctry_PROJ.shp",
-                                linewidth=0.5,
-                                output_file="output/rho_orig.png",
-                                figsize=(9, 5), dpi=80)
+    fig_rho_orig = far.plot.rho(
+        "output/rho_orig.tif",
+        borders="data/ctry_PROJ.shp",
+        linewidth=0.5,
+        output_file="output/rho_orig.png",
+        figsize=(9, 5),
+        dpi=80,
+    )
 
     # Interpolated spatial random effects
-    fig_rho = far.plot.rho("output/rho.tif",
-                           borders="data/ctry_PROJ.shp",
-                           linewidth=0.5,
-                           output_file="output/rho.png",
-                           figsize=(9, 5), dpi=80)
+    fig_rho = far.plot.rho(
+        "output/rho.tif",
+        borders="data/ctry_PROJ.shp",
+        linewidth=0.5,
+        output_file="output/rho.png",
+        figsize=(9, 5),
+        dpi=80,
+    )
 
     # ### 5.3 Spatial probability of deforestation
 
     # Spatial probability of deforestation
-    fig_prob = far.plot.prob("output/prob.tif",
-                             maxpixels=1e8,
-                             borders="data/ctry_PROJ.shp",
-                             linewidth=0.3,
-                             legend=True,
-                             output_file="output/prob.png",
-                             figsize=(6, 5), dpi=500)
+    fig_prob = far.plot.prob(
+        "output/prob.tif",
+        maxpixels=1e8,
+        borders="data/ctry_PROJ.shp",
+        linewidth=0.3,
+        legend=True,
+        output_file="output/prob.png",
+        figsize=(6, 5),
+        dpi=500,
+    )
 
     # ### 5.4 Future forest cover
 
     # Projected forest cover change (2020-2050)
-    fcc_2050 = far.plot.fcc("output/fcc_2050.tif",
-                            maxpixels=1e8,
-                            borders="data/ctry_PROJ.shp",
-                            linewidth=0.3,
-                            output_file="output/fcc_2050.png",
-                            figsize=(6, 5), dpi=500)
+    fcc_2050 = far.plot.fcc(
+        "output/fcc_2050.tif",
+        maxpixels=1e8,
+        borders="data/ctry_PROJ.shp",
+        linewidth=0.3,
+        output_file="output/fcc_2050.png",
+        figsize=(6, 5),
+        dpi=500,
+    )
 
-    return {"dataset": dataset, "nneigh": nneigh, "adj": adj,
-            "pred_icar": pred_icar, "rho": rho, "fc": fc}
+    return {
+        "dataset": dataset,
+        "nneigh": nneigh,
+        "adj": adj,
+        "pred_icar": pred_icar,
+        "rho": rho,
+        "fc": fc,
+    }
+
 
 # End Of File

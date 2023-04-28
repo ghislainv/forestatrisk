@@ -45,11 +45,11 @@ def deforest_diffusion(forest_t0, t0, annual_defor, t):
     nfor = forest_t0
 
     # While a country has defor > nfor
-    while (not np.all(nfor >= defor)):
+    while not np.all(nfor >= defor):
         excess = 0
         for i in range(nctry):
             # We need to have nfor > defor for each ctry
-            if (defor[i] > nfor[i]):  # if nfor[i]=0 and defor[i]=0: nothing
+            if defor[i] > nfor[i]:  # if nfor[i]=0 and defor[i]=0: nothing
                 ctry_for[i] = 0
                 # Compute excess of deforestation
                 excess = excess + (defor[i] - nfor[i])
@@ -98,15 +98,15 @@ def deforest_diffusion_t_nofor(forest_t0, t0, annual_defor):
     t = 0
 
     # Process runs while sum(defor) < sum(for)
-    while (np.sum(defor) < np.sum(nfor)):
+    while np.sum(defor) < np.sum(nfor):
 
         # While a country has defor > nfor
-        while (not np.all(nfor >= defor)):
+        while not np.all(nfor >= defor):
             excess = 0
             for i in range(nctry):
                 # We need to have nfor > defor for each ctry
                 # if nfor[i]=0 and defor[i]=0: nothing
-                if (defor[i] > nfor[i]):
+                if defor[i] > nfor[i]:
                     ny[i] = t
                     ctry_for[i] = 0
                     # Compute excess of deforestation
@@ -128,5 +128,6 @@ def deforest_diffusion_t_nofor(forest_t0, t0, annual_defor):
     ny[ctry_for == 1] = t
 
     return {"ny": ny, "year": ny + t0}
+
 
 # EOF

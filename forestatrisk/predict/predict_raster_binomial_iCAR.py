@@ -41,18 +41,20 @@ def predict_binomial_iCAR(model, new_data, rhos):
 
     """
 
-    (new_x,) = build_design_matrices([model._x_design_info],
-                                     new_data)
+    (new_x,) = build_design_matrices([model._x_design_info], new_data)
     new_X = new_x[:, :-1]
-    return (invlogit(np.dot(new_X, model.betas) + rhos))
+    return invlogit(np.dot(new_X, model.betas) + rhos)
 
 
 # predict
-def predict_raster_binomial_iCAR(model, var_dir="data",
-                                 input_cell_raster="output/rho.tif",
-                                 input_forest_raster="data/forest.tif",
-                                 output_file="output/pred_binomial_iCAR.tif",
-                                 blk_rows=128):
+def predict_raster_binomial_iCAR(
+    model,
+    var_dir="data",
+    input_cell_raster="output/rho.tif",
+    input_forest_raster="data/forest.tif",
+    output_file="output/pred_binomial_iCAR.tif",
+    blk_rows=128,
+):
     """Predict the spatial probability of deforestation from a model.
 
     This function predicts the spatial probability of deforestation
@@ -95,10 +97,13 @@ def predict_raster_binomial_iCAR(model, var_dir="data",
 
     # Make vrt with gdalbuildvrt
     print("Make virtual raster with variables as raster bands")
-    param = gdal.BuildVRTOptions(resolution="user",
-                                 outputBounds=(Xmin, Ymin, Xmax, Ymax),
-                                 xRes=gt[1], yRes=-gt[5],
-                                 separate=True)
+    param = gdal.BuildVRTOptions(
+        resolution="user",
+        outputBounds=(Xmin, Ymin, Xmax, Ymax),
+        xRes=gt[1],
+        yRes=-gt[5],
+        separate=True,
+    )
     gdal.BuildVRT("/vsimem/var.vrt", raster_list, options=param)
     stack = gdal.Open("/vsimem/var.vrt")
     nband = stack.RasterCount
@@ -110,8 +115,7 @@ def predict_raster_binomial_iCAR(model, var_dir="data",
         band = stack.GetRasterBand(k + 1)
         bandND[k] = band.GetNoDataValue()
         if (bandND[k] is None) or (bandND[k] is np.nan):
-            print("NoData value is not specified for"
-                  " input raster file {}".format(k))
+            print("NoData value is not specified for" " input raster file {}".format(k))
             sys.exit(1)
     bandND = bandND.astype(np.float32)
 
@@ -128,9 +132,14 @@ def predict_raster_binomial_iCAR(model, var_dir="data",
     # Raster of predictions
     print("Create a raster file on disk for projections")
     driver = gdal.GetDriverByName("GTiff")
-    Pdrv = driver.Create(output_file, ncol, nrow, 1,
-                         gdal.GDT_UInt16,
-                         ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"])
+    Pdrv = driver.Create(
+        output_file,
+        ncol,
+        nrow,
+        1,
+        gdal.GDT_UInt16,
+        ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
+    )
     Pdrv.SetGeoTransform(gt)
     Pdrv.SetProjection(proj)
     Pband = Pdrv.GetRasterBand(1)
@@ -176,9 +185,7 @@ def predict_raster_binomial_iCAR(model, var_dir="data",
         pred = np.zeros(npix)  # Initialize with nodata value (0)
         if len(w[0]) > 0:
             # Get predictions into an array
-            p = predict_binomial_iCAR(model,
-                                      new_data=df,
-                                      rhos=data[:, -2])
+            p = predict_binomial_iCAR(model, new_data=df, rhos=data[:, -2])
             # Rescale and return to pred
             pred[w] = rescale(p)
         # Assign prediction to raster
@@ -196,6 +203,7 @@ def predict_raster_binomial_iCAR(model, var_dir="data",
 
     # Dereference driver
     Pband = None
-    del(Pdrv)
+    del Pdrv
+
 
 # End

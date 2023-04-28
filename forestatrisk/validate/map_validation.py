@@ -80,15 +80,17 @@ def map_validation(pred, obs, blk_rows=128):
 
     # Dereference driver
     predB = None
-    del(predR)
+    del predR
     obsB = None
-    del(obsR)
+    del obsR
 
     # Print confusion matrix
-    mat = pd.DataFrame({"obs0": pd.Series([n00, n10],
-                                          index=["pred0", "pred1"]),
-                        "obs1": pd.Series([n01, n11],
-                                          index=["pred0", "pred1"])})
+    mat = pd.DataFrame(
+        {
+            "obs0": pd.Series([n00, n10], index=["pred0", "pred1"]),
+            "obs1": pd.Series([n01, n11], index=["pred0", "pred1"]),
+        }
+    )
     print(mat)
 
     # Accuracy indices
@@ -101,14 +103,20 @@ def map_validation(pred, obs, blk_rows=128):
     N = n11 + n10 + n00 + n01
     Observed_accuracy = (n11 + n00) / N
     Expected_accuracy = (
-        (n11 + n10) * ((n11 + n01) / N) + (n00 + n01) * ((n00 + n10) / N)) / N
+        (n11 + n10) * ((n11 + n01) / N) + (n00 + n01) * ((n00 + n10) / N)
+    ) / N
     Kappa = (Observed_accuracy - Expected_accuracy) / (1 - Expected_accuracy)
 
-    r = {"OA": round(OA, 2), "FOM": round(FOM, 2),
-         "Sen": round(Sensitivity, 2),
-         "Spe": round(Specificity, 2),
-         "TSS": round(TSS, 2), "K": round(Kappa, 2)}
+    r = {
+        "OA": round(OA, 2),
+        "FOM": round(FOM, 2),
+        "Sen": round(Sensitivity, 2),
+        "Spe": round(Specificity, 2),
+        "TSS": round(TSS, 2),
+        "K": round(Kappa, 2),
+    }
 
     return r
+
 
 # End

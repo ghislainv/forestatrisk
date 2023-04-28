@@ -21,10 +21,12 @@ from ..misc import progress_bar, makeblock
 
 
 # emissions
-def emissions(input_stocks="data/emissions/AGB.tif",
-              input_forest="output/forest_cover_2050.tif",
-              coefficient=0.47,
-              blk_rows=128):
+def emissions(
+    input_stocks="data/emissions/AGB.tif",
+    input_forest="output/forest_cover_2050.tif",
+    coefficient=0.47,
+    blk_rows=128,
+):
     """Predict the carbon emissions associated to future deforestation.
 
     This function predicts the carbon emissions associated to future
@@ -52,10 +54,13 @@ def emissions(input_stocks="data/emissions/AGB.tif",
     # Make vrt
     print("Make virtual raster")
     raster_list = [input_forest, input_stocks]
-    param = gdal.BuildVRTOptions(resolution="user",
-                                 outputBounds=(Xmin, Ymin, Xmax, Ymax),
-                                 xRes=gt[1], yRes=-gt[5],
-                                 separate=True)
+    param = gdal.BuildVRTOptions(
+        resolution="user",
+        outputBounds=(Xmin, Ymin, Xmax, Ymax),
+        xRes=gt[1],
+        yRes=-gt[5],
+        separate=True,
+    )
     gdal.BuildVRT("/vsimem/var.vrt", raster_list, options=param)
     stack = gdal.Open("/vsimem/var.vrt")
 
@@ -103,5 +108,6 @@ def emissions(input_stocks="data/emissions/AGB.tif",
 
     # Return carbon emissions
     return Carbon
+
 
 # End

@@ -21,9 +21,7 @@ from ..misc import progress_bar, makeblock
 
 
 # r_diffproj
-def r_diffproj(inputA, inputB,
-               output_file="diffproj.tif",
-               blk_rows=128):
+def r_diffproj(inputA, inputB, output_file="diffproj.tif", blk_rows=128):
     """Compute a raster of differences for comparison.
 
     This function compute a raster of differences between two rasters
@@ -61,9 +59,14 @@ def r_diffproj(inputA, inputB,
     # Raster of predictions
     print("Create a raster file on disk for projections")
     driver = gdal.GetDriverByName("GTiff")
-    ds_out = driver.Create(output_file, ncol, nrow, 1,
-                           gdal.GDT_Byte,
-                           ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"])
+    ds_out = driver.Create(
+        output_file,
+        ncol,
+        nrow,
+        1,
+        gdal.GDT_Byte,
+        ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
+    )
     ds_out.SetGeoTransform(gt)
     ds_out.SetProjection(proj)
     band_out = ds_out.GetRasterBand(1)
@@ -105,12 +108,11 @@ def r_diffproj(inputA, inputB,
 
     # Dereference driver
     band_out = None
-    del(ds_out)
+    del ds_out
 
 
 # mat_diffproj
-def mat_diffproj(input_raster,
-                 blk_rows=128):
+def mat_diffproj(input_raster, blk_rows=128):
     """Compute a confusion matrix from a raster of differences.
 
     This function computes a confusion matrix from a raster of
@@ -162,5 +164,6 @@ def mat_diffproj(input_raster,
     # Return confusion matrix
     conf_mat = np.array([[n00, n01], [n10, n11]])
     return conf_mat
+
 
 # End

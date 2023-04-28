@@ -29,16 +29,19 @@ class model_random_forest(object):
 
     """
 
-    def __init__(self,  # Observations
-                 formula, data,
-                 # NA action
-                 NA_action="drop",
-                 # Environment
-                 eval_env=0,
-                 # Number of cores
-                 n_estimators=500,
-                 n_jobs=1,
-                 **kwargs):
+    def __init__(
+        self,  # Observations
+        formula,
+        data,
+        # NA action
+        NA_action="drop",
+        # Environment
+        eval_env=0,
+        # Number of cores
+        n_estimators=500,
+        n_jobs=1,
+        **kwargs
+    ):
         """Function to fit a random forest model.
 
         The function fits a random forest model using patsy formula.
@@ -51,15 +54,12 @@ class model_random_forest(object):
 
         # Patsy
         eval_env = EvalEnvironment.capture(eval_env, reference=1)
-        y, x = dmatrices(formula, data,
-                         eval_env, NA_action)
+        y, x = dmatrices(formula, data, eval_env, NA_action)
         self._y_design_info = y.design_info
         self._x_design_info = x.design_info
 
         # Create and train Random Forest
-        rf = RandomForestClassifier(n_estimators=n_estimators,
-                                    n_jobs=n_jobs,
-                                    **kwargs)
+        rf = RandomForestClassifier(n_estimators=n_estimators, n_jobs=n_jobs, **kwargs)
         rf.fit(x, y)
         self.rf = rf
 
@@ -77,15 +77,14 @@ class model_random_forest(object):
         """
 
         # Data
-        if (new_data is None):
-            (new_x,) = build_design_matrices([self._x_design_info],
-                                             self.data)
+        if new_data is None:
+            (new_x,) = build_design_matrices([self._x_design_info], self.data)
         else:
-            (new_x,) = build_design_matrices([self._x_design_info],
-                                             new_data)
+            (new_x,) = build_design_matrices([self._x_design_info], new_data)
 
         # Predictions
         rf_pred = np.array(self.rf.predict_proba(new_x, **kwargs)[:, 1])
-        return(rf_pred)
+        return rf_pred
+
 
 # End

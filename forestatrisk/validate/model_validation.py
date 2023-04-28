@@ -42,7 +42,7 @@ def computeAUC(pos_scores, neg_scores, n_sample=100000):
     neg_scores = np.array(neg_scores, dtype=float)
     pos_sample = np.random.choice(pos_scores, size=n_sample, replace=True)
     neg_sample = np.random.choice(neg_scores, size=n_sample, replace=True)
-    AUC = np.mean(1.0*(pos_sample > neg_sample) + 0.5*(pos_sample == neg_sample))
+    AUC = np.mean(1.0 * (pos_sample > neg_sample) + 0.5 * (pos_sample == neg_sample))
 
     return AUC
 
@@ -84,20 +84,37 @@ def accuracy_indices(pred, obs):
     Expected_accuracy = (Prob_1and1 + Prob_0and0) / (N * N)
     Kappa = (OA - Expected_accuracy) / (1 - Expected_accuracy)
 
-    r = {"OA": OA, "EA": Expected_accuracy,
-         "FOM": FOM, "Sen": Sensitivity, "Spe": Specificity,
-         "TSS": TSS, "K": Kappa}
+    r = {
+        "OA": OA,
+        "EA": Expected_accuracy,
+        "FOM": FOM,
+        "Sen": Sensitivity,
+        "Spe": Specificity,
+        "TSS": TSS,
+        "K": Kappa,
+    }
 
     return r
 
 
 # cross_validation
-def cross_validation(data, formula, mod_type="icar", ratio=30,
-                     nrep=5, seed=1234,
-                     icar_args={"n_neighbors": None, "neighbors": None,
-                                "burnin": 1000, "mcmc": 1000,
-                                "thin": 1, "beta_start": 0},
-                     rf_args={"n_estimators": 100, "n_jobs": None}):
+def cross_validation(
+    data,
+    formula,
+    mod_type="icar",
+    ratio=30,
+    nrep=5,
+    seed=1234,
+    icar_args={
+        "n_neighbors": None,
+        "neighbors": None,
+        "burnin": 1000,
+        "mcmc": 1000,
+        "thin": 1,
+        "beta_start": 0,
+    },
+    rf_args={"n_estimators": 100, "n_jobs": None},
+):
     """Model cross-validation
 
     Performs model cross-validation.
@@ -119,8 +136,9 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
     np.random.seed(seed)
 
     # Result table
-    CV_df = pd.DataFrame({"index": ["AUC", "OA", "EA", "FOM", "Sen",
-                                    "Spe", "TSS", "K"]})
+    CV_df = pd.DataFrame(
+        {"index": ["AUC", "OA", "EA", "FOM", "Sen", "Spe", "TSS", "K"]}
+    )
 
     # Constants
     nobs = data.shape[0]
@@ -130,7 +148,7 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
     # Loop on repetitions
     for i in range(nrep):
         # Print message
-        print("Repetition #: " + str(i+1))
+        print("Repetition #: " + str(i + 1))
 
         # Data-sets for cross-validation
         rows_test = np.random.choice(rows, size=nobs_test, replace=False)
@@ -154,33 +172,37 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
 
         # Compute deforestation probability
         # icar
-        if (mod_type == "icar"):
+        if mod_type == "icar":
             # Training the model
             mod_icar = model_binomial_iCAR(
                 # Observations
-                suitability_formula=formula, data=data_train,
+                suitability_formula=formula,
+                data=data_train,
                 # Spatial structure
                 n_neighbors=icar_args["n_neighbors"],
                 neighbors=icar_args["neighbors"],
                 # Chains
-                burnin=icar_args["burnin"], mcmc=icar_args["mcmc"],
+                burnin=icar_args["burnin"],
+                mcmc=icar_args["mcmc"],
                 thin=icar_args["thin"],
                 # Starting values
-                beta_start=icar_args["beta_start"])
+                beta_start=icar_args["beta_start"],
+            )
             # Predictions for the test dataset
             data_test["theta_pred"] = mod_icar.predict(new_data=data_test)
         # glm
-        if (mod_type == "glm"):
+        if mod_type == "glm":
             # Training the model
             glm = LogisticRegression(solver="lbfgs")
             mod_glm = glm.fit(X_train, Y_train)
             # Predictions for the test dataset
             data_test["theta_pred"] = mod_glm.predict_proba(X_test)[:, 1]
         # RF
-        if (mod_type == "rf"):
+        if mod_type == "rf":
             # Training the model
-            rf = RandomForestClassifier(n_estimators=rf_args["n_estimators"],
-                                        n_jobs=rf_args["n_jobs"])
+            rf = RandomForestClassifier(
+                n_estimators=rf_args["n_estimators"], n_jobs=rf_args["n_jobs"]
+            )
             mod_rf = rf.fit(X_train, Y_train)
             # Predictions for the test dataset
             data_test["theta_pred"] = mod_rf.predict_proba(X_test)[:, 1]
@@ -200,11 +222,19 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
         ai = accuracy_indices(obs, pred)
 
         # Tupple of indices
-        acc_ind = (AUC, ai["OA"], ai["EA"], ai["FOM"], ai["Sen"],
-                   ai["Spe"], ai["TSS"], ai["K"])
+        acc_ind = (
+            AUC,
+            ai["OA"],
+            ai["EA"],
+            ai["FOM"],
+            ai["Sen"],
+            ai["Spe"],
+            ai["TSS"],
+            ai["K"],
+        )
 
         # Results as data frame
-        CV_df["rep" + str(i+1)] = acc_ind
+        CV_df["rep" + str(i + 1)] = acc_ind
 
     # Mean over repetitions
     CV_values = CV_df.loc[:, CV_df.columns != "index"]
@@ -212,5 +242,6 @@ def cross_validation(data, formula, mod_type="icar", ratio=30,
     CV_df = CV_df.round(4)
 
     return CV_df
+
 
 # End

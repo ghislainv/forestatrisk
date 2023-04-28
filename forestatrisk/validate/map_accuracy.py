@@ -21,8 +21,7 @@ from ..misc import progress_bar, makeblock
 
 
 # Percentage_correct
-def map_confmat(r_obs0, r_obs1, r_pred0, r_pred1,
-                blk_rows=0):
+def map_confmat(r_obs0, r_obs1, r_pred0, r_pred1, blk_rows=0):
     """Compute a confusion matrix.
 
     This function computes a confusion matrix at a given
@@ -56,10 +55,13 @@ def map_confmat(r_obs0, r_obs1, r_pred0, r_pred1,
     # Make vrt with gdal.BuildVRT
     # Note: Extent and resolution from forest raster!
     print("Make virtual raster")
-    param = gdal.BuildVRTOptions(resolution="user",
-                                 outputBounds=(Xmin, Ymin, Xmax, Ymax),
-                                 xRes=gt[1], yRes=-gt[5],
-                                 separate=True)
+    param = gdal.BuildVRTOptions(
+        resolution="user",
+        outputBounds=(Xmin, Ymin, Xmax, Ymax),
+        xRes=gt[1],
+        yRes=-gt[5],
+        separate=True,
+    )
     gdal.BuildVRT("/vsimem/temp.vrt", raster_list, options=param)
     stack = gdal.Open("/vsimem/temp.vrt")
 
@@ -133,10 +135,17 @@ def map_accuracy(mat):
     EA = Prob_1and1 + Prob_0and0
     Kappa = (OA - EA) / (1 - EA)
 
-    r = {"OA": OA, "EA": EA,
-         "FOM": FOM, "Sen": Sensitivity,
-         "Spe": Specificity, "TSS": TSS, "K": Kappa}
+    r = {
+        "OA": OA,
+        "EA": EA,
+        "FOM": FOM,
+        "Sen": Sensitivity,
+        "Spe": Specificity,
+        "TSS": TSS,
+        "K": Kappa,
+    }
 
     return r
+
 
 # End

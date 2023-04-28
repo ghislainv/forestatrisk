@@ -83,8 +83,7 @@ def cellneigh(raster=None, region=None, csize=10, rank=1):
 
 
 # cellneigh_ctry
-def cellneigh_ctry(raster=None, region=None, vector=None,
-                   csize=10, rank=1):
+def cellneigh_ctry(raster=None, region=None, vector=None, csize=10, rank=1):
     """Compute number of spatial cells and neighbours inside country's
     borders.
 
@@ -132,11 +131,14 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
 
     # Cells within country borders (rasterizing method)
     cb_ds = gdal.OpenEx(vector, gdal.OF_VECTOR)
-    rOptions = gdal.RasterizeOptions(xRes=csize, yRes=-csize,
-                                     allTouched=True,
-                                     outputBounds=[Xmin, Ymin_new,
-                                                   Xmax_new, Ymax],
-                                     burnValues=1, noData=0)
+    rOptions = gdal.RasterizeOptions(
+        xRes=csize,
+        yRes=-csize,
+        allTouched=True,
+        outputBounds=[Xmin, Ymin_new, Xmax_new, Ymax],
+        burnValues=1,
+        noData=0,
+    )
     outfile = "/vsimem/tmpfile"
     ds = gdal.Rasterize(outfile, cb_ds, options=rOptions)
     mask = ds.ReadAsArray()
@@ -172,5 +174,6 @@ def cellneigh_ctry(raster=None, region=None, vector=None,
         adj_sort.append(np.flatnonzero(cell_in == i)[0])
     adj_sort = np.array(adj_sort)
     return (nneigh, adj_sort, cell_in, ncell)
+
 
 # End

@@ -22,10 +22,7 @@ from ..misc import progress_bar, makeblock
 
 
 # deforest
-def deforest(input_raster,
-             hectares,
-             output_file="output/fcc.tif",
-             blk_rows=128):
+def deforest(input_raster, hectares, output_file="output/fcc.tif", blk_rows=128):
     """Function to map the future forest-cover change.
 
     This function computes the future forest cover map based on (i) a
@@ -75,7 +72,7 @@ def deforest(input_raster,
     nfp = np.sum(counts)
 
     # If deforestation < forest
-    if (ndefor < nfp):
+    if ndefor < nfp:
         # Identify threshold
         print("Identify threshold")
         quant = ndefor / (nfp * 1.0)
@@ -107,19 +104,21 @@ def deforest(input_raster,
 
     # Estimates of error on deforested hectares
     # If deforestation < forest
-    if (ndefor < nfp):
+    if ndefor < nfp:
         error = (ndp * surface_pixel / 10000.0) - hectares
         error_perc = np.round(100 * error / hectares, 2)
         error_perc_abs = abs(error_perc)
         if error_perc_abs >= 1.0:
-            msg = ("The error on deforested area (in ha) is high "
-                   "({}% >= 1%). "
-                   "This means that the number of categories for the "
-                   "deforestation probability [1, 65535] is too low to find "
-                   "an accurate probability threshold for deforestation. "
-                   "You might either i) reduce the size of the study area, "
-                   "or ii) project deforestation on a shorter "
-                   "period of time.").format(error_perc_abs)
+            msg = (
+                "The error on deforested area (in ha) is high "
+                "({}% >= 1%). "
+                "This means that the number of categories for the "
+                "deforestation probability [1, 65535] is too low to find "
+                "an accurate probability threshold for deforestation. "
+                "You might either i) reduce the size of the study area, "
+                "or ii) project deforestation on a shorter "
+                "period of time."
+            ).format(error_perc_abs)
             warnings.warn(msg)
     # If deforestation > forest (everything is deforested)
     else:
@@ -129,9 +128,14 @@ def deforest(input_raster,
     # Raster of predictions
     print("Create a raster file on disk for forest-cover change")
     driver = gdal.GetDriverByName("GTiff")
-    fccR = driver.Create(output_file, ncol, nrow, 1,
-                         gdal.GDT_Byte,
-                         ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"])
+    fccR = driver.Create(
+        output_file,
+        ncol,
+        nrow,
+        1,
+        gdal.GDT_Byte,
+        ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
+    )
     fccR.SetGeoTransform(gt)
     fccR.SetProjection(proj)
     fccB = fccR.GetRasterBand(1)
@@ -174,12 +178,19 @@ def deforest(input_raster,
 
     # Dereference driver
     fccB = None
-    del(fccR)
+    del fccR
 
     # Return results
-    stats = {"counts": counts, "hectares": hectares, "threshold":
-             threshold, "error": error, "error_perc": error_perc, "ndp": ndp,
-             "nfp": nfp}
+    stats = {
+        "counts": counts,
+        "hectares": hectares,
+        "threshold": threshold,
+        "error": error,
+        "error_perc": error_perc,
+        "ndp": ndp,
+        "nfp": nfp,
+    }
     return stats
+
 
 # End
