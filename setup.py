@@ -83,7 +83,8 @@ setup(name="forestatrisk",
                         "pandas", "patsy", "pywdpa", "scikit-learn"],
       extras_require={
           "interactive": ["jupyter", "python-dotenv", "geopandas",
-                          "descartes", "folium"]},
+                          "descartes", "folium"],
+          "dev": ["pre-commit"],}
       include_dirs=numpy.distutils.misc_util.get_numpy_include_dirs(),
       zip_safe=False)
 
