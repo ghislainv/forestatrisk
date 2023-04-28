@@ -122,8 +122,7 @@
 
 
 <span class="c1"># Percentage_correct</span>
-<div class="viewcode-block" id="map_confmat"><a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.map_accuracy.map_confmat">[docs]</a><span class="k">def</span> <span class="nf">map_confmat</span><span class="p">(</span><span class="n">r_obs0</span><span class="p">,</span> <span class="n">r_obs1</span><span class="p">,</span> <span class="n">r_pred0</span><span class="p">,</span> <span class="n">r_pred1</span><span class="p">,</span>
-                <span class="n">blk_rows</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="map_confmat"><a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.map_accuracy.map_confmat">[docs]</a><span class="k">def</span> <span class="nf">map_confmat</span><span class="p">(</span><span class="n">r_obs0</span><span class="p">,</span> <span class="n">r_obs1</span><span class="p">,</span> <span class="n">r_pred0</span><span class="p">,</span> <span class="n">r_pred1</span><span class="p">,</span> <span class="n">blk_rows</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute a confusion matrix.</span>
 
 <span class="sd">    This function computes a confusion matrix at a given</span>
@@ -157,10 +156,13 @@
     <span class="c1"># Make vrt with gdal.BuildVRT</span>
     <span class="c1"># Note: Extent and resolution from forest raster!</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Make virtual raster&quot;</span><span class="p">)</span>
-    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRTOptions</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span>
-                                 <span class="n">outputBounds</span><span class="o">=</span><span class="p">(</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">),</span>
-                                 <span class="n">xRes</span><span class="o">=</span><span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">yRes</span><span class="o">=-</span><span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
-                                 <span class="n">separate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRTOptions</span><span class="p">(</span>
+        <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span>
+        <span class="n">outputBounds</span><span class="o">=</span><span class="p">(</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">),</span>
+        <span class="n">xRes</span><span class="o">=</span><span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">yRes</span><span class="o">=-</span><span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">separate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRT</span><span class="p">(</span><span class="s2">&quot;/vsimem/temp.vrt&quot;</span><span class="p">,</span> <span class="n">raster_list</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
     <span class="n">stack</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="s2">&quot;/vsimem/temp.vrt&quot;</span><span class="p">)</span>
 
@@ -234,11 +236,18 @@
     <span class="n">EA</span> <span class="o">=</span> <span class="n">Prob_1and1</span> <span class="o">+</span> <span class="n">Prob_0and0</span>
     <span class="n">Kappa</span> <span class="o">=</span> <span class="p">(</span><span class="n">OA</span> <span class="o">-</span> <span class="n">EA</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">EA</span><span class="p">)</span>
 
-    <span class="n">r</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;OA&quot;</span><span class="p">:</span> <span class="n">OA</span><span class="p">,</span> <span class="s2">&quot;EA&quot;</span><span class="p">:</span> <span class="n">EA</span><span class="p">,</span>
-         <span class="s2">&quot;FOM&quot;</span><span class="p">:</span> <span class="n">FOM</span><span class="p">,</span> <span class="s2">&quot;Sen&quot;</span><span class="p">:</span> <span class="n">Sensitivity</span><span class="p">,</span>
-         <span class="s2">&quot;Spe&quot;</span><span class="p">:</span> <span class="n">Specificity</span><span class="p">,</span> <span class="s2">&quot;TSS&quot;</span><span class="p">:</span> <span class="n">TSS</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="n">Kappa</span><span class="p">}</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;OA&quot;</span><span class="p">:</span> <span class="n">OA</span><span class="p">,</span>
+        <span class="s2">&quot;EA&quot;</span><span class="p">:</span> <span class="n">EA</span><span class="p">,</span>
+        <span class="s2">&quot;FOM&quot;</span><span class="p">:</span> <span class="n">FOM</span><span class="p">,</span>
+        <span class="s2">&quot;Sen&quot;</span><span class="p">:</span> <span class="n">Sensitivity</span><span class="p">,</span>
+        <span class="s2">&quot;Spe&quot;</span><span class="p">:</span> <span class="n">Specificity</span><span class="p">,</span>
+        <span class="s2">&quot;TSS&quot;</span><span class="p">:</span> <span class="n">TSS</span><span class="p">,</span>
+        <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="n">Kappa</span><span class="p">,</span>
+    <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">r</span></div>
+
 
 <span class="c1"># End</span>
 </pre></div>

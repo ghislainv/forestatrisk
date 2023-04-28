@@ -158,8 +158,7 @@
     <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
     <span class="n">rho_orig_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="s2">&quot;rho_orig.tif&quot;</span><span class="p">)</span>
     <span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s2">&quot;GTiff&quot;</span><span class="p">)</span>
-    <span class="n">rho_R</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">rho_orig_filename</span><span class="p">,</span> <span class="n">ncell_X</span><span class="p">,</span> <span class="n">ncell_Y</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
-                          <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Float64</span><span class="p">)</span>
+    <span class="n">rho_R</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">rho_orig_filename</span><span class="p">,</span> <span class="n">ncell_X</span><span class="p">,</span> <span class="n">ncell_Y</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Float64</span><span class="p">)</span>
     <span class="n">rho_R</span><span class="o">.</span><span class="n">SetProjection</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">())</span>
     <span class="n">gt</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
     <span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">csize_m</span>
@@ -185,6 +184,7 @@
     <span class="c1"># Dereference driver</span>
     <span class="n">rho_B</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">del</span> <span class="n">rho_R</span></div>
+
 
 <span class="c1"># End</span>
 </pre></div>

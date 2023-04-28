@@ -120,8 +120,7 @@
 
 
 <span class="c1"># ee_gfc.run_task</span>
-<div class="viewcode-block" id="run_task"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.ee_gfc.run_task">[docs]</a><span class="k">def</span> <span class="nf">run_task</span><span class="p">(</span><span class="n">perc</span><span class="p">,</span> <span class="n">iso3</span><span class="p">,</span> <span class="n">extent_latlong</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-             <span class="n">gdrive_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="run_task"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.ee_gfc.run_task">[docs]</a><span class="k">def</span> <span class="nf">run_task</span><span class="p">(</span><span class="n">perc</span><span class="p">,</span> <span class="n">iso3</span><span class="p">,</span> <span class="n">extent_latlong</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute forest-cover change with Google EarthEngine.</span>
 
 <span class="sd">    Compute the forest-cover change from Global Forest Change (GFC)</span>
@@ -147,8 +146,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Region</span>
-    <span class="n">region</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span><span class="n">extent_latlong</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
-                                   <span class="n">geodesic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">region</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span><span class="n">extent_latlong</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span> <span class="n">geodesic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">region</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span><span class="o">.</span><span class="n">bounds</span><span class="p">()</span>
     <span class="n">export_coord</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">getInfo</span><span class="p">()[</span><span class="s2">&quot;coordinates&quot;</span><span class="p">]</span>
 
@@ -175,14 +173,20 @@
     <span class="n">forest2020</span> <span class="o">=</span> <span class="n">forest2000</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">lossyear</span><span class="o">.</span><span class="n">gte</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="c1"># Forest raster with five bands</span>
-    <span class="n">forest</span> <span class="o">=</span> <span class="n">forest2000</span><span class="o">.</span><span class="n">addBands</span><span class="p">(</span><span class="n">forest2005</span><span class="p">)</span><span class="o">.</span><span class="n">addBands</span><span class="p">(</span>
-        <span class="n">forest2010</span><span class="p">)</span><span class="o">.</span><span class="n">addBands</span><span class="p">(</span><span class="n">forest2015</span><span class="p">)</span><span class="o">.</span><span class="n">addBands</span><span class="p">(</span><span class="n">forest2020</span><span class="p">)</span>
-    <span class="n">forest</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;forest2000&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2005&quot;</span><span class="p">,</span>
-                                             <span class="s2">&quot;forest2010&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2015&quot;</span><span class="p">,</span>
-                                             <span class="s2">&quot;forest2020&quot;</span><span class="p">])</span>
-    <span class="n">forest</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;system:bandNames&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;forest2000&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2005&quot;</span><span class="p">,</span>
-                                             <span class="s2">&quot;forest2010&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2015&quot;</span><span class="p">,</span>
-                                             <span class="s2">&quot;forest2020&quot;</span><span class="p">])</span>
+    <span class="n">forest</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">forest2000</span><span class="o">.</span><span class="n">addBands</span><span class="p">(</span><span class="n">forest2005</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">addBands</span><span class="p">(</span><span class="n">forest2010</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">addBands</span><span class="p">(</span><span class="n">forest2015</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">addBands</span><span class="p">(</span><span class="n">forest2020</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">forest</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;forest2000&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2005&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2010&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2015&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2020&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">forest</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+        <span class="s2">&quot;system:bandNames&quot;</span><span class="p">,</span>
+        <span class="p">[</span><span class="s2">&quot;forest2000&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2005&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2010&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2015&quot;</span><span class="p">,</span> <span class="s2">&quot;forest2020&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
 
     <span class="c1"># maxPixels</span>
     <span class="n">maxPix</span> <span class="o">=</span> <span class="mf">1e13</span>
@@ -197,11 +201,12 @@
         <span class="n">region</span><span class="o">=</span><span class="n">export_coord</span><span class="p">,</span>
         <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span>
         <span class="n">maxPixels</span><span class="o">=</span><span class="n">maxPix</span><span class="p">,</span>
-        <span class="n">crs</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+        <span class="n">crs</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">task</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
     <span class="c1"># Return task</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">task</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">task</span></div>
 
 
 <span class="c1"># ee_gfc.check</span>
@@ -233,14 +238,11 @@
     <span class="k">if</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
         <span class="n">present_in_folder</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="c1"># Return</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">present_in_folder</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">present_in_folder</span></div>
 
 
 <span class="c1"># ee_gfc.download</span>
-<div class="viewcode-block" id="download"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.ee_gfc.download">[docs]</a><span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span>
-             <span class="n">gdrive_folder</span><span class="p">,</span>
-             <span class="n">iso3</span><span class="p">,</span>
-             <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="download"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.ee_gfc.download">[docs]</a><span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Download forest-cover data from Google Drive.</span>
 
 <span class="sd">    Check that GEE task is completed. Wait for the task to be</span>
@@ -261,18 +263,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Data availability</span>
-    <span class="n">data_availability</span> <span class="o">=</span> <span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span>
-                              <span class="n">gdrive_folder</span><span class="p">,</span>
-                              <span class="n">iso3</span><span class="p">)</span>
+    <span class="n">data_availability</span> <span class="o">=</span> <span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">iso3</span><span class="p">)</span>
 
     <span class="c1"># Check task status</span>
     <span class="k">while</span> <span class="n">data_availability</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="c1"># We wait 1 min</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
         <span class="c1"># We reactualize the status</span>
-        <span class="n">data_availability</span> <span class="o">=</span> <span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span>
-                                  <span class="n">gdrive_folder</span><span class="p">,</span>
-                                  <span class="n">iso3</span><span class="p">)</span>
+        <span class="n">data_availability</span> <span class="o">=</span> <span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">iso3</span><span class="p">)</span>
 
     <span class="c1"># Commands to download results with rclone</span>
     <span class="n">remote_path</span> <span class="o">=</span> <span class="n">gdrive_remote_rclone</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">gdrive_folder</span>
@@ -280,6 +278,7 @@
     <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rclone&quot;</span><span class="p">,</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;--include&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">remote_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">]</span>
     <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
     <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
 
 <span class="c1"># End</span>
 </pre></div>

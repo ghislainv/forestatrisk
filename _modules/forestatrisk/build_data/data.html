@@ -118,6 +118,7 @@
 <span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">copy2</span><span class="p">,</span> <span class="n">rmtree</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>  <span class="c1"># To unzip files</span>
+
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlretrieve</span>  <span class="c1"># Python 3</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -156,7 +157,7 @@
     <span class="n">inLayer</span> <span class="o">=</span> <span class="n">inDataSource</span><span class="o">.</span><span class="n">GetLayer</span><span class="p">()</span>
     <span class="n">extent</span> <span class="o">=</span> <span class="n">inLayer</span><span class="o">.</span><span class="n">GetExtent</span><span class="p">()</span>
     <span class="n">extent</span> <span class="o">=</span> <span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">extent</span><span class="p">)</span>  <span class="c1"># (xmin, ymin, xmax, ymax)</span></div>
+    <span class="k">return</span> <span class="n">extent</span>  <span class="c1"># (xmin, ymin, xmax, ymax)</span></div>
 
 
 <span class="c1"># tiles_srtm</span>
@@ -181,12 +182,12 @@
     <span class="c1"># Compute SRTM tile numbers</span>
     <span class="n">tile_left</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">xmin_latlong</span> <span class="o">+</span> <span class="mf">180.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">5.0</span><span class="p">))</span>
     <span class="n">tile_right</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">xmax_latlong</span> <span class="o">+</span> <span class="mf">180.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">5.0</span><span class="p">))</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">tile_right</span> <span class="o">==</span> <span class="n">tile_left</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">tile_right</span> <span class="o">==</span> <span class="n">tile_left</span><span class="p">:</span>
         <span class="c1"># Trick to make curl globbing work in data_country.sh</span>
         <span class="n">tile_right</span> <span class="o">=</span> <span class="n">tile_left</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">tile_top</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="o">-</span><span class="n">ymax_latlong</span> <span class="o">+</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">5.0</span><span class="p">))</span>
     <span class="n">tile_bottom</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="o">-</span><span class="n">ymin_latlong</span> <span class="o">+</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">5.0</span><span class="p">))</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">tile_bottom</span> <span class="o">==</span> <span class="n">tile_top</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">tile_bottom</span> <span class="o">==</span> <span class="n">tile_top</span><span class="p">:</span>
         <span class="n">tile_bottom</span> <span class="o">=</span> <span class="n">tile_top</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="c1"># Format variables, zfill is for having 01 and not 1</span>
     <span class="n">tiles_long</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">tile_left</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tile_right</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -200,12 +201,16 @@
 
 
 <span class="c1"># country_forest_run</span>
-<div class="viewcode-block" id="country_forest_run"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_forest_run">[docs]</a><span class="k">def</span> <span class="nf">country_forest_run</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">,</span>
-                       <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
-                       <span class="n">keep_dir</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                       <span class="n">fcc_source</span><span class="o">=</span><span class="s2">&quot;jrc&quot;</span><span class="p">,</span> <span class="n">perc</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-                       <span class="n">gdrive_remote_rclone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">gdrive_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="country_forest_run"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_forest_run">[docs]</a><span class="k">def</span> <span class="nf">country_forest_run</span><span class="p">(</span>
+    <span class="n">iso3</span><span class="p">,</span>
+    <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
+    <span class="n">keep_dir</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fcc_source</span><span class="o">=</span><span class="s2">&quot;jrc&quot;</span><span class="p">,</span>
+    <span class="n">perc</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">gdrive_remote_rclone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">gdrive_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute forest rasters per country and export them to Google Drive</span>
 <span class="sd">    with Google Earth Engine (GEE).</span>
 
@@ -263,41 +268,41 @@
         <span class="n">rmtree</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Google Earth Engine task</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">fcc_source</span> <span class="o">==</span> <span class="s2">&quot;jrc&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">fcc_source</span> <span class="o">==</span> <span class="s2">&quot;jrc&quot;</span><span class="p">:</span>
         <span class="c1"># Check data availability</span>
-        <span class="n">data_availability</span> <span class="o">=</span> <span class="n">ee_jrc</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span>
-                                         <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">iso3</span><span class="p">)</span>
+        <span class="n">data_availability</span> <span class="o">=</span> <span class="n">ee_jrc</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">iso3</span><span class="p">)</span>
         <span class="c1"># If not available, run GEE</span>
         <span class="k">if</span> <span class="n">data_availability</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Run Google Earth Engine&quot;</span><span class="p">)</span>
-            <span class="n">task</span> <span class="o">=</span> <span class="n">ee_jrc</span><span class="o">.</span><span class="n">run_task</span><span class="p">(</span><span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span>
-                                   <span class="n">extent_latlong</span><span class="o">=</span><span class="n">extent_latlong</span><span class="p">,</span>
-                                   <span class="n">scale</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-                                   <span class="n">proj</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
-                                   <span class="n">gdrive_folder</span><span class="o">=</span><span class="n">gdrive_folder</span><span class="p">)</span>
+            <span class="n">task</span> <span class="o">=</span> <span class="n">ee_jrc</span><span class="o">.</span><span class="n">run_task</span><span class="p">(</span>
+                <span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span>
+                <span class="n">extent_latlong</span><span class="o">=</span><span class="n">extent_latlong</span><span class="p">,</span>
+                <span class="n">scale</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                <span class="n">proj</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+                <span class="n">gdrive_folder</span><span class="o">=</span><span class="n">gdrive_folder</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;GEE running on the following extent:&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">extent_latlong</span><span class="p">))</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">fcc_source</span> <span class="o">==</span> <span class="s2">&quot;gfc&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">fcc_source</span> <span class="o">==</span> <span class="s2">&quot;gfc&quot;</span><span class="p">:</span>
         <span class="c1"># Check data availability</span>
-        <span class="n">data_availability</span> <span class="o">=</span> <span class="n">ee_gfc</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span>
-                                         <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">iso3</span><span class="p">)</span>
+        <span class="n">data_availability</span> <span class="o">=</span> <span class="n">ee_gfc</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">iso3</span><span class="p">)</span>
         <span class="c1"># If not available, run GEE</span>
         <span class="k">if</span> <span class="n">data_availability</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Run Google Earth Engine&quot;</span><span class="p">)</span>
-            <span class="n">task</span> <span class="o">=</span> <span class="n">ee_gfc</span><span class="o">.</span><span class="n">run_task</span><span class="p">(</span><span class="n">perc</span><span class="o">=</span><span class="n">perc</span><span class="p">,</span> <span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span>
-                                   <span class="n">extent_latlong</span><span class="o">=</span><span class="n">extent_latlong</span><span class="p">,</span>
-                                   <span class="n">scale</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-                                   <span class="n">proj</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
-                                   <span class="n">gdrive_folder</span><span class="o">=</span><span class="n">gdrive_folder</span><span class="p">)</span>
+            <span class="n">task</span> <span class="o">=</span> <span class="n">ee_gfc</span><span class="o">.</span><span class="n">run_task</span><span class="p">(</span>
+                <span class="n">perc</span><span class="o">=</span><span class="n">perc</span><span class="p">,</span>
+                <span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span>
+                <span class="n">extent_latlong</span><span class="o">=</span><span class="n">extent_latlong</span><span class="p">,</span>
+                <span class="n">scale</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                <span class="n">proj</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+                <span class="n">gdrive_folder</span><span class="o">=</span><span class="n">gdrive_folder</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;GEE running on the following extent:&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">extent_latlong</span><span class="p">))</span></div>
 
 
 <span class="c1"># country_forest_download</span>
-<div class="viewcode-block" id="country_forest_download"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_forest_download">[docs]</a><span class="k">def</span> <span class="nf">country_forest_download</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span>
-                            <span class="n">gdrive_remote_rclone</span><span class="p">,</span>
-                            <span class="n">gdrive_folder</span><span class="p">,</span>
-                            <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="country_forest_download"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_forest_download">[docs]</a><span class="k">def</span> <span class="nf">country_forest_download</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Download forest cover data from Google Drive.</span>
 
 <span class="sd">    Download forest cover data from Google Drive in the current</span>
@@ -323,17 +328,14 @@
     <span class="c1"># If no data locally check if available in gdrive</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">raster_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># Data availability in gdrive</span>
-        <span class="n">data_availability</span> <span class="o">=</span> <span class="n">ee_jrc</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span>
-                                         <span class="n">gdrive_folder</span><span class="p">,</span>
-                                         <span class="n">iso3</span><span class="p">)</span>
+        <span class="n">data_availability</span> <span class="o">=</span> <span class="n">ee_jrc</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">iso3</span><span class="p">)</span>
 
         <span class="c1"># Donwload if available in gdrive</span>
         <span class="k">if</span> <span class="n">data_availability</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="c1"># Commands to download results with rclone</span>
             <span class="n">remote_path</span> <span class="o">=</span> <span class="n">gdrive_remote_rclone</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">gdrive_folder</span>
             <span class="n">pattern</span> <span class="o">=</span> <span class="s2">&quot;&#39;forest_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;*.tif&#39;&quot;</span>
-            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rclone&quot;</span><span class="p">,</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;--include&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span>
-                   <span class="n">remote_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">]</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rclone&quot;</span><span class="p">,</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;--include&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">remote_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">]</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
             <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data for </span><span class="si">{0:3s}</span><span class="s2"> have been downloaded&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iso3</span><span class="p">))</span>
@@ -341,17 +343,21 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data for </span><span class="si">{0:3s}</span><span class="s2"> are not available&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iso3</span><span class="p">))</span></div>
 
+
 <span class="c1"># ===========================================================</span>
 <span class="c1"># Biomass</span>
 <span class="c1"># ===========================================================</span>
 
 
 <span class="c1"># country_biomass_run</span>
-<div class="viewcode-block" id="country_biomass_run"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_biomass_run">[docs]</a><span class="k">def</span> <span class="nf">country_biomass_run</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">,</span>
-                        <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
-                        <span class="n">keep_dir</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">gdrive_remote_rclone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">gdrive_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="country_biomass_run"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_biomass_run">[docs]</a><span class="k">def</span> <span class="nf">country_biomass_run</span><span class="p">(</span>
+    <span class="n">iso3</span><span class="p">,</span>
+    <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
+    <span class="n">keep_dir</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">gdrive_remote_rclone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">gdrive_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Export biomass maps to Google Drive with Google Earth Engine (GEE).</span>
 
 <span class="sd">    This function uses the iso3 code to download the country borders</span>
@@ -403,9 +409,7 @@
         <span class="n">rmtree</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Check data availability</span>
-    <span class="n">data_availability</span> <span class="o">=</span> <span class="n">ee_biomass_whrc</span><span class="o">.</span><span class="n">check</span><span class="p">(</span>
-        <span class="n">gdrive_remote_rclone</span><span class="p">,</span>
-        <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">iso3</span><span class="p">)</span>
+    <span class="n">data_availability</span> <span class="o">=</span> <span class="n">ee_biomass_whrc</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">iso3</span><span class="p">)</span>
     <span class="c1"># If not available, run GEE</span>
     <span class="k">if</span> <span class="n">data_availability</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Run Google Earth Engine&quot;</span><span class="p">)</span>
@@ -414,16 +418,14 @@
             <span class="n">extent_latlong</span><span class="o">=</span><span class="n">extent_latlong</span><span class="p">,</span>
             <span class="n">scale</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
             <span class="n">proj</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
-            <span class="n">gdrive_folder</span><span class="o">=</span><span class="n">gdrive_folder</span><span class="p">)</span>
+            <span class="n">gdrive_folder</span><span class="o">=</span><span class="n">gdrive_folder</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;GEE running on the following extent:&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">extent_latlong</span><span class="p">))</span></div>
 
 
 <span class="c1"># country_biomass_download</span>
-<div class="viewcode-block" id="country_biomass_download"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_biomass_download">[docs]</a><span class="k">def</span> <span class="nf">country_biomass_download</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span>
-                             <span class="n">gdrive_remote_rclone</span><span class="p">,</span>
-                             <span class="n">gdrive_folder</span><span class="p">,</span>
-                             <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="country_biomass_download"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_biomass_download">[docs]</a><span class="k">def</span> <span class="nf">country_biomass_download</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Download biomass data from Google Drive.</span>
 
 <span class="sd">    Download biomass data from Google Drive. Print a message if the</span>
@@ -450,17 +452,15 @@
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">raster_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># Data availability in gdrive</span>
         <span class="n">data_availability</span> <span class="o">=</span> <span class="n">ee_biomass_whrc</span><span class="o">.</span><span class="n">check</span><span class="p">(</span>
-            <span class="n">gdrive_remote_rclone</span><span class="p">,</span>
-            <span class="n">gdrive_folder</span><span class="p">,</span>
-            <span class="n">iso3</span><span class="p">)</span>
+            <span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">iso3</span>
+        <span class="p">)</span>
 
         <span class="c1"># Donwload if available in gdrive</span>
         <span class="k">if</span> <span class="n">data_availability</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="c1"># Commands to download results with rclone</span>
             <span class="n">remote_path</span> <span class="o">=</span> <span class="n">gdrive_remote_rclone</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">gdrive_folder</span>
             <span class="n">pattern</span> <span class="o">=</span> <span class="s2">&quot;&#39;biomass_whrc_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;*.tif&#39;&quot;</span>
-            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rclone&quot;</span><span class="p">,</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;--include&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span>
-                   <span class="n">remote_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">]</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rclone&quot;</span><span class="p">,</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;--include&quot;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">remote_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">]</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
             <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data for </span><span class="si">{0:3s}</span><span class="s2"> have been downloaded&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iso3</span><span class="p">))</span>
@@ -470,10 +470,9 @@
 
 
 <span class="c1"># country_biomass_compute</span>
-<div class="viewcode-block" id="country_biomass_compute"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_biomass_compute">[docs]</a><span class="k">def</span> <span class="nf">country_biomass_compute</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span>
-                            <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
-                            <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
-                            <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="country_biomass_compute"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_biomass_compute">[docs]</a><span class="k">def</span> <span class="nf">country_biomass_compute</span><span class="p">(</span>
+    <span class="n">iso3</span><span class="p">,</span> <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Function to mosaic and resample biomass data from WHRC.</span>
 
 <span class="sd">    This function mosaics and resamples the biomass data obtained from</span>
@@ -503,37 +502,45 @@
     <span class="c1"># See: https://trac.osgeo.org/gdal/wiki/UserDocs/GdalWarp#GeoTIFFoutput-coCOMPRESSisbroken</span>
     <span class="n">input_file</span> <span class="o">=</span> <span class="n">input_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc_gee.vrt&quot;</span>
     <span class="n">output_file</span> <span class="o">=</span> <span class="n">input_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc_warp.vrt&quot;</span>
-    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">WarpOptions</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">,</span> <span class="s2">&quot;tap&quot;</span><span class="p">],</span>
-                             <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;VRT&quot;</span><span class="p">,</span>
-                             <span class="n">xRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">yRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-                             <span class="n">srcNodata</span><span class="o">=-</span><span class="mi">9999</span><span class="p">,</span> <span class="n">dstNodata</span><span class="o">=-</span><span class="mi">9999</span><span class="p">,</span>
-                             <span class="n">srcSRS</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span> <span class="n">dstSRS</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
-                             <span class="n">resampleAlg</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GRA_Bilinear</span><span class="p">,</span>
-                             <span class="n">outputType</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Int16</span><span class="p">,</span>
-                             <span class="n">multithread</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                             <span class="n">warpMemoryLimit</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-                             <span class="n">warpOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;NUM_THREADS=ALL_CPUS&quot;</span><span class="p">])</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">WarpOptions</span><span class="p">(</span>
+        <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">,</span> <span class="s2">&quot;tap&quot;</span><span class="p">],</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;VRT&quot;</span><span class="p">,</span>
+        <span class="n">xRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+        <span class="n">yRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+        <span class="n">srcNodata</span><span class="o">=-</span><span class="mi">9999</span><span class="p">,</span>
+        <span class="n">dstNodata</span><span class="o">=-</span><span class="mi">9999</span><span class="p">,</span>
+        <span class="n">srcSRS</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
+        <span class="n">dstSRS</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+        <span class="n">resampleAlg</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GRA_Bilinear</span><span class="p">,</span>
+        <span class="n">outputType</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Int16</span><span class="p">,</span>
+        <span class="n">multithread</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">warpMemoryLimit</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">warpOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;NUM_THREADS=ALL_CPUS&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
     <span class="n">gdal</span><span class="o">.</span><span class="n">Warp</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">input_file</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
 
     <span class="c1"># Compressing</span>
     <span class="n">input_file</span> <span class="o">=</span> <span class="n">input_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc_warp.vrt&quot;</span>
     <span class="n">output_file</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc.tif&quot;</span>
-    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TranslateOptions</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">,</span> <span class="s2">&quot;tap&quot;</span><span class="p">],</span>
-                                  <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
-                                  <span class="n">creationOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;TILED=YES&quot;</span><span class="p">,</span>
-                                                   <span class="s2">&quot;BLOCKXSIZE=256&quot;</span><span class="p">,</span>
-                                                   <span class="s2">&quot;BLOCKYSIZE=256&quot;</span><span class="p">,</span>
-                                                   <span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span>
-                                                   <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span>
-                                                   <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">])</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TranslateOptions</span><span class="p">(</span>
+        <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">,</span> <span class="s2">&quot;tap&quot;</span><span class="p">],</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
+        <span class="n">creationOptions</span><span class="o">=</span><span class="p">[</span>
+            <span class="s2">&quot;TILED=YES&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;BLOCKXSIZE=256&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;BLOCKYSIZE=256&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
     <span class="n">gdal</span><span class="o">.</span><span class="n">Translate</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">input_file</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span></div>
 
 
 <span class="c1"># country_biomass_moaic</span>
-<div class="viewcode-block" id="country_biomass_mosaic"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_biomass_mosaic">[docs]</a><span class="k">def</span> <span class="nf">country_biomass_mosaic</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span>
-                           <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
-                           <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
-                           <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="country_biomass_mosaic"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_biomass_mosaic">[docs]</a><span class="k">def</span> <span class="nf">country_biomass_mosaic</span><span class="p">(</span>
+    <span class="n">iso3</span><span class="p">,</span> <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Function to mosaic biomass images from WHRC.</span>
 
 <span class="sd">    This function mosaics the biomass data obtained from GEE. No</span>
@@ -562,16 +569,20 @@
     <span class="c1"># Compressing</span>
     <span class="n">input_file</span> <span class="o">=</span> <span class="n">input_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc.vrt&quot;</span>
     <span class="n">output_file</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc.tif&quot;</span>
-    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TranslateOptions</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">,</span> <span class="s2">&quot;tap&quot;</span><span class="p">],</span>
-                                  <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
-                                  <span class="n">noData</span><span class="o">=-</span><span class="mi">9999</span><span class="p">,</span>
-                                  <span class="n">outputSRS</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
-                                  <span class="n">creationOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;TILED=YES&quot;</span><span class="p">,</span>
-                                                   <span class="s2">&quot;BLOCKXSIZE=256&quot;</span><span class="p">,</span>
-                                                   <span class="s2">&quot;BLOCKYSIZE=256&quot;</span><span class="p">,</span>
-                                                   <span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span>
-                                                   <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span>
-                                                   <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">])</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TranslateOptions</span><span class="p">(</span>
+        <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">,</span> <span class="s2">&quot;tap&quot;</span><span class="p">],</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
+        <span class="n">noData</span><span class="o">=-</span><span class="mi">9999</span><span class="p">,</span>
+        <span class="n">outputSRS</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+        <span class="n">creationOptions</span><span class="o">=</span><span class="p">[</span>
+            <span class="s2">&quot;TILED=YES&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;BLOCKXSIZE=256&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;BLOCKYSIZE=256&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
     <span class="n">gdal</span><span class="o">.</span><span class="n">Translate</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">input_file</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span></div>
 
 
@@ -628,8 +639,7 @@
     <span class="n">fname</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="s2">&quot;country.osm.pbf&quot;</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
         <span class="c1"># Identify continent and country from iso3</span>
-        <span class="n">file_run</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s2">&quot;forestatrisk&quot;</span><span class="p">,</span>
-                                                   <span class="s2">&quot;data/ctry_run.csv&quot;</span><span class="p">)</span>
+        <span class="n">file_run</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s2">&quot;forestatrisk&quot;</span><span class="p">,</span> <span class="s2">&quot;data/ctry_run.csv&quot;</span><span class="p">)</span>
         <span class="n">data_run</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_run</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="c1"># Check if data is available on Geofabrik</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">data_run</span><span class="o">.</span><span class="n">ctry_geofab</span><span class="p">[</span><span class="n">data_run</span><span class="o">.</span><span class="n">iso3</span> <span class="o">==</span> <span class="n">iso3</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
@@ -640,8 +650,13 @@
             <span class="n">continent</span> <span class="o">=</span> <span class="n">data_run</span><span class="o">.</span><span class="n">cont_geofab</span><span class="p">[</span><span class="n">data_run</span><span class="o">.</span><span class="n">iso3</span> <span class="o">==</span> <span class="n">iso3</span><span class="p">]</span>
             <span class="n">continent</span> <span class="o">=</span> <span class="n">continent</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="c1"># Download OSM data from Geofabrik</span>
-            <span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;http://download.geofabrik.de/&quot;</span><span class="p">,</span> <span class="n">continent</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span>
-                   <span class="n">country</span><span class="p">,</span> <span class="s2">&quot;-latest.osm.pbf&quot;</span><span class="p">]</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;http://download.geofabrik.de/&quot;</span><span class="p">,</span>
+                <span class="n">continent</span><span class="p">,</span>
+                <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+                <span class="n">country</span><span class="p">,</span>
+                <span class="s2">&quot;-latest.osm.pbf&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
             <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
             <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
         <span class="c1"># Else use openstreetmap.fr</span>
@@ -653,8 +668,13 @@
             <span class="n">continent</span> <span class="o">=</span> <span class="n">data_run</span><span class="o">.</span><span class="n">cont_osmfr</span><span class="p">[</span><span class="n">data_run</span><span class="o">.</span><span class="n">iso3</span> <span class="o">==</span> <span class="n">iso3</span><span class="p">]</span>
             <span class="n">continent</span> <span class="o">=</span> <span class="n">continent</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="c1"># Download OSM data from openstreetmap.fr</span>
-            <span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;https://download.openstreetmap.fr/extracts/&quot;</span><span class="p">,</span> <span class="n">continent</span><span class="p">,</span>
-                   <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">country</span><span class="p">,</span> <span class="s2">&quot;.osm.pbf&quot;</span><span class="p">]</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;https://download.openstreetmap.fr/extracts/&quot;</span><span class="p">,</span>
+                <span class="n">continent</span><span class="p">,</span>
+                <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+                <span class="n">country</span><span class="p">,</span>
+                <span class="s2">&quot;.osm.pbf&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
             <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
             <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span></div>
 
@@ -721,9 +741,14 @@
             <span class="n">fname</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/SRTM_V41_&quot;</span> <span class="o">+</span> <span class="n">tlong</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">tlat</span> <span class="o">+</span> <span class="s2">&quot;.zip&quot;</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="c1"># Download</span>
-                <span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;http://srtm.csi.cgiar.org/&quot;</span><span class="p">,</span>
-                       <span class="s2">&quot;wp-content/uploads/files/srtm_5x5/TIFF/srtm_&quot;</span><span class="p">,</span> <span class="n">tlong</span><span class="p">,</span>
-                       <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">tlat</span><span class="p">,</span> <span class="s2">&quot;.zip&quot;</span><span class="p">]</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="s2">&quot;http://srtm.csi.cgiar.org/&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;wp-content/uploads/files/srtm_5x5/TIFF/srtm_&quot;</span><span class="p">,</span>
+                    <span class="n">tlong</span><span class="p">,</span>
+                    <span class="s2">&quot;_&quot;</span><span class="p">,</span>
+                    <span class="n">tlat</span><span class="p">,</span>
+                    <span class="s2">&quot;.zip&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
                 <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
@@ -732,6 +757,7 @@
                         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SRTM not existing for tile: &quot;</span> <span class="o">+</span> <span class="n">tlong</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">tlat</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">raise</span></div>
+
 
 <span class="c1"># ===========================================================</span>
 <span class="c1"># Country borders</span>
@@ -777,9 +803,7 @@
 
 
 <span class="c1"># country_download</span>
-<div class="viewcode-block" id="country_download"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_download">[docs]</a><span class="k">def</span> <span class="nf">country_download</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span>
-                     <span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span>
-                     <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="country_download"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_download">[docs]</a><span class="k">def</span> <span class="nf">country_download</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">gdrive_remote_rclone</span><span class="p">,</span> <span class="n">gdrive_folder</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Function to download data for a specific country.</span>
 
 <span class="sd">    Function to download all the data for a specific country. It</span>
@@ -819,7 +843,8 @@
         <span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span>
         <span class="n">gdrive_remote_rclone</span><span class="o">=</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span>
         <span class="n">gdrive_folder</span><span class="o">=</span><span class="n">gdrive_folder</span><span class="p">,</span>
-        <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span></div>
+        <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 <span class="c1"># ===========================================================</span>
@@ -828,13 +853,15 @@
 
 
 <span class="c1"># country_compute</span>
-<div class="viewcode-block" id="country_compute"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_compute">[docs]</a><span class="k">def</span> <span class="nf">country_compute</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span>
-                    <span class="n">temp_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
-                    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
-                    <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">,</span>
-                    <span class="n">data_country</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">data_forest</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">keep_temp_dir</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="country_compute"><a class="viewcode-back" href="../../../subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_compute">[docs]</a><span class="k">def</span> <span class="nf">country_compute</span><span class="p">(</span>
+    <span class="n">iso3</span><span class="p">,</span>
+    <span class="n">temp_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
+    <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">,</span>
+    <span class="n">data_country</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">data_forest</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">keep_temp_dir</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Function computing and formatting country data.</span>
 
 <span class="sd">    This function computes and formats the country data. Computations</span>
@@ -863,8 +890,18 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Reproject GADM</span>
-    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs &#39;&quot;</span> <span class="o">+</span> <span class="n">proj</span> <span class="o">+</span> <span class="s2">&quot;&#39; -f &#39;ESRI Shapefile&#39; </span><span class="se">\</span>
-<span class="s2">    -lco ENCODING=UTF-8 &quot;</span> <span class="o">+</span> <span class="n">temp_dir</span> <span class="o">+</span> <span class="s2">&quot;/ctry_PROJ.shp &quot;</span> <span class="o">+</span> <span class="n">temp_dir</span> <span class="o">+</span> <span class="s2">&quot;/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs &#39;&quot;</span>
+        <span class="o">+</span> <span class="n">proj</span>
+        <span class="o">+</span> <span class="s2">&quot;&#39; -f &#39;ESRI Shapefile&#39; </span><span class="se">\</span>
+<span class="s2">    -lco ENCODING=UTF-8 &quot;</span>
+        <span class="o">+</span> <span class="n">temp_dir</span>
+        <span class="o">+</span> <span class="s2">&quot;/ctry_PROJ.shp &quot;</span>
+        <span class="o">+</span> <span class="n">temp_dir</span>
+        <span class="o">+</span> <span class="s2">&quot;/gadm36_&quot;</span>
+        <span class="o">+</span> <span class="n">iso3</span>
+        <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span>
+    <span class="p">)</span>
     <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Compute extent</span>
@@ -881,26 +918,43 @@
     <span class="n">extent</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">extent_reg</span><span class="p">))</span>
 
     <span class="c1"># Call data_country.sh</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">data_country</span><span class="p">):</span>
-        <span class="n">script</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s2">&quot;forestatrisk&quot;</span><span class="p">,</span>
-                                                 <span class="s2">&quot;shell/data_country.sh&quot;</span><span class="p">)</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sh &quot;</span><span class="p">,</span> <span class="n">script</span><span class="p">,</span> <span class="n">iso3</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">proj</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">extent</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span>
-                <span class="n">temp_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">data_country</span><span class="p">:</span>
+        <span class="n">script</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span>
+            <span class="s2">&quot;forestatrisk&quot;</span><span class="p">,</span> <span class="s2">&quot;shell/data_country.sh&quot;</span>
+        <span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;sh &quot;</span><span class="p">,</span>
+            <span class="n">script</span><span class="p">,</span>
+            <span class="n">iso3</span><span class="p">,</span>
+            <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">proj</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">extent</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span>
+            <span class="n">temp_dir</span><span class="p">,</span>
+            <span class="n">output_dir</span><span class="p">,</span>
+        <span class="p">]</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
         <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Call forest_country.sh</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">data_forest</span><span class="p">):</span>
-        <span class="n">script</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s2">&quot;forestatrisk&quot;</span><span class="p">,</span>
-                                                 <span class="s2">&quot;shell/forest_country.sh&quot;</span><span class="p">)</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sh &quot;</span><span class="p">,</span> <span class="n">script</span><span class="p">,</span> <span class="n">iso3</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">proj</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">extent</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span>
-                <span class="n">temp_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">data_forest</span><span class="p">:</span>
+        <span class="n">script</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span>
+            <span class="s2">&quot;forestatrisk&quot;</span><span class="p">,</span> <span class="s2">&quot;shell/forest_country.sh&quot;</span>
+        <span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;sh &quot;</span><span class="p">,</span>
+            <span class="n">script</span><span class="p">,</span>
+            <span class="n">iso3</span><span class="p">,</span>
+            <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">proj</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">extent</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span>
+            <span class="n">temp_dir</span><span class="p">,</span>
+            <span class="n">output_dir</span><span class="p">,</span>
+        <span class="p">]</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
         <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Keep or remove directory</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_temp_dir</span><span class="p">:</span>
         <span class="n">rmtree</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
 
 <span class="c1"># End</span>
 </pre></div>

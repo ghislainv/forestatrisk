@@ -231,29 +231,39 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="c1"># Observations</span>
-                 <span class="n">suitability_formula</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
-                 <span class="c1"># Spatial structure</span>
-                 <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">,</span>
-                 <span class="c1"># NA action</span>
-                 <span class="n">NA_action</span><span class="o">=</span><span class="s2">&quot;drop&quot;</span><span class="p">,</span>
-                 <span class="c1"># Predictions</span>
-                 <span class="n">data_pred</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="c1"># Environment</span>
-                 <span class="n">eval_env</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                 <span class="c1"># Chains</span>
-                 <span class="n">burnin</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">mcmc</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                 <span class="c1"># Starting values</span>
-                 <span class="n">beta_start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                 <span class="n">Vrho_start</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                 <span class="c1"># Priors</span>
-                 <span class="n">mubeta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Vbeta</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-                 <span class="n">priorVrho</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># -1=&quot;1/Gamma&quot;</span>
-                 <span class="n">shape</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">,</span>
-                 <span class="n">Vrho_max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                 <span class="c1"># Various</span>
-                 <span class="n">seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                 <span class="n">save_rho</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">save_p</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>  <span class="c1"># Observations</span>
+        <span class="n">suitability_formula</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">,</span>
+        <span class="c1"># Spatial structure</span>
+        <span class="n">n_neighbors</span><span class="p">,</span>
+        <span class="n">neighbors</span><span class="p">,</span>
+        <span class="c1"># NA action</span>
+        <span class="n">NA_action</span><span class="o">=</span><span class="s2">&quot;drop&quot;</span><span class="p">,</span>
+        <span class="c1"># Predictions</span>
+        <span class="n">data_pred</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="c1"># Environment</span>
+        <span class="n">eval_env</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="c1"># Chains</span>
+        <span class="n">burnin</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">mcmc</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">thin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="c1"># Starting values</span>
+        <span class="n">beta_start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">Vrho_start</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="c1"># Priors</span>
+        <span class="n">mubeta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">Vbeta</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">priorVrho</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># -1=&quot;1/Gamma&quot;</span>
+        <span class="n">shape</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">rate</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">,</span>
+        <span class="n">Vrho_max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="c1"># Various</span>
+        <span class="n">seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">save_rho</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">save_p</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to fit a model_binomial_iCAR model.</span>
 
 <span class="sd">        The function model_binomial_iCAR estimates the parameters of a</span>
@@ -391,8 +401,7 @@
 
         <span class="c1"># Patsy</span>
         <span class="n">eval_env</span> <span class="o">=</span> <span class="n">EvalEnvironment</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">eval_env</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">dmatrices</span><span class="p">(</span><span class="n">suitability_formula</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
-                         <span class="n">eval_env</span><span class="p">,</span> <span class="n">NA_action</span><span class="p">)</span>
+        <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">dmatrices</span><span class="p">(</span><span class="n">suitability_formula</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eval_env</span><span class="p">,</span> <span class="n">NA_action</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_y_design_info</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">design_info</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">design_info</span>
 
@@ -408,13 +417,12 @@
         <span class="n">ncell</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_neighbors</span><span class="p">)</span>
         <span class="n">cells</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Last column of x</span>
         <span class="c1"># Predictions</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">data_pred</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">data_pred</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">X_pred</span> <span class="o">=</span> <span class="n">X</span>
             <span class="n">cells_pred</span> <span class="o">=</span> <span class="n">cells</span>
             <span class="n">npred</span> <span class="o">=</span> <span class="n">nobs</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">data_pred</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="p">(</span><span class="n">x_pred</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="p">],</span>
-                                              <span class="n">data_pred</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data_pred</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">x_pred</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="p">],</span> <span class="n">data_pred</span><span class="p">)</span>
             <span class="n">X_pred</span> <span class="o">=</span> <span class="n">x_pred</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">X_pred</span> <span class="o">=</span> <span class="n">X_pred</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>  <span class="c1"># Flatten X_pred</span>
             <span class="n">cells_pred</span> <span class="o">=</span> <span class="n">x_pred</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -430,14 +438,16 @@
         <span class="c1"># Initial starting values for M-H</span>
         <span class="c1"># ========</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">beta_start</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">beta_start</span> <span class="o">==</span> <span class="o">-</span><span class="mi">99</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">beta_start</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">beta_start</span> <span class="o">==</span> <span class="o">-</span><span class="mi">99</span><span class="p">:</span>
             <span class="c1"># Use starting coefficient from logistic regression</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using estimates from classic logistic regression as&quot;</span>
-                  <span class="s2">&quot; starting values for betas&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Using estimates from classic logistic regression as&quot;</span>
+                <span class="s2">&quot; starting values for betas&quot;</span>
+            <span class="p">)</span>
             <span class="n">mod_LR</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="s2">&quot;lbfgs&quot;</span><span class="p">)</span>
             <span class="n">mod_LR</span> <span class="o">=</span> <span class="n">mod_LR</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_arr</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
             <span class="n">beta_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">mod_LR</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">beta_start</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">beta_start</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">99</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">beta_start</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">beta_start</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">99</span><span class="p">:</span>
             <span class="n">beta_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">npar</span><span class="p">)</span> <span class="o">*</span> <span class="n">beta_start</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">beta_start</span> <span class="o">=</span> <span class="n">beta_start</span>
@@ -447,11 +457,11 @@
         <span class="c1"># ========</span>
         <span class="c1"># Form and check priors</span>
         <span class="c1"># ========</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">mubeta</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">mubeta</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">mubeta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">npar</span><span class="p">)</span> <span class="o">*</span> <span class="n">mubeta</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">mubeta</span> <span class="o">=</span> <span class="n">mubeta</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">Vbeta</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">Vbeta</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">Vbeta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">npar</span><span class="p">)</span> <span class="o">*</span> <span class="n">Vbeta</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Vbeta</span> <span class="o">=</span> <span class="n">Vbeta</span>
@@ -500,7 +510,8 @@
             <span class="n">verbose</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">verbose</span><span class="p">),</span>
             <span class="c1"># Save rho and p</span>
             <span class="n">save_rho</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">save_rho</span><span class="p">),</span>
-            <span class="n">save_p</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">save_p</span><span class="p">))</span>
+            <span class="n">save_p</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">save_p</span><span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="c1"># Array of MCMC samples</span>
         <span class="n">MCMC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nsamp</span><span class="p">,</span> <span class="n">npar</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
@@ -514,17 +525,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">deviance</span> <span class="o">=</span> <span class="n">posterior_means</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="c1"># Save rho</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">save_rho</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">save_rho</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Sample</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">save_rho</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">save_rho</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Sample</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ncell</span><span class="p">,</span> <span class="n">nsamp</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
 
         <span class="c1"># Save pred</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">save_p</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">save_p</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">theta_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Sample</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">save_p</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">theta_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-                <span class="n">Sample</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">npred</span><span class="p">,</span> <span class="n">nsamp</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">save_p</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theta_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Sample</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">npred</span><span class="p">,</span> <span class="n">nsamp</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
 
         <span class="c1"># theta_latent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">theta_latent</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Sample</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
@@ -538,11 +548,12 @@
 <span class="sd">        estimate for model comparison.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">summary</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Binomial logistic regression with iCAR process</span><span class="se">\n</span><span class="s2">&quot;</span>
-                   <span class="s2">&quot;  Model: </span><span class="si">%s</span><span class="s2"> ~ </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span>
-                   <span class="s2">&quot;  Posteriors:</span><span class="se">\n</span><span class="s2">&quot;</span>
-                   <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_design_info</span><span class="o">.</span><span class="n">describe</span><span class="p">(),</span>
-                      <span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="o">.</span><span class="n">describe</span><span class="p">()))</span>
+        <span class="n">summary</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Binomial logistic regression with iCAR process</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;  Model: </span><span class="si">%s</span><span class="s2"> ~ </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;  Posteriors:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_design_info</span><span class="o">.</span><span class="n">describe</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+        <span class="p">)</span>
         <span class="c1"># Varnames</span>
         <span class="n">varnames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="o">.</span><span class="n">column_names</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">varnames</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">varnames</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Vrho&quot;</span><span class="p">,</span> <span class="s2">&quot;Deviance&quot;</span><span class="p">]))</span>
@@ -555,17 +566,22 @@
         <span class="n">CI_low</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">MCMC</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">CI_high</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">MCMC</span><span class="p">,</span> <span class="mf">97.5</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="c1"># Titles</span>
-        <span class="n">summary</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;%&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name_width</span><span class="p">)</span> <span class="o">+</span>
-                    <span class="s2">&quot;s </span><span class="si">%10s</span><span class="s2"> </span><span class="si">%10s</span><span class="s2"> </span><span class="si">%10s</span><span class="s2"> </span><span class="si">%10s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Mean&quot;</span><span class="p">,</span> <span class="s2">&quot;Std&quot;</span><span class="p">,</span>
-                                                  <span class="s2">&quot;CI_low&quot;</span><span class="p">,</span> <span class="s2">&quot;CI_high&quot;</span><span class="p">)</span>
+        <span class="n">summary</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;%&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name_width</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;s </span><span class="si">%10s</span><span class="s2"> </span><span class="si">%10s</span><span class="s2"> </span><span class="si">%10s</span><span class="s2"> </span><span class="si">%10s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Std&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CI_low&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CI_high&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="c1"># Loop on varnames</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nvar</span><span class="p">):</span>
-            <span class="n">summary</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;%&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name_width</span><span class="p">)</span> <span class="o">+</span>
-                        <span class="s2">&quot;s </span><span class="si">%10.3g</span><span class="s2"> </span><span class="si">%10.3g</span><span class="s2"> </span><span class="si">%10.3g</span><span class="s2"> </span><span class="si">%10.3g</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">varnames</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                                                              <span class="n">post_mean</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                                                              <span class="n">post_std</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                                                              <span class="n">CI_low</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                                                              <span class="n">CI_high</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">summary</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;%&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name_width</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;s </span><span class="si">%10.3g</span><span class="s2"> </span><span class="si">%10.3g</span><span class="s2"> </span><span class="si">%10.3g</span><span class="s2"> </span><span class="si">%10.3g</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">varnames</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">post_mean</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">post_std</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">CI_low</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">CI_high</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">summary</span>
 
 <div class="viewcode-block" id="model_binomial_iCAR.predict"><a class="viewcode-back" href="../../../subpackages/forestatrisk.model.html#forestatrisk.model.model_binomial_iCAR.model_binomial_iCAR.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -583,24 +599,23 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Data</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">new_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="p">(</span><span class="n">new_x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="p">],</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">new_x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">new_x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="p">],</span>
-                                             <span class="n">new_data</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">new_x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="p">],</span> <span class="n">new_data</span><span class="p">)</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">new_x</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">cell</span> <span class="o">=</span> <span class="n">new_x</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
 
         <span class="c1"># Rho</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">[</span><span class="n">cell</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="n">cell</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">invlogit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">betas</span><span class="p">)</span> <span class="o">+</span> <span class="n">rho</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="model_binomial_iCAR.plot"><a class="viewcode-back" href="../../../subpackages/forestatrisk.model.html#forestatrisk.model.model_binomial_iCAR.model_binomial_iCAR.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;mcmc.pdf&quot;</span><span class="p">,</span> <span class="n">plots_per_page</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-             <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">8.27</span><span class="p">,</span> <span class="mf">11.69</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<div class="viewcode-block" id="model_binomial_iCAR.plot"><a class="viewcode-back" href="../../../subpackages/forestatrisk.model.html#forestatrisk.model.model_binomial_iCAR.model_binomial_iCAR.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;mcmc.pdf&quot;</span><span class="p">,</span> <span class="n">plots_per_page</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">8.27</span><span class="p">,</span> <span class="mf">11.69</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot traces and posterior distributions.</span>
 
 <span class="sd">        This function plots the traces and posterior distributions of</span>
@@ -639,10 +654,15 @@
             <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">plots_per_page</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">posterior_means</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">MCMC</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#000000&quot;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">varnames</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                     <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
-                     <span class="n">verticalalignment</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
-                     <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="n">varnames</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+                <span class="n">verticalalignment</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="c1"># Posterior distribution</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">plots_per_page</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">MCMC</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#808080&quot;</span><span class="p">)</span>
@@ -655,6 +675,7 @@
         <span class="c1"># Write the PDF document to the disk</span>
         <span class="n">pdf_pages</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">figures</span></div></div>
+
 
 <span class="c1"># End</span>
 </pre></div>

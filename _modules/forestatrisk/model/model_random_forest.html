@@ -130,16 +130,19 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="c1"># Observations</span>
-                 <span class="n">formula</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
-                 <span class="c1"># NA action</span>
-                 <span class="n">NA_action</span><span class="o">=</span><span class="s2">&quot;drop&quot;</span><span class="p">,</span>
-                 <span class="c1"># Environment</span>
-                 <span class="n">eval_env</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                 <span class="c1"># Number of cores</span>
-                 <span class="n">n_estimators</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-                 <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>  <span class="c1"># Observations</span>
+        <span class="n">formula</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">,</span>
+        <span class="c1"># NA action</span>
+        <span class="n">NA_action</span><span class="o">=</span><span class="s2">&quot;drop&quot;</span><span class="p">,</span>
+        <span class="c1"># Environment</span>
+        <span class="n">eval_env</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="c1"># Number of cores</span>
+        <span class="n">n_estimators</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to fit a random forest model.</span>
 
 <span class="sd">        The function fits a random forest model using patsy formula.</span>
@@ -152,15 +155,12 @@
 
         <span class="c1"># Patsy</span>
         <span class="n">eval_env</span> <span class="o">=</span> <span class="n">EvalEnvironment</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">eval_env</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">dmatrices</span><span class="p">(</span><span class="n">formula</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
-                         <span class="n">eval_env</span><span class="p">,</span> <span class="n">NA_action</span><span class="p">)</span>
+        <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">dmatrices</span><span class="p">(</span><span class="n">formula</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eval_env</span><span class="p">,</span> <span class="n">NA_action</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_y_design_info</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">design_info</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">design_info</span>
 
         <span class="c1"># Create and train Random Forest</span>
-        <span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">n_estimators</span><span class="p">,</span>
-                                    <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span>
-                                    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">n_estimators</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rf</span> <span class="o">=</span> <span class="n">rf</span>
 
@@ -178,16 +178,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Data</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">new_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="p">(</span><span class="n">new_x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="p">],</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">new_x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">new_x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="p">],</span>
-                                             <span class="n">new_data</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">new_x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_design_info</span><span class="p">],</span> <span class="n">new_data</span><span class="p">)</span>
 
         <span class="c1"># Predictions</span>
         <span class="n">rf_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">])</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">rf_pred</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">rf_pred</span></div></div>
+
 
 <span class="c1"># End</span>
 </pre></div>

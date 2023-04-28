@@ -142,18 +142,20 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="p">(</span><span class="n">new_x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">_x_design_info</span><span class="p">],</span>
-                                     <span class="n">new_data</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">new_x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">_x_design_info</span><span class="p">],</span> <span class="n">new_data</span><span class="p">)</span>
     <span class="n">new_X</span> <span class="o">=</span> <span class="n">new_x</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">invlogit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">new_X</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">betas</span><span class="p">)</span> <span class="o">+</span> <span class="n">rhos</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">invlogit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">new_X</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">betas</span><span class="p">)</span> <span class="o">+</span> <span class="n">rhos</span><span class="p">)</span></div>
 
 
 <span class="c1"># predict</span>
-<div class="viewcode-block" id="predict_raster_binomial_iCAR"><a class="viewcode-back" href="../../../subpackages/forestatrisk.predict.html#forestatrisk.predict.predict_raster_binomial_iCAR.predict_raster_binomial_iCAR">[docs]</a><span class="k">def</span> <span class="nf">predict_raster_binomial_iCAR</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
-                                 <span class="n">input_cell_raster</span><span class="o">=</span><span class="s2">&quot;output/rho.tif&quot;</span><span class="p">,</span>
-                                 <span class="n">input_forest_raster</span><span class="o">=</span><span class="s2">&quot;data/forest.tif&quot;</span><span class="p">,</span>
-                                 <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/pred_binomial_iCAR.tif&quot;</span><span class="p">,</span>
-                                 <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+<div class="viewcode-block" id="predict_raster_binomial_iCAR"><a class="viewcode-back" href="../../../subpackages/forestatrisk.predict.html#forestatrisk.predict.predict_raster_binomial_iCAR.predict_raster_binomial_iCAR">[docs]</a><span class="k">def</span> <span class="nf">predict_raster_binomial_iCAR</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
+    <span class="n">input_cell_raster</span><span class="o">=</span><span class="s2">&quot;output/rho.tif&quot;</span><span class="p">,</span>
+    <span class="n">input_forest_raster</span><span class="o">=</span><span class="s2">&quot;data/forest.tif&quot;</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/pred_binomial_iCAR.tif&quot;</span><span class="p">,</span>
+    <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Predict the spatial probability of deforestation from a model.</span>
 
 <span class="sd">    This function predicts the spatial probability of deforestation</span>
@@ -196,10 +198,13 @@
 
     <span class="c1"># Make vrt with gdalbuildvrt</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Make virtual raster with variables as raster bands&quot;</span><span class="p">)</span>
-    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRTOptions</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span>
-                                 <span class="n">outputBounds</span><span class="o">=</span><span class="p">(</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">),</span>
-                                 <span class="n">xRes</span><span class="o">=</span><span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">yRes</span><span class="o">=-</span><span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
-                                 <span class="n">separate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRTOptions</span><span class="p">(</span>
+        <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span>
+        <span class="n">outputBounds</span><span class="o">=</span><span class="p">(</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">),</span>
+        <span class="n">xRes</span><span class="o">=</span><span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">yRes</span><span class="o">=-</span><span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">separate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRT</span><span class="p">(</span><span class="s2">&quot;/vsimem/var.vrt&quot;</span><span class="p">,</span> <span class="n">raster_list</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
     <span class="n">stack</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="s2">&quot;/vsimem/var.vrt&quot;</span><span class="p">)</span>
     <span class="n">nband</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">RasterCount</span>
@@ -211,8 +216,7 @@
         <span class="n">band</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">bandND</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">bandND</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">bandND</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NoData value is not specified for&quot;</span>
-                  <span class="s2">&quot; input raster file </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NoData value is not specified for&quot;</span> <span class="s2">&quot; input raster file </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">bandND</span> <span class="o">=</span> <span class="n">bandND</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
@@ -229,9 +233,14 @@
     <span class="c1"># Raster of predictions</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Create a raster file on disk for projections&quot;</span><span class="p">)</span>
     <span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s2">&quot;GTiff&quot;</span><span class="p">)</span>
-    <span class="n">Pdrv</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
-                         <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_UInt16</span><span class="p">,</span>
-                         <span class="p">[</span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">])</span>
+    <span class="n">Pdrv</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span>
+        <span class="n">output_file</span><span class="p">,</span>
+        <span class="n">ncol</span><span class="p">,</span>
+        <span class="n">nrow</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_UInt16</span><span class="p">,</span>
+        <span class="p">[</span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
     <span class="n">Pdrv</span><span class="o">.</span><span class="n">SetGeoTransform</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
     <span class="n">Pdrv</span><span class="o">.</span><span class="n">SetProjection</span><span class="p">(</span><span class="n">proj</span><span class="p">)</span>
     <span class="n">Pband</span> <span class="o">=</span> <span class="n">Pdrv</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -277,9 +286,7 @@
         <span class="n">pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">npix</span><span class="p">)</span>  <span class="c1"># Initialize with nodata value (0)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># Get predictions into an array</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">predict_binomial_iCAR</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
-                                      <span class="n">new_data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-                                      <span class="n">rhos</span><span class="o">=</span><span class="n">data</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">predict_binomial_iCAR</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">new_data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">rhos</span><span class="o">=</span><span class="n">data</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">2</span><span class="p">])</span>
             <span class="c1"># Rescale and return to pred</span>
             <span class="n">pred</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">rescale</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
         <span class="c1"># Assign prediction to raster</span>
@@ -297,7 +304,8 @@
 
     <span class="c1"># Dereference driver</span>
     <span class="n">Pband</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">del</span><span class="p">(</span><span class="n">Pdrv</span><span class="p">)</span></div>
+    <span class="k">del</span> <span class="n">Pdrv</span></div>
+
 
 <span class="c1"># End</span>
 </pre></div>

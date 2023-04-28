@@ -143,7 +143,7 @@
     <span class="n">neg_scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">neg_scores</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">pos_sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">pos_scores</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_sample</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">neg_sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">neg_scores</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_sample</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">AUC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mf">1.0</span><span class="o">*</span><span class="p">(</span><span class="n">pos_sample</span> <span class="o">&gt;</span> <span class="n">neg_sample</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">pos_sample</span> <span class="o">==</span> <span class="n">neg_sample</span><span class="p">))</span>
+    <span class="n">AUC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">pos_sample</span> <span class="o">&gt;</span> <span class="n">neg_sample</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">pos_sample</span> <span class="o">==</span> <span class="n">neg_sample</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">AUC</span></div>
 
@@ -185,20 +185,37 @@
     <span class="n">Expected_accuracy</span> <span class="o">=</span> <span class="p">(</span><span class="n">Prob_1and1</span> <span class="o">+</span> <span class="n">Prob_0and0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">N</span><span class="p">)</span>
     <span class="n">Kappa</span> <span class="o">=</span> <span class="p">(</span><span class="n">OA</span> <span class="o">-</span> <span class="n">Expected_accuracy</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">Expected_accuracy</span><span class="p">)</span>
 
-    <span class="n">r</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;OA&quot;</span><span class="p">:</span> <span class="n">OA</span><span class="p">,</span> <span class="s2">&quot;EA&quot;</span><span class="p">:</span> <span class="n">Expected_accuracy</span><span class="p">,</span>
-         <span class="s2">&quot;FOM&quot;</span><span class="p">:</span> <span class="n">FOM</span><span class="p">,</span> <span class="s2">&quot;Sen&quot;</span><span class="p">:</span> <span class="n">Sensitivity</span><span class="p">,</span> <span class="s2">&quot;Spe&quot;</span><span class="p">:</span> <span class="n">Specificity</span><span class="p">,</span>
-         <span class="s2">&quot;TSS&quot;</span><span class="p">:</span> <span class="n">TSS</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="n">Kappa</span><span class="p">}</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;OA&quot;</span><span class="p">:</span> <span class="n">OA</span><span class="p">,</span>
+        <span class="s2">&quot;EA&quot;</span><span class="p">:</span> <span class="n">Expected_accuracy</span><span class="p">,</span>
+        <span class="s2">&quot;FOM&quot;</span><span class="p">:</span> <span class="n">FOM</span><span class="p">,</span>
+        <span class="s2">&quot;Sen&quot;</span><span class="p">:</span> <span class="n">Sensitivity</span><span class="p">,</span>
+        <span class="s2">&quot;Spe&quot;</span><span class="p">:</span> <span class="n">Specificity</span><span class="p">,</span>
+        <span class="s2">&quot;TSS&quot;</span><span class="p">:</span> <span class="n">TSS</span><span class="p">,</span>
+        <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="n">Kappa</span><span class="p">,</span>
+    <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">r</span></div>
 
 
 <span class="c1"># cross_validation</span>
-<div class="viewcode-block" id="cross_validation"><a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.model_validation.cross_validation">[docs]</a><span class="k">def</span> <span class="nf">cross_validation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">formula</span><span class="p">,</span> <span class="n">mod_type</span><span class="o">=</span><span class="s2">&quot;icar&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-                     <span class="n">nrep</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span>
-                     <span class="n">icar_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;n_neighbors&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;neighbors&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                                <span class="s2">&quot;burnin&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;mcmc&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
-                                <span class="s2">&quot;thin&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;beta_start&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
-                     <span class="n">rf_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}):</span>
+<div class="viewcode-block" id="cross_validation"><a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.model_validation.cross_validation">[docs]</a><span class="k">def</span> <span class="nf">cross_validation</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">formula</span><span class="p">,</span>
+    <span class="n">mod_type</span><span class="o">=</span><span class="s2">&quot;icar&quot;</span><span class="p">,</span>
+    <span class="n">ratio</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">nrep</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span>
+    <span class="n">icar_args</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;n_neighbors&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;neighbors&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;burnin&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s2">&quot;mcmc&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s2">&quot;thin&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;beta_start&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">rf_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model cross-validation</span>
 
 <span class="sd">    Performs model cross-validation.</span>
@@ -220,8 +237,9 @@
     <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
     <span class="c1"># Result table</span>
-    <span class="n">CV_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;AUC&quot;</span><span class="p">,</span> <span class="s2">&quot;OA&quot;</span><span class="p">,</span> <span class="s2">&quot;EA&quot;</span><span class="p">,</span> <span class="s2">&quot;FOM&quot;</span><span class="p">,</span> <span class="s2">&quot;Sen&quot;</span><span class="p">,</span>
-                                    <span class="s2">&quot;Spe&quot;</span><span class="p">,</span> <span class="s2">&quot;TSS&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">]})</span>
+    <span class="n">CV_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;AUC&quot;</span><span class="p">,</span> <span class="s2">&quot;OA&quot;</span><span class="p">,</span> <span class="s2">&quot;EA&quot;</span><span class="p">,</span> <span class="s2">&quot;FOM&quot;</span><span class="p">,</span> <span class="s2">&quot;Sen&quot;</span><span class="p">,</span> <span class="s2">&quot;Spe&quot;</span><span class="p">,</span> <span class="s2">&quot;TSS&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">]}</span>
+    <span class="p">)</span>
 
     <span class="c1"># Constants</span>
     <span class="n">nobs</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -231,7 +249,7 @@
     <span class="c1"># Loop on repetitions</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrep</span><span class="p">):</span>
         <span class="c1"># Print message</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Repetition #: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Repetition #: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
 
         <span class="c1"># Data-sets for cross-validation</span>
         <span class="n">rows_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">nobs_test</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -255,33 +273,37 @@
 
         <span class="c1"># Compute deforestation probability</span>
         <span class="c1"># icar</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">mod_type</span> <span class="o">==</span> <span class="s2">&quot;icar&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">mod_type</span> <span class="o">==</span> <span class="s2">&quot;icar&quot;</span><span class="p">:</span>
             <span class="c1"># Training the model</span>
             <span class="n">mod_icar</span> <span class="o">=</span> <span class="n">model_binomial_iCAR</span><span class="p">(</span>
                 <span class="c1"># Observations</span>
-                <span class="n">suitability_formula</span><span class="o">=</span><span class="n">formula</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_train</span><span class="p">,</span>
+                <span class="n">suitability_formula</span><span class="o">=</span><span class="n">formula</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">data_train</span><span class="p">,</span>
                 <span class="c1"># Spatial structure</span>
                 <span class="n">n_neighbors</span><span class="o">=</span><span class="n">icar_args</span><span class="p">[</span><span class="s2">&quot;n_neighbors&quot;</span><span class="p">],</span>
                 <span class="n">neighbors</span><span class="o">=</span><span class="n">icar_args</span><span class="p">[</span><span class="s2">&quot;neighbors&quot;</span><span class="p">],</span>
                 <span class="c1"># Chains</span>
-                <span class="n">burnin</span><span class="o">=</span><span class="n">icar_args</span><span class="p">[</span><span class="s2">&quot;burnin&quot;</span><span class="p">],</span> <span class="n">mcmc</span><span class="o">=</span><span class="n">icar_args</span><span class="p">[</span><span class="s2">&quot;mcmc&quot;</span><span class="p">],</span>
+                <span class="n">burnin</span><span class="o">=</span><span class="n">icar_args</span><span class="p">[</span><span class="s2">&quot;burnin&quot;</span><span class="p">],</span>
+                <span class="n">mcmc</span><span class="o">=</span><span class="n">icar_args</span><span class="p">[</span><span class="s2">&quot;mcmc&quot;</span><span class="p">],</span>
                 <span class="n">thin</span><span class="o">=</span><span class="n">icar_args</span><span class="p">[</span><span class="s2">&quot;thin&quot;</span><span class="p">],</span>
                 <span class="c1"># Starting values</span>
-                <span class="n">beta_start</span><span class="o">=</span><span class="n">icar_args</span><span class="p">[</span><span class="s2">&quot;beta_start&quot;</span><span class="p">])</span>
+                <span class="n">beta_start</span><span class="o">=</span><span class="n">icar_args</span><span class="p">[</span><span class="s2">&quot;beta_start&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
             <span class="c1"># Predictions for the test dataset</span>
             <span class="n">data_test</span><span class="p">[</span><span class="s2">&quot;theta_pred&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mod_icar</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">new_data</span><span class="o">=</span><span class="n">data_test</span><span class="p">)</span>
         <span class="c1"># glm</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">mod_type</span> <span class="o">==</span> <span class="s2">&quot;glm&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">mod_type</span> <span class="o">==</span> <span class="s2">&quot;glm&quot;</span><span class="p">:</span>
             <span class="c1"># Training the model</span>
             <span class="n">glm</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="s2">&quot;lbfgs&quot;</span><span class="p">)</span>
             <span class="n">mod_glm</span> <span class="o">=</span> <span class="n">glm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)</span>
             <span class="c1"># Predictions for the test dataset</span>
             <span class="n">data_test</span><span class="p">[</span><span class="s2">&quot;theta_pred&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mod_glm</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="c1"># RF</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">mod_type</span> <span class="o">==</span> <span class="s2">&quot;rf&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">mod_type</span> <span class="o">==</span> <span class="s2">&quot;rf&quot;</span><span class="p">:</span>
             <span class="c1"># Training the model</span>
-            <span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">rf_args</span><span class="p">[</span><span class="s2">&quot;n_estimators&quot;</span><span class="p">],</span>
-                                        <span class="n">n_jobs</span><span class="o">=</span><span class="n">rf_args</span><span class="p">[</span><span class="s2">&quot;n_jobs&quot;</span><span class="p">])</span>
+            <span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span>
+                <span class="n">n_estimators</span><span class="o">=</span><span class="n">rf_args</span><span class="p">[</span><span class="s2">&quot;n_estimators&quot;</span><span class="p">],</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">rf_args</span><span class="p">[</span><span class="s2">&quot;n_jobs&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
             <span class="n">mod_rf</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)</span>
             <span class="c1"># Predictions for the test dataset</span>
             <span class="n">data_test</span><span class="p">[</span><span class="s2">&quot;theta_pred&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mod_rf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
@@ -301,11 +323,19 @@
         <span class="n">ai</span> <span class="o">=</span> <span class="n">accuracy_indices</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
 
         <span class="c1"># Tupple of indices</span>
-        <span class="n">acc_ind</span> <span class="o">=</span> <span class="p">(</span><span class="n">AUC</span><span class="p">,</span> <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;OA&quot;</span><span class="p">],</span> <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;EA&quot;</span><span class="p">],</span> <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;FOM&quot;</span><span class="p">],</span> <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;Sen&quot;</span><span class="p">],</span>
-                   <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;Spe&quot;</span><span class="p">],</span> <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;TSS&quot;</span><span class="p">],</span> <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;K&quot;</span><span class="p">])</span>
+        <span class="n">acc_ind</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">AUC</span><span class="p">,</span>
+            <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;OA&quot;</span><span class="p">],</span>
+            <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;EA&quot;</span><span class="p">],</span>
+            <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;FOM&quot;</span><span class="p">],</span>
+            <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;Sen&quot;</span><span class="p">],</span>
+            <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;Spe&quot;</span><span class="p">],</span>
+            <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;TSS&quot;</span><span class="p">],</span>
+            <span class="n">ai</span><span class="p">[</span><span class="s2">&quot;K&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
         <span class="c1"># Results as data frame</span>
-        <span class="n">CV_df</span><span class="p">[</span><span class="s2">&quot;rep&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">acc_ind</span>
+        <span class="n">CV_df</span><span class="p">[</span><span class="s2">&quot;rep&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">acc_ind</span>
 
     <span class="c1"># Mean over repetitions</span>
     <span class="n">CV_values</span> <span class="o">=</span> <span class="n">CV_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">CV_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">!=</span> <span class="s2">&quot;index&quot;</span><span class="p">]</span>
@@ -313,6 +343,7 @@
     <span class="n">CV_df</span> <span class="o">=</span> <span class="n">CV_df</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">CV_df</span></div>
+
 
 <span class="c1"># End</span>
 </pre></div>

@@ -122,9 +122,7 @@
 
 
 <span class="c1"># r_diffproj</span>
-<div class="viewcode-block" id="r_diffproj"><a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.diffproj.r_diffproj">[docs]</a><span class="k">def</span> <span class="nf">r_diffproj</span><span class="p">(</span><span class="n">inputA</span><span class="p">,</span> <span class="n">inputB</span><span class="p">,</span>
-               <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;diffproj.tif&quot;</span><span class="p">,</span>
-               <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+<div class="viewcode-block" id="r_diffproj"><a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.diffproj.r_diffproj">[docs]</a><span class="k">def</span> <span class="nf">r_diffproj</span><span class="p">(</span><span class="n">inputA</span><span class="p">,</span> <span class="n">inputB</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;diffproj.tif&quot;</span><span class="p">,</span> <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute a raster of differences for comparison.</span>
 
 <span class="sd">    This function compute a raster of differences between two rasters</span>
@@ -162,9 +160,14 @@
     <span class="c1"># Raster of predictions</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Create a raster file on disk for projections&quot;</span><span class="p">)</span>
     <span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s2">&quot;GTiff&quot;</span><span class="p">)</span>
-    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
-                           <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span><span class="p">,</span>
-                           <span class="p">[</span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">])</span>
+    <span class="n">ds_out</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span>
+        <span class="n">output_file</span><span class="p">,</span>
+        <span class="n">ncol</span><span class="p">,</span>
+        <span class="n">nrow</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span><span class="p">,</span>
+        <span class="p">[</span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
     <span class="n">ds_out</span><span class="o">.</span><span class="n">SetGeoTransform</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
     <span class="n">ds_out</span><span class="o">.</span><span class="n">SetProjection</span><span class="p">(</span><span class="n">proj</span><span class="p">)</span>
     <span class="n">band_out</span> <span class="o">=</span> <span class="n">ds_out</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -206,12 +209,11 @@
 
     <span class="c1"># Dereference driver</span>
     <span class="n">band_out</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">del</span><span class="p">(</span><span class="n">ds_out</span><span class="p">)</span></div>
+    <span class="k">del</span> <span class="n">ds_out</span></div>
 
 
 <span class="c1"># mat_diffproj</span>
-<div class="viewcode-block" id="mat_diffproj"><a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.diffproj.mat_diffproj">[docs]</a><span class="k">def</span> <span class="nf">mat_diffproj</span><span class="p">(</span><span class="n">input_raster</span><span class="p">,</span>
-                 <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+<div class="viewcode-block" id="mat_diffproj"><a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.diffproj.mat_diffproj">[docs]</a><span class="k">def</span> <span class="nf">mat_diffproj</span><span class="p">(</span><span class="n">input_raster</span><span class="p">,</span> <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute a confusion matrix from a raster of differences.</span>
 
 <span class="sd">    This function computes a confusion matrix from a raster of</span>
@@ -263,6 +265,7 @@
     <span class="c1"># Return confusion matrix</span>
     <span class="n">conf_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">n00</span><span class="p">,</span> <span class="n">n01</span><span class="p">],</span> <span class="p">[</span><span class="n">n10</span><span class="p">,</span> <span class="n">n11</span><span class="p">]])</span>
     <span class="k">return</span> <span class="n">conf_mat</span></div>
+
 
 <span class="c1"># End</span>
 </pre></div>
