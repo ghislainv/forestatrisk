@@ -9,6 +9,8 @@ on:
   push:
     branches:
       - 'dev'
+    tags:
+      - "v*"
 
 env:
   CONFIGURATIONS_FOLDER: .github/label-configuration-files
@@ -35,7 +37,8 @@ jobs:
         run: |
           python3 -m cibuildwheel --output-dir wheelhouse
         env:
-          CIBW_SKIP: pp* cp27-win* cp312-*
+          CIBW_BUILD: cp311-*
+          CIBW_SKIP: pp*
           CIBW_BEFORE_BUILD: pip install numpy
       - uses: actions/upload-artifact@v3
         with:
@@ -61,7 +64,7 @@ jobs:
           path: dist/*.tar.gz
 
   upload_pypi:
-    if: startsWith(github.event.ref, 'refs/tags/v')
+    # if: startsWith(github.event.ref, 'refs/tags/v')
     # upload to PyPI on every tag starting with 'v'
     # if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     # alternatively, to publish when a GitHub Release is created, use the following rule:
