@@ -8,7 +8,7 @@ name: Build wheel and upload to TestPyPI
 on:
   push:
     branches:
-      - 'dev'
+      - dev
     tags:
       - "v*"
 
