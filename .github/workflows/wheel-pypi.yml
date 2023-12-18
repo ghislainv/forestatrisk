@@ -1,17 +1,19 @@
-## Build wheel and upload to PyPI
+## Build wheel and upload to TestPyPI (!! not PyPI !!)
 ## https://github.com/joerick/cibuildwheel/blob/master/examples/github-deploy.yml
 ## https://scikit-hep.org/developer/gha_wheels
 
-name: Build wheel and upload to PyPI
-  
-# When new version on master branch
+name: Build wheel and upload to PyPI or TestPyPI
+
+# When push on branch dev
 on:
   push:
-    branches:
-      - master
     tags:
       - "v*"
 
+env:
+  CONFIGURATIONS_FOLDER: .github/label-configuration-files
+  CONFIGURATIONS_ARTIFACT: label-configuration-files
+  
 jobs:
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
@@ -48,7 +50,7 @@ jobs:
       - uses: actions/setup-python@v5
         name: Install Python
         with:
-          python-version: '3.11'
+          python-version: "3.11"
       - name: Install Python dependencies
         run: |
           python3 -m pip install --upgrade pip setuptools wheel
@@ -60,8 +62,8 @@ jobs:
           path: dist/*.tar.gz
 
   upload_pypi:
-    # upload to PyPI on every tag starting with 'v'
-    # if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+    # Upload to PyPI for master branch
+    if: github.ref == "refs/heads/master"
     name: Upload to PyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
@@ -74,5 +76,22 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.pypi_password }}
+
+  upload_testpypi:
+    # Upload to TestPyPI for dev branch
+    if: github.ref == "refs/heads/dev"
+    name: Upload to TestPyPI
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.testpypi_password }}
+          repository_url: https://test.pypi.org/legacy/
 
 # End

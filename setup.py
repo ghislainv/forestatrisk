@@ -58,7 +58,7 @@ setup(
     long_description_content_type="text/x-rst",
     classifiers=[
         "Development Status :: 4 - Beta",
-        "License :: OSI Approved :: GNU General Public License v3",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
