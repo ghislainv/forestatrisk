@@ -9,6 +9,10 @@ on:
   push:
     branches:
       - 'dev'
+
+env:
+  CONFIGURATIONS_FOLDER: .github/label-configuration-files
+  CONFIGURATIONS_ARTIFACT: label-configuration-files
   
 jobs:
   build_wheels:
@@ -33,7 +37,7 @@ jobs:
         env:
           CIBW_SKIP: pp* cp27-win* cp312-*
           CIBW_BEFORE_BUILD: pip install numpy
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
 
@@ -52,7 +56,7 @@ jobs:
           python3 -m pip install numpy
       - name: Build sdist
         run: python setup.py sdist
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         with:
           path: dist/*.tar.gz
 
@@ -66,7 +70,7 @@ jobs:
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v3
         with:
           name: artifact
           path: dist
