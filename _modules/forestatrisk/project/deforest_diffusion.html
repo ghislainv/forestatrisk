@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>forestatrisk.project.deforest_diffusion &#8212; forestatrisk — Modelling and forecasting deforestation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=6d3bb19f" />
+    <script src="../../../_static/documentation_options.js?v=58fbf978"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -114,7 +114,9 @@
 
 
 <span class="c1"># deforest_diffusion</span>
-<div class="viewcode-block" id="deforest_diffusion"><a class="viewcode-back" href="../../../subpackages/forestatrisk.project.html#forestatrisk.project.deforest_diffusion.deforest_diffusion">[docs]</a><span class="k">def</span> <span class="nf">deforest_diffusion</span><span class="p">(</span><span class="n">forest_t0</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">annual_defor</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<div class="viewcode-block" id="deforest_diffusion">
+<a class="viewcode-back" href="../../../subpackages/forestatrisk.project.html#forestatrisk.project.deforest_diffusion.deforest_diffusion">[docs]</a>
+<span class="k">def</span> <span class="nf">deforest_diffusion</span><span class="p">(</span><span class="n">forest_t0</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">annual_defor</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Diffusion of the deforestation between states of a country.</span>
 
@@ -166,8 +168,11 @@
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;forest_t0&quot;</span><span class="p">:</span> <span class="n">forest_t0</span><span class="p">,</span> <span class="s2">&quot;forest_t&quot;</span><span class="p">:</span> <span class="n">nfor</span><span class="p">,</span> <span class="s2">&quot;defor_t0_t&quot;</span><span class="p">:</span> <span class="n">defor</span><span class="p">}</span></div>
 
 
+
 <span class="c1"># deforest_diffusion_t_nofor</span>
-<div class="viewcode-block" id="deforest_diffusion_t_nofor"><a class="viewcode-back" href="../../../subpackages/forestatrisk.project.html#forestatrisk.project.deforest_diffusion.deforest_diffusion_t_nofor">[docs]</a><span class="k">def</span> <span class="nf">deforest_diffusion_t_nofor</span><span class="p">(</span><span class="n">forest_t0</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">annual_defor</span><span class="p">):</span>
+<div class="viewcode-block" id="deforest_diffusion_t_nofor">
+<a class="viewcode-back" href="../../../subpackages/forestatrisk.project.html#forestatrisk.project.deforest_diffusion.deforest_diffusion_t_nofor">[docs]</a>
+<span class="k">def</span> <span class="nf">deforest_diffusion_t_nofor</span><span class="p">(</span><span class="n">forest_t0</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">annual_defor</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the number of years until there is no forest in each state</span>
 <span class="sd">    for of a deforestation with diffusion.</span>
@@ -230,6 +235,7 @@
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ny&quot;</span><span class="p">:</span> <span class="n">ny</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="n">ny</span> <span class="o">+</span> <span class="n">t0</span><span class="p">}</span></div>
 
 
+
 <span class="c1"># EOF</span>
 </pre></div>
 
@@ -243,7 +249,7 @@
       &copy;2020, Ghislain Vieilledent.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
