@@ -7,14 +7,10 @@ name: Build wheel and upload to PyPI or TestPyPI
 # When push on branch dev
 on:
   push:
-    tags:
-      - "v*"
-
-env:
-  CONFIGURATIONS_FOLDER: .github/label-configuration-files
-  CONFIGURATIONS_ARTIFACT: label-configuration-files
   
 jobs:
+  # Only if tag for version
+  if: startsWith(github.ref, 'refs/tags/v')
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -50,7 +46,7 @@ jobs:
       - uses: actions/setup-python@v5
         name: Install Python
         with:
-          python-version: "3.11"
+          python-version: '3.11'
       - name: Install Python dependencies
         run: |
           python3 -m pip install --upgrade pip setuptools wheel
@@ -63,7 +59,7 @@ jobs:
 
   upload_pypi:
     # Upload to PyPI for master branch
-    if: github.ref == "refs/heads/master"
+    if: github.ref == 'refs/heads/master'
     name: Upload to PyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
@@ -79,7 +75,7 @@ jobs:
 
   upload_testpypi:
     # Upload to TestPyPI for dev branch
-    if: github.ref == "refs/heads/dev"
+    if: github.ref == 'refs/heads/dev'
     name: Upload to TestPyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
