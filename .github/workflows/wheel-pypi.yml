@@ -62,15 +62,17 @@ jobs:
     name: Upload to PyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/forestatrisk
+    permissions:
+      id-token: write  # Mandatory for trusted publishing.
     steps:
       - uses: actions/download-artifact@v3
         with:
           name: artifact
           path: dist
       - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.pypi_password }}
 
   upload_testpypi:
     # Upload to TestPyPI for dev branch
@@ -78,6 +80,11 @@ jobs:
     name: Upload to TestPyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/forestatrisk
+    permissions:
+      id-token: write  # Mandatory for trusted publishing.
     steps:
       - uses: actions/download-artifact@v3
         with:
@@ -85,8 +92,6 @@ jobs:
           path: dist
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          user: __token__
-          password: ${{ secrets.testpypi_password }}
           repository-url: https://test.pypi.org/legacy/
 
 # End
