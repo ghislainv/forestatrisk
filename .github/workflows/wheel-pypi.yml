@@ -7,10 +7,9 @@ name: Build wheel and upload to PyPI or TestPyPI
 # When push on branch dev
 on:
   push:
+    if: "startsWith(github.ref, 'refs/tags/v')"
   
 jobs:
-  # Only if tag for version
-  if: startsWith(github.ref, 'refs/tags/v')
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
