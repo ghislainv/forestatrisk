@@ -9,8 +9,10 @@
 # license         :GPLv3
 # ==============================================================================
 
-"""forestatrisk: modelling and forecasting deforestation in the tropics.
-https://ecology.ghislainv.fr/forestatrisk/"""
+"""
+forestatrisk: modelling and forecasting deforestation in the tropics.
+https://ecology.ghislainv.fr/forestatrisk/
+"""
 
 # Standard library imports
 from __future__ import division, print_function  # Python 3 compatibility

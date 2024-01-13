@@ -145,19 +145,19 @@ def country_forest_run(
     make_dir(output_dir)
 
     # Check for existing data
-    shp_name = output_dir + "/gadm36_" + iso3 + "_0.shp"
+    shp_name = os.path.join(output_dir, "gadm36_" + iso3 + "_0.shp")
     if os.path.isfile(shp_name) is not True:
 
         # Download the zipfile from gadm.org
-        fname = output_dir + "/" + iso3 + "_shp.zip"
-        url = "https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
+        fname = os.path.join(output_dir, iso3 + "_shp.zip")
+        url = (
+            "https://biogeo.ucdavis.edu/data/gadm3.6/" "shp/gadm36_" + iso3 + "_shp.zip"
+        )
         urlretrieve(url, fname)
 
         # Extract files from zip
-        destDir = output_dir
-        f = ZipFile(fname)
-        f.extractall(destDir)
-        f.close()
+        with ZipFile(fname) as file:
+            file.extractall(output_dir)
 
     # Compute extent
     extent_latlong = extent_shp(shp_name)
@@ -221,7 +221,7 @@ def country_forest_download(iso3, gdrive_remote_rclone, gdrive_folder, output_di
     """
 
     # Check for existing data locally
-    files_tif = output_dir + "/forest_" + iso3 + "*.tif"
+    files_tif = os.path.join(output_dir, "forest_" + iso3 + "*.tif")
     raster_list = glob(files_tif)
 
     # If no data locally check if available in gdrive
@@ -286,19 +286,19 @@ def country_biomass_run(
     make_dir(output_dir)
 
     # Check for existing data
-    shp_name = output_dir + "/gadm36_" + iso3 + "_0.shp"
+    shp_name = os.path.join(output_dir, "gadm36_" + iso3 + "_0.shp")
     if os.path.isfile(shp_name) is not True:
 
         # Download the zipfile from gadm.org
-        fname = output_dir + "/" + iso3 + "_shp.zip"
-        url = "https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
+        fname = os.path.join(output_dir, iso3 + "_shp.zip")
+        url = (
+            "https://biogeo.ucdavis.edu/data/gadm3.6/" "shp/gadm36_" + iso3 + "_shp.zip"
+        )
         urlretrieve(url, fname)
 
         # Extract files from zip
-        destDir = output_dir
-        f = ZipFile(fname)
-        f.extractall(destDir)
-        f.close()
+        with ZipFile(fname) as file:
+            file.extractall(output_dir)
 
     # Compute extent
     extent_latlong = extent_shp(shp_name)
@@ -344,7 +344,7 @@ def country_biomass_download(iso3, gdrive_remote_rclone, gdrive_folder, output_d
     """
 
     # Check for existing data locally
-    files_tif = output_dir + "/biomass_whrc_" + iso3 + "*.tif"
+    files_tif = os.path.join(output_dir, "biomass_whrc_" + iso3 + "*.tif")
     raster_list = glob(files_tif)
 
     # If no data locally check if available in gdrive
@@ -392,15 +392,15 @@ def country_biomass_compute(
     make_dir("data")
 
     # Mosaicing
-    files_tif = input_dir + "/biomass_whrc_" + iso3 + "*.tif"
+    files_tif = os.path.join(input_dir, "biomass_whrc_" + iso3 + "*.tif")
     input_list = glob(files_tif)
-    output_file = input_dir + "/biomass_whrc_gee.vrt"
+    output_file = os.path.join(input_dir, "biomass_whrc_gee.vrt")
     gdal.BuildVRT(output_file, input_list)
 
     # Resampling without compression using .vrt file
     # See: https://trac.osgeo.org/gdal/wiki/UserDocs/GdalWarp#GeoTIFFoutput-coCOMPRESSisbroken
-    input_file = input_dir + "/biomass_whrc_gee.vrt"
-    output_file = input_dir + "/biomass_whrc_warp.vrt"
+    input_file = os.path.join(input_dir, "biomass_whrc_gee.vrt")
+    output_file = os.path.join(input_dir, "biomass_whrc_warp.vrt")
     param = gdal.WarpOptions(
         options=["overwrite", "tap"],
         format="VRT",
@@ -419,8 +419,8 @@ def country_biomass_compute(
     gdal.Warp(output_file, input_file, options=param)
 
     # Compressing
-    input_file = input_dir + "/biomass_whrc_warp.vrt"
-    output_file = output_dir + "/biomass_whrc.tif"
+    input_file = os.path.join(input_dir, "biomass_whrc_warp.vrt")
+    output_file = os.path.join(output_dir, "biomass_whrc.tif")
     param = gdal.TranslateOptions(
         options=["overwrite", "tap"],
         format="GTiff",
@@ -460,14 +460,14 @@ def country_biomass_mosaic(
     make_dir("data")
 
     # Mosaicing
-    files_tif = input_dir + "/biomass_whrc_" + iso3 + "*.tif"
+    files_tif = os.path.join(input_dir, "biomass_whrc_" + iso3 + "*.tif")
     input_list = glob(files_tif)
-    output_file = input_dir + "/biomass_whrc.vrt"
+    output_file = os.path.join(input_dir, "biomass_whrc.vrt")
     gdal.BuildVRT(output_file, input_list)
 
     # Compressing
-    input_file = input_dir + "/biomass_whrc.vrt"
-    output_file = output_dir + "/biomass_whrc.tif"
+    input_file = os.path.join(input_dir, "biomass_whrc.vrt")
+    output_file = os.path.join(output_dir, "biomass_whrc.tif")
     param = gdal.TranslateOptions(
         options=["overwrite", "tap"],
         format="GTiff",
@@ -509,7 +509,7 @@ def country_wdpa(iso3, output_dir="."):
     make_dir(output_dir)
 
     # Check for existing data
-    fname = output_dir + "/pa_" + iso3 + ".shp"
+    fname = os.path.join(output_dir, "pa_" + iso3 + ".shp")
     if os.path.isfile(fname) is not True:
         owd = os.getcwd()
         os.chdir(output_dir)
@@ -535,10 +535,12 @@ def country_osm(iso3, output_dir="."):
     make_dir(output_dir)
 
     # Check for existing data
-    fname = output_dir + "/" + "country.osm.pbf"
+    fname = os.path.join(output_dir, "country.osm.pbf")
     if os.path.isfile(fname) is not True:
         # Identify continent and country from iso3
-        file_run = pkg_resources.resource_filename("forestatrisk", "data/ctry_run.csv")
+        file_run = pkg_resources.resource_filename(
+            "forestatrisk", os.path.join("data", "ctry_run.csv")
+        )
         data_run = pd.read_csv(file_run, sep=";", header=0)
         # Check if data is available on Geofabrik
         if not pd.isna(data_run.ctry_geofab[data_run.iso3 == iso3].iloc[0]):
@@ -605,19 +607,19 @@ def country_srtm(iso3, output_dir="."):
     make_dir(output_dir)
 
     # Check for existing data
-    shp_name = output_dir + "/gadm36_" + iso3 + "_0.shp"
+    shp_name = os.path.join(output_dir, "gadm36_" + iso3 + "_0.shp")
     if os.path.isfile(shp_name) is not True:
 
         # Download the zipfile from gadm.org
-        fname = output_dir + "/" + iso3 + "_shp.zip"
-        url = "https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
+        fname = os.path.join(output_dir, iso3 + "_shp.zip")
+        url = (
+            "https://biogeo.ucdavis.edu/data/gadm3.6/" "shp/gadm36_" + iso3 + "_shp.zip"
+        )
         urlretrieve(url, fname)
 
         # Extract files from zip
-        destDir = output_dir
-        f = ZipFile(fname)
-        f.extractall(destDir)
-        f.close()
+        with ZipFile(fname) as file:
+            file.extractall(output_dir)
 
     # Compute extent and SRTM tiles
     extent_latlong = extent_shp(shp_name)
@@ -637,7 +639,7 @@ def country_srtm(iso3, output_dir="."):
             tlong = str(tlong_seq[i]).zfill(2)
             tlat = str(tlat_seq[j]).zfill(2)
             # Check for existing data
-            fname = output_dir + "/SRTM_V41_" + tlong + "_" + tlat + ".zip"
+            fname = os.path.join(output_dir, "SRTM_V41_" + tlong + "_" + tlat + ".zip")
             if os.path.isfile(fname) is not True:
                 # Download
                 url = [
@@ -681,19 +683,19 @@ def country_gadm(iso3, output_dir="."):
     make_dir(output_dir)
 
     # Check for existing data
-    shp_name = output_dir + "/gadm36_" + iso3 + "_0.shp"
+    shp_name = os.path.join(output_dir, "gadm36_" + iso3 + "_0.shp")
     if os.path.isfile(shp_name) is not True:
 
         # Download the zipfile from gadm.org
-        fname = output_dir + "/" + iso3 + "_shp.zip"
-        url = "https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_" + iso3 + "_shp.zip"
+        fname = os.path.join(output_dir, iso3 + "_shp.zip")
+        url = (
+            "https://biogeo.ucdavis.edu/data/gadm3.6/" "shp/gadm36_" + iso3 + "_shp.zip"
+        )
         urlretrieve(url, fname)
 
         # Extract files from zip
-        destDir = output_dir
-        f = ZipFile(fname)
-        f.extractall(destDir)
-        f.close()
+        with ZipFile(fname) as file:
+            file.extractall(output_dir)
 
 
 # ===========================================================
@@ -789,23 +791,25 @@ def country_compute(
     """
 
     # Reproject GADM
-    cmd = (
-        "ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs '"
-        + proj
-        + "' -f 'ESRI Shapefile' \
-    -lco ENCODING=UTF-8 "
-        + temp_dir
-        + "/ctry_PROJ.shp "
-        + temp_dir
-        + "/gadm36_"
-        + iso3
-        + "_0.shp"
-    )
+    ofile = os.path.join(temp_dir, "ctry_PROJ.shp")
+    ifile = os.path.join(temp_dir, "gadm36_" + iso3 + "_0.shp")
+    args = [
+        "ogr2ogr",
+        "-overwrite",
+        "-s_srs EPSG:4326",
+        "-t_srs '" + proj + "'",
+        "-f 'ESRI Shapefile'",
+        "-lco ENCODING=UTF-8",
+        ofile,
+        ifile,
+    ]
+    cmd = " ".join(args)
     subprocess.call(cmd, shell=True)
 
     # Compute extent
     print("Compute extent")
-    extent_proj = extent_shp(temp_dir + "/ctry_PROJ.shp")
+    ifile = os.path.join(temp_dir, "ctry_PROJ.shp")
+    extent_proj = extent_shp(ifile)
 
     # Region with buffer of 5km
     print("Region with buffer of 5km")
@@ -819,7 +823,7 @@ def country_compute(
     # Call data_country.sh
     if data_country:
         script = pkg_resources.resource_filename(
-            "forestatrisk", "shell/data_country.sh"
+            "forestatrisk", os.path.join("shell", "data_country.sh")
         )
         args = [
             "sh ",
@@ -836,7 +840,7 @@ def country_compute(
     # Call forest_country.sh
     if data_forest:
         script = pkg_resources.resource_filename(
-            "forestatrisk", "shell/forest_country.sh"
+            "forestatrisk", os.path.join("shell", "forest_country.sh")
         )
         args = [
             "sh ",

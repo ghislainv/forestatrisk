@@ -19,12 +19,12 @@ output_dir=$5
 # Working directory
 cd $temp_dir
 
-# ===========================
-# Borders, roads and town
-# ===========================
+# ===================================
+# Distance to roads, town, and rivers
+# ===================================
 
 # Message
-echo "Borders, roads, towns and rivers from OSM\n"
+echo "Distance to roads, towns, and rivers from OSM\n"
 osmconvert country.osm.pbf -o=country.o5m
 
 # Main roads
