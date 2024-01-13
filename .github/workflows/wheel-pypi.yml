@@ -4,7 +4,7 @@
 
 name: Build wheel and upload to PyPI or TestPyPI
 
-# When push on branch dev
+# When pushing a version tag
 on:
   push:
     if: "startsWith(github.ref, 'refs/tags/v')"
