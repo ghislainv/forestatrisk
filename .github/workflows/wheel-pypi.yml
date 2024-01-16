@@ -11,6 +11,29 @@ on:
       - '*'
   
 jobs:
+
+  check-current-branch:
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.check_step.outputs.branch }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get current branch
+        id: check_step
+        # 1. Get the list of branches ref where this tag exists
+        # 2. Remove 'origin/' from that result
+        # 3. Put that string in output
+        # => We can now use function 'contains(list, item)''
+        run: |
+          raw=$(git branch -r --contains ${{ github.ref }})
+          branch="$(echo ${raw//origin\//} | tr -d '\n')"
+          echo "{name}=branch" >> $GITHUB_OUTPUT
+          echo "Branches where this tag exists : $branch."
+  
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -58,11 +81,10 @@ jobs:
           path: dist/*.tar.gz
 
   upload_pypi:
-    # Upload to PyPI for master branch
-    if: github.ref == 'refs/heads/master'
     name: Upload to PyPI
-    needs: [build_wheels, build_sdist]
+    needs: [check-current-branch, build_wheels, build_sdist]
     runs-on: ubuntu-latest
+    if: contains(${{ needs.check.outputs.branch }}, 'master')
     environment:
       name: pypi
       url: https://pypi.org/p/forestatrisk
@@ -76,11 +98,10 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@release/v1
 
   upload_testpypi:
-    # Upload to TestPyPI for dev branch
-    if: github.ref == 'refs/heads/dev'
     name: Upload to TestPyPI
-    needs: [build_wheels, build_sdist]
+    needs: [check-current-branch, build_wheels, build_sdist]
     runs-on: ubuntu-latest
+    if: contains(${{ needs.check.outputs.branch }}, 'dev')
     environment:
       name: testpypi
       url: https://test.pypi.org/p/forestatrisk
