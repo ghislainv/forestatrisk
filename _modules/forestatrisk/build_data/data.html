@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>forestatrisk.build_data.data &#8212; forestatrisk — Modelling and forecasting deforestation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=4f649999" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=6d3bb19f" />
-    <script src="../../../_static/documentation_options.js?v=6f037312"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=b21ac067" />
+    <script src="../../../_static/documentation_options.js?v=cb7bf70b"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -17,8 +17,9 @@
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   <div class="document">
@@ -27,7 +28,7 @@
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../../index.html">
-    <img class="logo" src="../../../_static/logo-far.svg" alt="Logo"/>
+    <img class="logo" src="../../../_static/logo-far.svg" alt="Logo" />
     
     <h1 class="logo logo-name">forestatrisk</h1>
     
@@ -253,19 +254,19 @@
     <span class="n">make_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
     <span class="c1"># Check for existing data</span>
-    <span class="n">shp_name</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span>
+    <span class="n">shp_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">shp_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
 
         <span class="c1"># Download the zipfile from gadm.org</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;https://biogeo.ucdavis.edu/data/gadm3.6/&quot;</span> <span class="s2">&quot;shp/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
+        <span class="p">)</span>
         <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
 
         <span class="c1"># Extract files from zip</span>
-        <span class="n">destDir</span> <span class="o">=</span> <span class="n">output_dir</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">destDir</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
     <span class="c1"># Compute extent</span>
     <span class="n">extent_latlong</span> <span class="o">=</span> <span class="n">extent_shp</span><span class="p">(</span><span class="n">shp_name</span><span class="p">)</span>
@@ -332,7 +333,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Check for existing data locally</span>
-    <span class="n">files_tif</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/forest_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;*.tif&quot;</span>
+    <span class="n">files_tif</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;forest_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;*.tif&quot;</span><span class="p">)</span>
     <span class="n">raster_list</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">files_tif</span><span class="p">)</span>
 
     <span class="c1"># If no data locally check if available in gdrive</span>
@@ -400,19 +401,19 @@
     <span class="n">make_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
     <span class="c1"># Check for existing data</span>
-    <span class="n">shp_name</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span>
+    <span class="n">shp_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">shp_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
 
         <span class="c1"># Download the zipfile from gadm.org</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;https://biogeo.ucdavis.edu/data/gadm3.6/&quot;</span> <span class="s2">&quot;shp/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
+        <span class="p">)</span>
         <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
 
         <span class="c1"># Extract files from zip</span>
-        <span class="n">destDir</span> <span class="o">=</span> <span class="n">output_dir</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">destDir</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
     <span class="c1"># Compute extent</span>
     <span class="n">extent_latlong</span> <span class="o">=</span> <span class="n">extent_shp</span><span class="p">(</span><span class="n">shp_name</span><span class="p">)</span>
@@ -461,7 +462,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Check for existing data locally</span>
-    <span class="n">files_tif</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;*.tif&quot;</span>
+    <span class="n">files_tif</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;biomass_whrc_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;*.tif&quot;</span><span class="p">)</span>
     <span class="n">raster_list</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">files_tif</span><span class="p">)</span>
 
     <span class="c1"># If no data locally check if available in gdrive</span>
@@ -512,15 +513,15 @@
     <span class="n">make_dir</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
 
     <span class="c1"># Mosaicing</span>
-    <span class="n">files_tif</span> <span class="o">=</span> <span class="n">input_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;*.tif&quot;</span>
+    <span class="n">files_tif</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="s2">&quot;biomass_whrc_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;*.tif&quot;</span><span class="p">)</span>
     <span class="n">input_list</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">files_tif</span><span class="p">)</span>
-    <span class="n">output_file</span> <span class="o">=</span> <span class="n">input_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc_gee.vrt&quot;</span>
+    <span class="n">output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="s2">&quot;biomass_whrc_gee.vrt&quot;</span><span class="p">)</span>
     <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRT</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">input_list</span><span class="p">)</span>
 
     <span class="c1"># Resampling without compression using .vrt file</span>
     <span class="c1"># See: https://trac.osgeo.org/gdal/wiki/UserDocs/GdalWarp#GeoTIFFoutput-coCOMPRESSisbroken</span>
-    <span class="n">input_file</span> <span class="o">=</span> <span class="n">input_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc_gee.vrt&quot;</span>
-    <span class="n">output_file</span> <span class="o">=</span> <span class="n">input_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc_warp.vrt&quot;</span>
+    <span class="n">input_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="s2">&quot;biomass_whrc_gee.vrt&quot;</span><span class="p">)</span>
+    <span class="n">output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="s2">&quot;biomass_whrc_warp.vrt&quot;</span><span class="p">)</span>
     <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">WarpOptions</span><span class="p">(</span>
         <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">,</span> <span class="s2">&quot;tap&quot;</span><span class="p">],</span>
         <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;VRT&quot;</span><span class="p">,</span>
@@ -539,8 +540,8 @@
     <span class="n">gdal</span><span class="o">.</span><span class="n">Warp</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">input_file</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
 
     <span class="c1"># Compressing</span>
-    <span class="n">input_file</span> <span class="o">=</span> <span class="n">input_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc_warp.vrt&quot;</span>
-    <span class="n">output_file</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc.tif&quot;</span>
+    <span class="n">input_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="s2">&quot;biomass_whrc_warp.vrt&quot;</span><span class="p">)</span>
+    <span class="n">output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;biomass_whrc.tif&quot;</span><span class="p">)</span>
     <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TranslateOptions</span><span class="p">(</span>
         <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">,</span> <span class="s2">&quot;tap&quot;</span><span class="p">],</span>
         <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
@@ -583,14 +584,14 @@
     <span class="n">make_dir</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
 
     <span class="c1"># Mosaicing</span>
-    <span class="n">files_tif</span> <span class="o">=</span> <span class="n">input_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;*.tif&quot;</span>
+    <span class="n">files_tif</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="s2">&quot;biomass_whrc_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;*.tif&quot;</span><span class="p">)</span>
     <span class="n">input_list</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">files_tif</span><span class="p">)</span>
-    <span class="n">output_file</span> <span class="o">=</span> <span class="n">input_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc.vrt&quot;</span>
+    <span class="n">output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="s2">&quot;biomass_whrc.vrt&quot;</span><span class="p">)</span>
     <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRT</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">input_list</span><span class="p">)</span>
 
     <span class="c1"># Compressing</span>
-    <span class="n">input_file</span> <span class="o">=</span> <span class="n">input_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc.vrt&quot;</span>
-    <span class="n">output_file</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/biomass_whrc.tif&quot;</span>
+    <span class="n">input_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="s2">&quot;biomass_whrc.vrt&quot;</span><span class="p">)</span>
+    <span class="n">output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;biomass_whrc.tif&quot;</span><span class="p">)</span>
     <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TranslateOptions</span><span class="p">(</span>
         <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">,</span> <span class="s2">&quot;tap&quot;</span><span class="p">],</span>
         <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
@@ -635,7 +636,7 @@
     <span class="n">make_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
     <span class="c1"># Check for existing data</span>
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/pa_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;.shp&quot;</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;pa_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;.shp&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">owd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
@@ -664,10 +665,12 @@
     <span class="n">make_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
     <span class="c1"># Check for existing data</span>
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="s2">&quot;country.osm.pbf&quot;</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;country.osm.pbf&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
         <span class="c1"># Identify continent and country from iso3</span>
-        <span class="n">file_run</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s2">&quot;forestatrisk&quot;</span><span class="p">,</span> <span class="s2">&quot;data/ctry_run.csv&quot;</span><span class="p">)</span>
+        <span class="n">file_run</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span>
+            <span class="s2">&quot;forestatrisk&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;ctry_run.csv&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">data_run</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_run</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="c1"># Check if data is available on Geofabrik</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">data_run</span><span class="o">.</span><span class="n">ctry_geofab</span><span class="p">[</span><span class="n">data_run</span><span class="o">.</span><span class="n">iso3</span> <span class="o">==</span> <span class="n">iso3</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
@@ -737,19 +740,19 @@
     <span class="n">make_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
     <span class="c1"># Check for existing data</span>
-    <span class="n">shp_name</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span>
+    <span class="n">shp_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">shp_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
 
         <span class="c1"># Download the zipfile from gadm.org</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;https://biogeo.ucdavis.edu/data/gadm3.6/&quot;</span> <span class="s2">&quot;shp/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
+        <span class="p">)</span>
         <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
 
         <span class="c1"># Extract files from zip</span>
-        <span class="n">destDir</span> <span class="o">=</span> <span class="n">output_dir</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">destDir</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
     <span class="c1"># Compute extent and SRTM tiles</span>
     <span class="n">extent_latlong</span> <span class="o">=</span> <span class="n">extent_shp</span><span class="p">(</span><span class="n">shp_name</span><span class="p">)</span>
@@ -769,7 +772,7 @@
             <span class="n">tlong</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">tlong_seq</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">tlat</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">tlat_seq</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
             <span class="c1"># Check for existing data</span>
-            <span class="n">fname</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/SRTM_V41_&quot;</span> <span class="o">+</span> <span class="n">tlong</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">tlat</span> <span class="o">+</span> <span class="s2">&quot;.zip&quot;</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;SRTM_V41_&quot;</span> <span class="o">+</span> <span class="n">tlong</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">tlat</span> <span class="o">+</span> <span class="s2">&quot;.zip&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="c1"># Download</span>
                 <span class="n">url</span> <span class="o">=</span> <span class="p">[</span>
@@ -816,19 +819,19 @@
     <span class="n">make_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
     <span class="c1"># Check for existing data</span>
-    <span class="n">shp_name</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span>
+    <span class="n">shp_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">shp_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
 
         <span class="c1"># Download the zipfile from gadm.org</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;https://biogeo.ucdavis.edu/data/gadm3.6/&quot;</span> <span class="s2">&quot;shp/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
+        <span class="p">)</span>
         <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
 
         <span class="c1"># Extract files from zip</span>
-        <span class="n">destDir</span> <span class="o">=</span> <span class="n">output_dir</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">destDir</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span></div>
 
 
 
@@ -930,23 +933,25 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Reproject GADM</span>
-    <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs &#39;&quot;</span>
-        <span class="o">+</span> <span class="n">proj</span>
-        <span class="o">+</span> <span class="s2">&quot;&#39; -f &#39;ESRI Shapefile&#39; </span><span class="se">\</span>
-<span class="s2">    -lco ENCODING=UTF-8 &quot;</span>
-        <span class="o">+</span> <span class="n">temp_dir</span>
-        <span class="o">+</span> <span class="s2">&quot;/ctry_PROJ.shp &quot;</span>
-        <span class="o">+</span> <span class="n">temp_dir</span>
-        <span class="o">+</span> <span class="s2">&quot;/gadm36_&quot;</span>
-        <span class="o">+</span> <span class="n">iso3</span>
-        <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span>
-    <span class="p">)</span>
+    <span class="n">ofile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;ctry_PROJ.shp&quot;</span><span class="p">)</span>
+    <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;ogr2ogr&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-overwrite&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-s_srs EPSG:4326&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-t_srs &#39;&quot;</span> <span class="o">+</span> <span class="n">proj</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-f &#39;ESRI Shapefile&#39;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-lco ENCODING=UTF-8&quot;</span><span class="p">,</span>
+        <span class="n">ofile</span><span class="p">,</span>
+        <span class="n">ifile</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
     <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Compute extent</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute extent&quot;</span><span class="p">)</span>
-    <span class="n">extent_proj</span> <span class="o">=</span> <span class="n">extent_shp</span><span class="p">(</span><span class="n">temp_dir</span> <span class="o">+</span> <span class="s2">&quot;/ctry_PROJ.shp&quot;</span><span class="p">)</span>
+    <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;ctry_PROJ.shp&quot;</span><span class="p">)</span>
+    <span class="n">extent_proj</span> <span class="o">=</span> <span class="n">extent_shp</span><span class="p">(</span><span class="n">ifile</span><span class="p">)</span>
 
     <span class="c1"># Region with buffer of 5km</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Region with buffer of 5km&quot;</span><span class="p">)</span>
@@ -960,7 +965,7 @@
     <span class="c1"># Call data_country.sh</span>
     <span class="k">if</span> <span class="n">data_country</span><span class="p">:</span>
         <span class="n">script</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span>
-            <span class="s2">&quot;forestatrisk&quot;</span><span class="p">,</span> <span class="s2">&quot;shell/data_country.sh&quot;</span>
+            <span class="s2">&quot;forestatrisk&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="s2">&quot;data_country.sh&quot;</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;sh &quot;</span><span class="p">,</span>
@@ -977,7 +982,7 @@
     <span class="c1"># Call forest_country.sh</span>
     <span class="k">if</span> <span class="n">data_forest</span><span class="p">:</span>
         <span class="n">script</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span>
-            <span class="s2">&quot;forestatrisk&quot;</span><span class="p">,</span> <span class="s2">&quot;shell/forest_country.sh&quot;</span>
+            <span class="s2">&quot;forestatrisk&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="s2">&quot;forest_country.sh&quot;</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;sh &quot;</span><span class="p">,</span>
@@ -1007,11 +1012,11 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2020, Ghislain Vieilledent.
+      &#169;2020, Ghislain Vieilledent.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
     </div>
 
