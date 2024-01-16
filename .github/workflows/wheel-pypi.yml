@@ -7,7 +7,9 @@ name: Build wheel and upload to PyPI or TestPyPI
 # When pushing a version tag
 on:
   push:
-    if: "startsWith(github.ref, 'refs/tags/v')"
+    tags:        
+      - '*'
+    #if: "startsWith(github.ref, 'refs/tags/v')"
   
 jobs:
   build_wheels:
