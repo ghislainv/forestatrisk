@@ -4,12 +4,11 @@
 
 name: Build wheel and upload to PyPI or TestPyPI
 
-# When pushing a version tag
+# When pushing with a tag (i.e. new version)
 on:
   push:
     tags:        
       - '*'
-    #if: "startsWith(github.ref, 'refs/tags/v')"
   
 jobs:
   build_wheels:
