@@ -41,12 +41,6 @@ from .compute_srtm import compute_srtm
 from .compute_wdpa import compute_wdpa
 from .compute_agb import compute_agb
 
-# Tests
-import forestatrisk as far
-from forestatrisk.build_data.compute_osm import compute_osm
-from forestatrisk.build_data.compute_srtm import compute_srtm
-from forestatrisk.build_data.compute_wdpa import compute_wdpa
-from forestatrisk.build_data.compute_agb import compute_agb
 
 # Extent of a shapefile
 def extent_shp(shape_file):
@@ -161,7 +155,8 @@ def country_forest_run(
         # Download the zipfile from gadm.org
         fname = os.path.join(output_dir, iso3 + "_shp.zip")
         url = (
-            "https://biogeo.ucdavis.edu/data/gadm3.6/" "shp/gadm36_" + iso3 + "_shp.zip"
+            "https://biogeo.ucdavis.edu/data/gadm3.6/"
+            "shp/gadm36_" + iso3 + "_shp.zip"
         )
         urlretrieve(url, fname)
 
@@ -179,7 +174,8 @@ def country_forest_run(
     # Google Earth Engine task
     if fcc_source == "jrc":
         # Check data availability
-        data_availability = ee_jrc.check(gdrive_remote_rclone, gdrive_folder, iso3)
+        data_availability = ee_jrc.check(gdrive_remote_rclone,
+                                         gdrive_folder, iso3)
         # If not available, run GEE
         if data_availability is False:
             print("Run Google Earth Engine")
@@ -194,7 +190,8 @@ def country_forest_run(
             print(str(extent_latlong))
     if fcc_source == "gfc":
         # Check data availability
-        data_availability = ee_gfc.check(gdrive_remote_rclone, gdrive_folder, iso3)
+        data_availability = ee_gfc.check(gdrive_remote_rclone,
+                                         gdrive_folder, iso3)
         # If not available, run GEE
         if data_availability is False:
             print("Run Google Earth Engine")
@@ -211,7 +208,8 @@ def country_forest_run(
 
 
 # country_forest_download
-def country_forest_download(iso3, gdrive_remote_rclone, gdrive_folder, output_dir="."):
+def country_forest_download(iso3, gdrive_remote_rclone,
+                            gdrive_folder, output_dir="."):
     """Download forest cover data from Google Drive.
 
     Download forest cover data from Google Drive in the current
@@ -237,14 +235,16 @@ def country_forest_download(iso3, gdrive_remote_rclone, gdrive_folder, output_di
     # If no data locally check if available in gdrive
     if len(raster_list) == 0:
         # Data availability in gdrive
-        data_availability = ee_jrc.check(gdrive_remote_rclone, gdrive_folder, iso3)
+        data_availability = ee_jrc.check(gdrive_remote_rclone,
+                                         gdrive_folder, iso3)
 
         # Donwload if available in gdrive
         if data_availability is True:
             # Commands to download results with rclone
             remote_path = gdrive_remote_rclone + ":" + gdrive_folder
             pattern = "'forest_" + iso3 + "*.tif'"
-            cmd = ["rclone", "copy", "--include", pattern, remote_path, output_dir]
+            cmd = ["rclone", "copy", "--include", pattern,
+                   remote_path, output_dir]
             cmd = " ".join(cmd)
             subprocess.call(cmd, shell=True)
             print("Data for {0:3s} have been downloaded".format(iso3))
@@ -302,7 +302,8 @@ def country_biomass_run(
         # Download the zipfile from gadm.org
         fname = os.path.join(output_dir, iso3 + "_shp.zip")
         url = (
-            "https://biogeo.ucdavis.edu/data/gadm3.6/" "shp/gadm36_" + iso3 + "_shp.zip"
+            "https://biogeo.ucdavis.edu/data/gadm3.6/"
+            "shp/gadm36_" + iso3 + "_shp.zip"
         )
         urlretrieve(url, fname)
 
@@ -318,7 +319,8 @@ def country_biomass_run(
         rmtree(output_dir, ignore_errors=True)
 
     # Check data availability
-    data_availability = ee_biomass_whrc.check(gdrive_remote_rclone, gdrive_folder, iso3)
+    data_availability = ee_biomass_whrc.check(gdrive_remote_rclone,
+                                              gdrive_folder, iso3)
     # If not available, run GEE
     if data_availability is False:
         print("Run Google Earth Engine")
@@ -334,7 +336,8 @@ def country_biomass_run(
 
 
 # country_biomass_download
-def country_biomass_download(iso3, gdrive_remote_rclone, gdrive_folder, output_dir="."):
+def country_biomass_download(iso3, gdrive_remote_rclone,
+                             gdrive_folder, output_dir="."):
     """Download biomass data from Google Drive.
 
     Download biomass data from Google Drive. Print a message if the
@@ -369,7 +372,8 @@ def country_biomass_download(iso3, gdrive_remote_rclone, gdrive_folder, output_d
             # Commands to download results with rclone
             remote_path = gdrive_remote_rclone + ":" + gdrive_folder
             pattern = "'biomass_whrc_" + iso3 + "*.tif'"
-            cmd = ["rclone", "copy", "--include", pattern, remote_path, output_dir]
+            cmd = ["rclone", "copy", "--include", pattern,
+                   remote_path, output_dir]
             cmd = " ".join(cmd)
             subprocess.call(cmd, shell=True)
             print("Data for {0:3s} have been downloaded".format(iso3))
@@ -446,7 +450,7 @@ def country_biomass_compute(
     gdal.Translate(output_file, input_file, options=param)
 
 
-# country_biomass_moaic
+# country_biomass_mosaic
 def country_biomass_mosaic(
     iso3, input_dir="data_raw", output_dir="data", proj="EPSG:3395"
 ):
@@ -623,7 +627,8 @@ def country_srtm(iso3, output_dir="."):
         # Download the zipfile from gadm.org
         fname = os.path.join(output_dir, iso3 + "_shp.zip")
         url = (
-            "https://biogeo.ucdavis.edu/data/gadm3.6/" "shp/gadm36_" + iso3 + "_shp.zip"
+            "https://biogeo.ucdavis.edu/data/gadm3.6/"
+            "shp/gadm36_" + iso3 + "_shp.zip"
         )
         urlretrieve(url, fname)
 
@@ -699,7 +704,8 @@ def country_gadm(iso3, output_dir="."):
         # Download the zipfile from gadm.org
         fname = os.path.join(output_dir, iso3 + "_shp.zip")
         url = (
-            "https://biogeo.ucdavis.edu/data/gadm3.6/" "shp/gadm36_" + iso3 + "_shp.zip"
+            "https://biogeo.ucdavis.edu/data/gadm3.6/"
+            "shp/gadm36_" + iso3 + "_shp.zip"
         )
         urlretrieve(url, fname)
 
@@ -714,7 +720,8 @@ def country_gadm(iso3, output_dir="."):
 
 
 # country_download
-def country_download(iso3, gdrive_remote_rclone, gdrive_folder, output_dir="."):
+def country_download(iso3, gdrive_remote_rclone,
+                     gdrive_folder, output_dir="."):
     """Function to download data for a specific country.
 
     Function to download all the data for a specific country. It
@@ -825,6 +832,7 @@ def country_compute(
     xmax_reg = np.ceil(extent_proj[2] + 5000)
     ymax_reg = np.ceil(extent_proj[3] + 5000)
     extent_reg = (xmin_reg, ymin_reg, xmax_reg, ymax_reg)
+    extent = " ".join(extent_reg)
 
     # Computing country data
     if data_country:
@@ -847,27 +855,22 @@ def country_compute(
             copy2(file, output_dir)
         os.chdir(wd)
 
-    # tests
-    # extent_reg = (685000, 1586000, 742000, 1651000)
-    # proj = "EPSG:5490"
-    # iso3 = "MTQ"
-
     # Computing forest data
-    # if data_forest:
-    #     script = pkg_resources.resource_filename(
-    #         "forestatrisk", os.path.join("shell", "forest_country.sh")
-    #     )
-    #     args = [
-    #         "sh ",
-    #         script,
-    #         iso3,
-    #         "'" + proj + "'",
-    #         "'" + extent + "'",
-    #         temp_dir,
-    #         output_dir
-    #     ]
-    #     cmd = " ".join(args)
-    #     subprocess.call(cmd, shell=True)
+    if data_forest:
+        script = pkg_resources.resource_filename(
+            "forestatrisk", os.path.join("shell", "forest_country.sh")
+        )
+        args = [
+            "sh ",
+            script,
+            iso3,
+            "'" + proj + "'",
+            "'" + extent + "'",
+            temp_dir,
+            output_dir
+        ]
+        cmd = " ".join(args)
+        subprocess.call(cmd, shell=True)
 
     # Keep or remove directory
     if not keep_temp_dir:

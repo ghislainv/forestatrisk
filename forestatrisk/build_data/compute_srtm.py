@@ -31,10 +31,10 @@ def compute_srtm(proj, extent, verbose=False):
     """
 
     # Callback
-    cb = gdal.TermProgress if verbose else 0
+    cback = gdal.TermProgress if verbose else 0
 
     # Creation options
-    co = ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"]
+    copts = ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"]
 
     # Unzip files
     zipfiles = glob("SRTM_*.zip")
@@ -45,7 +45,7 @@ def compute_srtm(proj, extent, verbose=False):
 
     # Build vrt file
     tif_srtm_files = glob("SRTM_*/srtm_*.tif")
-    gdal.BuildVRT("srtm.vrt", tif_srtm_files, callback=cb)
+    gdal.BuildVRT("srtm.vrt", tif_srtm_files, callback=cback)
 
     # Merge and reproject
     param = gdal.WarpOptions(
@@ -57,20 +57,22 @@ def compute_srtm(proj, extent, verbose=False):
         resampleAlg=gdal.GRA_Bilinear,
         xRes=90,
         yRes=90,
-        creationOptions=co,
-        callback=cb,
+        creationOptions=copts,
+        callback=cback,
     )
     gdal.Warp("altitude.tif", "srtm.vrt", options=param)
 
     # Compute slope
     param = gdal.DEMProcessingOptions(
-        creationOptions=co, computeEdges=True, callback=cb
+        creationOptions=copts, computeEdges=True, callback=cback
     )
-    gdal.DEMProcessing("_slope.tif", "altitude.tif", processing="slope", options=param)
+    gdal.DEMProcessing("_slope.tif", "altitude.tif", processing="slope",
+                       options=param)
 
     # Convert to Int16
     param = gdal.TranslateOptions(
-        outputType=gdal.GDT_Int16, creationOptions=co, callback=cb
+        outputType=gdal.GDT_Int16, creationOptions=copts,
+        callback=cback
     )
     gdal.Translate("slope.tif", "_slope.tif")
 

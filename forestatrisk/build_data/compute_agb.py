@@ -29,10 +29,10 @@ def compute_agb(proj, extent, verbose=False):
     """
 
     # Callback
-    cb = gdal.TermProgress if verbose else 0
+    cback = gdal.TermProgress if verbose else 0
 
     # Creation options
-    co = ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"]
+    copts = ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"]
 
     # Resample
     ifile = (
@@ -48,8 +48,8 @@ def compute_agb(proj, extent, verbose=False):
         resampleAlg=gdal.GRA_Bilinear,
         xRes=1000,
         yRes=1000,
-        creationOptions=co,
-        callback=cb,
+        creationOptions=copts,
+        callback=cback,
     )
     gdal.Warp("AGB.tif", ifile, options=param)
 

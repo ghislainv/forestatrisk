@@ -52,17 +52,20 @@ def compute_osm(proj, extent, verbose=False):
     subprocess.run(cmd, capture_output=True, check=True)
 
     # Callback
-    cb = gdal.TermProgress if verbose else 0
+    cback = gdal.TermProgress if verbose else 0
 
     # Creation options
-    co = ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"]
+    copts = ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"]
 
     # Useful lists
     line_cat = ["roads", "towns", "rivers"]
     sql_statement = [
-        ("SELECT osm_id, name, highway FROM lines " "WHERE highway IS NOT NULL"),
-        ("SELECT osm_id, name, place FROM points " "WHERE place IS NOT NULL"),
-        ("SELECT osm_id, name, waterway FROM lines " "WHERE waterway IS NOT NULL"),
+        ("SELECT osm_id, name, highway FROM lines "
+         "WHERE highway IS NOT NULL"),
+        ("SELECT osm_id, name, place FROM points "
+         "WHERE place IS NOT NULL"),
+        ("SELECT osm_id, name, waterway FROM lines "
+         "WHERE waterway IS NOT NULL"),
     ]
 
     # Loop on line categories
@@ -74,7 +77,7 @@ def compute_osm(proj, extent, verbose=False):
             format="ESRI Shapefile",
             layerCreationOptions=["ENCODING=UTF-8"],
             SQLStatement=sql_statement[i],
-            callback=cb,
+            callback=cback,
         )
         gdal.VectorTranslate(cat + ".shp", cat + ".osm", options=param)
         # Reproject
@@ -84,7 +87,7 @@ def compute_osm(proj, extent, verbose=False):
             layerCreationOptions=["ENCODING=UTF-8"],
             srcSRS="EPSG:4326",
             dstSRS=proj,
-            callback=cb,
+            callback=cback,
         )
         gdal.VectorTranslate(cat + "_PROJ.shp", cat + ".shp", options=param)
         # Rasterize
@@ -98,8 +101,8 @@ def compute_osm(proj, extent, verbose=False):
             yRes=150,
             layers=[cat + "_PROJ"],
             outputType=gdal.GDT_Byte,
-            creationOptions=co,
-            callback=cb,
+            creationOptions=copts,
+            callback=cback,
         )
         gdal.Rasterize(cat + ".tif", cat + "_PROJ.shp", options=param)
         # Compute distances

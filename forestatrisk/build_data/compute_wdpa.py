@@ -34,7 +34,7 @@ def compute_wdpa(iso, proj, extent, where=None, verbose=False):
     """
 
     # Callback
-    cb = gdal.TermProgress if verbose else 0
+    cback = gdal.TermProgress if verbose else 0
 
     # Defaut value for where
     if where is None:
@@ -57,7 +57,7 @@ def compute_wdpa(iso, proj, extent, where=None, verbose=False):
         srcSRS="EPSG:4326",
         dstSRS=proj,
         layerCreationOptions=["ENCODING=UTF-8"],
-        callback=cb,
+        callback=cback,
     )
     gdal.VectorTranslate("pa_PROJ.shp", "pa_" + iso + ".shp", options=param)
 
@@ -74,7 +74,7 @@ def compute_wdpa(iso, proj, extent, where=None, verbose=False):
         layers=["pa_PROJ"],
         outputType=gdal.GDT_Byte,
         creationOptions=["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
-        callback=cb,
+        callback=cback,
     )
     gdal.Rasterize("pa.tif", "pa_PROJ.shp", options=param)
 
