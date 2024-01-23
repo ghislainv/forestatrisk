@@ -13,10 +13,10 @@
 from __future__ import division, print_function  # Python 3 compatibility
 from glob import glob  # To explore files in a folder
 import os
-import pkg_resources
-from shutil import copy2, rmtree
+from shutil import rmtree, copy2
 import subprocess
 from zipfile import ZipFile  # To unzip files
+import pkg_resources
 
 try:
     from urllib.request import urlretrieve  # Python 3
@@ -36,10 +36,20 @@ import pandas as pd
 # Local application imports
 from ..misc import make_dir
 from . import ee_jrc, ee_gfc, ee_biomass_whrc
+from .compute_osm import compute_osm
+from .compute_srtm import compute_srtm
+from .compute_wdpa import compute_wdpa
+from .compute_agb import compute_agb
 
+# Tests
+import forestatrisk as far
+from forestatrisk.build_data.compute_osm import compute_osm
+from forestatrisk.build_data.compute_srtm import compute_srtm
+from forestatrisk.build_data.compute_wdpa import compute_wdpa
+from forestatrisk.build_data.compute_agb import compute_agb
 
 # Extent of a shapefile
-def extent_shp(inShapefile):
+def extent_shp(shape_file):
     """Compute the extent of a shapefile.
 
     This function computes the extent (xmin, xmax, ymin, ymax) of a
@@ -51,10 +61,10 @@ def extent_shp(inShapefile):
 
     """
 
-    inDriver = ogr.GetDriverByName("ESRI Shapefile")
-    inDataSource = inDriver.Open(inShapefile, 0)
-    inLayer = inDataSource.GetLayer()
-    extent = inLayer.GetExtent()
+    in_driver = ogr.GetDriverByName("ESRI Shapefile")
+    in_data_dource = in_driver.Open(shape_file, 0)
+    in_layer = in_data_dource.GetLayer()
+    extent = in_layer.GetExtent()
     extent = (extent[0], extent[2], extent[1], extent[3])
     return extent  # (xmin, ymin, xmax, ymax)
 
@@ -793,18 +803,15 @@ def country_compute(
     # Reproject GADM
     ofile = os.path.join(temp_dir, "ctry_PROJ.shp")
     ifile = os.path.join(temp_dir, "gadm36_" + iso3 + "_0.shp")
-    args = [
-        "ogr2ogr",
-        "-overwrite",
-        "-s_srs EPSG:4326",
-        "-t_srs '" + proj + "'",
-        "-f 'ESRI Shapefile'",
-        "-lco ENCODING=UTF-8",
-        ofile,
-        ifile,
-    ]
-    cmd = " ".join(args)
-    subprocess.call(cmd, shell=True)
+    param = gdal.VectorTranslateOptions(
+        accessMode="overwrite",
+        srcSRS="EPSG:4326",
+        dstSRS=proj,
+        reproject=True,
+        format="ESRI Shapefile",
+        layerCreationOptions=["ENCODING=UTF-8"],
+    )
+    gdal.VectorTranslate(ofile, ifile, options=param)
 
     # Compute extent
     print("Compute extent")
@@ -818,41 +825,49 @@ def country_compute(
     xmax_reg = np.ceil(extent_proj[2] + 5000)
     ymax_reg = np.ceil(extent_proj[3] + 5000)
     extent_reg = (xmin_reg, ymin_reg, xmax_reg, ymax_reg)
-    extent = " ".join(map(str, extent_reg))
 
-    # Call data_country.sh
+    # Computing country data
     if data_country:
-        script = pkg_resources.resource_filename(
-            "forestatrisk", os.path.join("shell", "data_country.sh")
-        )
-        args = [
-            "sh ",
-            script,
-            iso3,
-            "'" + proj + "'",
-            "'" + extent + "'",
-            temp_dir,
-            output_dir,
-        ]
-        cmd = " ".join(args)
-        subprocess.call(cmd, shell=True)
+        # Changing working directory
+        wd = os.getcwd()
+        os.chdir(temp_dir)
+        # Perform computations
+        compute_osm(proj, extent_reg)
+        compute_srtm(proj, extent_reg)
+        compute_wdpa(iso3, proj, extent_reg)
+        compute_agb(proj, extent_reg)
+        # Moving created files
+        make_dir(os.path.join(output_dir, "emissions"))
+        copy2("AGB.tif", os.path.join(output_dir, "emissions"))
+        dist_files = glob("dist_*.tif")
+        proj_files = glob("*_PROJ.*")
+        other_files = ["altitude", "slope.tif", "pa.tif"]
+        files = dist_files + proj_files + other_files
+        for file in files:
+            copy2(file, output_dir)
+        os.chdir(wd)
 
-    # Call forest_country.sh
-    if data_forest:
-        script = pkg_resources.resource_filename(
-            "forestatrisk", os.path.join("shell", "forest_country.sh")
-        )
-        args = [
-            "sh ",
-            script,
-            iso3,
-            "'" + proj + "'",
-            "'" + extent + "'",
-            temp_dir,
-            output_dir,
-        ]
-        cmd = " ".join(args)
-        subprocess.call(cmd, shell=True)
+    # tests
+    # extent_reg = (685000, 1586000, 742000, 1651000)
+    # proj = "EPSG:5490"
+    # iso3 = "MTQ"
+
+    # Computing forest data
+    # if data_forest:
+    #     script = pkg_resources.resource_filename(
+    #         "forestatrisk", os.path.join("shell", "forest_country.sh")
+    #     )
+    #     args = [
+    #         "sh ",
+    #         script,
+    #         iso3,
+    #         "'" + proj + "'",
+    #         "'" + extent + "'",
+    #         temp_dir,
+    #         output_dir
+    #     ]
+    #     cmd = " ".join(args)
+    #     subprocess.call(cmd, shell=True)
 
     # Keep or remove directory
     if not keep_temp_dir:

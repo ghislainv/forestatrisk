@@ -20,11 +20,11 @@ output_dir=$5
 cd $temp_dir
 
 # ===================================
-# Distance to roads, town, and rivers
+# Distance to road, town, and river
 # ===================================
 
 # Message
-echo "Distance to roads, towns, and rivers from OSM\n"
+echo "Distance to road, town, and river from OSM\n"
 osmconvert country.osm.pbf -o=country.o5m
 
 # Main roads
@@ -112,16 +112,16 @@ gdalwarp -overwrite -t_srs "$proj" -te $extent -tap -r bilinear \
          -tr 90 90 srtm.vrt altitude.tif
 
 # Compute slope
-gdaldem slope altitude.tif slope_.tif -compute_edges \
+gdaldem slope altitude.tif _slope.tif -compute_edges \
 	-co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES"
 
 # Convert to Int16
 gdal_translate -ot Int16 \
 	       -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-	       slope_.tif slope.tif
+	       _slope.tif slope.tif
 
 # ===========================
-# SAPM
+# WDPA
 # ===========================
 
 # Message
@@ -152,7 +152,9 @@ echo "AGB from Avitabile's map\n"
 gdalwarp -overwrite -s_srs EPSG:4326 -t_srs "$proj" \
          -te $extent -tap -r bilinear \
          -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-         -tr 1000 1000 ~/Code/forestatrisk-tropics/AGB/Avitabile_AGB_Map.tif AGB.tif
+         -tr 1000 1000 \
+	 /vsicurl/https://forestatrisk.cirad.fr/tropics/agb/Avitabile_AGB_Map_cog.tif \
+	 AGB.tif
 
 # ===========================
 # Cleaning
