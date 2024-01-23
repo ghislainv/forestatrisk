@@ -36,6 +36,7 @@ import forestatrisk as far
 
 @pytest.fixture(scope="session", autouse=True)
 def gstart():
+    """Test get started notebook."""
     # We create a directory to hold the outputs with the help of the
     # function `.make_dir()`.
 
@@ -55,8 +56,8 @@ def gstart():
     if os.path.exists("data_GLP.zip") is False:
         urlretrieve(url, "data_GLP.zip")
 
-    with ZipFile("data_GLP.zip", "r") as z:
-        z.extractall("data")
+    with ZipFile("data_GLP.zip", "r") as zfile:
+        zfile.extractall("data")
 
     # ### 1.2 Files
 
@@ -163,8 +164,11 @@ def gstart():
     # Summary
     print(mod_binomial_iCAR)
     # Write summary in file
-    with open("output/summary_hSDM.txt", "w") as f:
-        f.write(str(mod_binomial_iCAR))
+    with open(
+            "output/summary_hSDM.txt",
+            "w",
+            encoding="UTF-8") as file:
+        file.write(str(mod_binomial_iCAR))
 
     # ## 3. Predict
 
