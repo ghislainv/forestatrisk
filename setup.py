@@ -72,7 +72,7 @@ setup(
     package_dir={"forestatrisk": "forestatrisk"},
     package_data={
         "forestatrisk": [
-            "data/*.csv",
+            "csv/*.csv",
             "shell/data_country.sh",
             "shell/forest_country.sh",
         ]

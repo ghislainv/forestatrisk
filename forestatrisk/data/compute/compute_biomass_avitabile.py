@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Computations on SRTM data"""
+"""Downloading and processing Avitabile AGB data"""
 
 # =====================================================================
 # author          :Ghislain Vieilledent
@@ -10,15 +10,13 @@
 # license         :GPLv3
 # =====================================================================
 
-import os
-from glob import glob
-from zipfile import ZipFile
-
 from osgeo import gdal
 
 
-def compute_srtm(proj, extent, verbose=False):
-    """Compute elevation and slope.
+def compute_biomass_avitabile(proj, extent, verbose=False):
+    """Compute aboveground biomass.
+
+    Using Avitabile et al. 2016 data.
 
     :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
         GDAL/OGR. Used for reprojecting data.
@@ -36,18 +34,11 @@ def compute_srtm(proj, extent, verbose=False):
     # Creation options
     copts = ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"]
 
-    # Unzip files
-    zipfiles = glob("SRTM_*.zip")
-    for zipfile in zipfiles:
-        outdir = os.path.splitext(zipfile)[0]
-        with ZipFile(zipfile) as file:
-            file.extractall(outdir)
-
-    # Build vrt file
-    tif_srtm_files = glob("SRTM_*/srtm_*.tif")
-    gdal.BuildVRT("srtm.vrt", tif_srtm_files, callback=cback)
-
-    # Merge and reproject
+    # Resample
+    ifile = (
+        "/vsicurl/https://forestatrisk.cirad.fr/"
+        "tropics/agb/Avitabile_AGB_Map_cog.tif"
+    )
     param = gdal.WarpOptions(
         options=["overwrite"],
         srcSRS="EPSG:4326",
@@ -55,26 +46,11 @@ def compute_srtm(proj, extent, verbose=False):
         outputBounds=extent,
         targetAlignedPixels=True,
         resampleAlg=gdal.GRA_Bilinear,
-        xRes=90,
-        yRes=90,
+        xRes=1000,
+        yRes=1000,
         creationOptions=copts,
         callback=cback,
     )
-    gdal.Warp("altitude.tif", "srtm.vrt", options=param)
-
-    # Compute slope
-    param = gdal.DEMProcessingOptions(
-        creationOptions=copts, computeEdges=True, callback=cback
-    )
-    gdal.DEMProcessing("_slope.tif", "altitude.tif", processing="slope",
-                       options=param)
-
-    # Convert to Int16
-    param = gdal.TranslateOptions(
-        outputType=gdal.GDT_Int16, creationOptions=copts,
-        callback=cback
-    )
-    gdal.Translate("slope.tif", "_slope.tif")
-
+    gdal.Warp("AGB.tif", ifile, options=param)
 
 # End

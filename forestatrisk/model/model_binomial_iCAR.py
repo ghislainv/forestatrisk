@@ -69,8 +69,10 @@ class model_binomial_iCAR(object):
     :param thin: The thinning interval used in the simulation. The
         number of mcmc iterations must be divisible by this value.
 
-    :param beta_start: Starting values for beta parameters. This
-        can either be a scalar or a p-length vector.
+    :param beta_start: Starting values for beta parameters. This can
+        either be a scalar or a p-length vector. If set to -99,
+        estimates from a simple logistic regression are used (from
+        scikit-learn module).
 
     :param Vrho_start: Positive scalar indicating the starting
         value for the variance of the spatial random effects.

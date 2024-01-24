@@ -1,13 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# =====================================================================
-# author          :Ghislain Vieilledent
-# email           :ghislain.vieilledent@cirad.fr
-# web             :https://ecology.ghislainv.fr
-# python_version  :>=2.7
-# license         :GPLv3
-# =====================================================================
+"""Compute distance to pixel."""
 
 from osgeo import gdal
 

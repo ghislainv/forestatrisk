@@ -1,13 +1,4 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-# ==============================================================================
-# author          :Ghislain Vieilledent
-# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
-# web             :https://ecology.ghislainv.fr
-# python_version  :>=2.7
-# license         :GPLv3
-# ==============================================================================
+"""Sample points and extract raster values."""
 
 # Import
 from __future__ import division, print_function  # Python 3 compatibility
@@ -35,7 +26,6 @@ def sample(
     output_file="output/sample.txt",
     blk_rows=0,
 ):
-
     """Sample points and extract raster values.
 
     This function (i) randomly draws spatial points in deforested and

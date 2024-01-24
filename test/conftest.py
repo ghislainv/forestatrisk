@@ -131,7 +131,8 @@ def gstart():
     formula = left_part + right_part
 
     # Starting values
-    beta_start = -99  # Simple GLM estimates
+    # 0 for the test to avoid relying on scikit-learn if set to -99
+    beta_start = 0
 
     # Priors
     priorVrho = -1  # -1="1/Gamma"

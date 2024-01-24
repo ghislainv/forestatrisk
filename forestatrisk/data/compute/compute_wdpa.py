@@ -1,20 +1,10 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""Computations on WDPA data"""
-
-# =====================================================================
-# author          :Ghislain Vieilledent
-# email           :ghislain.vieilledent@cirad.fr
-# web             :https://ecology.ghislainv.fr
-# python_version  :>=2.7
-# license         :GPLv3
-# =====================================================================
+"""Processing WDPA data."""
 
 from osgeo import gdal
 
 
 def compute_wdpa(iso, proj, extent, where=None, verbose=False):
-    """Compute presence of protected areas.
+    """Process geospatial data on protected areas.
 
     :param iso: Country iso code.
 

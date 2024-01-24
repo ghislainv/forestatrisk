@@ -1,14 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# ==============================================================================
-# author          :Ghislain Vieilledent
-# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
-# web             :https://ecology.ghislainv.fr
-# python_version  :>=2.7
-# license         :GPLv3
-# ==============================================================================
-
 """
 forestatrisk: modelling and forecasting deforestation in the tropics.
 https://ecology.ghislainv.fr/forestatrisk/
@@ -21,11 +10,11 @@ from __future__ import division, print_function  # Python 3 compatibility
 # https://peps.python.org/pep-0008/#module-level-dunder-names
 __author__ = "Ghislain Vieilledent"
 __email__ = "ghislain.vieilledent@cirad.fr"
-__version__ = "1.1.3"
+__version__ = "1.1.4"
 
 # Local imports
 # Data
-from .build_data import data, sample
+from .data import sample, extent_shp
 
 # Misc
 from .misc import countpix, invlogit, make_dir
