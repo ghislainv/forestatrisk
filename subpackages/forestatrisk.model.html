@@ -8,7 +8,7 @@
     <title>forestatrisk.model package &#8212; forestatrisk — Modelling and forecasting deforestation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=b21ac067" />
-    <script src="../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../_static/documentation_options.js?v=00f267c6"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -195,8 +195,10 @@ burnin+mcmc. burnin+mcmc must be divisible by 10 and superior
 or equal to 100 so that the progress bar can be displayed.</p></li>
 <li><p><strong>thin</strong> – The thinning interval used in the simulation. The
 number of mcmc iterations must be divisible by this value.</p></li>
-<li><p><strong>beta_start</strong> – Starting values for beta parameters. This
-can either be a scalar or a p-length vector.</p></li>
+<li><p><strong>beta_start</strong> – Starting values for beta parameters. This can
+either be a scalar or a p-length vector. If set to -99,
+estimates from a simple logistic regression are used (from
+scikit-learn module).</p></li>
 <li><p><strong>Vrho_start</strong> – Positive scalar indicating the starting
 value for the variance of the spatial random effects.</p></li>
 <li><p><strong>mubeta</strong> – Means of the priors for the beta parameters of the
