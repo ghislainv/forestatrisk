@@ -33,18 +33,20 @@ def country_compute(
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
-    :param temp_dir: Temporary directory for computation.
+    :param temp_dir: Temporary directory for computation. Relative
+        path to the current working directory.
 
-    :param output_dir: Output directory.
+    :param output_dir: Output directory. Relative path to the current
+        working directory.
 
     :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
         GDAL/OGR. Default to "EPSG:3395" (World Mercator).
 
-    :param data_country: Boolean for running data_country.sh to
-        compute country variables. Default to "True".
+    :param data_country: Boolean to compute environmental
+        variables for the country. Default to "True".
 
-    :param data_forest: Boolean for running data_forest.sh to
-        compute forest landscape variables. Default to "True".
+    :param data_forest: Boolean to compute forest variables. Default
+        to "True".
 
     :param keep_temp_dir: Boolean to keep the temporary
         directory. Default to "False".
@@ -65,18 +67,16 @@ def country_compute(
     gdal.VectorTranslate(ofile, ifile, options=param)
 
     # Compute extent
-    print("Compute extent")
     ifile = os.path.join(temp_dir, "ctry_PROJ.shp")
     extent_proj = extent_shp(ifile)
 
     # Region with buffer of 5km
-    print("Region with buffer of 5km")
     xmin_reg = np.floor(extent_proj[0] - 5000)
     ymin_reg = np.floor(extent_proj[1] - 5000)
     xmax_reg = np.ceil(extent_proj[2] + 5000)
     ymax_reg = np.ceil(extent_proj[3] + 5000)
     extent_reg = (xmin_reg, ymin_reg, xmax_reg, ymax_reg)
-    extent = " ".join(extent_reg)
+    extent = " ".join(map(str, extent_reg))
 
     # Computing country data
     if data_country:
@@ -89,14 +89,14 @@ def country_compute(
         compute_wdpa(iso3, proj, extent_reg)
         compute_biomass_avitabile(proj, extent_reg)
         # Moving created files
-        make_dir(os.path.join(output_dir, "emissions"))
-        copy2("AGB.tif", os.path.join(output_dir, "emissions"))
+        make_dir(os.path.join(wd, output_dir, "emissions"))
+        copy2("AGB.tif", os.path.join(wd, output_dir, "emissions"))
         dist_files = glob("dist_*.tif")
         proj_files = glob("*_PROJ.*")
-        other_files = ["altitude", "slope.tif", "pa.tif"]
+        other_files = ["altitude.tif", "slope.tif", "pa.tif"]
         files = dist_files + proj_files + other_files
         for file in files:
-            copy2(file, output_dir)
+            copy2(file, os.path.join(wd, output_dir))
         os.chdir(wd)
 
     # Computing forest data

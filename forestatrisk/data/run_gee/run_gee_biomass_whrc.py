@@ -84,7 +84,7 @@ def run_gee_biomass_whrc(
             extent_latlong=extent_latlong,
             scale=30,
             proj=proj,
-            gdrive_folder=gdrive_folder,
+            gdrive_folder=os.path.basename(gdrive_folder),
         )
         print("GEE running on the following extent:")
         print(str(extent_latlong))

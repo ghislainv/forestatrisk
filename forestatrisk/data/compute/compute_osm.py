@@ -22,24 +22,35 @@ def compute_osm(proj, extent, verbose=False):
 
     # Convert osm.pbf to o5m
     cmd = "osmconvert country.osm.pbf -o=country.o5m"
-    subprocess.run(cmd, capture_output=True, check=True)
+    rtn = subprocess.run(cmd, capture_output=True, shell=True)
+    if verbose:
+        print(rtn.stdout.decode())
 
     # Filter data
-    cmd = (
-        'osmfilter country.o5m --keep="highway=motorway '
-        'or highway=trunk or highway=*ary" -o=roads.osm'
-    )
-    subprocess.run(cmd, capture_output=True, check=True)
-    cmd = (
-        'osmfilter country.o5m --keep="place=city '
-        'or place=town or place=village" -o=towns.osm'
-    )
-    subprocess.run(cmd, capture_output=True, check=True)
-    cmd = (
-        'osmfilter country.o5m --keep="waterway=river '
-        'or waterway=canal" -o=rivers.osm'
-    )
-    subprocess.run(cmd, capture_output=True, check=True)
+    # Roads
+    cmd = ('osmfilter country.o5m '
+           '--keep="highway=motorway '
+           'or highway=trunk or highway=*ary" '
+           '-o=roads.osm')
+    subprocess.run(cmd, capture_output=True, shell=True)
+    if verbose:
+        print(rtn.stdout.decode())
+    # Towns
+    cmd = ('osmfilter country.o5m '
+           '--keep="place=city or '
+           'place=town or place=village" '
+           '-o=towns.osm')
+    subprocess.run(cmd, capture_output=True, shell=True)
+    if verbose:
+        print(rtn.stdout.decode())
+    # Rivers
+    cmd = ('osmfilter country.o5m '
+           '--keep="waterway=river or '
+           'waterway=canal" '
+           '-o=rivers.osm')
+    subprocess.run(cmd, capture_output=True, shell=True)
+    if verbose:
+        print(rtn.stdout.decode())
 
     # Callback
     cback = gdal.TermProgress if verbose else 0
@@ -98,7 +109,7 @@ def compute_osm(proj, extent, verbose=False):
         # Compute distances
         compute_distance(
             input_file=cat + ".tif",
-            dist_file="_dist_" + cat + ".tif",
+            dist_file="dist_" + cat + ".tif",
             values=1,
             verbose=verbose,
         )

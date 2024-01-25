@@ -3,7 +3,7 @@
 # -*- org-src-preserve-indentation: t; org-edit-src-content: 0; -*-
 # ==============================================================================
 # author          :Ghislain Vieilledent
-# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+# email           :ghislain.vieilledent@cirad.fr
 # web             :https://ecology.ghislainv.fr
 # license         :GPLv3
 # ==============================================================================
@@ -32,7 +32,7 @@
 
 * Version information    :noexport:
 
-#+begin_src emacs-lisp -n :exports both
+#+begin_src emacs-lisp -n :exports none
 (princ (concat
         (format "Emacs version: %s\n"
                 (emacs-version))
@@ -41,9 +41,35 @@
 #+end_src
 
 #+RESULTS:
-: Emacs version: GNU Emacs 27.1 (build 1, x86_64-pc-linux-gnu, GTK+ Version 3.24.24, cairo version 1.16.0)
-:  of 2021-03-28, modified by Debian
-: org version: 9.3
+: Emacs version: GNU Emacs 29.1 (build 1, x86_64-pc-linux-gnu, GTK+ Version 3.24.38, cairo version 1.16.0)
+:  of 2023-08-30, modified by Debian
+: org version: 9.6.10
+
+* Configuring the Python environment                               :noexport:
+
+** Defining IPython interpreter for org-babel
+
+#+begin_src emacs-lisp :results none :exports none
+(setq org-babel-python-command "ipython -i --simple-prompt --profile=dev")
+#+end_src
+
+** Setting up the virtual environment with pyvenv in Emacs
+
+#+begin_src emacs-lisp :results none :exports none
+(setenv "WORKON_HOME" "~/.pyenv/versions/miniconda3-latest/envs")
+(pyvenv-mode 1)
+(pyvenv-workon "conda-far")
+#+end_src
+
+** Checking Python executable 
+
+#+begin_src python :results output :session :exports none
+import sys
+print(sys.executable)
+#+end_src
+
+#+RESULTS:
+: /home/ghislain/.pyenv/versions/miniconda3-latest/envs/conda-far/bin/python3.11
 
 * Introduction
 
@@ -59,10 +85,9 @@ working directory.
 
 ** Importing Python modules
 
-
 We import the Python modules needed for collecting the data.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python :results none :session :exports both
 # Imports
 import os
 
@@ -75,9 +100,12 @@ from pywdpa import get_token
 import forestatrisk as far
 #+end_src
 
-#+RESULTS:
-: # forestatrisk: modelling and forecasting deforestation in the tropics.
-: # https://ecology.ghislainv.fr/forestatrisk/
+#+begin_src python :results none :session :exports none
+# Set environmental variables
+proj_lib = ("/home/ghislain/.pyenv/versions/"
+            "miniconda3-latest/envs/conda-far/share/proj")
+os.environ["PROJ_LIB"]= proj_lib
+#+end_src
 
 We create some directories to hold the data and the ouputs with the
 function =far.make_dir()=.
@@ -118,13 +146,11 @@ for using the Google Earth Engine API, follow these
 necessary only once, you have to execute the command =ee.Initialize()=
 at each session.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python :results none :session :exports code
 # Uncomment to authenticate for the first time.
 # ee.Authenticate()
-ee.Initialize()
+ee.Initialize(project="forestatrisk")
 #+end_src
-
-#+RESULTS:
 
 Under Linux and Mac, credentials are stored in
 =$HOME/.config/earthengine/credentials=.
@@ -132,7 +158,6 @@ Under Linux and Mac, credentials are stored in
 #+begin_src shell :results none :session :exports code
 cat $HOME/.config/earthengine/credentials
 #+end_src
-
 
 *** Access to Google Drive with RClone
 
@@ -164,6 +189,7 @@ If your token is valid, the function will return its value. Otherwise
 it will print an error message.
 
 * Data
+
 ** Compute forest cover change
 
 We specify the [[https://fr.wikipedia.org/wiki/ISO_3166-1#Table_de_codage][iso3]] code of the country we want the data for, for example [[https://en.wikipedia.org/wiki/Martinique][Martinique]]. 
@@ -178,7 +204,8 @@ We compute the past forest cover change from Vancutsem et al. 2021
 using Google Earth Engine. The argument =gdrive_remote_rclone= of the
 function [[https://ecology.ghislainv.fr/forestatrisk/subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_forest_run][far.data.country_forest_run()]] specifies the name of the
 Google Drive remote for rclone. The argument =gdrive_folder= specifies
-the name of the Google Drive folder to use.
+the name of the Google Drive folder to use. In this case, folder
+=GEE/GEE-forestatrisk-notebooks= should exist in Google Drive.
 
 #+begin_src python :results output :session :exports both
 # Compute gee forest data
@@ -188,13 +215,10 @@ far.data.country_forest_run(
     keep_dir=True,
     fcc_source="jrc", perc=50,
     gdrive_remote_rclone="gdrive_gv",
-    gdrive_folder="GEE-forestatrisk-notebooks")
+    gdrive_folder="GEE/GEE-forestatrisk-notebooks")
 #+end_src
 
 #+RESULTS:
-: Run Google Earth Engine
-: GEE running on the following extent:
-: (-61.22902679, 14.38819408, -60.80875015, 14.87902832)
 
 ** Download raw data
 
@@ -203,13 +227,14 @@ far.data.country_forest_run(
 far.data.country_download(
     iso3,
     gdrive_remote_rclone="gdrive_gv",
-    gdrive_folder="GEE-forestatrisk-notebooks",
+    gdrive_folder="GEE/GEE-forestatrisk-notebooks",
     output_dir="data_raw")   
 #+end_src
 
 #+RESULTS:
 : Downloading data for country MTQ
 : SRTM not existing for tile: 25_09
+: Data for MTQ have been downloaded
 
 ** Compute explanatory variables
 
@@ -224,7 +249,7 @@ proj = "EPSG:5490"
 
 We compute the explanatory variables from the raw data.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python :results none :session :exports both
 # Compute variables
 far.data.country_compute(
     iso3,
@@ -249,19 +274,6 @@ The =data= folder includes:
   different dates used for projections in the future, and forest carbon
   data for computing carbon emissions.
 
-#+begin_src python :results output :session :exports code
-# Plot forest
-fig_fcc23 = far.plot.fcc(
-    input_fcc_raster="data/fcc23.tif",
-    maxpixels=1e8,
-    output_file="output/fcc23.png",
-    borders="data/ctry_PROJ.shp",
-    linewidth=0.3, dpi=500)
-#+end_src
-
-#+RESULTS:
-: Build overview
-
 Variable characteristics are summarized in the following table:
 
 #+begin_src python :results value raw :session :exports results
@@ -284,7 +296,7 @@ tabulate(var, headers=col_names, tablefmt="orgtbl", showindex=False)
 
 ** Plots
 
-We can plot the past deforestation on the period 2000--2010--2020:
+We can plot the past deforestation for the period 2000--2010--2020:
 
 #+begin_src python :results file :session :exports both
 # Plot forest
@@ -321,31 +333,4 @@ ofile
 #+RESULTS:
 [[file:output/nb_ctrydata_var.png]]
 
-* Environment setup and test :noexport:
-
-#+BEGIN_SRC python :results value
-import sys
-return(sys.executable)
-#+END_SRC
-
-#+RESULTS:
-: /home/ghislain/.pyenv/versions/miniconda3-latest/envs/conda-far/bin/python
-
-
-These definitions are necessary for having babel use the correct
-virtual environment.
-
-Before using the anaconda python distribution I was a heavy user of python
-virtualenv. I do not use this much any more, but these are the relevant
-options:
-- python-shell-virtualenv-path: only affects sessions via the run-python function
-- org-babel-python-command: defines executable for non-session src blocks
-
-# python-shell-virtualenv-path: "/home/dfeich/py-virtualenv/notebook"
-# org-babel-python-command: "/home/dfeich/py-virtualenv/notebook/bin/python"
-
-Local Variables:
-org-babel-python-command: "/home/ghislain/.pyenv/versions/miniconda3-latest/envs/conda-far/bin/python"
-org-babel-sh-command: "/bin/bash"
-End:
-
+* End of file                                                      :noexport:

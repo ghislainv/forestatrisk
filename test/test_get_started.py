@@ -1,14 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# ==============================================================================
-# author          :Ghislain Vieilledent
-# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
-# web             :https://ecology.ghislainv.fr
-# python_version  :>=2.7
-# license         :GPLv3
-# ==============================================================================
-
+"""Testing funtions in get started tutorial."""
 
 import os
 
@@ -139,7 +129,6 @@ def test_model_binomial_icar(gstart):
     )
 
     assert np.allclose(gstart["pred_icar"][0:100], pred_icar_first100)
-    # assert type(gstart["pred_icar"]).__name__ == "ndarray"
 
 def test_rho(gstart):
     """Test rho."""
@@ -169,7 +158,7 @@ def test_rho(gstart):
     )
 
     assert np.allclose(gstart["rho"], rho)
-    # assert type(gstart["rho"]).__name__ == "ndarray"
+
 
 def test_interpolate_rho():
     """Test interpolate."""

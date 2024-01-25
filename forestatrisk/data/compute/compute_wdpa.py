@@ -29,10 +29,10 @@ def compute_wdpa(iso, proj, extent, where=None, verbose=False):
     # Defaut value for where
     if where is None:
         where_statement = (
-            'status="Designated" OR '
-            'status="Inscribed" OR '
-            'status="Established" OR '
-            '(status="Proposed" AND '
+            "status='Designated' OR "
+            "status='Inscribed' OR "
+            "status='Established' OR "
+            "(status='Proposed' AND "
             "CAST(SUBSTR(date,7,4) AS INTEGER) < 2010)"
         )
     else:
@@ -47,12 +47,12 @@ def compute_wdpa(iso, proj, extent, where=None, verbose=False):
         srcSRS="EPSG:4326",
         dstSRS=proj,
         layerCreationOptions=["ENCODING=UTF-8"],
-        callback=cback,
+        callback=cback
     )
     gdal.VectorTranslate("pa_PROJ.shp", "pa_" + iso + ".shp", options=param)
 
     # Rasterize
-    gdal.RasterizeOptions(
+    param = gdal.RasterizeOptions(
         outputBounds=extent,
         targetAlignedPixels=True,
         burnValues=[1],
@@ -64,7 +64,7 @@ def compute_wdpa(iso, proj, extent, where=None, verbose=False):
         layers=["pa_PROJ"],
         outputType=gdal.GDT_Byte,
         creationOptions=["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
-        callback=cback,
+        callback=cback
     )
     gdal.Rasterize("pa.tif", "pa_PROJ.shp", options=param)
 

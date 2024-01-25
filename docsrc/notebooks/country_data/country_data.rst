@@ -36,12 +36,6 @@ We import the Python modules needed for collecting the data.
     from pywdpa import get_token
     import forestatrisk as far
 
-::
-
-    # forestatrisk: modelling and forecasting deforestation in the tropics.
-    # https://ecology.ghislainv.fr/forestatrisk/
-
-
 We create some directories to hold the data and the ouputs with the
 function ``far.make_dir()``.
 
@@ -78,7 +72,7 @@ Google Drive.
 Google Earth Engine is used to compute the past forest cover change
 from Vancutsem et al. 2021 or Hansen et al. 2013. To get credentials
 for using the Google Earth Engine API, follow these
-`instructions <https://developers.google.com/earth-engine/guides/python_install-conda#get_credentials>`__. While authentication with ``ee.Authenticate()`` should be
+`instructions <https://developers.google.com/earth-engine/guides/python_install-conda#get_credentials>`_. While authentication with ``ee.Authenticate()`` should be
 necessary only once, you have to execute the command ``ee.Initialize()``
 at each session.
 
@@ -86,7 +80,7 @@ at each session.
 
     # Uncomment to authenticate for the first time.
     # ee.Authenticate()
-    ee.Initialize()
+    ee.Initialize(project="forestatrisk")
 
 Under Linux and Mac, credentials are stored in
 ``$HOME/.config/earthengine/credentials``.
@@ -99,8 +93,8 @@ Under Linux and Mac, credentials are stored in
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 RClone is used to download the forest cover change raster locally from
-Google Drive. To install RClone, follow these `instructions <https://rclone.org/install/>`__. To
-configure the access to your Google Drive, follow these `instructions <https://rclone.org/drive/>`__.
+Google Drive. To install RClone, follow these `instructions <https://rclone.org/install/>`_. To
+configure the access to your Google Drive, follow these `instructions <https://rclone.org/drive/>`_.
 
 1.2.3 Access to WDPA API
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -142,7 +136,8 @@ We compute the past forest cover change from Vancutsem et al. 2021
 using Google Earth Engine. The argument ``gdrive_remote_rclone`` of the
 function `far.data.country\_forest\_run() <https://ecology.ghislainv.fr/forestatrisk/subpackages/forestatrisk.build_data.html#forestatrisk.build_data.data.country_forest_run>`_ specifies the name of the
 Google Drive remote for rclone. The argument ``gdrive_folder`` specifies
-the name of the Google Drive folder to use.
+the name of the Google Drive folder to use. In this case, folder
+``GEE/GEE-forestatrisk-notebooks`` should exist in Google Drive.
 
 .. code:: python
 
@@ -153,13 +148,7 @@ the name of the Google Drive folder to use.
         keep_dir=True,
         fcc_source="jrc", perc=50,
         gdrive_remote_rclone="gdrive_gv",
-        gdrive_folder="GEE-forestatrisk-notebooks")
-
-::
-
-    Run Google Earth Engine
-    GEE running on the following extent:
-    (-61.22902679, 14.38819408, -60.80875015, 14.87902832)
+        gdrive_folder="GEE/GEE-forestatrisk-notebooks")
 
 2.2 Download raw data
 ~~~~~~~~~~~~~~~~~~~~~
@@ -170,13 +159,14 @@ the name of the Google Drive folder to use.
     far.data.country_download(
         iso3,
         gdrive_remote_rclone="gdrive_gv",
-        gdrive_folder="GEE-forestatrisk-notebooks",
+        gdrive_folder="GEE/GEE-forestatrisk-notebooks",
         output_dir="data_raw")   
 
 ::
 
     Downloading data for country MTQ
     SRTM not existing for tile: 25_09
+    Data for MTQ have been downloaded
 
 2.3 Compute explanatory variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -218,16 +208,6 @@ The ``data`` folder includes:
   different dates used for projections in the future, and forest carbon
   data for computing carbon emissions.
 
-.. code:: python
-
-    # Plot forest
-    fig_fcc23 = far.plot.fcc(
-        input_fcc_raster="data/fcc23.tif",
-        maxpixels=1e8,
-        output_file="output/fcc23.png",
-        borders="data/ctry_PROJ.shp",
-        linewidth=0.3, dpi=500)
-
 Variable characteristics are summarized in the following table:
 
 .. table::
@@ -255,7 +235,7 @@ Variable characteristics are summarized in the following table:
 2.5 Plots
 ~~~~~~~~~
 
-We can plot the past deforestation on the period 2000--2010--2020:
+We can plot the past deforestation for the period 2000--2010--2020:
 
 .. code:: python
 

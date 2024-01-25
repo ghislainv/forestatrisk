@@ -34,7 +34,7 @@ def download_osm(iso3, output_dir="."):
     if os.path.isfile(fname) is not True:
         # Identify continent and country from iso3
         file_run = pkg_resources.resource_filename(
-            "forestatrisk", os.path.join("data", "ctry_run.csv")
+            "forestatrisk", os.path.join("csv", "ctry_run.csv")
         )
         data_run = pd.read_csv(file_run, sep=";", header=0)
         # Check if data is available on Geofabrik
