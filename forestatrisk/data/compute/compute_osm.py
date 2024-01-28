@@ -35,6 +35,7 @@ def compute_osm(proj, extent, verbose=False):
            'or highway=trunk or highway=*ary" '
            '-o=roads.osm')
     rtn = subprocess.run(cmd, shell=True,
+                         check=True,
                          capture_output=True,
                          text=True)
     if verbose:
@@ -45,6 +46,7 @@ def compute_osm(proj, extent, verbose=False):
            'place=town or place=village" '
            '-o=towns.osm')
     rtn = subprocess.run(cmd, shell=True,
+                         check=True,
                          capture_output=True,
                          text=True)
     if verbose:
@@ -55,6 +57,7 @@ def compute_osm(proj, extent, verbose=False):
            'waterway=canal" '
            '-o=rivers.osm')
     rtn = subprocess.run(cmd, shell=True,
+                         check=True,
                          capture_output=True,
                          text=True)
     if verbose:

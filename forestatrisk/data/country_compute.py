@@ -1,17 +1,16 @@
 """Process country geospatial data."""
 
 import os
-import subprocess
 from glob import glob
 from shutil import rmtree, copy2
-import pkg_resources
 
 import numpy as np
 from osgeo import gdal
 
 from ..misc import make_dir
-from .compute import compute_biomass_avitabile, compute_osm, compute_srtm
-from .compute import compute_wdpa
+from .compute import compute_biomass_avitabile, compute_osm
+from .compute import compute_srtm, compute_wdpa
+from .compute import compute_forest
 from .extent_shp import extent_shp
 
 
@@ -76,7 +75,6 @@ def country_compute(
     xmax_reg = np.ceil(extent_proj[2] + 5000)
     ymax_reg = np.ceil(extent_proj[3] + 5000)
     extent_reg = (xmin_reg, ymin_reg, xmax_reg, ymax_reg)
-    extent = " ".join(map(str, extent_reg))
 
     # Computing country data
     if data_country:
@@ -101,20 +99,27 @@ def country_compute(
 
     # Computing forest data
     if data_forest:
-        script = pkg_resources.resource_filename(
-            "forestatrisk", os.path.join("shell", "forest_country.sh")
-        )
-        args = [
-            "sh ",
-            script,
-            iso3,
-            "'" + proj + "'",
-            "'" + extent + "'",
-            temp_dir,
-            output_dir
-        ]
-        cmd = " ".join(args)
-        subprocess.call(cmd, shell=True)
+        # Changing working directory
+        wd = os.getcwd()
+        os.chdir(temp_dir)
+        # Perform computations
+        compute_forest(iso3, proj, extent_reg)
+        # Create directories
+        make_dir(os.path.join(wd, output_dir, "forest"))
+        make_dir(os.path.join(wd, output_dir, "forecast"))
+        # Copy files
+        files = ["dist_edge.tif", "dist_defor.tif", "fcc23.tif"]
+        for file in files:
+            copy2(file, os.path.join(wd, output_dir))
+        files = ["dist_edge_forecast.tif", "dist_defor_forecast.tif"]
+        for file in files:
+            copy2(file, os.path.join(wd, output_dir, "forecast"))
+        files = ["forest_t1.tif", "forest_t2.tif", "forest_t3.tif",
+                 "forest_2005.tif", "forest_2015.tif",
+                 "fcc123.tif", "fcc12345.tif"]
+        for file in files:
+            copy2(file, os.path.join(wd, output_dir, "forest"))
+        os.chdir(wd)
 
     # Keep or remove directory
     if not keep_temp_dir:

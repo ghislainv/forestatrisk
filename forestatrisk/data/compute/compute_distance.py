@@ -3,7 +3,8 @@
 from osgeo import gdal
 
 
-def compute_distance(input_file, dist_file, values=0, verbose=True):
+def compute_distance(input_file, dist_file, values=0,
+                     nodata=4294967295, verbose=True):
     """Computing the shortest distance to pixels with given values in
     a raster file.
 
@@ -18,14 +19,16 @@ def compute_distance(input_file, dist_file, values=0, verbose=True):
 
     :param values: Values of the raster to compute the distance to. If
         several values, they must be separated with a comma in a
-        string (eg. '0,1'). Default to 0.
+        string (eg. '0,1'). Default is 0.
+
+    :param nodata: NoData value. Default is 4294967295 for UInt32.
 
     :param verbose: Logical. Whether to print messages or not. Default
         to ``True``.
 
     :return: None. A distance raster file is created (see
         ``dist_file``). Raster data type is UInt32 ([0,
-        4294967295]). NoData is set to 4294967295.
+        4294967295]).
 
     """
 
@@ -53,7 +56,7 @@ def compute_distance(input_file, dist_file, values=0, verbose=True):
     gdal.ComputeProximity(srcband, dstband, [val, "DISTUNITS=GEO"], callback=cb)
 
     # Set nodata value
-    dstband.SetNoDataValue(4294967295)
+    dstband.SetNoDataValue(nodata)
 
     # Delete objects
     srcband = None
