@@ -120,7 +120,7 @@ def compute_osm(proj, extent, verbose=False):
         # Compute distances
         compute_distance(
             input_file=cat + ".tif",
-            dist_file="dist_" + cat + ".tif",
+            dist_file="dist_" + cat[:-1] + ".tif",
             values=1,
             verbose=verbose,
         )
