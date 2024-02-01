@@ -182,7 +182,7 @@ def download(gdrive_remote_rclone, gdrive_folder, iso3, output_dir="."):
                    "yet available in the drive...")
             msg = msg.format(iso3)
             print(msg)
-            print("0")
+            print("0", end="")
         elif counter % 10 == 0:
             print(counter, end="")
         else:
