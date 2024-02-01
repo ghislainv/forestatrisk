@@ -2,6 +2,7 @@
 
 # Standard library imports
 from __future__ import division, print_function  # Python 3 compatibility
+import os
 import subprocess
 import time
 
@@ -87,7 +88,7 @@ def run_task(perc, iso3, extent_latlong, scale=30, proj=None, gdrive_folder=None
         image=forest,
         description="forest_" + iso3,
         fileNamePrefix="forest_" + iso3,
-        folder=gdrive_folder,
+        folder=os.path.basename(gdrive_folder),
         region=export_coord,
         scale=scale,
         maxPixels=maxPix,
@@ -152,20 +153,40 @@ def download(gdrive_remote_rclone, gdrive_folder, iso3, output_dir="."):
 
     """
 
-    # Data availability
-    data_availability = check(gdrive_remote_rclone, gdrive_folder, iso3)
+    # Check data availability
+    data_availability = check(
+        gdrive_remote_rclone, gdrive_folder, iso3
+    )
 
-    # Check task status
+    # Wait for task to be finished
+    counter = 0
     while data_availability is False:
-        # We wait 1 min
+        # Message
+        if counter == 0:
+            msg = ("Forest data for {} is not "
+                   "yet available in the drive...")
+            msg = msg.format(iso3)
+            print(msg)
+            print("0", end="")
+        elif (counter % 10) == 0:
+            print(counter, end="")
+        else:
+            print(".", end="")
+        # Increment the counter
+        counter += counter
+        # Wait for 1 min
         time.sleep(60)
-        # We reactualize the status
-        data_availability = check(gdrive_remote_rclone, gdrive_folder, iso3)
+        # Recheck data availability
+        data_availability = check(
+            gdrive_remote_rclone, gdrive_folder, iso3
+        )
+    print("OK")
 
     # Commands to download results with rclone
     remote_path = gdrive_remote_rclone + ":" + gdrive_folder
     pattern = "'forest_" + iso3 + "*.tif'"
-    cmd = ["rclone", "copy", "--include", pattern, remote_path, output_dir]
+    cmd = ["rclone", "copy", "--include", pattern,
+           remote_path, output_dir]
     cmd = " ".join(cmd)
     subprocess.call(cmd, shell=True)
 

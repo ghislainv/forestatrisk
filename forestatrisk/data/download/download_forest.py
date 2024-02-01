@@ -2,7 +2,6 @@
 
 import os
 from glob import glob
-import subprocess
 
 from ..run_gee import ee_jrc
 
@@ -31,25 +30,12 @@ def download_forest(iso3, gdrive_remote_rclone,
     files_tif = os.path.join(output_dir, "forest_" + iso3 + "*.tif")
     raster_list = glob(files_tif)
 
-    # If no data locally check if available in gdrive
+    # If no data locally try to download the data
     if len(raster_list) == 0:
-        # Data availability in gdrive
-        data_availability = ee_jrc.check(gdrive_remote_rclone,
-                                         gdrive_folder, iso3)
-
-        # Donwload if available in gdrive
-        if data_availability is True:
-            # Commands to download results with rclone
-            remote_path = gdrive_remote_rclone + ":" + gdrive_folder
-            pattern = "'forest_" + iso3 + "*.tif'"
-            cmd = ["rclone", "copy", "--include", pattern,
-                   remote_path, output_dir]
-            cmd = " ".join(cmd)
-            subprocess.call(cmd, shell=True)
-            print("Data for {0:3s} have been downloaded".format(iso3))
-
-        else:
-            print("Data for {0:3s} are not available".format(iso3))
+        ee_jrc.download(
+            gdrive_remote_rclone, gdrive_folder,
+            iso3, output_dir
+        )
 
 
 # End

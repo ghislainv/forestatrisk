@@ -97,7 +97,7 @@ def run_gee_forest(
                 extent_latlong=extent_latlong,
                 scale=30,
                 proj=proj,
-                gdrive_folder=os.path.basename(gdrive_folder),
+                gdrive_folder=gdrive_folder,
             )
             print("GEE running on the following extent:")
             print(str(extent_latlong))
@@ -114,7 +114,7 @@ def run_gee_forest(
                 extent_latlong=extent_latlong,
                 scale=30,
                 proj=proj,
-                gdrive_folder=os.path.basename(gdrive_folder),
+                gdrive_folder=gdrive_folder,
             )
             print("GEE running on the following extent:")
             print(str(extent_latlong))
