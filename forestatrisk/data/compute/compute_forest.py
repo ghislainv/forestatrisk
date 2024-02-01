@@ -79,11 +79,11 @@ def compute_forest(iso, proj, extent, verbose=False):
 
     # Compute distance to forest edge at t2 for modelling
     compute_distance("forest_t2_src.tif", "dist_edge.tif",
-                     values=0, nodata=0)
+                     values=0, nodata=0, verbose=verbose)
 
     # Compute distance to forest edge at t3 for forecasting
     compute_distance("forest_t3_src.tif", "dist_edge_forecast.tif",
-                     values=0, nodata=0)
+                     values=0, nodata=0, verbose=verbose)
 
     # Compute fcc12_src.tif
     cmd_str = (
@@ -102,7 +102,7 @@ def compute_forest(iso, proj, extent, verbose=False):
 
     # Compute distance to past deforestation at t2 for training
     compute_distance("fcc12_src.tif", "dist_defor.tif",
-                     values=0, nodata=0)
+                     values=0, nodata=0, verbose=verbose)
 
     # Compute fcc23_src.tif
     rast_a = "forest_t2_src.tif"
@@ -114,7 +114,7 @@ def compute_forest(iso, proj, extent, verbose=False):
 
     # Compute distance to past deforestation at t3 for forecasting
     compute_distance("fcc23_src.tif", "dist_defor_forecast.tif",
-                     values=0, nodata=0)
+                     values=0, nodata=0, verbose=verbose)
 
     # Mask forest rasters with country border
     rast_in = [
