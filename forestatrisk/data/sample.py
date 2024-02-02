@@ -25,6 +25,7 @@ def sample(
     input_forest_raster="forest.tif",
     output_file="output/sample.txt",
     blk_rows=0,
+    verbose=True
 ):
     """Sample points and extract raster values.
 
@@ -50,6 +51,8 @@ def sample(
 
     :param blk_rows: If > 0, number of lines per block.
 
+    :param verbose: Toogle progress bar.
+
     :return: A Pandas DataFrame, each row being one observation.
 
     """
@@ -61,7 +64,10 @@ def sample(
     # Sampling pixels
     # =============================================
 
-    print("Sample 2x {} pixels (deforested vs. forest)".format(nsamp))
+    if verbose:
+        text = ("Sample 2x {} pixels "
+                "(deforested vs. forest)")
+        print(text.format(nsamp))
 
     # Read defor raster
     forest_raster_file = os.path.join(var_dir, input_forest_raster)
@@ -76,10 +82,15 @@ def sample(
     y = blockinfo[4]
     nx = blockinfo[5]
     ny = blockinfo[6]
-    print("Divide region in {} blocks".format(nblock))
+    if verbose:
+        text = "Divide region in {} blocks"
+        print(text.format(nblock))
 
     # Number of defor/forest pixels by block
-    print("Compute number of deforested and forest pixels per block")
+    if verbose:
+        text = ("Compute number of deforested "
+                "and forest pixels per block")
+        print(text)
     ndc = 0
     ndc_block = np.zeros(nblock, dtype=int)
     nfc = 0
@@ -88,7 +99,8 @@ def sample(
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
-        progress_bar(nblock, b + 1)
+        if verbose:
+            progress_bar(nblock, b + 1)
         # Position in 1D-arrays
         px = b % nblock_x
         py = b // nblock_x
@@ -115,11 +127,10 @@ def sample(
             nsamp = 10000
         else:
             nsamp = int(np.rint(nsamp_prop))
-    else:
-        nsamp = nsamp
 
     # Proba of drawing a block
-    print("Draw blocks at random")
+    if verbose:
+        print("Draw blocks at random")
     proba_block_d = ndc_block / ndc
     proba_block_f = nfc_block / nfc
     # Draw block number nsamp times
@@ -137,14 +148,16 @@ def sample(
         nblock_draw_f[block_draw_f[s]] += 1
 
     # Draw defor/forest pixels in blocks
-    print("Draw pixels at random in blocks")
+    if verbose:
+        print("Draw pixels at random in blocks")
     # Object to store coordinates of selected pixels
     deforselect = np.empty(shape=(0, 2), dtype=int)
     forselect = np.empty(shape=(0, 2), dtype=int)
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
-        progress_bar(nblock, b + 1)
+        if verbose:
+            progress_bar(nblock, b + 1)
         # nbdraw
         nbdraw_d = nblock_draw_d[b]
         nbdraw_f = nblock_draw_f[b]
@@ -166,7 +179,10 @@ def sample(
         if nbdraw_d > 0:
             if nbdraw_d < ndc_block:
                 i = np.random.choice(ndc_block, size=nbdraw_d, replace=False)
-                deforselect = np.concatenate((deforselect, deforpix[i]), axis=0)
+                deforselect = np.concatenate(
+                    (deforselect, deforpix[i]),
+                    axis=0
+                )
             else:
                 # nbdraw = ndc_block
                 deforselect = np.concatenate((deforselect, deforpix), axis=0)
@@ -182,8 +198,8 @@ def sample(
     # =============================================
     # Compute center of pixel coordinates
     # =============================================
-
-    print("Compute center of pixel coordinates")
+    if verbose:
+        print("Compute center of pixel coordinates")
 
     # Landscape variables from forest raster
     gt = forestR.GetGeoTransform()
@@ -208,14 +224,19 @@ def sample(
     # ================================================
 
     # Cell number from region
-    print("Compute number of {} x {} km spatial cells".format(csize, csize))
+    if verbose:
+        text = "Compute number of {} x {} km spatial cells"
+        print(text.format(csize, csize))
     csize = csize * 1000  # Transform km in m
     ncol = int(np.ceil((Xmax - Xmin) / csize))
     nrow = int(np.ceil((Ymax - Ymin) / csize))
     ncell = ncol * nrow
-    print("... {} cells ({} x {})".format(ncell, nrow, ncol))
+    if verbose:
+        text = "... {} cells ({} x {})"
+        print(text.format(ncell, nrow, ncol))
     # bigI and bigJ are the coordinates of the cells and start at zero
-    print("Identify cell number from XY coordinates")
+    if verbose:
+        print("Identify cell number from XY coordinates")
     bigJ = ((pts_x - Xmin) / csize).astype(int)
     bigI = ((Ymax - pts_y) / csize).astype(int)
     cell = bigI * ncol + bigJ  # Cell number starts at zero
@@ -231,7 +252,10 @@ def sample(
 
     # Make vrt with gdal.BuildVRT
     # Note: Extent and resolution from forest raster!
-    print("Make virtual raster with variables as raster bands")
+    if verbose:
+        text = ("Make virtual raster with "
+                "variables as raster bands")
+        print(text)
     param = gdal.BuildVRTOptions(
         resolution="user",
         outputBounds=(Xmin, Ymin, Xmax, Ymax),
@@ -261,7 +285,10 @@ def sample(
     val = np.zeros(shape=(nobs, nband), dtype=float)
 
     # Extract raster values
-    print("Extract raster values for selected pixels")
+    if verbose:
+        text = ("Extract raster values "
+                "for selected pixels")
+        print(text)
     for i in range(nobs):
         # Progress bar
         progress_bar(nobs, i + 1)
@@ -290,22 +317,25 @@ def sample(
     # Export and return value
     # =============================================
 
-    print("Export results to file " + output_file)
+    if verbose:
+        text = "Export results to file {}"
+        print(text.format(output_file))
 
     # Write to file by row
     colname = raster_list
-    for i in range(len(raster_list)):
-        base_name = os.path.basename(raster_list[i])
+    for (i, j) in enumerate(raster_list):
+        base_name = os.path.basename(j)
         index_dot = base_name.index(".")
         colname[i] = base_name[:index_dot]
 
     varname = ",".join(colname) + ",X,Y,cell"
-    np.savetxt(output_file, val, header=varname, fmt="%s", delimiter=",", comments="")
+    np.savetxt(output_file, val, header=varname, fmt="%s",
+               delimiter=",", comments="")
 
     # Convert to pandas DataFrame and return the result
     colname.extend(["X", "Y", "cell"])
-    val_DF = pd.DataFrame(val, columns=colname)
-    return val_DF
+    val_df = pd.DataFrame(val, columns=colname)
+    return val_df
 
 
 # End

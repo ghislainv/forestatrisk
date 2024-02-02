@@ -169,8 +169,6 @@ def progress_bar(niter, i):
     :param niter: Total number of iterations.
     :param i: Current number of iteration (starts at 1).
 
-    :return: This function does not return any value.
-
     """
 
     step = 1 if niter <= 100 else niter // 100
@@ -183,7 +181,6 @@ def progress_bar(niter, i):
     if i == niter:
         sys.stdout.write("\r100%\n")
         sys.stdout.flush()
-    return None
 
 
 # Rescale
