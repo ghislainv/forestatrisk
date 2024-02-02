@@ -291,7 +291,8 @@ def sample(
         print(text)
     for i in range(nobs):
         # Progress bar
-        progress_bar(nobs, i + 1)
+        if verbose:
+            progress_bar(nobs, i + 1)
         # ReadArray for extract
         extract = stack.ReadAsArray(int(xOffset[i]), int(yOffset[i]), 1, 1)
         val[i, :] = extract.reshape(
