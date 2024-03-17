@@ -18,6 +18,7 @@ import sys
 # Third party imports
 import numpy as np
 import pandas as pd
+from patsy import build_design_matrices
 from osgeo import gdal
 
 # Local application imports
@@ -27,31 +28,27 @@ from ..misc import progress_bar, makeblock
 
 # predict_raster
 def predict_raster(
-    model,
-    var_dir="data",
-    input_forest_raster="data/forest.tif",
-    output_file="predictions.tif",
-    blk_rows=128,
-    **kwargs
+        model,
+        _x_design_info,
+        var_dir="data",
+        input_forest_raster="data/forest.tif",
+        output_file="predictions.tif",
+        blk_rows=128,
 ):
-    """Predict the spatial probability of deforestation from a model.
+    """Predict the spatial probability of deforestation from a
+    statistical model.
 
     This function predicts the spatial probability of deforestation
-    from a model_binomial_iCAR model. Computation are done by block and
+    from a statistical model. Computation are done by block and
     can be performed on large geographical areas.
 
     :param model: The model (glm, rf) to predict from. Must have a
-        model.predict() function.
+        model.predict_proba() function.
+    :param _x_design_info: Design matrix information from patsy.
     :param var_dir: Directory with rasters (.tif) of explicative variables.
     :param input_forest_raster: Path to forest raster (1 for forest).
     :param output_file: Name of the output raster file for predictions.
     :param blk_rows: If > 0, number of rows for computation by block.
-    :param \\**kwargs: see below.
-
-    :Keyword Arguments: Additional arguments to be passed to
-        ``model.predict()``\\ .
-
-    :return: A raster of predictions.
 
     """
 
@@ -175,11 +172,19 @@ def predict_raster(
         # Transform into a pandas DataFrame
         df = pd.DataFrame(data)
         df.columns = var_names
+        # Add fake cell column for _x_design_info
+        df["cell"] = 0
         # Predict
         pred = np.zeros(npix)  # Initialize with nodata value (0)
         if len(w[0]) > 0:
+            # Get X
+            (x_new,) = build_design_matrices([_x_design_info], df)
+            if "LogisticRegression" in str(model):
+                X_new = x_new[:, :-1]
+            else:
+                X_new = x_new[:, 1:-1]
             # Get predictions into an array
-            p = model.predict(df, **kwargs)
+            p = model.predict_proba(X_new)[:, 1]
             # Rescale and return to pred
             pred[w] = rescale(p)
         # Assign prediction to raster

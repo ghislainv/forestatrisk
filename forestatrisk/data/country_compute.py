@@ -106,16 +106,24 @@ def country_compute(
         compute_forest(iso3, proj, extent_reg)
         # Create directories
         make_dir(os.path.join(wd, output_dir, "forest"))
+        make_dir(os.path.join(wd, output_dir, "validation"))
         make_dir(os.path.join(wd, output_dir, "forecast"))
-        # Copy files
-        files = ["dist_edge.tif", "dist_defor.tif", "fcc23.tif"]
+        # Copy files for modelling
+        ifiles = ["dist_edge_t1.tif", "fcc12.tif"]
+        ofiles = ["dist_edge.tif", "fcc.tif"]
+        for (ifile, ofile) in zip(ifiles, ofiles):
+            copy2(ifile, os.path.join(wd, output_dir, ofile))
+        # Copy files for validation
+        files = ["dist_edge_t2.tif", "dist_defor_t2.tif"]
         for file in files:
-            copy2(file, os.path.join(wd, output_dir))
-        files = ["dist_edge_forecast.tif", "dist_defor_forecast.tif"]
+            copy2(file, os.path.join(wd, output_dir, "validation"))
+        # Copy files for forecast
+        files = ["dist_edge_t3.tif", "dist_defor_t3.tif"]
         for file in files:
             copy2(file, os.path.join(wd, output_dir, "forecast"))
+        # Forest data
         files = ["forest_t1.tif", "forest_t2.tif", "forest_t3.tif",
-                 "forest_2005.tif", "forest_2015.tif",
+                 "forest_2005.tif", "forest_2015.tif", "fcc23.tif",
                  "fcc123.tif", "fcc12345.tif"]
         for file in files:
             copy2(file, os.path.join(wd, output_dir, "forest"))
@@ -125,5 +133,4 @@ def country_compute(
     if not keep_temp_dir:
         rmtree(temp_dir, ignore_errors=True)
 
-
-# End
+# End of file

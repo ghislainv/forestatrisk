@@ -30,6 +30,7 @@ from .plot import plot
 # Predict
 from .predict import interpolate_rho, wrast_rho
 from .predict import predict_raster, predict_raster_binomial_iCAR
+from .predict import defrate_per_cat
 
 # Project
 from .project import deforest_diffusion, deforest_diffusion_t_nofor

@@ -41,9 +41,9 @@ def predict_binomial_iCAR(model, new_data, rhos):
 
     """
 
-    (new_x,) = build_design_matrices([model._x_design_info], new_data)
-    new_X = new_x[:, :-1]
-    return invlogit(np.dot(new_X, model.betas) + rhos)
+    (x_new,) = build_design_matrices([model._x_design_info], new_data)
+    X_new = x_new[:, :-1]
+    return invlogit(np.dot(X_new, model.betas) + rhos)
 
 
 # predict

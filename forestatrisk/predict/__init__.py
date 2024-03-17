@@ -12,6 +12,7 @@
 from .interpolate_rho import interpolate_rho
 from .predict_raster_binomial_iCAR import predict_raster_binomial_iCAR
 from .predict_raster import predict_raster
+from .defrate_per_cat import defrate_per_cat
 from .wrast_rho import wrast_rho
 
 # EOF

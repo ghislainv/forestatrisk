@@ -77,12 +77,16 @@ def compute_forest(iso, proj, extent, verbose=False):
                    burnValues=[1], outputType=gdal.GDT_Byte,
                    creationOptions=copts, callback=cback)
 
-    # Compute distance to forest edge at t2 for modelling
-    compute_distance("forest_t2_src.tif", "dist_edge.tif",
+    # Compute distance to forest edge at t1 for modelling
+    compute_distance("forest_t1_src.tif", "dist_edge_t1.tif",
+                     values=0, nodata=0, verbose=verbose)
+
+    # Compute distance to forest edge at t2 for validating
+    compute_distance("forest_t2_src.tif", "dist_edge_t2.tif",
                      values=0, nodata=0, verbose=verbose)
 
     # Compute distance to forest edge at t3 for forecasting
-    compute_distance("forest_t3_src.tif", "dist_edge_forecast.tif",
+    compute_distance("forest_t3_src.tif", "dist_edge_t3.tif",
                      values=0, nodata=0, verbose=verbose)
 
     # Compute fcc12_src.tif
@@ -100,8 +104,8 @@ def compute_forest(iso, proj, extent, verbose=False):
     subprocess.run(cmd, shell=True, check=True,
                    capture_output=False)
 
-    # Compute distance to past deforestation at t2 for training
-    compute_distance("fcc12_src.tif", "dist_defor.tif",
+    # Compute distance to past deforestation at t2 for modelling
+    compute_distance("fcc12_src.tif", "dist_defor_t2.tif",
                      values=0, nodata=0, verbose=verbose)
 
     # Compute fcc23_src.tif
@@ -113,7 +117,7 @@ def compute_forest(iso, proj, extent, verbose=False):
                    capture_output=False)
 
     # Compute distance to past deforestation at t3 for forecasting
-    compute_distance("fcc23_src.tif", "dist_defor_forecast.tif",
+    compute_distance("fcc23_src.tif", "dist_defor_t3.tif",
                      values=0, nodata=0, verbose=verbose)
 
     # Mask forest rasters with country border
@@ -140,8 +144,9 @@ def compute_forest(iso, proj, extent, verbose=False):
         subprocess.run(cmd, shell=True, check=True,
                        capture_output=False)
 
-    # fcc23
-    # Mask fcc23 with country border
+    # Mask fcc12 and fcc23 with country border
+    rast_in = ["fcc12_src.tif", "fcc23_src.tif"]
+    rast_out = ["fcc12.tif", "fcc23.tif"]
     cmd_str = (
         'gdal_calc.py --overwrite '
         '-A {0} -B ctry_PROJ.tif '
@@ -150,14 +155,12 @@ def compute_forest(iso, proj, extent, verbose=False):
         '--co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
         '--NoDataValue=255 --quiet'
     )
-    rast_in = "fcc23_src.tif"
-    rast_out = "fcc23.tif"
     calc_expr = '"255-254*(A==1)*(B==1)-255*(A==0)*(B==1)"'
-    cmd = cmd_str.format(rast_in, rast_out, calc_expr)
-    subprocess.run(cmd, shell=True, check=True,
-                   capture_output=False)
+    for (i, j) in zip(rast_in, rast_out):
+        cmd = cmd_str.format(i, j, calc_expr)
+        subprocess.run(cmd, shell=True, check=True,
+                       capture_output=False)
 
-    # fcc123
     # Create raster fcc123.tif
     # (0: nodata, 1: for2000, 2: for2010, 3: for2020)
     cmd = (
@@ -171,7 +174,6 @@ def compute_forest(iso, proj, extent, verbose=False):
     subprocess.run(cmd, shell=True, check=True,
                    capture_output=False)
 
-    # fcc12345
     # Create raster fcc12345.tif
     # (0: nodata, 1: for2000, 2: for2005,
     # 3: for2010, 4: for2015, 5: for2020)

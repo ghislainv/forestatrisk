@@ -23,7 +23,7 @@ def sample(
     csize=10,
     var_dir="data",
     input_forest_raster="forest.tif",
-    output_file="output/sample.txt",
+    output_file="sample.txt",
     blk_rows=0,
     verbose=True
 ):
