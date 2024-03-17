@@ -137,29 +137,23 @@ interpolation (in km).</p></li>
 <span id="forestatrisk-predict-predict-raster-module"></span><h2>forestatrisk.predict.predict_raster module<a class="headerlink" href="#module-forestatrisk.predict.predict_raster" title="Link to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="forestatrisk.predict.predict_raster.predict_raster">
-<span class="sig-name descname"><span class="pre">predict_raster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_forest_raster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/forest.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'predictions.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/predict/predict_raster.html#predict_raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.predict.predict_raster.predict_raster" title="Link to this definition">¶</a></dt>
-<dd><p>Predict the spatial probability of deforestation from a model.</p>
+<span class="sig-name descname"><span class="pre">predict_raster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_x_design_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_forest_raster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/forest.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'predictions.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/predict/predict_raster.html#predict_raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.predict.predict_raster.predict_raster" title="Link to this definition">¶</a></dt>
+<dd><p>Predict the spatial probability of deforestation from a
+statistical model.</p>
 <p>This function predicts the spatial probability of deforestation
-from a model_binomial_iCAR model. Computation are done by block and
+from a statistical model. Computation are done by block and
 can be performed on large geographical areas.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> – The model (glm, rf) to predict from. Must have a
-model.predict() function.</p></li>
+model.predict_proba() function.</p></li>
+<li><p><strong>_x_design_info</strong> – Design matrix information from patsy.</p></li>
 <li><p><strong>var_dir</strong> – Directory with rasters (.tif) of explicative variables.</p></li>
 <li><p><strong>input_forest_raster</strong> – Path to forest raster (1 for forest).</p></li>
 <li><p><strong>output_file</strong> – Name of the output raster file for predictions.</p></li>
 <li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for computation by block.</p></li>
-<li><p><strong>**kwargs</strong> – see below.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Keyword Arguments<span class="colon">:</span></dt>
-<dd class="field-even"><p>Additional arguments to be passed to
-<code class="docutils literal notranslate"><span class="pre">model.predict()</span></code>.</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A raster of predictions.</p>
 </dd>
 </dl>
 </dd></dl>

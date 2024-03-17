@@ -119,6 +119,7 @@
 <span class="c1"># Third party imports</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">patsy</span> <span class="kn">import</span> <span class="n">build_design_matrices</span>
 <span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span>
 
 <span class="c1"># Local application imports</span>
@@ -130,31 +131,27 @@
 <div class="viewcode-block" id="predict_raster">
 <a class="viewcode-back" href="../../../subpackages/forestatrisk.predict.html#forestatrisk.predict.predict_raster.predict_raster">[docs]</a>
 <span class="k">def</span> <span class="nf">predict_raster</span><span class="p">(</span>
-    <span class="n">model</span><span class="p">,</span>
-    <span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
-    <span class="n">input_forest_raster</span><span class="o">=</span><span class="s2">&quot;data/forest.tif&quot;</span><span class="p">,</span>
-    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;predictions.tif&quot;</span><span class="p">,</span>
-    <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">_x_design_info</span><span class="p">,</span>
+        <span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
+        <span class="n">input_forest_raster</span><span class="o">=</span><span class="s2">&quot;data/forest.tif&quot;</span><span class="p">,</span>
+        <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;predictions.tif&quot;</span><span class="p">,</span>
+        <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Predict the spatial probability of deforestation from a model.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Predict the spatial probability of deforestation from a</span>
+<span class="sd">    statistical model.</span>
 
 <span class="sd">    This function predicts the spatial probability of deforestation</span>
-<span class="sd">    from a model_binomial_iCAR model. Computation are done by block and</span>
+<span class="sd">    from a statistical model. Computation are done by block and</span>
 <span class="sd">    can be performed on large geographical areas.</span>
 
 <span class="sd">    :param model: The model (glm, rf) to predict from. Must have a</span>
-<span class="sd">        model.predict() function.</span>
+<span class="sd">        model.predict_proba() function.</span>
+<span class="sd">    :param _x_design_info: Design matrix information from patsy.</span>
 <span class="sd">    :param var_dir: Directory with rasters (.tif) of explicative variables.</span>
 <span class="sd">    :param input_forest_raster: Path to forest raster (1 for forest).</span>
 <span class="sd">    :param output_file: Name of the output raster file for predictions.</span>
 <span class="sd">    :param blk_rows: If &gt; 0, number of rows for computation by block.</span>
-<span class="sd">    :param \\**kwargs: see below.</span>
-
-<span class="sd">    :Keyword Arguments: Additional arguments to be passed to</span>
-<span class="sd">        ``model.predict()``\\ .</span>
-
-<span class="sd">    :return: A raster of predictions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -278,11 +275,19 @@
         <span class="c1"># Transform into a pandas DataFrame</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">var_names</span>
+        <span class="c1"># Add fake cell column for _x_design_info</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;cell&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># Predict</span>
         <span class="n">pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">npix</span><span class="p">)</span>  <span class="c1"># Initialize with nodata value (0)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Get X</span>
+            <span class="p">(</span><span class="n">x_new</span><span class="p">,)</span> <span class="o">=</span> <span class="n">build_design_matrices</span><span class="p">([</span><span class="n">_x_design_info</span><span class="p">],</span> <span class="n">df</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;LogisticRegression&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+                <span class="n">X_new</span> <span class="o">=</span> <span class="n">x_new</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">X_new</span> <span class="o">=</span> <span class="n">x_new</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="c1"># Get predictions into an array</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_new</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
             <span class="c1"># Rescale and return to pred</span>
             <span class="n">pred</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">rescale</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
         <span class="c1"># Assign prediction to raster</span>
