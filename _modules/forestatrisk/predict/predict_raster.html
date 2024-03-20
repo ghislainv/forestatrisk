@@ -137,6 +137,7 @@
         <span class="n">input_forest_raster</span><span class="o">=</span><span class="s2">&quot;data/forest.tif&quot;</span><span class="p">,</span>
         <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;predictions.tif&quot;</span><span class="p">,</span>
         <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Predict the spatial probability of deforestation from a</span>
 <span class="sd">    statistical model.</span>
@@ -152,6 +153,8 @@
 <span class="sd">    :param input_forest_raster: Path to forest raster (1 for forest).</span>
 <span class="sd">    :param output_file: Name of the output raster file for predictions.</span>
 <span class="sd">    :param blk_rows: If &gt; 0, number of rows for computation by block.</span>
+<span class="sd">    :param verbose: Logical. Whether to print messages or not. Default</span>
+<span class="sd">        to ``True``.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -236,7 +239,8 @@
     <span class="c1"># Loop on blocks of data</span>
     <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nblock</span><span class="p">):</span>
         <span class="c1"># Progress bar</span>
-        <span class="n">progress_bar</span><span class="p">(</span><span class="n">nblock</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="n">progress_bar</span><span class="p">(</span><span class="n">nblock</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="c1"># Position in 1D-arrays</span>
         <span class="n">px</span> <span class="o">=</span> <span class="n">b</span> <span class="o">%</span> <span class="n">nblock_x</span>
         <span class="n">py</span> <span class="o">=</span> <span class="n">b</span> <span class="o">//</span> <span class="n">nblock_x</span>
