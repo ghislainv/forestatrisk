@@ -15,5 +15,6 @@ from .map_validation import map_validation
 from .map_accuracy import map_confmat, map_accuracy
 from .resample_sum import resample_sum
 from .validation_npix import validation_npix  # Deprecated function
+from .validation_udef_arp import validation_udef_arp
 
 # EOF

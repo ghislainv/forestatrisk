@@ -12,5 +12,6 @@
 from .cellneigh import cellneigh, cellneigh_ctry
 from .model_binomial_iCAR import model_binomial_iCAR
 from .model_random_forest import model_random_forest
+from .icarModelPred import icarModelPred
 
 # EOF

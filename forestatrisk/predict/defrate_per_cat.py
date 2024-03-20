@@ -20,7 +20,8 @@ from ..misc import progress_bar, makeblock
 
 
 # defrate_per_cat
-def defrate_per_cat(fcc_file, defor_values, riskmap_file, time_interval,
+def defrate_per_cat(fcc_file, riskmap_file, time_interval,
+                    period="calibration",
                     tab_file_defrate="defrate_per_cat.csv",
                     blk_rows=128, verbose=True):
     """Compute deforestation rates per category of deforestation risk.
@@ -33,16 +34,15 @@ def defrate_per_cat(fcc_file, defor_values, riskmap_file, time_interval,
         deforestation, 3: remaining forest at the end of the second
         period. No data value must be 0 (zero).
 
-    :param defor_values: Raster values to consider for
-       deforestation. Must correspond to either scalar 1 if first
-       period, or list [1, 2] if both first and second period are
-       considered.
-
     :param riskmap_file: Input raster file with categories of
         spatial deforestation risk.
 
     :param time_interval: Time interval (in years) for forest cover
         change observations.
+
+    :param period: Either "calibration" (from t1 to t2), "validation"
+        (or "confirmation" from t2 to t3), or "historical" (full
+        historical period from t1 to t3). Default to "calibration".
 
     :param tab_file_defrate: Path to the ``.csv`` output file with
         estimates of deforestation rates per category of deforestation
@@ -110,12 +110,20 @@ def defrate_per_cat(fcc_file, defor_values, riskmap_file, time_interval,
         fcc_data = fcc_band.ReadAsArray(x[px], y[py], nx[px], ny[py])
         defor_cat_data = defor_cat_band.ReadAsArray(
             x[px], y[py], nx[px], ny[py])
+        # Defor data on period
+        if period == "calibration":
+            data_for = defor_cat_data[fcc_data > 0]
+            data_defor = defor_cat_data[fcc_data == 1]
+        elif period in ["validation", "confirmation"]:
+            data_for = defor_cat_data[fcc_data > 1]
+            data_defor = defor_cat_data[fcc_data == 2]
+        elif period == "historical":
+            data_for = defor_cat_data[fcc_data > 0]
+            data_defor = defor_cat_data[np.isin(fcc_data, [1, 2])]
         # nfor_per_cat
-        data_for = defor_cat_data[fcc_data > 0]
         cat_for = pd.Categorical(data_for.flatten(), categories=cat)
         df["nfor"] += cat_for.value_counts().values
         # ndefor_per_cat
-        data_defor = defor_cat_data[np.isin(fcc_data, defor_values)]
         cat_defor = pd.Categorical(data_defor.flatten(), categories=cat)
         df["ndefor"] += cat_defor.value_counts().values
 

@@ -34,6 +34,7 @@ def predict_raster(
         input_forest_raster="data/forest.tif",
         output_file="predictions.tif",
         blk_rows=128,
+        verbose=True,
 ):
     """Predict the spatial probability of deforestation from a
     statistical model.
@@ -49,6 +50,8 @@ def predict_raster(
     :param input_forest_raster: Path to forest raster (1 for forest).
     :param output_file: Name of the output raster file for predictions.
     :param blk_rows: If > 0, number of rows for computation by block.
+    :param verbose: Logical. Whether to print messages or not. Default
+        to ``True``.
 
     """
 
@@ -133,7 +136,8 @@ def predict_raster(
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
-        progress_bar(nblock, b + 1)
+        if verbose:
+            progress_bar(nblock, b + 1)
         # Position in 1D-arrays
         px = b % nblock_x
         py = b // nblock_x

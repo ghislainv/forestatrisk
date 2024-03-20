@@ -12,6 +12,9 @@ __author__ = "Ghislain Vieilledent"
 __email__ = "ghislain.vieilledent@cirad.fr"
 __version__ = "1.1.4"
 
+# GDAL exceptions
+from osgeo import gdal
+
 # Local imports
 # Data
 from .data import sample, extent_shp
@@ -23,6 +26,7 @@ from .misc import countpix, invlogit, make_dir
 from .model import cellneigh, cellneigh_ctry
 from .model import model_binomial_iCAR
 from .model import model_random_forest
+from .model import icarModelPred
 
 # Plot
 from .plot import plot
@@ -43,5 +47,9 @@ from .validate import map_confmat, map_accuracy
 from .validate import r_diffproj, mat_diffproj
 from .validate import resample_sum
 from .validate import validation_npix
+from .validate import validation_udef_arp
+
+# GDAL exceptions
+gdal.UseExceptions()
 
 # EOF
