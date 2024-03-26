@@ -127,8 +127,8 @@ def validation_udef_arp(
 
     # Create a table to save the results
     data = {"cell": list(range(nsquare)), "nfor_obs": 0,
-            "ndefor_obs": 0, "nfor_obs_ha": 0,
-            "ndefor_obs_ha": 0, "ndefor_pred_ha": 0}
+            "ndefor_obs": 0, "nfor_obs_ha": 0.0,
+            "ndefor_obs_ha": 0.0, "ndefor_pred_ha": 0.0}
     df = pd.DataFrame(data)
 
     # ==============================================================
