@@ -95,7 +95,7 @@ def defrate_per_cat(fcc_file, riskmap_file, time_interval,
 
     # Create a table to save the results
     data = {"cat": cat, "nfor": 0, "ndefor": 0,
-            "rate_obs": 0, "rate_mod": 0}
+            "rate_obs": 0.0, "rate_mod": 0.0}
     df = pd.DataFrame(data)
 
     # Loop on blocks of data
@@ -158,8 +158,6 @@ def defrate_per_cat(fcc_file, riskmap_file, time_interval,
 
     # Dereference drivers
     del fcc_ds, defor_cat_ds
-
-    return None
 
 
 # # Test
