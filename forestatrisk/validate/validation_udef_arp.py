@@ -208,7 +208,7 @@ def validation_udef_arp(
 
     # Identify model from file
     model_basename = os.path.basename(riskmap_file)
-    model_name = model_basename[5:-4]
+    model_name = model_basename[5:-7]
 
     # Plot title
     title = (
@@ -218,8 +218,9 @@ def validation_udef_arp(
     )
     title = title.format(model_name, period, csize_coarse_grid_ha)
 
-    # Points or identity line
-    p = [df["ndefor_obs_ha"].min(), df["ndefor_obs_ha"].max()]
+    # Points for identity line
+    p = [df[["ndefor_obs_ha", "ndefor_pred_ha"]].min(axis=None),
+         df[["ndefor_obs_ha", "ndefor_pred_ha"]].max(axis=None)]
 
     # Plot predictions vs. observations
     fig = plt.figure(figsize=figsize, dpi=dpi)
@@ -237,7 +238,7 @@ def validation_udef_arp(
          "n = {2:d}")
     t = t.format(MedAE, r_square, ncell)
     x_text = 0
-    y_text = df["ndefor_obs_ha"].max()
+    y_text = df[["ndefor_obs_ha", "ndefor_pred_ha"]].max(axis=None)
     plt.text(x_text, y_text, t, ha="left", va="top")
     fig.savefig(fig_file_pred)
     plt.close(fig)

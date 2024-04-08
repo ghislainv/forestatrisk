@@ -19,7 +19,7 @@ import sys
 import numpy as np
 from osgeo import gdal
 import pandas as pd
-from patsy import build_design_matrices
+from patsy.build import build_design_matrices
 
 # Local application imports
 from ..misc import invlogit, rescale
