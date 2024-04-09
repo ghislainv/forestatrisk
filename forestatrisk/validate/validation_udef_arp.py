@@ -191,10 +191,15 @@ def validation_udef_arp(
     df.to_csv(tab_file_pred, sep=",", header=True,
               index=False, index_label=False)
 
+    # Prediction error
+    error_pred = df["ndefor_pred_ha"] - df["ndefor_obs_ha"]
+
+    # Compute RMSE
+    squared_error = (error_pred) ** 2
+    RMSE = round(np.sqrt(np.mean(squared_error)), 2)
+
     # Compute wRMSE
     w = df["nfor_obs_ha"] / df["nfor_obs_ha"].sum()
-    error_pred = df["ndefor_pred_ha"] - df["ndefor_obs_ha"]
-    squared_error = (error_pred) ** 2
     wRMSE = round(np.sqrt(sum(squared_error * w)), 2)
 
     # Compute MedAE
@@ -244,9 +249,10 @@ def validation_udef_arp(
     plt.close(fig)
 
     # Results
-    indices = {"wRMSE": wRMSE, "MedAE": MedAE, "R2": r_square,
-               "ncell": ncell, "csize_coarse_grid": csize_coarse_grid,
-               "csize_coarse_grid_ha": csize_coarse_grid_ha}
+    indices = {"RMSE": RMSE, "wRMSE": wRMSE, "MedAE": MedAE, "R2":
+               r_square, "ncell": ncell, "csize_coarse_grid":
+               csize_coarse_grid, "csize_coarse_grid_ha":
+               csize_coarse_grid_ha}
     indices_df = pd.DataFrame([indices])
     indices_df.to_csv(indices_file_pred, sep=",", header=True,
                       index=False, index_label=False)
