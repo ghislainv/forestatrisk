@@ -1,6 +1,22 @@
 Changelog
 =========
 
+forestatrisk 1.1.3
+++++++++++++++++++
+
+* Improve usage on multiple operating systems.
+
+forestatrisk 1.1.2
+++++++++++++++++++
+
+* New wheels for Python 3.9 to 3.11.
+
+forestatrisk 1.1.1
+++++++++++++++++++
+
+* Adding biomass from WHRC.
+* Let the user select the Agg display for matpotlib.
+
 forestatrisk 1.1
 ++++++++++++++++
 
