@@ -4,7 +4,8 @@ from osgeo import gdal
 
 
 def compute_distance(input_file, dist_file, values=0,
-                     nodata=4294967295, verbose=True):
+                     nodata=4294967295, input_nodata=False,
+                     verbose=True):
     """Computing the shortest distance to pixels with given values in
     a raster file.
 
@@ -21,7 +22,11 @@ def compute_distance(input_file, dist_file, values=0,
         several values, they must be separated with a comma in a
         string (eg. '0,1'). Default is 0.
 
-    :param nodata: NoData value. Default is 4294967295 for UInt32.
+    :param nodata: NoData value for the output raster. Default is
+        4294967295 for UInt32.
+
+    :param input_nodata: Whether nodata pixels in the input
+        raster should be nodata in the output raster (default to False).
 
     :param verbose: Logical. Whether to print messages or not. Default
         to ``True``.
@@ -50,10 +55,19 @@ def compute_distance(input_file, dist_file, values=0,
     dst_ds.SetProjection(src_ds.GetProjectionRef())
     dstband = dst_ds.GetRasterBand(1)
 
+    # Use_input_nodata
+    ui_nodata = "YES" if input_nodata else "NO"
+
     # Compute distance
     val = "VALUES=" + str(values)
+    use_input_nodata = "USE_INPUT_NODATA=" + ui_nodata
     cb = gdal.TermProgress if verbose else 0
-    gdal.ComputeProximity(srcband, dstband, [val, "DISTUNITS=GEO"], callback=cb)
+    gdal.ComputeProximity(
+        srcband,
+        dstband,
+        [val, use_input_nodata, "DISTUNITS=GEO"],
+        callback=cb
+    )
 
     # Set nodata value
     dstband.SetNoDataValue(nodata)
@@ -62,6 +76,5 @@ def compute_distance(input_file, dist_file, values=0,
     srcband = None
     dstband = None
     del src_ds, dst_ds
-
 
 # End
