@@ -88,6 +88,9 @@ setup(
         "patsy",
         "pywdpa",
         "scikit-learn",
+        "xarray",
+        "rioxarray",
+        "dask",
     ],
     extras_require={
         "interactive": ["jupyter", "python-dotenv", "geopandas", "descartes", "folium"],
