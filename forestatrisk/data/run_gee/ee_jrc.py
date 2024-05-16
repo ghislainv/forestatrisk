@@ -45,7 +45,8 @@ def run_task(iso3, extent_latlong, scale=30, proj=None, gdrive_folder=None):
     """
 
     # Region
-    region = ee.Geometry.Rectangle(extent_latlong, proj="EPSG:4326", geodesic=False)
+    region = ee.Geometry.Rectangle(extent_latlong, proj="EPSG:4326",
+                                   geodesic=False)
     region = region.buffer(10000).bounds()
     export_coord = region.getInfo()["coordinates"]
 

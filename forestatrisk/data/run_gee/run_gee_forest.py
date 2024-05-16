@@ -13,8 +13,6 @@ from ...misc import make_dir
 from ..extent_shp import extent_shp
 
 
-
-
 def run_gee_forest(
     iso3,
     proj="EPSG:3395",

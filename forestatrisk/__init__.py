@@ -17,7 +17,7 @@ from osgeo import gdal
 
 # Local imports
 # Data
-from .data import sample, extent_shp
+from .data import sample, extent_shp, get_vector_extent
 
 # Misc
 from .misc import countpix, invlogit, make_dir
