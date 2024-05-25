@@ -119,21 +119,21 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Imports
-import os
-import re
-from shutil import copy2
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Imports</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">copy2</span>
 
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-from patsy import dmatrices
-import pickle
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import log_loss
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">patsy</span> <span class="kn">import</span> <span class="n">dmatrices</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">log_loss</span>
 
-import forestatrisk as far
+<span class="kn">import</span> <span class="nn">forestatrisk</span> <span class="k">as</span> <span class="nn">far</span>
 </pre></div>
 </div>
 </div>
@@ -151,8 +151,8 @@ import forestatrisk as far
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Make output directory
-far.make_dir(&quot;output&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make output directory</span>
+<span class="n">far</span><span class="o">.</span><span class="n">make_dir</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -164,16 +164,16 @@ far.make_dir(&quot;output&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import urllib.request
-from zipfile import ZipFile
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
 
-# Source of the data
-url = &quot;https://github.com/ghislainv/forestatrisk/raw/master/docsrc/notebooks/data_GLP.zip&quot;
+<span class="c1"># Source of the data</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/ghislainv/forestatrisk/raw/master/docsrc/notebooks/data_GLP.zip&quot;</span>
 
-if os.path.exists(&quot;data_GPL.zip&quot;) is False:
-    urllib.request.urlretrieve(url, &quot;data_GPL.zip&quot;)
-    with ZipFile(&quot;data_GPL.zip&quot;, &quot;r&quot;) as z:
-        z.extractall(&quot;data&quot;)
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data_GPL.zip&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+    <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;data_GPL.zip&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="s2">&quot;data_GPL.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
+        <span class="n">z</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -190,13 +190,13 @@ if os.path.exists(&quot;data_GPL.zip&quot;) is False:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Plot forest
-fig_fcc23 = far.plot.fcc(
-    input_fcc_raster=&quot;data/fcc23.tif&quot;,
-    maxpixels=1e8,
-    output_file=&quot;output/fcc23.png&quot;,
-    borders=&quot;data/ctry_PROJ.shp&quot;,
-    linewidth=0.3, dpi=500)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot forest</span>
+<span class="n">fig_fcc23</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">fcc</span><span class="p">(</span>
+    <span class="n">input_fcc_raster</span><span class="o">=</span><span class="s2">&quot;data/fcc23.tif&quot;</span><span class="p">,</span>
+    <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/fcc23.png&quot;</span><span class="p">,</span>
+    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -214,12 +214,12 @@ fig_fcc23 = far.plot.fcc(
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Sample points
-dataset = far.sample(nsamp=10000, adapt=True, seed=1234, csize=10,
-                     var_dir=&quot;data&quot;,
-                     input_forest_raster=&quot;fcc23.tif&quot;,
-                     output_file=&quot;output/sample.txt&quot;,
-                     blk_rows=0)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample points</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">nsamp</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">adapt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span> <span class="n">csize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                     <span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
+                     <span class="n">input_forest_raster</span><span class="o">=</span><span class="s2">&quot;fcc23.tif&quot;</span><span class="p">,</span>
+                     <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/sample.txt&quot;</span><span class="p">,</span>
+                     <span class="n">blk_rows</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -249,13 +249,13 @@ Export results to file output/sample.txt
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Remove NA from data-set (otherwise scale() and
-# model_binomial_iCAR doesn&#39;t work)
-dataset = dataset.dropna(axis=0)
-# Set number of trials to one for far.model_binomial_iCAR()
-dataset[&quot;trial&quot;] = 1
-# Print the first five rows
-print(dataset.head(5))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove NA from data-set (otherwise scale() and</span>
+<span class="c1"># model_binomial_iCAR doesn&#39;t work)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Set number of trials to one for far.model_binomial_iCAR()</span>
+<span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;trial&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c1"># Print the first five rows</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -283,14 +283,14 @@ print(dataset.head(5))
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Sample size
-ndefor = sum(dataset.fcc23 == 0)
-nfor = sum(dataset.fcc23 == 1)
-with open(&quot;output/sample_size.csv&quot;, &quot;w&quot;) as f:
-    f.write(&quot;var, n\n&quot;)
-    f.write(&quot;ndefor, &quot; + str(ndefor) + &quot;\n&quot;)
-    f.write(&quot;nfor, &quot; + str(nfor) + &quot;\n&quot;)
-print(&quot;ndefor = {}, nfor = {}&quot;.format(ndefor, nfor))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample size</span>
+<span class="n">ndefor</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">fcc23</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">nfor</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">fcc23</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output/sample_size.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;var, n</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;ndefor, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ndefor</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;nfor, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nfor</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ndefor = </span><span class="si">{}</span><span class="s2">, nfor = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ndefor</span><span class="p">,</span> <span class="n">nfor</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -309,22 +309,22 @@ ndefor = 9923, nfor = 9979
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Correlation formula
-formula_corr = &quot;fcc23 ~ dist_road + dist_town + dist_river + \
-dist_defor + dist_edge + altitude + slope - 1&quot;
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Correlation formula</span>
+<span class="n">formula_corr</span> <span class="o">=</span> <span class="s2">&quot;fcc23 ~ dist_road + dist_town + dist_river + </span><span class="se">\</span>
+<span class="s2">dist_defor + dist_edge + altitude + slope - 1&quot;</span>
 
-# Output file
-of = &quot;output/correlation.pdf&quot;
-# Data
-y, data = dmatrices(formula_corr, data=dataset,
-                    return_type=&quot;dataframe&quot;)
-# Plots
-figs = far.plot.correlation(
-    y=y, data=data,
-    plots_per_page=3,
-    figsize=(7, 8),
-    dpi=80,
-    output_file=of)
+<span class="c1"># Output file</span>
+<span class="n">of</span> <span class="o">=</span> <span class="s2">&quot;output/correlation.pdf&quot;</span>
+<span class="c1"># Data</span>
+<span class="n">y</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">dmatrices</span><span class="p">(</span><span class="n">formula_corr</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+                    <span class="n">return_type</span><span class="o">=</span><span class="s2">&quot;dataframe&quot;</span><span class="p">)</span>
+<span class="c1"># Plots</span>
+<span class="n">figs</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">correlation</span><span class="p">(</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+    <span class="n">plots_per_page</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="n">of</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -359,20 +359,20 @@ figs = far.plot.correlation(
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Neighborhood for spatial-autocorrelation
-nneigh, adj = far.cellneigh(raster=&quot;data/fcc23.tif&quot;, csize=10, rank=1)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Neighborhood for spatial-autocorrelation</span>
+<span class="n">nneigh</span><span class="p">,</span> <span class="n">adj</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">cellneigh</span><span class="p">(</span><span class="n">raster</span><span class="o">=</span><span class="s2">&quot;data/fcc23.tif&quot;</span><span class="p">,</span> <span class="n">csize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-# List of variables
-variables = [&quot;C(pa)&quot;, &quot;scale(altitude)&quot;, &quot;scale(slope)&quot;,
-             &quot;scale(dist_defor)&quot;, &quot;scale(dist_edge)&quot;, &quot;scale(dist_road)&quot;,
-             &quot;scale(dist_town)&quot;, &quot;scale(dist_river)&quot;]
-# Transform into numpy array
-variables = np.array(variables)
+<span class="c1"># List of variables</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;C(pa)&quot;</span><span class="p">,</span> <span class="s2">&quot;scale(altitude)&quot;</span><span class="p">,</span> <span class="s2">&quot;scale(slope)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;scale(dist_defor)&quot;</span><span class="p">,</span> <span class="s2">&quot;scale(dist_edge)&quot;</span><span class="p">,</span> <span class="s2">&quot;scale(dist_road)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;scale(dist_town)&quot;</span><span class="p">,</span> <span class="s2">&quot;scale(dist_river)&quot;</span><span class="p">]</span>
+<span class="c1"># Transform into numpy array</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
 
-# Starting values
-beta_start = -99  # Simple GLM estimates
-# Priors
-priorVrho = -1  # -1=&quot;1/Gamma&quot;
+<span class="c1"># Starting values</span>
+<span class="n">beta_start</span> <span class="o">=</span> <span class="o">-</span><span class="mi">99</span>  <span class="c1"># Simple GLM estimates</span>
+<span class="c1"># Priors</span>
+<span class="n">priorVrho</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># -1=&quot;1/Gamma&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -393,37 +393,37 @@ Identify adjacent cells and compute number of neighbors
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Run model while there is non-significant variables
-var_remove = True
-while(np.any(var_remove)):
-    # Formula
-    right_part = &quot; + &quot;.join(variables) + &quot; + cell&quot;
-    left_part = &quot;I(1-fcc23) + trial ~ &quot;
-    formula = left_part + right_part
-    # Model
-    mod_binomial_iCAR = far.model_binomial_iCAR(
-        # Observations
-        suitability_formula=formula, data=dataset,
-        # Spatial structure
-        n_neighbors=nneigh, neighbors=adj,
-        # Priors
-        priorVrho=priorVrho,
-        # Chains
-        burnin=1000, mcmc=1000, thin=1,
-        # Starting values
-        beta_start=beta_start)
-    # Ecological and statistical significance
-    effects = mod_binomial_iCAR.betas[1:]
-    # MCMC = mod_binomial_iCAR.mcmc
-    # CI_low = np.percentile(MCMC, 2.5, axis=0)[1:-2]
-    # CI_high = np.percentile(MCMC, 97.5, axis=0)[1:-2]
-    positive_effects = (effects &gt;= 0)
-    # zero_in_CI = ((CI_low * CI_high) &lt;= 0)
-    # Keeping only significant variables
-    var_remove = positive_effects
-    # var_remove = np.logical_or(positive_effects, zero_in_CI)
-    var_keep = np.logical_not(var_remove)
-    variables = variables[var_keep]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run model while there is non-significant variables</span>
+<span class="n">var_remove</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">while</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">var_remove</span><span class="p">)):</span>
+    <span class="c1"># Formula</span>
+    <span class="n">right_part</span> <span class="o">=</span> <span class="s2">&quot; + &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; + cell&quot;</span>
+    <span class="n">left_part</span> <span class="o">=</span> <span class="s2">&quot;I(1-fcc23) + trial ~ &quot;</span>
+    <span class="n">formula</span> <span class="o">=</span> <span class="n">left_part</span> <span class="o">+</span> <span class="n">right_part</span>
+    <span class="c1"># Model</span>
+    <span class="n">mod_binomial_iCAR</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">model_binomial_iCAR</span><span class="p">(</span>
+        <span class="c1"># Observations</span>
+        <span class="n">suitability_formula</span><span class="o">=</span><span class="n">formula</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+        <span class="c1"># Spatial structure</span>
+        <span class="n">n_neighbors</span><span class="o">=</span><span class="n">nneigh</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">adj</span><span class="p">,</span>
+        <span class="c1"># Priors</span>
+        <span class="n">priorVrho</span><span class="o">=</span><span class="n">priorVrho</span><span class="p">,</span>
+        <span class="c1"># Chains</span>
+        <span class="n">burnin</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">mcmc</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="c1"># Starting values</span>
+        <span class="n">beta_start</span><span class="o">=</span><span class="n">beta_start</span><span class="p">)</span>
+    <span class="c1"># Ecological and statistical significance</span>
+    <span class="n">effects</span> <span class="o">=</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">betas</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="c1"># MCMC = mod_binomial_iCAR.mcmc</span>
+    <span class="c1"># CI_low = np.percentile(MCMC, 2.5, axis=0)[1:-2]</span>
+    <span class="c1"># CI_high = np.percentile(MCMC, 97.5, axis=0)[1:-2]</span>
+    <span class="n">positive_effects</span> <span class="o">=</span> <span class="p">(</span><span class="n">effects</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># zero_in_CI = ((CI_low * CI_high) &lt;= 0)</span>
+    <span class="c1"># Keeping only significant variables</span>
+    <span class="n">var_remove</span> <span class="o">=</span> <span class="n">positive_effects</span>
+    <span class="c1"># var_remove = np.logical_or(positive_effects, zero_in_CI)</span>
+    <span class="n">var_keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">var_remove</span><span class="p">)</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="n">var_keep</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -443,18 +443,18 @@ Using estimates from classic logistic regression as starting values for betas
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Re-run the model with longer MCMC and estimated initial values
-mod_binomial_iCAR = far.model_binomial_iCAR(
-    # Observations
-    suitability_formula=formula, data=dataset,
-    # Spatial structure
-    n_neighbors=nneigh, neighbors=adj,
-    # Priors
-    priorVrho=priorVrho,
-    # Chains
-    burnin=5000, mcmc=5000, thin=5,
-    # Starting values
-    beta_start=mod_binomial_iCAR.betas)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Re-run the model with longer MCMC and estimated initial values</span>
+<span class="n">mod_binomial_iCAR</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">model_binomial_iCAR</span><span class="p">(</span>
+    <span class="c1"># Observations</span>
+    <span class="n">suitability_formula</span><span class="o">=</span><span class="n">formula</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+    <span class="c1"># Spatial structure</span>
+    <span class="n">n_neighbors</span><span class="o">=</span><span class="n">nneigh</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">adj</span><span class="p">,</span>
+    <span class="c1"># Priors</span>
+    <span class="n">priorVrho</span><span class="o">=</span><span class="n">priorVrho</span><span class="p">,</span>
+    <span class="c1"># Chains</span>
+    <span class="n">burnin</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">mcmc</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="c1"># Starting values</span>
+    <span class="n">beta_start</span><span class="o">=</span><span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">betas</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -465,14 +465,14 @@ mod_binomial_iCAR = far.model_binomial_iCAR(
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Predictions
-pred_icar = mod_binomial_iCAR.theta_pred
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predictions</span>
+<span class="n">pred_icar</span> <span class="o">=</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">theta_pred</span>
 
-# Summary
-print(mod_binomial_iCAR)
-# Write summary in file
-with open(&quot;output/summary_hSDM.txt&quot;, &quot;w&quot;) as f:
-    f.write(str(mod_binomial_iCAR))
+<span class="c1"># Summary</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mod_binomial_iCAR</span><span class="p">)</span>
+<span class="c1"># Write summary in file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output/summary_hSDM.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mod_binomial_iCAR</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -502,11 +502,11 @@ scale(dist_river)    -0.0129     0.0319    -0.0735     0.0502
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Plot
-figs = mod_binomial_iCAR.plot(
-    output_file=&quot;output/mcmc.pdf&quot;,plots_per_page=3,
-    figsize=(10, 6),
-    dpi=80)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot</span>
+<span class="n">figs</span> <span class="o">=</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/mcmc.pdf&quot;</span><span class="p">,</span><span class="n">plots_per_page</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -543,15 +543,15 @@ Traces and posteriors will be plotted in output/mcmc.pdf
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Save model&#39;s main specifications with pickle
-mod_icar_pickle = {
-    &quot;formula&quot;: mod_binomial_iCAR.suitability_formula,
-    &quot;rho&quot;: mod_binomial_iCAR.rho,
-    &quot;betas&quot;: mod_binomial_iCAR.betas,
-    &quot;Vrho&quot;: mod_binomial_iCAR.Vrho,
-    &quot;deviance&quot;: mod_binomial_iCAR.deviance}
-with open(&quot;output/mod_icar.pickle&quot;, &quot;wb&quot;) as pickle_file:
-    pickle.dump(mod_icar_pickle, pickle_file)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save model&#39;s main specifications with pickle</span>
+<span class="n">mod_icar_pickle</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;formula&quot;</span><span class="p">:</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">suitability_formula</span><span class="p">,</span>
+    <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span>
+    <span class="s2">&quot;betas&quot;</span><span class="p">:</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">betas</span><span class="p">,</span>
+    <span class="s2">&quot;Vrho&quot;</span><span class="p">:</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">Vrho</span><span class="p">,</span>
+    <span class="s2">&quot;deviance&quot;</span><span class="p">:</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">deviance</span><span class="p">}</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output/mod_icar.pickle&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pickle_file</span><span class="p">:</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">mod_icar_pickle</span><span class="p">,</span> <span class="n">pickle_file</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -565,22 +565,22 @@ with open(&quot;output/mod_icar.pickle&quot;, &quot;wb&quot;) as pickle_file:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Cross-validation for icar, glm and RF
-CV_df_icar = far.cross_validation(
-    dataset, formula, mod_type=&quot;icar&quot;, ratio=30, nrep=5,
-    icar_args={&quot;n_neighbors&quot;: nneigh, &quot;neighbors&quot;: adj,
-               &quot;burnin&quot;: 1000, &quot;mcmc&quot;: 1000, &quot;thin&quot;: 1,
-               &quot;beta_start&quot;: mod_binomial_iCAR.betas})
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cross-validation for icar, glm and RF</span>
+<span class="n">CV_df_icar</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">cross_validation</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">,</span> <span class="n">formula</span><span class="p">,</span> <span class="n">mod_type</span><span class="o">=</span><span class="s2">&quot;icar&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">nrep</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">icar_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;n_neighbors&quot;</span><span class="p">:</span> <span class="n">nneigh</span><span class="p">,</span> <span class="s2">&quot;neighbors&quot;</span><span class="p">:</span> <span class="n">adj</span><span class="p">,</span>
+               <span class="s2">&quot;burnin&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;mcmc&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;thin&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+               <span class="s2">&quot;beta_start&quot;</span><span class="p">:</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">betas</span><span class="p">})</span>
 
-CV_df_glm = far.cross_validation(dataset, formula, mod_type=&quot;glm&quot;, ratio=30, nrep=5)
+<span class="n">CV_df_glm</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">cross_validation</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">formula</span><span class="p">,</span> <span class="n">mod_type</span><span class="o">=</span><span class="s2">&quot;glm&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">nrep</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
-CV_df_rf = far.cross_validation(dataset, formula, mod_type=&quot;rf&quot;, ratio=30, nrep=5,
-                                rf_args={&quot;n_estimators&quot;: 500, &quot;n_jobs&quot;: 3})
+<span class="n">CV_df_rf</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">cross_validation</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">formula</span><span class="p">,</span> <span class="n">mod_type</span><span class="o">=</span><span class="s2">&quot;rf&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">nrep</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                <span class="n">rf_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
 
-# Save result to disk
-CV_df_icar.to_csv(&quot;output/CV_icar.csv&quot;, header=True, index=False)
-CV_df_glm.to_csv(&quot;output/CV_glm.csv&quot;, header=True, index=False)
-CV_df_rf.to_csv(&quot;output/CV_rf.csv&quot;, header=True, index=False)
+<span class="c1"># Save result to disk</span>
+<span class="n">CV_df_icar</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;output/CV_icar.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">CV_df_glm</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;output/CV_glm.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">CV_df_rf</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;output/CV_rf.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -610,7 +610,7 @@ Repetition #: 5
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(CV_df_icar)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">CV_df_icar</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -634,7 +634,7 @@ Repetition #: 5
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(CV_df_glm)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">CV_df_glm</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -658,7 +658,7 @@ Repetition #: 5
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(CV_df_rf)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">CV_df_rf</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -685,48 +685,48 @@ Repetition #: 5
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Null model
-formula_null = &quot;I(1-fcc23) ~ 1&quot;
-y, x = dmatrices(formula_null, data=dataset, NA_action=&quot;drop&quot;)
-Y = y[:, 0]
-X_null = x[:, :]
-mod_null = LogisticRegression(solver=&quot;lbfgs&quot;)
-mod_null = mod_null.fit(X_null, Y)
-pred_null = mod_null.predict_proba(X_null)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Null model</span>
+<span class="n">formula_null</span> <span class="o">=</span> <span class="s2">&quot;I(1-fcc23) ~ 1&quot;</span>
+<span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">dmatrices</span><span class="p">(</span><span class="n">formula_null</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">NA_action</span><span class="o">=</span><span class="s2">&quot;drop&quot;</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">X_null</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="p">:]</span>
+<span class="n">mod_null</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="s2">&quot;lbfgs&quot;</span><span class="p">)</span>
+<span class="n">mod_null</span> <span class="o">=</span> <span class="n">mod_null</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_null</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+<span class="n">pred_null</span> <span class="o">=</span> <span class="n">mod_null</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_null</span><span class="p">)</span>
 
-# Simple glm with no spatial random effects
-formula_glm = formula
-y, x = dmatrices(formula_glm, data=dataset, NA_action=&quot;drop&quot;)
-Y = y[:, 0]
-X_glm = x[:, :-1]  # We remove the last column (cells)
-mod_glm = LogisticRegression(solver=&quot;lbfgs&quot;)
-mod_glm = mod_glm.fit(X_glm, Y)
-pred_glm = mod_glm.predict_proba(X_glm)
+<span class="c1"># Simple glm with no spatial random effects</span>
+<span class="n">formula_glm</span> <span class="o">=</span> <span class="n">formula</span>
+<span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">dmatrices</span><span class="p">(</span><span class="n">formula_glm</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">NA_action</span><span class="o">=</span><span class="s2">&quot;drop&quot;</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">X_glm</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># We remove the last column (cells)</span>
+<span class="n">mod_glm</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="s2">&quot;lbfgs&quot;</span><span class="p">)</span>
+<span class="n">mod_glm</span> <span class="o">=</span> <span class="n">mod_glm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_glm</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+<span class="n">pred_glm</span> <span class="o">=</span> <span class="n">mod_glm</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_glm</span><span class="p">)</span>
 
-# Random forest model
-formula_rf = formula
-y, x = dmatrices(formula_rf, data=dataset, NA_action=&quot;drop&quot;)
-Y = y[:, 0]
-X_rf = x[:, :-1]  # We remove the last column (cells)
-mod_rf = RandomForestClassifier(n_estimators=500, n_jobs=3)
-mod_rf = mod_rf.fit(X_rf, Y)
-pred_rf = mod_rf.predict_proba(X_rf)
+<span class="c1"># Random forest model</span>
+<span class="n">formula_rf</span> <span class="o">=</span> <span class="n">formula</span>
+<span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">dmatrices</span><span class="p">(</span><span class="n">formula_rf</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">NA_action</span><span class="o">=</span><span class="s2">&quot;drop&quot;</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">X_rf</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># We remove the last column (cells)</span>
+<span class="n">mod_rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">mod_rf</span> <span class="o">=</span> <span class="n">mod_rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_rf</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+<span class="n">pred_rf</span> <span class="o">=</span> <span class="n">mod_rf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_rf</span><span class="p">)</span>
 
-# Deviances
-deviance_null = 2*log_loss(Y, pred_null, normalize=False)
-deviance_glm = 2*log_loss(Y, pred_glm, normalize=False)
-deviance_rf = 2*log_loss(Y, pred_rf, normalize=False)
-deviance_icar = mod_binomial_iCAR.deviance
-deviance_full = 0
-dev = [deviance_null, deviance_glm, deviance_rf, deviance_icar, deviance_full]
+<span class="c1"># Deviances</span>
+<span class="n">deviance_null</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">log_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">pred_null</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">deviance_glm</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">log_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">pred_glm</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">deviance_rf</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">log_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">pred_rf</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">deviance_icar</span> <span class="o">=</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">deviance</span>
+<span class="n">deviance_full</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">dev</span> <span class="o">=</span> <span class="p">[</span><span class="n">deviance_null</span><span class="p">,</span> <span class="n">deviance_glm</span><span class="p">,</span> <span class="n">deviance_rf</span><span class="p">,</span> <span class="n">deviance_icar</span><span class="p">,</span> <span class="n">deviance_full</span><span class="p">]</span>
 
-# Result table
-mod_dev = pd.DataFrame({&quot;model&quot;: [&quot;null&quot;, &quot;glm&quot;, &quot;rf&quot;, &quot;icar&quot;, &quot;full&quot;],
-                        &quot;deviance&quot;: dev})
-perc = 100*(1-mod_dev.deviance/deviance_null)
-mod_dev[&quot;perc&quot;] = perc
-mod_dev = mod_dev.round(0)
-mod_dev.to_csv(&quot;output/model_deviance.csv&quot;, header=True, index=False)
+<span class="c1"># Result table</span>
+<span class="n">mod_dev</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;null&quot;</span><span class="p">,</span> <span class="s2">&quot;glm&quot;</span><span class="p">,</span> <span class="s2">&quot;rf&quot;</span><span class="p">,</span> <span class="s2">&quot;icar&quot;</span><span class="p">,</span> <span class="s2">&quot;full&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;deviance&quot;</span><span class="p">:</span> <span class="n">dev</span><span class="p">})</span>
+<span class="n">perc</span> <span class="o">=</span> <span class="mi">100</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">mod_dev</span><span class="o">.</span><span class="n">deviance</span><span class="o">/</span><span class="n">deviance_null</span><span class="p">)</span>
+<span class="n">mod_dev</span><span class="p">[</span><span class="s2">&quot;perc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">perc</span>
+<span class="n">mod_dev</span> <span class="o">=</span> <span class="n">mod_dev</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">mod_dev</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;output/model_deviance.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -734,7 +734,7 @@ mod_dev.to_csv(&quot;output/model_deviance.csv&quot;, header=True, index=False)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(mod_dev)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">mod_dev</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -755,13 +755,13 @@ mod_dev.to_csv(&quot;output/model_deviance.csv&quot;, header=True, index=False)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Save models&#39; predictions
-obs_pred = dataset
-obs_pred[&quot;null&quot;] = pred_null[:, 1]
-obs_pred[&quot;glm&quot;] = pred_glm[:, 1]
-obs_pred[&quot;rf&quot;] = pred_rf[:, 1]
-obs_pred[&quot;icar&quot;] = pred_icar
-obs_pred.to_csv(&quot;output/obs_pred.csv&quot;, header=True, index=False)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save models&#39; predictions</span>
+<span class="n">obs_pred</span> <span class="o">=</span> <span class="n">dataset</span>
+<span class="n">obs_pred</span><span class="p">[</span><span class="s2">&quot;null&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_null</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">obs_pred</span><span class="p">[</span><span class="s2">&quot;glm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_glm</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">obs_pred</span><span class="p">[</span><span class="s2">&quot;rf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_rf</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">obs_pred</span><span class="p">[</span><span class="s2">&quot;icar&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_icar</span>
+<span class="n">obs_pred</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;output/obs_pred.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -775,13 +775,13 @@ obs_pred.to_csv(&quot;output/obs_pred.csv&quot;, header=True, index=False)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Spatial random effects
-rho = mod_binomial_iCAR.rho
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Spatial random effects</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">rho</span>
 
-# Interpolate
-far.interpolate_rho(rho=rho, input_raster=&quot;data/fcc23.tif&quot;,
-                    output_file=&quot;output/rho.tif&quot;,
-                    csize_orig=10, csize_new=1)
+<span class="c1"># Interpolate</span>
+<span class="n">far</span><span class="o">.</span><span class="n">interpolate_rho</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">input_raster</span><span class="o">=</span><span class="s2">&quot;data/fcc23.tif&quot;</span><span class="p">,</span>
+                    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/rho.tif&quot;</span><span class="p">,</span>
+                    <span class="n">csize_orig</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">csize_new</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -803,26 +803,26 @@ Resampling spatial random effects to file output/rho.tif
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Update dist_edge and dist_defor at t3
-os.rename(&quot;data/dist_edge.tif&quot;, &quot;data/dist_edge.tif.bak&quot;)
-os.rename(&quot;data/dist_defor.tif&quot;, &quot;data/dist_defor.tif.bak&quot;)
-copy2(&quot;data/forecast/dist_edge_forecast.tif&quot;, &quot;data/dist_edge.tif&quot;)
-copy2(&quot;data/forecast/dist_defor_forecast.tif&quot;, &quot;data/dist_defor.tif&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update dist_edge and dist_defor at t3</span>
+<span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;data/dist_edge.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_edge.tif.bak&quot;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;data/dist_defor.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_defor.tif.bak&quot;</span><span class="p">)</span>
+<span class="n">copy2</span><span class="p">(</span><span class="s2">&quot;data/forecast/dist_edge_forecast.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_edge.tif&quot;</span><span class="p">)</span>
+<span class="n">copy2</span><span class="p">(</span><span class="s2">&quot;data/forecast/dist_defor_forecast.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_defor.tif&quot;</span><span class="p">)</span>
 
-# Compute predictions
-far.predict_raster_binomial_iCAR(
-    mod_binomial_iCAR, var_dir=&quot;data&quot;,
-    input_cell_raster=&quot;output/rho.tif&quot;,
-    input_forest_raster=&quot;data/forest/forest_t3.tif&quot;,
-    output_file=&quot;output/prob.tif&quot;,
-    blk_rows=10  # Reduced number of lines to avoid memory problems
-)
+<span class="c1"># Compute predictions</span>
+<span class="n">far</span><span class="o">.</span><span class="n">predict_raster_binomial_iCAR</span><span class="p">(</span>
+    <span class="n">mod_binomial_iCAR</span><span class="p">,</span> <span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
+    <span class="n">input_cell_raster</span><span class="o">=</span><span class="s2">&quot;output/rho.tif&quot;</span><span class="p">,</span>
+    <span class="n">input_forest_raster</span><span class="o">=</span><span class="s2">&quot;data/forest/forest_t3.tif&quot;</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/prob.tif&quot;</span><span class="p">,</span>
+    <span class="n">blk_rows</span><span class="o">=</span><span class="mi">10</span>  <span class="c1"># Reduced number of lines to avoid memory problems</span>
+<span class="p">)</span>
 
-# Reinitialize data
-os.remove(&quot;data/dist_edge.tif&quot;)
-os.remove(&quot;data/dist_defor.tif&quot;)
-os.rename(&quot;data/dist_edge.tif.bak&quot;, &quot;data/dist_edge.tif&quot;)
-os.rename(&quot;data/dist_defor.tif.bak&quot;, &quot;data/dist_defor.tif&quot;)
+<span class="c1"># Reinitialize data</span>
+<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;data/dist_edge.tif&quot;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;data/dist_defor.tif&quot;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;data/dist_edge.tif.bak&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_edge.tif&quot;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;data/dist_defor.tif.bak&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_defor.tif&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -847,27 +847,27 @@ Compute statistics
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Forest cover
-fc = list()
-dates = [&quot;t1&quot;, &quot;2005&quot;, &quot;t2&quot;, &quot;2015&quot;, &quot;t3&quot;]
-ndates = len(dates)
-for i in range(ndates):
-    rast = &quot;data/forest/forest_&quot; + dates[i] + &quot;.tif&quot;
-    val = far.countpix(input_raster=rast, value=1)
-    fc.append(val[&quot;area&quot;])  # area in ha
-# Save results to disk
-f = open(&quot;output/forest_cover.txt&quot;, &quot;w&quot;)
-for i in fc:
-    f.write(str(i) + &quot;\n&quot;)
-f.close()
-# Annual deforestation
-T = 10.0
-annual_defor = (fc[2] - fc[4]) / T
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Forest cover</span>
+<span class="n">fc</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;t1&quot;</span><span class="p">,</span> <span class="s2">&quot;2005&quot;</span><span class="p">,</span> <span class="s2">&quot;t2&quot;</span><span class="p">,</span> <span class="s2">&quot;2015&quot;</span><span class="p">,</span> <span class="s2">&quot;t3&quot;</span><span class="p">]</span>
+<span class="n">ndates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ndates</span><span class="p">):</span>
+    <span class="n">rast</span> <span class="o">=</span> <span class="s2">&quot;data/forest/forest_&quot;</span> <span class="o">+</span> <span class="n">dates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">countpix</span><span class="p">(</span><span class="n">input_raster</span><span class="o">=</span><span class="n">rast</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">])</span>  <span class="c1"># area in ha</span>
+<span class="c1"># Save results to disk</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output/forest_cover.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">fc</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="c1"># Annual deforestation</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mf">10.0</span>
+<span class="n">annual_defor</span> <span class="o">=</span> <span class="p">(</span><span class="n">fc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">fc</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">/</span> <span class="n">T</span>
 
-# Dates and time intervals
-dates_fut = [&quot;2030&quot;, &quot;2035&quot;, &quot;2040&quot;, &quot;2050&quot;, &quot;2055&quot;, &quot;2060&quot;, &quot;2070&quot;, &quot;2080&quot;, &quot;2085&quot;, &quot;2090&quot;, &quot;2100&quot;]
-ndates_fut = len(dates_fut)
-ti = [10, 15, 20, 30, 35, 40, 50, 60, 65, 70, 80]
+<span class="c1"># Dates and time intervals</span>
+<span class="n">dates_fut</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;2030&quot;</span><span class="p">,</span> <span class="s2">&quot;2035&quot;</span><span class="p">,</span> <span class="s2">&quot;2040&quot;</span><span class="p">,</span> <span class="s2">&quot;2050&quot;</span><span class="p">,</span> <span class="s2">&quot;2055&quot;</span><span class="p">,</span> <span class="s2">&quot;2060&quot;</span><span class="p">,</span> <span class="s2">&quot;2070&quot;</span><span class="p">,</span> <span class="s2">&quot;2080&quot;</span><span class="p">,</span> <span class="s2">&quot;2085&quot;</span><span class="p">,</span> <span class="s2">&quot;2090&quot;</span><span class="p">,</span> <span class="s2">&quot;2100&quot;</span><span class="p">]</span>
+<span class="n">ndates_fut</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates_fut</span><span class="p">)</span>
+<span class="n">ti</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">]</span>
 <br/></pre></div>
 </div>
 </div>
@@ -902,24 +902,24 @@ Compute the corresponding area in ha
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Loop on dates
-for i in range(ndates_fut):
-    # Amount of deforestation (ha)
-    defor = np.rint(annual_defor * ti[i])
-    # Compute future forest cover
-    stats = far.deforest(
-        input_raster=&quot;output/prob.tif&quot;,
-        hectares=defor,
-        output_file=&quot;output/fcc_&quot; + dates_fut[i] + &quot;.tif&quot;,
-        blk_rows=128)
-    # Save some stats if date = 2050
-    if dates_fut[i] == &quot;2050&quot;:
-        # Save stats to disk with pickle
-        pickle.dump(stats, open(&quot;output/stats.pickle&quot;, &quot;wb&quot;))
-        # Plot histograms of probabilities
-        fig_freq = far.plot.freq_prob(
-            stats, output_file=&quot;output/freq_prob.png&quot;)
-        plt.close(fig_freq)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loop on dates</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ndates_fut</span><span class="p">):</span>
+    <span class="c1"># Amount of deforestation (ha)</span>
+    <span class="n">defor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">annual_defor</span> <span class="o">*</span> <span class="n">ti</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="c1"># Compute future forest cover</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">deforest</span><span class="p">(</span>
+        <span class="n">input_raster</span><span class="o">=</span><span class="s2">&quot;output/prob.tif&quot;</span><span class="p">,</span>
+        <span class="n">hectares</span><span class="o">=</span><span class="n">defor</span><span class="p">,</span>
+        <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/fcc_&quot;</span> <span class="o">+</span> <span class="n">dates_fut</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span><span class="p">,</span>
+        <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+    <span class="c1"># Save some stats if date = 2050</span>
+    <span class="k">if</span> <span class="n">dates_fut</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;2050&quot;</span><span class="p">:</span>
+        <span class="c1"># Save stats to disk with pickle</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output/stats.pickle&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+        <span class="c1"># Plot histograms of probabilities</span>
+        <span class="n">fig_freq</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">freq_prob</span><span class="p">(</span>
+            <span class="n">stats</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/freq_prob.png&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig_freq</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1036,22 +1036,22 @@ Compute statistics
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create dataframe
-dpast = [&quot;2020&quot;]
-dpast.extend(dates_fut)
-C_df = pd.DataFrame({&quot;date&quot;: dpast, &quot;C&quot;: np.repeat(-99, ndates_fut + 1)},
-                    columns=[&quot;date&quot;,&quot;C&quot;])
-# Loop on date
-for i in range(ndates_fut):
-    carbon = far.emissions(input_stocks=&quot;data/emissions/AGB.tif&quot;,
-                           input_forest=&quot;output/fcc_&quot; + dates_fut[i] + &quot;.tif&quot;)
-    C_df.loc[C_df[&quot;date&quot;]==dates_fut[i], [&quot;C&quot;]] = carbon
-# Past emissions
-carbon = far.emissions(input_stocks=&quot;data/emissions/AGB.tif&quot;,
-                       input_forest=&quot;data/fcc23.tif&quot;)
-C_df.loc[C_df[&quot;date&quot;]==dpast[0], [&quot;C&quot;]] = carbon
-# Save dataframe
-C_df.to_csv(&quot;output/C_emissions.csv&quot;, header=True, index=False)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create dataframe</span>
+<span class="n">dpast</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;2020&quot;</span><span class="p">]</span>
+<span class="n">dpast</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">dates_fut</span><span class="p">)</span>
+<span class="n">C_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">dpast</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="o">-</span><span class="mi">99</span><span class="p">,</span> <span class="n">ndates_fut</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)},</span>
+                    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span><span class="s2">&quot;C&quot;</span><span class="p">])</span>
+<span class="c1"># Loop on date</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ndates_fut</span><span class="p">):</span>
+    <span class="n">carbon</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">emissions</span><span class="p">(</span><span class="n">input_stocks</span><span class="o">=</span><span class="s2">&quot;data/emissions/AGB.tif&quot;</span><span class="p">,</span>
+                           <span class="n">input_forest</span><span class="o">=</span><span class="s2">&quot;output/fcc_&quot;</span> <span class="o">+</span> <span class="n">dates_fut</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span><span class="p">)</span>
+    <span class="n">C_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">C_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">==</span><span class="n">dates_fut</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">carbon</span>
+<span class="c1"># Past emissions</span>
+<span class="n">carbon</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">emissions</span><span class="p">(</span><span class="n">input_stocks</span><span class="o">=</span><span class="s2">&quot;data/emissions/AGB.tif&quot;</span><span class="p">,</span>
+                       <span class="n">input_forest</span><span class="o">=</span><span class="s2">&quot;data/fcc23.tif&quot;</span><span class="p">)</span>
+<span class="n">C_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">C_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">==</span><span class="n">dpast</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">carbon</span>
+<span class="c1"># Save dataframe</span>
+<span class="n">C_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;output/C_emissions.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1114,7 +1114,7 @@ Compute carbon emissions by block
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(C_df)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">C_df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1148,14 +1148,14 @@ Compute carbon emissions by block
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Plot forest
-fig_fcc123 = far.plot.fcc123(
-    input_fcc_raster=&quot;data/forest/fcc123.tif&quot;,
-    maxpixels=1e8,
-    output_file=&quot;output/fcc123.png&quot;,
-    borders=&quot;data/ctry_PROJ.shp&quot;,
-    linewidth=0.3,
-    figsize=(6, 5), dpi=500)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot forest</span>
+<span class="n">fig_fcc123</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">fcc123</span><span class="p">(</span>
+    <span class="n">input_fcc_raster</span><span class="o">=</span><span class="s2">&quot;data/forest/fcc123.tif&quot;</span><span class="p">,</span>
+    <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/fcc123.png&quot;</span><span class="p">,</span>
+    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1173,19 +1173,19 @@ fig_fcc123 = far.plot.fcc123(
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Original spatial random effects
-fig_rho_orig = far.plot.rho(&quot;output/rho_orig.tif&quot;,
-                            borders=&quot;data/ctry_PROJ.shp&quot;,
-                            linewidth=0.5,
-                            output_file=&quot;output/rho_orig.png&quot;,
-                            figsize=(9,5), dpi=80)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Original spatial random effects</span>
+<span class="n">fig_rho_orig</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">rho</span><span class="p">(</span><span class="s2">&quot;output/rho_orig.tif&quot;</span><span class="p">,</span>
+                            <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+                            <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                            <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/rho_orig.png&quot;</span><span class="p">,</span>
+                            <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 
-# Interpolated spatial random effects
-fig_rho = far.plot.rho(&quot;output/rho.tif&quot;,
-                       borders=&quot;data/ctry_PROJ.shp&quot;,
-                       linewidth=0.5,
-                       output_file=&quot;output/rho.png&quot;,
-                       figsize=(9,5), dpi=80)
+<span class="c1"># Interpolated spatial random effects</span>
+<span class="n">fig_rho</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">rho</span><span class="p">(</span><span class="s2">&quot;output/rho.tif&quot;</span><span class="p">,</span>
+                       <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+                       <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                       <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/rho.png&quot;</span><span class="p">,</span>
+                       <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1218,14 +1218,14 @@ Build overview
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Spatial probability of deforestation
-fig_prob = far.plot.prob(&quot;output/prob.tif&quot;,
-                         maxpixels=1e8,
-                         borders=&quot;data/ctry_PROJ.shp&quot;,
-                         linewidth=0.3,
-                         legend=True,
-                         output_file=&quot;output/prob.png&quot;,
-                         figsize=(6, 5), dpi=500)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Spatial probability of deforestation</span>
+<span class="n">fig_prob</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span><span class="s2">&quot;output/prob.tif&quot;</span><span class="p">,</span>
+                         <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
+                         <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+                         <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                         <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/prob.png&quot;</span><span class="p">,</span>
+                         <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1243,13 +1243,13 @@ fig_prob = far.plot.prob(&quot;output/prob.tif&quot;,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Projected forest cover change (2020-2050)
-fcc_2050 = far.plot.fcc(&quot;output/fcc_2050.tif&quot;,
-                        maxpixels=1e8,
-                        borders=&quot;data/ctry_PROJ.shp&quot;,
-                        linewidth=0.3,
-                        output_file=&quot;output/fcc_&quot; + dates_fut[i] + &quot;.png&quot;,
-                        figsize=(6, 5), dpi=500)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Projected forest cover change (2020-2050)</span>
+<span class="n">fcc_2050</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">fcc</span><span class="p">(</span><span class="s2">&quot;output/fcc_2050.tif&quot;</span><span class="p">,</span>
+                        <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
+                        <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+                        <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                        <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/fcc_&quot;</span> <span class="o">+</span> <span class="n">dates_fut</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">,</span>
+                        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1264,13 +1264,13 @@ fcc_2050 = far.plot.fcc(&quot;output/fcc_2050.tif&quot;,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Projected forest cover change (2020-2100)
-fcc_2100 = far.plot.fcc(&quot;output/fcc_2100.tif&quot;,
-                        maxpixels=1e8,
-                        borders=&quot;data/ctry_PROJ.shp&quot;,
-                        linewidth=0.3,
-                        output_file=&quot;output/fcc_&quot; + dates_fut[i] + &quot;.png&quot;,
-                        figsize=(6, 5), dpi=500)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Projected forest cover change (2020-2100)</span>
+<span class="n">fcc_2100</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">fcc</span><span class="p">(</span><span class="s2">&quot;output/fcc_2100.tif&quot;</span><span class="p">,</span>
+                        <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
+                        <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+                        <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                        <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/fcc_&quot;</span> <span class="o">+</span> <span class="n">dates_fut</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">,</span>
+                        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

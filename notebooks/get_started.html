@@ -117,13 +117,13 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Imports
-import os
-from shutil import copy2
-import urllib.request
-from zipfile import ZipFile
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Imports</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">copy2</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
 
-import forestatrisk as far
+<span class="kn">import</span> <span class="nn">forestatrisk</span> <span class="k">as</span> <span class="nn">far</span>
 </pre></div>
 </div>
 </div>
@@ -141,8 +141,8 @@ import forestatrisk as far
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Make output directory
-far.make_dir(&quot;output&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make output directory</span>
+<span class="n">far</span><span class="o">.</span><span class="n">make_dir</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -155,14 +155,14 @@ far.make_dir(&quot;output&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Source of the data
-url = &quot;https://github.com/ghislainv/forestatrisk/raw/master/docsrc/notebooks/data_GLP.zip&quot;
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Source of the data</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/ghislainv/forestatrisk/raw/master/docsrc/notebooks/data_GLP.zip&quot;</span>
 
-if os.path.exists(&quot;data_GLP.zip&quot;) is False:
-    urllib.request.urlretrieve(url, &quot;data_GLP.zip&quot;)
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data_GLP.zip&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+    <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;data_GLP.zip&quot;</span><span class="p">)</span>
 
-with ZipFile(&quot;data_GLP.zip&quot;, &quot;r&quot;) as z:
-    z.extractall(&quot;data&quot;)
+<span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="s2">&quot;data_GLP.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
+    <span class="n">z</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -181,12 +181,12 @@ with ZipFile(&quot;data_GLP.zip&quot;, &quot;r&quot;) as z:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Sample points
-dataset = far.sample(nsamp=10000, adapt=True, seed=1234, csize=10,
-                     var_dir=&quot;data&quot;,
-                     input_forest_raster=&quot;fcc23.tif&quot;,
-                     output_file=&quot;output/sample.txt&quot;,
-                     blk_rows=0)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample points</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">nsamp</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">adapt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span> <span class="n">csize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                     <span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
+                     <span class="n">input_forest_raster</span><span class="o">=</span><span class="s2">&quot;fcc23.tif&quot;</span><span class="p">,</span>
+                     <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/sample.txt&quot;</span><span class="p">,</span>
+                     <span class="n">blk_rows</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -216,13 +216,13 @@ Export results to file output/sample.txt
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Remove NA from data-set (otherwise scale() and
-# model_binomial_iCAR do not work)
-dataset = dataset.dropna(axis=0)
-# Set number of trials to one for far.model_binomial_iCAR()
-dataset[&quot;trial&quot;] = 1
-# Print the first five rows
-print(dataset.head(5))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove NA from data-set (otherwise scale() and</span>
+<span class="c1"># model_binomial_iCAR do not work)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Set number of trials to one for far.model_binomial_iCAR()</span>
+<span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;trial&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c1"># Print the first five rows</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -256,24 +256,24 @@ print(dataset.head(5))
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Neighborhood for spatial-autocorrelation
-nneigh, adj = far.cellneigh(raster=&quot;data/fcc23.tif&quot;, csize=10, rank=1)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Neighborhood for spatial-autocorrelation</span>
+<span class="n">nneigh</span><span class="p">,</span> <span class="n">adj</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">cellneigh</span><span class="p">(</span><span class="n">raster</span><span class="o">=</span><span class="s2">&quot;data/fcc23.tif&quot;</span><span class="p">,</span> <span class="n">csize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-# List of variables
-variables = [&quot;scale(altitude)&quot;, &quot;scale(slope)&quot;,
-             &quot;scale(dist_defor)&quot;, &quot;scale(dist_edge)&quot;, &quot;scale(dist_road)&quot;,
-             &quot;scale(dist_town)&quot;, &quot;scale(dist_river)&quot;]
+<span class="c1"># List of variables</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;scale(altitude)&quot;</span><span class="p">,</span> <span class="s2">&quot;scale(slope)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;scale(dist_defor)&quot;</span><span class="p">,</span> <span class="s2">&quot;scale(dist_edge)&quot;</span><span class="p">,</span> <span class="s2">&quot;scale(dist_road)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;scale(dist_town)&quot;</span><span class="p">,</span> <span class="s2">&quot;scale(dist_river)&quot;</span><span class="p">]</span>
 
-# Formula
-right_part = &quot; + &quot;.join(variables) + &quot; + cell&quot;
-left_part = &quot;I(1-fcc23) + trial ~ &quot;
-formula = left_part + right_part
+<span class="c1"># Formula</span>
+<span class="n">right_part</span> <span class="o">=</span> <span class="s2">&quot; + &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; + cell&quot;</span>
+<span class="n">left_part</span> <span class="o">=</span> <span class="s2">&quot;I(1-fcc23) + trial ~ &quot;</span>
+<span class="n">formula</span> <span class="o">=</span> <span class="n">left_part</span> <span class="o">+</span> <span class="n">right_part</span>
 
-# Starting values
-beta_start = -99  # Simple GLM estimates
+<span class="c1"># Starting values</span>
+<span class="n">beta_start</span> <span class="o">=</span> <span class="o">-</span><span class="mi">99</span>  <span class="c1"># Simple GLM estimates</span>
 
-# Priors
-priorVrho = -1  # -1=&quot;1/Gamma&quot;
+<span class="c1"># Priors</span>
+<span class="n">priorVrho</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># -1=&quot;1/Gamma&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -294,18 +294,18 @@ Identify adjacent cells and compute number of neighbors
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Run the model
-mod_binomial_iCAR = far.model_binomial_iCAR(
-    # Observations
-    suitability_formula=formula, data=dataset,
-    # Spatial structure
-    n_neighbors=nneigh, neighbors=adj,
-    # Priors
-    priorVrho=priorVrho,
-    # Chains
-    burnin=1000, mcmc=1000, thin=1,
-    # Starting values
-    beta_start=beta_start)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run the model</span>
+<span class="n">mod_binomial_iCAR</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">model_binomial_iCAR</span><span class="p">(</span>
+    <span class="c1"># Observations</span>
+    <span class="n">suitability_formula</span><span class="o">=</span><span class="n">formula</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+    <span class="c1"># Spatial structure</span>
+    <span class="n">n_neighbors</span><span class="o">=</span><span class="n">nneigh</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">adj</span><span class="p">,</span>
+    <span class="c1"># Priors</span>
+    <span class="n">priorVrho</span><span class="o">=</span><span class="n">priorVrho</span><span class="p">,</span>
+    <span class="c1"># Chains</span>
+    <span class="n">burnin</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">mcmc</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="c1"># Starting values</span>
+    <span class="n">beta_start</span><span class="o">=</span><span class="n">beta_start</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -324,14 +324,14 @@ Using estimates from classic logistic regression as starting values for betas
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Predictions
-pred_icar = mod_binomial_iCAR.theta_pred
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predictions</span>
+<span class="n">pred_icar</span> <span class="o">=</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">theta_pred</span>
 
-# Summary
-print(mod_binomial_iCAR)
-# Write summary in file
-with open(&quot;output/summary_icar.txt&quot;, &quot;w&quot;) as f:
-    f.write(str(mod_binomial_iCAR))
+<span class="c1"># Summary</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mod_binomial_iCAR</span><span class="p">)</span>
+<span class="c1"># Write summary in file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output/summary_icar.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mod_binomial_iCAR</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -367,13 +367,13 @@ scale(dist_river)    -0.0122     0.0347    -0.0838     0.0607
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Spatial random effects
-rho = mod_binomial_iCAR.rho
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Spatial random effects</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">rho</span>
 
-# Interpolate
-far.interpolate_rho(rho=rho, input_raster=&quot;data/fcc23.tif&quot;,
-                    output_file=&quot;output/rho.tif&quot;,
-                    csize_orig=10, csize_new=1)
+<span class="c1"># Interpolate</span>
+<span class="n">far</span><span class="o">.</span><span class="n">interpolate_rho</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">input_raster</span><span class="o">=</span><span class="s2">&quot;data/fcc23.tif&quot;</span><span class="p">,</span>
+                    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/rho.tif&quot;</span><span class="p">,</span>
+                    <span class="n">csize_orig</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">csize_new</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -395,26 +395,26 @@ Resampling spatial random effects to file output/rho.tif
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Update dist_edge and dist_defor at t3
-os.rename(&quot;data/dist_edge.tif&quot;, &quot;data/dist_edge.tif.bak&quot;)
-os.rename(&quot;data/dist_defor.tif&quot;, &quot;data/dist_defor.tif.bak&quot;)
-copy2(&quot;data/forecast/dist_edge_forecast.tif&quot;, &quot;data/dist_edge.tif&quot;)
-copy2(&quot;data/forecast/dist_defor_forecast.tif&quot;, &quot;data/dist_defor.tif&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update dist_edge and dist_defor at t3</span>
+<span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;data/dist_edge.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_edge.tif.bak&quot;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;data/dist_defor.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_defor.tif.bak&quot;</span><span class="p">)</span>
+<span class="n">copy2</span><span class="p">(</span><span class="s2">&quot;data/forecast/dist_edge_forecast.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_edge.tif&quot;</span><span class="p">)</span>
+<span class="n">copy2</span><span class="p">(</span><span class="s2">&quot;data/forecast/dist_defor_forecast.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_defor.tif&quot;</span><span class="p">)</span>
 
-# Compute predictions
-far.predict_raster_binomial_iCAR(
-    mod_binomial_iCAR, var_dir=&quot;data&quot;,
-    input_cell_raster=&quot;output/rho.tif&quot;,
-    input_forest_raster=&quot;data/forest/forest_t3.tif&quot;,
-    output_file=&quot;output/prob.tif&quot;,
-    blk_rows=10  # Reduced number of lines to avoid memory problems
-)
+<span class="c1"># Compute predictions</span>
+<span class="n">far</span><span class="o">.</span><span class="n">predict_raster_binomial_iCAR</span><span class="p">(</span>
+    <span class="n">mod_binomial_iCAR</span><span class="p">,</span> <span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
+    <span class="n">input_cell_raster</span><span class="o">=</span><span class="s2">&quot;output/rho.tif&quot;</span><span class="p">,</span>
+    <span class="n">input_forest_raster</span><span class="o">=</span><span class="s2">&quot;data/forest/forest_t3.tif&quot;</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/prob.tif&quot;</span><span class="p">,</span>
+    <span class="n">blk_rows</span><span class="o">=</span><span class="mi">10</span>  <span class="c1"># Reduced number of lines to avoid memory problems</span>
+<span class="p">)</span>
 
-# Reinitialize data
-os.remove(&quot;data/dist_edge.tif&quot;)
-os.remove(&quot;data/dist_defor.tif&quot;)
-os.rename(&quot;data/dist_edge.tif.bak&quot;, &quot;data/dist_edge.tif&quot;)
-os.rename(&quot;data/dist_defor.tif.bak&quot;, &quot;data/dist_defor.tif&quot;)
+<span class="c1"># Reinitialize data</span>
+<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;data/dist_edge.tif&quot;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;data/dist_defor.tif&quot;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;data/dist_edge.tif.bak&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_edge.tif&quot;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;data/dist_defor.tif.bak&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_defor.tif&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -439,23 +439,23 @@ Compute statistics
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Forest cover
-fc = list()
-dates = [&quot;t2&quot;, &quot;t3&quot;]
-ndates = len(dates)
-for i in range(ndates):
-    rast = &quot;data/forest/forest_&quot; + dates[i] + &quot;.tif&quot;
-    val = far.countpix(input_raster=rast, value=1)
-    fc.append(val[&quot;area&quot;])  # area in ha
-# Save results to disk
-f = open(&quot;output/forest_cover.txt&quot;, &quot;w&quot;)
-for i in fc:
-    f.write(str(i) + &quot;\n&quot;)
-f.close()
-# Annual deforestation
-T = 10.0
-annual_defor = (fc[0] - fc[1]) / T
-print(&quot;Mean annual deforested area during the period 2010-2020: {} ha/yr&quot;.format(annual_defor))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Forest cover</span>
+<span class="n">fc</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;t2&quot;</span><span class="p">,</span> <span class="s2">&quot;t3&quot;</span><span class="p">]</span>
+<span class="n">ndates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ndates</span><span class="p">):</span>
+    <span class="n">rast</span> <span class="o">=</span> <span class="s2">&quot;data/forest/forest_&quot;</span> <span class="o">+</span> <span class="n">dates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">countpix</span><span class="p">(</span><span class="n">input_raster</span><span class="o">=</span><span class="n">rast</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">])</span>  <span class="c1"># area in ha</span>
+<span class="c1"># Save results to disk</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;output/forest_cover.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">fc</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="c1"># Annual deforestation</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mf">10.0</span>
+<span class="n">annual_defor</span> <span class="o">=</span> <span class="p">(</span><span class="n">fc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">fc</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">T</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean annual deforested area during the period 2010-2020: </span><span class="si">{}</span><span class="s2"> ha/yr&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">annual_defor</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -479,15 +479,15 @@ Mean annual deforested area during the period 2010-2020: 498.375 ha/yr
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Projected deforestation (ha) during 2020-2050
-defor = annual_defor * 30
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Projected deforestation (ha) during 2020-2050</span>
+<span class="n">defor</span> <span class="o">=</span> <span class="n">annual_defor</span> <span class="o">*</span> <span class="mi">30</span>
 
-# Compute future forest cover in 2050
-stats = far.deforest(
-    input_raster=&quot;output/prob.tif&quot;,
-    hectares=defor,
-    output_file=&quot;output/fcc_2050.tif&quot;,
-    blk_rows=128)
+<span class="c1"># Compute future forest cover in 2050</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">deforest</span><span class="p">(</span>
+    <span class="n">input_raster</span><span class="o">=</span><span class="s2">&quot;output/prob.tif&quot;</span><span class="p">,</span>
+    <span class="n">hectares</span><span class="o">=</span><span class="n">defor</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/fcc_2050.tif&quot;</span><span class="p">,</span>
+    <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -517,14 +517,14 @@ Compute statistics
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Plot forest
-fig_fcc123 = far.plot.fcc123(
-    input_fcc_raster=&quot;data/forest/fcc123.tif&quot;,
-    maxpixels=1e8,
-    output_file=&quot;output/fcc123.png&quot;,
-    borders=&quot;data/ctry_PROJ.shp&quot;,
-    linewidth=0.2,
-    figsize=(5, 4), dpi=800)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot forest</span>
+<span class="n">fig_fcc123</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">fcc123</span><span class="p">(</span>
+    <span class="n">input_fcc_raster</span><span class="o">=</span><span class="s2">&quot;data/forest/fcc123.tif&quot;</span><span class="p">,</span>
+    <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/fcc123.png&quot;</span><span class="p">,</span>
+    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -542,19 +542,19 @@ fig_fcc123 = far.plot.fcc123(
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Original spatial random effects
-fig_rho_orig = far.plot.rho(&quot;output/rho_orig.tif&quot;,
-                            borders=&quot;data/ctry_PROJ.shp&quot;,
-                            linewidth=0.5,
-                            output_file=&quot;output/rho_orig.png&quot;,
-                            figsize=(9,5), dpi=80)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Original spatial random effects</span>
+<span class="n">fig_rho_orig</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">rho</span><span class="p">(</span><span class="s2">&quot;output/rho_orig.tif&quot;</span><span class="p">,</span>
+                            <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+                            <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                            <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/rho_orig.png&quot;</span><span class="p">,</span>
+                            <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 
-# Interpolated spatial random effects
-fig_rho = far.plot.rho(&quot;output/rho.tif&quot;,
-                       borders=&quot;data/ctry_PROJ.shp&quot;,
-                       linewidth=0.5,
-                       output_file=&quot;output/rho.png&quot;,
-                       figsize=(9,5), dpi=80)
+<span class="c1"># Interpolated spatial random effects</span>
+<span class="n">fig_rho</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">rho</span><span class="p">(</span><span class="s2">&quot;output/rho.tif&quot;</span><span class="p">,</span>
+                       <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+                       <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                       <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/rho.png&quot;</span><span class="p">,</span>
+                       <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -587,14 +587,14 @@ Build overview
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Spatial probability of deforestation
-fig_prob = far.plot.prob(&quot;output/prob.tif&quot;,
-                         maxpixels=1e8,
-                         borders=&quot;data/ctry_PROJ.shp&quot;,
-                         linewidth=0.2,
-                         legend=True,
-                         output_file=&quot;output/prob.png&quot;,
-                         figsize=(5, 4), dpi=800)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Spatial probability of deforestation</span>
+<span class="n">fig_prob</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span><span class="s2">&quot;output/prob.tif&quot;</span><span class="p">,</span>
+                         <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
+                         <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+                         <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                         <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/prob.png&quot;</span><span class="p">,</span>
+                         <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -612,13 +612,13 @@ fig_prob = far.plot.prob(&quot;output/prob.tif&quot;,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Projected forest cover change (2020-2050)
-fcc_2050 = far.plot.fcc(&quot;output/fcc_2050.tif&quot;,
-                        maxpixels=1e8,
-                        borders=&quot;data/ctry_PROJ.shp&quot;,
-                        linewidth=0.2,
-                        output_file=&quot;output/fcc_2050.png&quot;,
-                        figsize=(5, 4), dpi=800)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Projected forest cover change (2020-2050)</span>
+<span class="n">fcc_2050</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">fcc</span><span class="p">(</span><span class="s2">&quot;output/fcc_2050.tif&quot;</span><span class="p">,</span>
+                        <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
+                        <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+                        <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                        <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/fcc_2050.png&quot;</span><span class="p">,</span>
+                        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
