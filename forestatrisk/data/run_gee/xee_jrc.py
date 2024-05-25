@@ -92,17 +92,17 @@ def run_task(iso3, extent_latlong, scale=0.0002727272727, proj=None):
 
     # Prepare the raster and save it to disk
     forest_date_list = [f"forest{i}" for i in years]
-    forest = xr.concat(
-        [forest[i] for i in forest_date_list],
-        dim=(pd.Index(forest_date_list, name="bands")
-             .astype('b')
-             .rio.set_spatial_dims(x_dim="lon", y_dim="lat")
-             .rio.write_crs("epsg:4326")
-             .rio.write_coordinate_system()
-             .rename({"lon": "x", "lat": "y"})
-             .transpose("bands", "y", "x")
-             .rename("forest")
-             .rio.reproject(proj)))
+    forest = xr.concat([forest[i] for i in forest_date_list],
+                       dim=pd.Index(forest_date_list, name="bands"))
+    forest = (forest
+              .astype('b')
+              .rio.set_spatial_dims(x_dim="lon", y_dim="lat")
+              .rio.write_crs("epsg:4326")
+              .rio.write_coordinate_system()
+              .rename({"lon": "x", "lat": "y"})
+              .transpose("bands", "y", "x")
+              .rename("forest")
+              .rio.reproject(proj))
 
     # Save to disk
     forest.rio.to_raster(

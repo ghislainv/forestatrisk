@@ -25,7 +25,9 @@ author = "Ghislain Vieilledent"
 
 # The full version, including alpha/beta/rc tags
 version = re.search(
-    '^__version__\s*=\s*"(.*)"', open("../forestatrisk/__init__.py").read(), re.M
+    r'^__version__\s*=\s*"(.*)"',
+    open("../forestatrisk/__init__.py").read(),
+    re.M
 ).group(1)
 release = version
 

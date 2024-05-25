@@ -27,8 +27,8 @@ def wrast_rho(rho, input_raster, csize=10, output_file="output/rho_orig.tif"):
 
     :param rho: original rho values estimates with the iCAR model.
     :param input_raster: path to input raster defining the region.
-    :csize: size of the spatial cells (in km).
-    :output_file: path to output raster file.
+    :param csize: size of the spatial cells (in km).
+    :param output_file: path to output raster file.
 
     """
 

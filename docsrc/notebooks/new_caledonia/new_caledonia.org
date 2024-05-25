@@ -9,15 +9,13 @@
 # ==============================================================================
 
 #+title: New Caledonia
-#+author:
-# #+author: Ghislain Vieilledent
-# #+email: ghislain.vieilledent@cirad.fr
+
 
 #+LANGUAGE: en
 #+TAGS: Blog(B) noexport(n) Stats(S)
 #+TAGS: Ecology(E) R(R) OrgMode(O) Python(P)
 #+EXPORT_SELECT_TAGS: Blog
-#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
+#+OPTIONS: H:3 num:t toc:nil title:t author:nil \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
 #+OPTIONS: html-postamble:nil
 #+EXPORT_SELECT_TAGS: export
 #+EXPORT_EXCLUDE_TAGS: noexport
@@ -1273,9 +1271,3 @@ options:
 
 # python-shell-virtualenv-path: "/home/dfeich/py-virtualenv/notebook"
 # org-babel-python-command: "/home/dfeich/py-virtualenv/notebook/bin/python"
-
-Local Variables:
-org-babel-python-command: "/home/ghislain/.pyenv/versions/miniconda3-latest/envs/conda-far/bin/python"
-org-babel-sh-command: "/bin/bash"
-End:
-

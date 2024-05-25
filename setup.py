@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Installation setup."""
 
-"""Installation setup.
-"""
-
-# ==============================================================================
+# ================================================================
 # author          :Ghislain Vieilledent
-# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+# email           :ghislain.vieilledent@cirad.fr
 # web             :https://ecology.ghislainv.fr
 # python_version  :>=2.7
 # license         :GPLv3
-# ==============================================================================
+# ================================================================
 
 # Import
 import io
@@ -25,7 +23,9 @@ def find_version():
     """Finding package version."""
     with open("forestatrisk/__init__.py", encoding="utf-8") as init_file:
         init_text = init_file.read()
-    far_version = re.search('^__version__\\s*=\\s*"(.*)"', init_text, re.M).group(1)
+    far_version = (re.search('^__version__\\s*=\\s*"(.*)"',
+                             init_text, re.M)
+                   .group(1))
     return far_version
 
 
@@ -99,3 +99,5 @@ setup(
     include_dirs=numpy.distutils.misc_util.get_numpy_include_dirs(),
     zip_safe=False,
 )
+
+# End
