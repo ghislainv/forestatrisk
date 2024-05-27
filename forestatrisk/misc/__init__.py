@@ -1,4 +1,4 @@
-"""Acessing miscellaneous functions."""
+"""Accessing miscellaneous functions."""
 
 from .countpix import countpix
 from .miscellaneous import invlogit, make_dir

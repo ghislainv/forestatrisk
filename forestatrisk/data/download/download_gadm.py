@@ -2,11 +2,7 @@
 
 import os
 from zipfile import ZipFile
-
-try:
-    from urllib.request import urlretrieve  # Python 3
-except ImportError:
-    from urllib import urlretrieve  # urlretrieve with Python 2
+from urllib.request import urlretrieve
 
 from ...misc import make_dir
 
@@ -28,14 +24,14 @@ def download_gadm(iso3, output_dir="."):
     make_dir(output_dir)
 
     # Check for existing data
-    shp_name = os.path.join(output_dir, "gadm36_" + iso3 + "_0.shp")
+    shp_name = os.path.join(output_dir, "gadm41_" + iso3 + "_0.shp")
     if os.path.isfile(shp_name) is not True:
 
         # Download the zipfile from gadm.org
         fname = os.path.join(output_dir, iso3 + "_shp.zip")
         url = (
-            "https://biogeo.ucdavis.edu/data/gadm3.6/"
-            "shp/gadm36_" + iso3 + "_shp.zip"
+            "https://geodata.ucdavis.edu/gadm/gadm4.1/"
+            "shp/gadm41_" + iso3 + "_shp.zip"
         )
         urlretrieve(url, fname)
 
