@@ -117,7 +117,7 @@ deforestation as a function of various spatial explanatory variables.</p>
 towns, and forest edge), deforestation history (distance to previous
 deforestation), or land conservation status (eg. protected area) for
 example.</p>
-<a class="reference external image-reference" href="https://ecology.ghislainv.fr/forestatrisk"><img alt="prob_AFR" class="align-center" src="https://ecology.ghislainv.fr/forestatrisk/_static/forestatrisk.png" style="width: 800px;" />
+<a class="reference external image-reference" href="https://ecology.ghislainv.fr/forestatrisk"><img alt="banner_forestatrisk" class="align-center" src="https://ecology.ghislainv.fr/forestatrisk/_static/banner_forestatrisk.png" />
 </a>
 </section>
 <section id="scientific-publication">
@@ -167,47 +167,60 @@ forest cover by 2100 across the humid tropics
 <p>You will need several dependencies to run the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python
 package. The best way to install the package is to create a Python
 virtual environment, either through <code class="docutils literal notranslate"><span class="pre">conda</span></code> (recommended) or <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code>.</p>
-<section id="using-conda-recommended">
-<h3>Using <code class="docutils literal notranslate"><span class="pre">conda</span></code> (recommended)<a class="headerlink" href="#using-conda-recommended" title="Link to this heading">¶</a></h3>
+<section id="using-virtualenv">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code><a class="headerlink" href="#using-virtualenv" title="Link to this heading">¶</a></h3>
+<p>The easiest way to install the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python package is via <a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a> in the <em>OSGeo4W Shell</em> for Windows or in a virtual environment for Linux.</p>
+<p>For Linux, create and activate a virtual environment before installing <code class="docutils literal notranslate"><span class="pre">geefcc</span></code> with <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~
+<span class="c1"># Create a directory for virtual environments</span>
+mkdir<span class="w"> </span>venvs
+<span class="c1"># Create the virtual environment with venv</span>
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/venvs/venv-geefcc
+<span class="c1"># Activate (start) the virtual environment</span>
+<span class="nb">source</span><span class="w"> </span>~/venvs/venv-geefcc/bin/activate
+</pre></div>
+</div>
+<p>Install Python dependencies and <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> in the <em>OSGeo4W Shell</em> or in the newly created virtual environment:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Upgrade pip, setuptools, and wheel</span>
+python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip<span class="w"> </span>setuptools<span class="w"> </span>wheel
+<span class="c1"># Install numpy</span>
+python3<span class="w"> </span>-m<span class="w"> </span>numpy
+<span class="c1"># Install gdal Python bindings (the correct version)</span>
+python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">gdal</span><span class="o">==</span><span class="k">$(</span>gdal-config<span class="w"> </span>--version<span class="k">)</span>
+<span class="c1"># Install forestatrisk. This will install all other dependencies</span>
+python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>forestatrisk
+</pre></div>
+</div>
+<p>If you want to install the development version of <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code>, replace the last line with:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>https://github.com/ghislainv/forestatrisk/archive/master.zip
+</pre></div>
+</div>
+<p>To deactivate and delete the virtual environment:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>deactivate
+rm<span class="w"> </span>-R<span class="w"> </span>~/venvs/venv-forestatrisk<span class="w"> </span><span class="c1"># Just remove the repository</span>
+</pre></div>
+</div>
+<p>In case of problem while installing GDAL Python bindings, try the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>--force-reinstall<span class="w"> </span><span class="nv">gdal</span><span class="o">==</span><span class="k">$(</span>gdal-config<span class="w"> </span>--version<span class="k">)</span>
+</pre></div>
+</div>
+</section>
+<section id="using-conda">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">conda</span></code><a class="headerlink" href="#using-conda" title="Link to this heading">¶</a></h3>
 <p>You first need to have <code class="docutils literal notranslate"><span class="pre">miniconda3</span></code> installed (see <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">here</a>).</p>
 <p>Then, create a conda environment (details <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">here</a>)
 and install the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> package with the following commands:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>conda-far<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span>gdal<span class="w"> </span>numpy<span class="w"> </span>matplotlib<span class="w"> </span>pandas<span class="w"> </span>patsy<span class="w"> </span>pip<span class="w"> </span>statsmodels<span class="w"> </span>earthengine-api<span class="w"> </span>--yes
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>conda-far<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>python<span class="w"> </span>gdal<span class="w"> </span>numpy<span class="w"> </span>matplotlib<span class="w"> </span>pandas<span class="w"> </span>patsy<span class="w"> </span>pip<span class="w"> </span>statsmodels<span class="w"> </span>earthengine-api<span class="w"> </span>--yes
 conda<span class="w"> </span>activate<span class="w"> </span>conda-far
 pip<span class="w"> </span>install<span class="w"> </span>pywdpa<span class="w"> </span>scikit-learn<span class="w"> </span><span class="c1"># Packages not available with conda</span>
 pip<span class="w"> </span>install<span class="w"> </span>forestatrisk<span class="w"> </span><span class="c1"># For PyPI version</span>
 <span class="c1"># pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version</span>
-<span class="c1"># conda install -c conda-forge python-dotenv rclone --yes  # Potentially interesting libraries</span>
+<span class="c1"># conda install -c conda-forge python-dotenv --yes  # Additional libraries if needed</span>
 </pre></div>
 </div>
 <p>To deactivate and delete the conda environment:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>deactivate
 conda<span class="w"> </span>env<span class="w"> </span>remove<span class="w"> </span>--name<span class="w"> </span>conda-far
-</pre></div>
-</div>
-</section>
-<section id="using-virtualenv">
-<h3>Using <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code><a class="headerlink" href="#using-virtualenv" title="Link to this heading">¶</a></h3>
-<p>You first need to have the <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code> package installed (see <a class="reference external" href="https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/">here</a>).</p>
-<p>Then, create a virtual environment and install the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code>
-package with the following commands:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~
-mkdir<span class="w"> </span>venvs<span class="w"> </span><span class="c1"># Directory for virtual environments</span>
-<span class="nb">cd</span><span class="w"> </span>venvs
-virtualenv<span class="w"> </span>--python<span class="o">=</span>/usr/bin/python3<span class="w"> </span>venv-far
-<span class="nb">source</span><span class="w"> </span>~/venvs/venv-far/bin/activate
-<span class="c1"># Install numpy first</span>
-pip<span class="w"> </span>install<span class="w"> </span>numpy
-<span class="c1"># Install gdal (the correct version)</span>
-pip<span class="w"> </span>install<span class="w"> </span>--global-option<span class="o">=</span>build_ext<span class="w"> </span>--global-option<span class="o">=</span><span class="s2">&quot;-I/usr/include/gdal&quot;</span><span class="w"> </span><span class="nv">gdal</span><span class="o">==</span><span class="k">$(</span>gdal-config<span class="w"> </span>--version<span class="k">)</span>
-pip<span class="w"> </span>install<span class="w"> </span>forestatrisk<span class="w"> </span><span class="c1"># For PyPI version, this will install all other dependencies</span>
-<span class="c1"># pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version</span>
-pip<span class="w"> </span>install<span class="w"> </span>statsmodels<span class="w"> </span><span class="c1"># Optional additional packages</span>
-</pre></div>
-</div>
-<p>To deactivate and delete the virtual environment:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>deactivate
-rm<span class="w"> </span>-R<span class="w"> </span>~/venvs/venv-far<span class="w"> </span><span class="c1"># Just remove the repository</span>
 </pre></div>
 </div>
 </section>
@@ -225,7 +238,7 @@ and the version number:</p>
 <span class="c1"># forestatrisk version x.x.</span>
 </pre></div>
 </div>
-<p>You can also test the package executing the commands in the <a class="reference external" href="https://ecology.ghislainv.fr/forestatrisk/notebooks/get_started.html">Get
+<p>You can also test the package following the <a class="reference external" href="https://ecology.ghislainv.fr/forestatrisk/notebooks/get_started.html">Get
 started</a>
 tutorial.</p>
 </section>
