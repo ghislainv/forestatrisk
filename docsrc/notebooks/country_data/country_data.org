@@ -9,26 +9,11 @@
 # ==============================================================================
 
 #+title: Country data
-#+author:
-# #+author: Ghislain Vieilledent
-# #+email: ghislain.vieilledent@cirad.fr
-
-#+LANGUAGE: en
-#+TAGS: Blog(B) noexport(n) Stats(S)
-#+TAGS: Ecology(E) R(R) OrgMode(O) Python(P)
-#+EXPORT_SELECT_TAGS: Blog
-#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
-#+OPTIONS: html-postamble:nil
-#+EXPORT_SELECT_TAGS: export
-#+EXPORT_EXCLUDE_TAGS: noexport
-#+HTML_DOCTYPE: html5
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css"/>
-
-# For math display
-#+LATEX_HEADER: \usepackage{amsfonts}
-#+LATEX_HEADER: \usepackage{unicode-math}
-
-#+PROPERTY: header-args :eval never-export
+#+options: toc:nil title:t num:nil author:nil ^:{}
+#+property: header-args:python :results output :session :exports both
+#+property: header-args :eval never-export
+#+export_select_tags: export
+#+export_exclude_tags: noexport
 
 * Version information    :noexport:
 

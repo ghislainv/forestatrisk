@@ -9,27 +9,14 @@
 # ==============================================================================
 
 #+title: New Caledonia
+#+options: toc:nil title:t num:nil author:nil ^:{}
+#+property: header-args:python :results output :session :exports both
+#+property: header-args :eval never-export
+#+export_select_tags: export
+#+export_exclude_tags: noexport
 
-
-#+LANGUAGE: en
-#+TAGS: Blog(B) noexport(n) Stats(S)
-#+TAGS: Ecology(E) R(R) OrgMode(O) Python(P)
-#+EXPORT_SELECT_TAGS: Blog
-#+OPTIONS: H:3 num:t toc:nil title:t author:nil \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
-#+OPTIONS: html-postamble:nil
-#+EXPORT_SELECT_TAGS: export
-#+EXPORT_EXCLUDE_TAGS: noexport
-#+HTML_DOCTYPE: html5
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css"/>
-
-# For math display
-#+LATEX_HEADER: \usepackage{amsfonts}
-#+LATEX_HEADER: \usepackage{unicode-math}
-
-#+PROPERTY: header-args :eval never-export
-
-#+ATTR_RST: :width 1100
-[[file:images/nb_newcal_banner.png]]
+#+ATTR_RST: :width 1300
+[[file:images/banner_newcal.jpg]]
 
 * Version information    :noexport:
 
@@ -65,7 +52,7 @@ website: [[https://forestatrisk.cirad.fr]].
 
 We import the Python modules needed for running the analysis.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Imports
 import os
 import pkg_resources
@@ -96,7 +83,7 @@ import forestatrisk as far
 We create some directories to hold the data and the ouputs with the
 function =far.make_dir()=.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 far.make_dir("data_raw")
 far.make_dir("data")
 far.make_dir("output")
@@ -106,7 +93,7 @@ far.make_dir("output")
 
 We increase the cache for GDAL to increase computational speed.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # GDAL
 os.environ["GDAL_CACHEMAX"] = "1024"
 #+end_src
@@ -132,7 +119,7 @@ for using the Google Earth Engine API, follow these
 necessary only once, you have to execute the command =ee.Initialize()=
 at each session.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Uncomment to authenticate for the first time.
 # ee.Authenticate()
 ee.Initialize()
@@ -143,7 +130,7 @@ ee.Initialize()
 Under Linux and Mac, credentials are stored in
 =$HOME/.config/earthengine/credentials=.
 
-#+begin_src shell :results none :session :exports code
+#+begin_src shell :results none :exports code
 cat $HOME/.config/earthengine/credentials
 #+end_src
 
@@ -168,7 +155,7 @@ using either the command ~os.environ["WDPA_KEY"]="your_token"~ or
 The validity of your token can be checked with the function
 =pywdpa.get_token()=.
 
-#+begin_src python :results none :session :exports code
+#+begin_src python :results none :exports code
 # WDPA API
 load_dotenv(".env")
 get_token()
@@ -182,7 +169,7 @@ it will print an error message.
 
 We specify the [[https://fr.wikipedia.org/wiki/ISO_3166-1#Table_de_codage][iso3]] code of New Caledonia which is "NCL". 
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 iso3 = "NCL"
 #+end_src
 
@@ -194,7 +181,7 @@ function [[https://ecology.ghislainv.fr/forestatrisk/subpackages/forestatrisk.bu
 Google Drive remote for rclone. The argument =gdrive_folder= specifies
 the name of the Google Drive folder to use.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Compute gee forest data
 far.data.country_forest_run(
     iso3, proj="EPSG:4326",
@@ -209,7 +196,7 @@ far.data.country_forest_run(
 
 ** Download raw data
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Download data
 far.data.country_download(
     iso3,
@@ -226,7 +213,7 @@ far.data.country_download(
 We first set the projection for New-Caledonia which is RGNC91-93 /
 Lambert New Caledonia ([[https://epsg.io/3163][EPSG:3163]]).
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Projection
 proj = "EPSG:3163"
 #+end_src
@@ -235,7 +222,7 @@ proj = "EPSG:3163"
 
 We compute the explanatory variables from the raw data.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Compute variables
 far.data.country_compute(
     iso3,
@@ -363,7 +350,7 @@ The =data= folder includes:
   different dates used for projections in the future, and forest carbon
   data for computing carbon emissions.
 
-#+begin_src python :results output :session :exports code
+#+begin_src python
 # Plot forest
 fig_fcc23 = far.plot.fcc(
     input_fcc_raster="data/fcc23.tif",
@@ -414,7 +401,7 @@ dataset = far.sample(nsamp=10000, adapt=True, seed=1234, csize=10,
 #+RESULTS:
 
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Remove NA from data-set (otherwise scale() and
 # model_binomial_iCAR doesn't work)
 dataset = dataset.dropna(axis=0)
@@ -432,7 +419,7 @@ print(dataset.head(5))
 : 4      74.0       488.0       60.0     90900.0    18870.0    18795.0    0.0   1.0  0.0   15.0  145095.0  513525.0   0.0      1
 : 5      66.0       210.0       67.0     89386.0    17522.0    17437.0    0.0   1.0  1.0   13.0  146445.0  512685.0   0.0      1
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Sample size
 ndefor = sum(dataset.fcc23 == 0)
 nfor = sum(dataset.fcc23 == 1)
@@ -448,7 +435,7 @@ print("ndefor = {}, nfor = {}".format(ndefor, nfor))
 
 ** Correlation plots
 
-#+begin_src python :results value :session :exports both
+#+begin_src python
 # Correlation formula
 formula_corr = "fcc23 ~ dist_road + dist_town + dist_river + \
 dist_defor + dist_edge + altitude + slope - 1"
@@ -472,7 +459,7 @@ figs = far.plot.correlation(
 * Model
 ** Model preparation
 
-#+begin_src python :results value :session :exports both
+#+begin_src python
 # Neighborhood for spatial-autocorrelation
 nneigh, adj = far.cellneigh(raster="data/fcc23.tif", csize=10, rank=1)
 
@@ -493,7 +480,7 @@ priorVrho = -1  # -1="1/Gamma"
 
 ** Variable selection
 
-#+begin_src python :results value :session :exports both
+#+begin_src python
 # Formula
 right_part = " + ".join(variables) + " + cell"
 left_part = "I(1-fcc23) + trial ~ "
@@ -514,7 +501,7 @@ mod_binomial_iCAR = far.model_binomial_iCAR(
 
 We check the parameter values.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 mod_binomial_iCAR
 #+end_src
 
@@ -543,7 +530,7 @@ scale(dist_river)    -0.0556      0.129     -0.298       0.16
 We remove the protected areas and the distance to river from the list
 of explanatory variables as their effects seem not to be significant.
 
-#+begin_src python :results value :session :exports both
+#+begin_src python
 # Formula
 variables = ["C(geol)", "scale(altitude)", "scale(slope)",
              "scale(dist_defor)", "scale(dist_edge)", "scale(dist_road)",
@@ -567,7 +554,7 @@ mod_binomial_iCAR = far.model_binomial_iCAR(
 
 We can plot the traces of the MCMCs.
 
-#+begin_src python :results value :session :exports both
+#+begin_src python
 # Plot
 figs = mod_binomial_iCAR.plot(
   output_file="output/mcmc.pdf",plots_per_page=3,
@@ -579,7 +566,7 @@ figs = mod_binomial_iCAR.plot(
 
 We save the model using pickle.
 
-#+begin_src python :results value :session :exports both
+#+begin_src python
 # Save model's main specifications with pickle
 mod_icar_pickle = {
   "formula": mod_binomial_iCAR.suitability_formula,
@@ -595,7 +582,7 @@ with open("output/mod_icar.pickle", "wb") as pickle_file:
 
 We get model's predictions.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Predictions
 pred_icar = mod_binomial_iCAR.theta_pred
 #+end_src
@@ -603,7 +590,7 @@ pred_icar = mod_binomial_iCAR.theta_pred
 * Model comparison and validation
 ** Cross-validation
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Cross-validation for icar, glm and RF
 CV_df_icar = far.cross_validation(
   dataset, formula, mod_type="icar", ratio=30, nrep=5,
@@ -622,7 +609,7 @@ CV_df_glm.to_csv("output/CV_glm.csv", header=True, index=False)
 CV_df_rf.to_csv("output/CV_rf.csv", header=True, index=False)
 #+end_src
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 print(CV_df_icar)
 #+end_src
 
@@ -637,7 +624,7 @@ print(CV_df_icar)
 : 6   TSS  0.6049  0.6095  0.6082  0.6269  0.6183  0.6136
 : 7     K  0.6049  0.6095  0.6082  0.6269  0.6183  0.6136
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 print(CV_df_glm)
 #+end_src
 
@@ -652,7 +639,7 @@ print(CV_df_glm)
 : 6   TSS  0.5413  0.5566  0.5366  0.5572  0.5513  0.5486
 : 7     K  0.5413  0.5566  0.5366  0.5572  0.5513  0.5486
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 print(CV_df_rf)
 #+end_src
 
@@ -671,7 +658,7 @@ The "icar" model has the best accuracy indices for the cross-validation.
 
 ** Deviance
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Null model
 formula_null = "I(1-fcc23) ~ 1"
 y, x = dmatrices(formula_null, data=dataset, NA_action="drop")
@@ -718,7 +705,7 @@ mod_dev.to_csv("output/model_deviance.csv", header=True, index=False)
 
 #+RESULTS:
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 print(mod_dev)
 #+end_src
 
@@ -732,7 +719,7 @@ print(mod_dev)
 
 While the "rf" had lower accuracy indices than the "icar" model for the cross-validation, the "rf" model explains 84% of the deviance against 42% for the "icar" model. This shows clearly that the "rf" model overfits the data. Moreover, the "glm" explains only 34% of the deviance. This means that fixed variables included in the model only explain a part of the spatial variability in the deforestation process and that adding spatial random effects allow to structure a significant part of the residual variability (8%). We thus use the "icar" model to predict the spatial location of the deforestation in the future.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Save models' predictions
 obs_pred = dataset
 obs_pred["null"] = pred_null[:, 1]
@@ -748,7 +735,7 @@ obs_pred.to_csv("output/obs_pred.csv", header=True, index=False)
 
 ** Model's coefficients
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Summary
 print(mod_binomial_iCAR)
 # Write summary in file
@@ -803,7 +790,7 @@ def inv_logit(p):
 
 #+RESULTS:
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Variable transformation
 sd_road = np.std(dataset["dist_road"]) # dist in meter
 # Effect of roads at decreasing deforestation probability
@@ -826,7 +813,7 @@ print("d_road_10km: {}%".format(d_road_10km))
 On average, a distance of 10 km from a road reduces the risk of
 deforestation by 18%.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Variable transformation
 sd_edge = np.std(dataset["dist_edge"]) # dist in meter
 ## Effect of edges at decreasing deforestation probability
@@ -850,7 +837,7 @@ On average, a distance of 100 m from the forest edge reduces the risk
 of deforestation by 95%, and a distance of 1 km reduces the risk of
 deforestation by almost 100%.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Load data
 df = pd.read_csv("output/obs_pred.csv")
 
@@ -975,7 +962,7 @@ for a distance > 10 km is not shown).
 
 ** Effect of ultramafic soils
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Change in deforestation probability on ultramafic soils
 alpha_normalized = -1.85
 coef_geol = 0.349
@@ -991,7 +978,7 @@ print("d_geol: {}%".format(d_geol))
 On average, being on ultramafic soils increases the deforestation
 probability by 34%.
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 df_out = pd.DataFrame({"x": [0, 1],
                        "theta_obs": np.zeros(2),
                        "theta_icar": np.zeros(2)})
@@ -1036,7 +1023,7 @@ for all observations in each class.
 * Predictions
 ** Interpolate spatial random effects
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Spatial random effects
 rho = mod_binomial_iCAR.rho
 
@@ -1054,7 +1041,7 @@ far.interpolate_rho(rho=rho, input_raster="data/fcc23.tif",
 
 ** Predict deforestation probability
 
-#+begin_src python :results output :session :exports both
+#+begin_src python
 # Update dist_edge and dist_defor at t3
 os.rename("data/dist_edge.tif", "data/dist_edge.tif.bak")
 os.rename("data/dist_defor.tif", "data/dist_defor.tif.bak")

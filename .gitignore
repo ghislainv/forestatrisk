@@ -20,7 +20,7 @@ docsrc/notebooks/new_caledonia/*
 !docsrc/notebooks/new_caledonia/new_caledonia.rst
 !docsrc/notebooks/new_caledonia/images
 docsrc/notebooks/new_caledonia/images/*
-!docsrc/notebooks/new_caledonia/images/nb_newcal_banner.png
+!docsrc/notebooks/new_caledonia/images/banner_newcal.jpg
 !docsrc/notebooks/new_caledonia/output
 docsrc/notebooks/new_caledonia/output/*
 !docsrc/notebooks/new_caledonia/output/nb_newcal_dist_road_edge_effect.png

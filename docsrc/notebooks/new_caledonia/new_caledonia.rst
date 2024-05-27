@@ -3,11 +3,11 @@ New Caledonia
 =============
 
 
-.. image:: images/nb_newcal_banner.png
-    :width: 1100
+.. image:: images/banner_newcal.jpg
+    :width: 1300
 
-1 Introduction
---------------
+Introduction
+------------
 
 This notebook presents the approach used to model and forecast
 deforestation in New Caledonia.
@@ -21,8 +21,8 @@ carbon emissions from tropical deforestation in the 21\ :sup:`st`\ century.
 More information on the method can be find at the ForestAtRisk
 website: `https://forestatrisk.cirad.fr <https://forestatrisk.cirad.fr>`_.
 
-1.1 Importing Python modules
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Importing Python modules
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 We import the Python modules needed for running the analysis.
 
@@ -72,8 +72,8 @@ We increase the cache for GDAL to increase computational speed.
     # GDAL
     os.environ["GDAL_CACHEMAX"] = "1024"
 
-1.2 Set credentials
-~~~~~~~~~~~~~~~~~~~
+Set credentials
+~~~~~~~~~~~~~~~
 
 We need to configure and set credentials for:
 
@@ -86,8 +86,8 @@ We need to configure and set credentials for:
 You will need a `Google account <https://www.google.com/account/about/>`_ for using the GEE API and accessing
 Google Drive.
 
-1.2.1 Access to Google Earth Engine API
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Access to Google Earth Engine API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Google Earth Engine is used to compute the past forest cover change
 from Vancutsem et al. 2021 or Hansen et al. 2013. To get credentials
@@ -109,16 +109,16 @@ Under Linux and Mac, credentials are stored in
 
     cat $HOME/.config/earthengine/credentials
 
-1.2.2 Access to Google Drive with RClone
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Access to Google Drive with RClone
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 RClone is used to download the forest cover change raster locally from
 Google Drive. To install RClone, follow these `instructions for
 RClone <https://rclone.org/install/>`_. To configure the access to your Google Drive, follow these
 `instructions for accessing Google Drive <https://rclone.org/drive/>`_.
 
-1.2.3 Access to WDPA API
-^^^^^^^^^^^^^^^^^^^^^^^^
+Access to WDPA API
+^^^^^^^^^^^^^^^^^^
 
 We will be using the `pywda <https://ecology.ghislainv.fr/pywdpa/>`_ Python package to collect the data on
 protected areas from the World Database on Protected Areas (WDPA) at
@@ -141,11 +141,11 @@ The validity of your token can be checked with the function
 If your token is valid, the function will return its value. Otherwise
 it will print an error message.
 
-2 Data
-------
+Data
+----
 
-2.1 Compute forest cover change
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compute forest cover change
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We specify the `iso3 <https://fr.wikipedia.org/wiki/ISO_3166-1#Table_de_codage>`_ code of New Caledonia which is “NCL”. 
 
@@ -170,8 +170,8 @@ the name of the Google Drive folder to use.
         gdrive_remote_rclone="gdrive_gv",
         gdrive_folder="GEE-forestatrisk-notebooks")
 
-2.2 Download raw data
-~~~~~~~~~~~~~~~~~~~~~
+Download raw data
+~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -186,8 +186,8 @@ the name of the Google Drive folder to use.
 
     Downloading data for country NCL
 
-2.3 Compute explanatory variables
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compute explanatory variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We first set the projection for New-Caledonia which is RGNC91-93 /
 Lambert New Caledonia (`EPSG:3163 <https://epsg.io/3163>`_).
@@ -211,8 +211,8 @@ We compute the explanatory variables from the raw data.
         data_forest=True,
         keep_temp_dir=True)
 
-2.4 Adding data on ultramafic soils
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Adding data on ultramafic soils
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Data can be downloaded from `Géorep <https://georep-dtsi-sgt.opendata.arcgis.com/datasets/40d5b1a5afa244b1a73dd3620df075de_0/explore?location=-21.087852%2C165.489950%2C8.00>`_. We unzip the shapefile in the
 folder ``gisdata/vectors/peridotite/``, reproject, and rasterize the
@@ -309,8 +309,8 @@ and 0 when not. Extent is obtained from file ``pa.tif`` with command
                    -a_nodata 255 -a_srs "$proj" \
     	       -ot Byte -tr 30 30 -l geol_PROJ $f2 $f3
 
-2.5 Files
-~~~~~~~~~
+Files
+~~~~~
 
 The ``data`` folder includes:
 
@@ -334,6 +334,11 @@ The ``data`` folder includes:
         output_file="output/fcc23.png",
         borders="data/ctry_PROJ.shp",
         linewidth=0.3, dpi=500)
+
+::
+
+    Build overview
+
 
 Variable characteristics are summarized in the following table:
 
@@ -361,11 +366,11 @@ Variable characteristics are summarized in the following table:
     | Geology                      | Géorep 1/50.000       | peridotite bed presence        | --     |             30 |
     +------------------------------+-----------------------+--------------------------------+--------+----------------+
 
-3 Sampling
-----------
+Sampling
+--------
 
-3.1 Sampling the observations
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Sampling the observations
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -414,8 +419,8 @@ Variable characteristics are summarized in the following table:
 
     ndefor = 9933, nfor = 9977
 
-3.2 Correlation plots
-~~~~~~~~~~~~~~~~~~~~~
+Correlation plots
+~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -436,11 +441,11 @@ Variable characteristics are summarized in the following table:
         dpi=80,
         output_file=of)
 
-4 Model
--------
+Model
+-----
 
-4.1 Model preparation
-~~~~~~~~~~~~~~~~~~~~~
+Model preparation
+~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -459,8 +464,8 @@ Variable characteristics are summarized in the following table:
     # Priors
     priorVrho = -1  # -1="1/Gamma"
 
-4.2 Variable selection
-~~~~~~~~~~~~~~~~~~~~~~
+Variable selection
+~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -506,8 +511,8 @@ We check the parameter values.
                  Vrho       2.92      0.315       2.34       3.59
              Deviance   1.61e+04       22.1   1.61e+04   1.62e+04
 
-4.3 Final model
-~~~~~~~~~~~~~~~
+Final model
+~~~~~~~~~~~
 
 We remove the protected areas and the distance to river from the list
 of explanatory variables as their effects seem not to be significant.
@@ -565,11 +570,11 @@ We get model’s predictions.
     # Predictions
     pred_icar = mod_binomial_iCAR.theta_pred
 
-5 Model comparison and validation
----------------------------------
+Model comparison and validation
+-------------------------------
 
-5.1 Cross-validation
-~~~~~~~~~~~~~~~~~~~~
+Cross-validation
+~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -643,8 +648,8 @@ We get model’s predictions.
 
 The “icar” model has the best accuracy indices for the cross-validation.
 
-5.2 Deviance
-~~~~~~~~~~~~
+Deviance
+~~~~~~~~
 
 .. code:: python
 
@@ -717,11 +722,11 @@ While the “rf” had lower accuracy indices than the “icar” model for the 
     obs_pred["icar"] = pred_icar
     obs_pred.to_csv("output/obs_pred.csv", header=True, index=False)
 
-6 Variables’ effects
---------------------
+Variables’ effects
+------------------
 
-6.1 Model’s coefficients
-~~~~~~~~~~~~~~~~~~~~~~~~
+Model’s coefficients
+~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -760,8 +765,8 @@ type. It could be that human activities inducing deforestation
 (agriculture, pasture) are more developed in the southern part of
 New-Caledonia, where the ultramafic soils are more present.
 
-6.2 Effect of the distances to road and forest edge
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Effect of the distances to road and forest edge
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We define an inverse-logit function.
 
@@ -948,8 +953,8 @@ for a distance > 10 km is not shown).
 .. image:: output/nb_newcal_dist_road_edge_effect.png
     :width: 600
 
-6.3 Effect of ultramafic soils
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Effect of ultramafic soils
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -1012,11 +1017,11 @@ for all observations in each class.
 .. image:: output/nb_newcal_geol_effect.png
     :width: 600
 
-7 Predictions
--------------
+Predictions
+-----------
 
-7.1 Interpolate spatial random effects
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Interpolate spatial random effects
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -1035,8 +1040,8 @@ for all observations in each class.
     Build overview
     Resampling spatial random effects to file output/rho.tif
 
-7.2 Predict deforestation probability
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Predict deforestation probability
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -1061,8 +1066,8 @@ for all observations in each class.
     os.rename("data/dist_edge.tif.bak", "data/dist_edge.tif")
     os.rename("data/dist_defor.tif.bak", "data/dist_defor.tif")
 
-8 Project future forest cover change
-------------------------------------
+Project future forest cover change
+----------------------------------
 
 .. code:: python
 
@@ -1109,11 +1114,11 @@ for all observations in each class.
     	  stats, output_file="output/freq_prob.png")
           plt.close(fig_freq)
 
-9 Figures
----------
+Figures
+-------
 
-9.1 Historical forest cover change
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Historical forest cover change
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Forest cover change for the period 2000-2010-2020
 
@@ -1133,8 +1138,8 @@ Forest cover change for the period 2000-2010-2020
 .. image:: output/nb_newcal_fcc123.png
     :width: 600
 
-9.2 Spatial random effects
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Spatial random effects
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -1160,8 +1165,8 @@ Forest cover change for the period 2000-2010-2020
 .. image:: output/nb_newcal_rho.png
     :width: 600
 
-9.3 Spatial probability of deforestation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Spatial probability of deforestation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -1180,8 +1185,8 @@ Forest cover change for the period 2000-2010-2020
 .. image:: output/nb_newcal_prob.png
     :width: 600
 
-9.4 Future forest cover
-~~~~~~~~~~~~~~~~~~~~~~~
+Future forest cover
+~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
