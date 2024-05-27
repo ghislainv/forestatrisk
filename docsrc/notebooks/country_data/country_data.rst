@@ -72,7 +72,7 @@ Access to Google Earth Engine API
 Google Earth Engine is used to compute the past forest cover change
 from Vancutsem et al. 2021 or Hansen et al. 2013. To get credentials
 for using the Google Earth Engine API, follow these
-`instructions <https://developers.google.com/earth-engine/guides/python_install-conda#get_credentials>`_. While authentication with ``ee.Authenticate()`` should be
+`GEE instructions <https://developers.google.com/earth-engine/guides/python_install-conda#get_credentials>`_. While authentication with ``ee.Authenticate()`` should be
 necessary only once, you have to execute the command ``ee.Initialize()``
 at each session.
 
@@ -93,8 +93,9 @@ Access to Google Drive with RClone
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 RClone is used to download the forest cover change raster locally from
-Google Drive. To install RClone, follow these `instructions <https://rclone.org/install/>`_. To
-configure the access to your Google Drive, follow these `instructions <https://rclone.org/drive/>`_.
+Google Drive. To install RClone, follow these `RClone instructions <https://rclone.org/install/>`_. To
+configure the access to your Google Drive, follow these `RClone Google
+Drive instructions <https://rclone.org/drive/>`_.
 
 Access to WDPA API
 ^^^^^^^^^^^^^^^^^^

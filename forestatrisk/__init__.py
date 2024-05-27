@@ -19,17 +19,11 @@ from osgeo import gdal
 # Data
 from .data import sample, extent_shp, get_vector_extent
 
-# Misc
-from .misc import countpix, invlogit, make_dir
-
 # Model
 from .model import cellneigh, cellneigh_ctry
 from .model import model_binomial_iCAR
 from .model import model_random_forest
 from .model import icarModelPred
-
-# Plot
-from .plot import plot
 
 # Predict
 from .predict import interpolate_rho, wrast_rho
@@ -48,6 +42,12 @@ from .validate import r_diffproj, mat_diffproj
 from .validate import resample_sum
 from .validate import validation_npix
 from .validate import validation_udef_arp
+
+# Plot
+from .plot import plot
+
+# Misc
+from .misc import countpix, invlogit, make_dir
 
 # GDAL exceptions
 gdal.UseExceptions()
