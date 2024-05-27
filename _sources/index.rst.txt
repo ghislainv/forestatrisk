@@ -1,24 +1,15 @@
 .. include:: ../README.rst
 
-Table of contents
-================= 
-
 .. toctree::
+   :hidden:
    :maxdepth: 2
 
    Home <self>	      
    notebooks/get_started
    articles
-   package_contents      
+   python_api      
    indices
    citation
    changelog
    license
    
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-

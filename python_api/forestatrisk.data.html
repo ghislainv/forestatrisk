@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Download &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=b21ac067" />
+    <script src="../_static/documentation_options.js?v=00f267c6"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="forestatrisk.model.html" />
+    <link rel="prev" title="Python API" href="../python_api.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo-far.svg" alt="Logo" />
+    
+    <h1 class="logo logo-name">forestatrisk</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../articles.html">Articles</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../python_api.html">Python API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../python_api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#model">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#predict">Predict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#project">Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#validate">Validate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#plot">Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#miscellaneous">Miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../python_api.html">Python API</a><ul>
+      <li>Previous: <a href="../python_api.html" title="previous chapter">Python API</a></li>
+      <li>Next: <a href="forestatrisk.model.html" title="next chapter">&lt;no title&gt;</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="download">
+<h1>Download<a class="headerlink" href="#download" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.country_download">
+<span class="sig-name descname"><span class="pre">country_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_remote_rclone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gadm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">srtm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wdpa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">osm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/country_download.html#country_download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.country_download" title="Link to this definition">¶</a></dt>
+<dd><p>Download country geospatial data.</p>
+<p>Function to download all the data for a specific country. It
+includes GEE forest data, GADM, OSM, SRTM, and WDPA data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>gdrive_remote_rclone</strong> – Google Drive remote name in rclone.</p></li>
+<li><p><strong>gdrive_folder</strong> – the Google Drive folder to download from.</p></li>
+<li><p><strong>output_dir</strong> – Directory where data is downloaded. Default to
+current working directory.</p></li>
+<li><p><strong>gadm</strong> – Toggle GADM data download.</p></li>
+<li><p><strong>srtm</strong> – Toggle SRTM data download.</p></li>
+<li><p><strong>wdpa</strong> – Toggle SRTM data download.</p></li>
+<li><p><strong>osm</strong> – Toggle OSM data download.</p></li>
+<li><p><strong>forest</strong> – Toggle forest data download.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.download.download_biomass_whrc">
+<span class="sig-name descname"><span class="pre">download_biomass_whrc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_remote_rclone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/download/download_biomass_whrc.html#download_biomass_whrc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.download.download_biomass_whrc" title="Link to this definition">¶</a></dt>
+<dd><p>Download biomass data from Google Drive.</p>
+<p>Download biomass data from Google Drive. Print a message if the
+file is not available.</p>
+<p>RClone program is needed: <a class="reference external" href="https://rclone.org">https://rclone.org</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>gdrive_remote_rclone</strong> – Google Drive remote name in rclone.</p></li>
+<li><p><strong>gdrive_folder</strong> – the Google Drive folder to download from.</p></li>
+<li><p><strong>output_dir</strong> – Output directory to download files to. Default
+to current working directory.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.download.download_forest">
+<span class="sig-name descname"><span class="pre">download_forest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_remote_rclone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/download/download_forest.html#download_forest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.download.download_forest" title="Link to this definition">¶</a></dt>
+<dd><p>Download forest cover data from Google Drive.</p>
+<p>Download forest cover data from Google Drive in the current
+working directory. Print a message if the file is not available.</p>
+<p>RClone program is needed: <a class="reference external" href="https://rclone.org">https://rclone.org</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>gdrive_remote_rclone</strong> – Google Drive remote name in rclone.</p></li>
+<li><p><strong>gdrive_folder</strong> – the Google Drive folder to download from.</p></li>
+<li><p><strong>output_dir</strong> – Output directory to download files to. Default
+to current working directory.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.download.download_gadm">
+<span class="sig-name descname"><span class="pre">download_gadm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/download/download_gadm.html#download_gadm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.download.download_gadm" title="Link to this definition">¶</a></dt>
+<dd><p>Download GADM data for a country.</p>
+<p>Download GADM (Global Administrative Areas) for a specific
+country. See <a class="reference external" href="https://gadm.org">https://gadm.org</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>output_dir</strong> – Directory where data is downloaded. Default to
+current working directory.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.download.download_osm">
+<span class="sig-name descname"><span class="pre">download_osm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/download/download_osm.html#download_osm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.download.download_osm" title="Link to this definition">¶</a></dt>
+<dd><p>Download OSM data for a country.</p>
+<p>Download OpenStreetMap data from Geofabrik.de or OpenStreetMap.fr
+for aspecific country.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>output_dir</strong> – Directory where data is downloaded. Default to
+current working directory.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.download.download_srtm">
+<span class="sig-name descname"><span class="pre">download_srtm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/download/download_srtm.html#download_srtm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.download.download_srtm" title="Link to this definition">¶</a></dt>
+<dd><p>Download SRTM data for a country.</p>
+<p>Download SRTM data (Shuttle Radar Topographic Mission v4.1) from
+CSI-CGIAR for a specific country. This function uses the iso3 code
+to download the country borders (as a shapefile) from <a class="reference external" href="https://gadm.org">GADM</a>. Download is skipped if the shapefile is
+already present. Country borders are used to identify the SRTM
+tiles to be downloaded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>output_dir</strong> – Directory where data is downloaded. Default to
+current working directory.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.download.download_wdpa">
+<span class="sig-name descname"><span class="pre">download_wdpa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/download/download_wdpa.html#download_wdpa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.download.download_wdpa" title="Link to this definition">¶</a></dt>
+<dd><p>Download protected areas.</p>
+<p>Protected areas come from the World Database on Protected Areas
+(<a class="reference external" href="https://www.protectedplanet.net/">https://www.protectedplanet.net/</a>). This function uses the
+<code class="docutils literal notranslate"><span class="pre">pywdpa</span></code> python package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>output_dir</strong> – Directory where shapefiles for protected areas
+are downloaded. Default to current working directory.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="run-on-gee">
+<h1>Run on GEE<a class="headerlink" href="#run-on-gee" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.run_gee_forest">
+<span class="sig-name descname"><span class="pre">run_gee_forest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:3395'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fcc_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'jrc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_xee</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_remote_rclone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/run_gee/run_gee_forest.html#run_gee_forest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.run_gee_forest" title="Link to this definition">¶</a></dt>
+<dd><p>Compute forest rasters per country with Google Earth Engine (GEE).</p>
+<p>This function uses the iso3 code to download the country borders
+(as a shapefile) from <a class="reference external" href="https://gadm.org">GADM</a>. Download is
+skipped if the shapefile is already present. Country borders are
+used to define the extent for the GEE computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
+<li><p><strong>output_dir</strong> – Directory where shapefile for country border is saved.
+Additionaly, the forest raster is saved in this directory if “use_xee” is “True”.
+Default to “data_raw”.</p></li>
+<li><p><strong>keep_dir</strong> – Boolean to keep the output_dir folder. Default
+to “True” (directory “data_raw” is not deleted).</p></li>
+<li><p><strong>fcc_source</strong> – Source for forest-cover change data. Can be
+“gfc” (Global Forest Change) or “tmf” (Tropical Moist Forest)
+data. Abbreviation “jrc” (Joint Research Center) can also be
+used in place of “tmf”.</p></li>
+<li><p><strong>perc</strong> – Tree cover percentage threshold to define forest
+(only used if <code class="docutils literal notranslate"><span class="pre">fcc_source=&quot;gfc&quot;</span></code>).</p></li>
+<li><p><strong>use_xee</strong> – Boolean to use the xarray-EE package or not. If True, then the
+forest raster is directly saved to disk in the “output_dir” directory.
+If False, then the raster is saved to Google Drive, using
+“gdrive_remote_rclone” and “gdrive_folder” parameters. Default to <cite>False</cite>.</p></li>
+<li><p><strong>gdrive_remote_rclone</strong> – Name of the Google Drive remote for
+rclone. Only used if <cite>use_xee</cite> is <cite>False</cite>.</p></li>
+<li><p><strong>gdrive_folder</strong> – Name of the Google Drive folder to use. Only used if
+<cite>use_xee</cite> is <cite>False</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.country_forest_run">
+<span class="sig-name descname"><span class="pre">country_forest_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:3395'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fcc_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'jrc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_xee</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_remote_rclone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#forestatrisk.data.country_forest_run" title="Link to this definition">¶</a></dt>
+<dd><p>Compute forest rasters per country with Google Earth Engine (GEE).</p>
+<p>This function uses the iso3 code to download the country borders
+(as a shapefile) from <a class="reference external" href="https://gadm.org">GADM</a>. Download is
+skipped if the shapefile is already present. Country borders are
+used to define the extent for the GEE computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
+<li><p><strong>output_dir</strong> – Directory where shapefile for country border is saved.
+Additionaly, the forest raster is saved in this directory if “use_xee” is “True”.
+Default to “data_raw”.</p></li>
+<li><p><strong>keep_dir</strong> – Boolean to keep the output_dir folder. Default
+to “True” (directory “data_raw” is not deleted).</p></li>
+<li><p><strong>fcc_source</strong> – Source for forest-cover change data. Can be
+“gfc” (Global Forest Change) or “tmf” (Tropical Moist Forest)
+data. Abbreviation “jrc” (Joint Research Center) can also be
+used in place of “tmf”.</p></li>
+<li><p><strong>perc</strong> – Tree cover percentage threshold to define forest
+(only used if <code class="docutils literal notranslate"><span class="pre">fcc_source=&quot;gfc&quot;</span></code>).</p></li>
+<li><p><strong>use_xee</strong> – Boolean to use the xarray-EE package or not. If True, then the
+forest raster is directly saved to disk in the “output_dir” directory.
+If False, then the raster is saved to Google Drive, using
+“gdrive_remote_rclone” and “gdrive_folder” parameters. Default to <cite>False</cite>.</p></li>
+<li><p><strong>gdrive_remote_rclone</strong> – Name of the Google Drive remote for
+rclone. Only used if <cite>use_xee</cite> is <cite>False</cite>.</p></li>
+<li><p><strong>gdrive_folder</strong> – Name of the Google Drive folder to use. Only used if
+<cite>use_xee</cite> is <cite>False</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.run_gee_biomass_whrc">
+<span class="sig-name descname"><span class="pre">run_gee_biomass_whrc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:3395'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_remote_rclone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/run_gee/run_gee_biomass_whrc.html#run_gee_biomass_whrc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.run_gee_biomass_whrc" title="Link to this definition">¶</a></dt>
+<dd><p>Export biomass maps to Google Drive with Google Earth Engine (GEE).</p>
+<p>This function uses the iso3 code to download the country borders
+(as a shapefile) from <a class="reference external" href="https://gadm.org">GADM</a>. Download is
+skipped if the shapefile is already present. Country borders are
+used to define the extent for the GEE computation. Biomass map by
+WHRC (doi: <cite>10.1111/gcb.13153
+&lt;https://doi.org/10.1111/gcb.13153&gt;</cite>) is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
+<li><p><strong>output_dir</strong> – Directory where shapefile for country border is saved.</p></li>
+<li><p><strong>keep_dir</strong> – Boolean to keep the output_dir folder. Default
+to “True” (directory “data_raw” is not deleted).</p></li>
+<li><p><strong>gdrive_remote_rclone</strong> – Name of the Google Drive remote for rclone.</p></li>
+<li><p><strong>gdrive_folder</strong> – Name of the Google Drive folder to use.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="compute">
+<h1>Compute<a class="headerlink" href="#compute" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.country_compute">
+<span class="sig-name descname"><span class="pre">country_compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:3395'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_country</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_forest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_temp_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/country_compute.html#country_compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.country_compute" title="Link to this definition">¶</a></dt>
+<dd><p>Process country geospatial data.</p>
+<p>This function computes and formats the country data. Computations
+are done in a temporary directory where data have been downloaded
+(default to “data_raw”). Then data are copied to an output
+directory (default to “data”).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>temp_dir</strong> – Temporary directory for computation. Relative
+path to the current working directory.</p></li>
+<li><p><strong>output_dir</strong> – Output directory. Relative path to the current
+working directory.</p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
+<li><p><strong>data_country</strong> – Boolean to compute environmental
+variables for the country. Default to “True”.</p></li>
+<li><p><strong>data_forest</strong> – Boolean to compute forest variables. Default
+to “True”.</p></li>
+<li><p><strong>keep_temp_dir</strong> – Boolean to keep the temporary
+directory. Default to “False”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.compute.compute_biomass_avitabile">
+<span class="sig-name descname"><span class="pre">compute_biomass_avitabile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/compute/compute_biomass_avitabile.html#compute_biomass_avitabile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.compute.compute_biomass_avitabile" title="Link to this definition">¶</a></dt>
+<dd><p>Compute aboveground biomass.</p>
+<p>Using Avitabile et al. 2016 data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Used for reprojecting data.</p></li>
+<li><p><strong>extent</strong> – Extent (xmin, ymin, xmax, ymax) of output rasters.</p></li>
+<li><p><strong>verbose</strong> – Logical. Whether to print messages or not. Default
+to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.compute.compute_biomass_whrc">
+<span class="sig-name descname"><span class="pre">compute_biomass_whrc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:3395'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/compute/compute_biomass_whrc.html#compute_biomass_whrc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.compute.compute_biomass_whrc" title="Link to this definition">¶</a></dt>
+<dd><p>Function to mosaic and resample biomass data from WHRC.</p>
+<p>This function mosaics and resamples the biomass data obtained from
+GEE. A reprojection can be performed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>input_dir</strong> – Directory with input files for biomass.</p></li>
+<li><p><strong>output_dir</strong> – Output directory.</p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.compute.compute_distance">
+<span class="sig-name descname"><span class="pre">compute_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4294967295</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_nodata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/compute/compute_distance.html#compute_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.compute.compute_distance" title="Link to this definition">¶</a></dt>
+<dd><p>Computing the shortest distance to pixels with given values in
+a raster file.</p>
+<p>This function computes the shortest distance to pixels with given
+values in a raster file. Distances generated are in georeferenced
+coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_file</strong> – Input raster file.</p></li>
+<li><p><strong>dist_file</strong> – Path to the distance raster file that is
+created.</p></li>
+<li><p><strong>values</strong> – Values of the raster to compute the distance to. If
+several values, they must be separated with a comma in a
+string (eg. ‘0,1’). Default is 0.</p></li>
+<li><p><strong>nodata</strong> – NoData value for the output raster. Default is
+4294967295 for UInt32.</p></li>
+<li><p><strong>input_nodata</strong> – Whether nodata pixels in the input
+raster should be nodata in the output raster (default to False).</p></li>
+<li><p><strong>verbose</strong> – Logical. Whether to print messages or not. Default
+to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None. A distance raster file is created (see
+<code class="docutils literal notranslate"><span class="pre">dist_file</span></code>). Raster data type is UInt32 ([0,
+4294967295]).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.compute.compute_osm">
+<span class="sig-name descname"><span class="pre">compute_osm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/compute/compute_osm.html#compute_osm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.compute.compute_osm" title="Link to this definition">¶</a></dt>
+<dd><p>Compute distance to road, town, and river.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Used for reprojecting data.</p></li>
+<li><p><strong>extent</strong> – Extent (xmin, ymin, xmax, ymax) of output rasters.</p></li>
+<li><p><strong>verbose</strong> – Logical. Whether to print messages or not. Default
+to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.compute.compute_srtm">
+<span class="sig-name descname"><span class="pre">compute_srtm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/compute/compute_srtm.html#compute_srtm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.compute.compute_srtm" title="Link to this definition">¶</a></dt>
+<dd><p>Compute elevation and slope.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Used for reprojecting data.</p></li>
+<li><p><strong>extent</strong> – Extent (xmin, ymin, xmax, ymax) of output rasters.</p></li>
+<li><p><strong>verbose</strong> – Logical. Whether to print messages or not. Default
+to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.compute.compute_wdpa">
+<span class="sig-name descname"><span class="pre">compute_wdpa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/compute/compute_wdpa.html#compute_wdpa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.compute.compute_wdpa" title="Link to this definition">¶</a></dt>
+<dd><p>Process geospatial data on protected areas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso</strong> – Country iso code.</p></li>
+<li><p><strong>where</strong> – SQL statement to filter features. Default to
+<code class="docutils literal notranslate"><span class="pre">&quot;status=&quot;Designated&quot;</span> <span class="pre">OR</span> <span class="pre">status=&quot;Inscribed&quot;</span> <span class="pre">OR</span>
+<span class="pre">status=&quot;Established&quot;</span> <span class="pre">OR</span> <span class="pre">(status=&quot;Proposed&quot;</span> <span class="pre">AND</span>
+<span class="pre">CAST(SUBSTR(date,7,4)</span> <span class="pre">AS</span> <span class="pre">INTEGER)</span> <span class="pre">&lt;</span> <span class="pre">2010)&quot;</span></code></p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Used for reprojecting data.</p></li>
+<li><p><strong>extent</strong> – Extent (xmin, ymin, xmax, ymax) of output rasters.</p></li>
+<li><p><strong>verbose</strong> – Logical. Whether to print messages or not. Default
+to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.compute.compute_forest">
+<span class="sig-name descname"><span class="pre">compute_forest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/compute/compute_forest.html#compute_forest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.compute.compute_forest" title="Link to this definition">¶</a></dt>
+<dd><p>Processing forest data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso</strong> – Country iso code.</p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Used for reprojecting data.</p></li>
+<li><p><strong>extent</strong> – Extent (xmin, ymin, xmax, ymax) of output rasters.</p></li>
+<li><p><strong>verbose</strong> – Logical. Whether to print messages or not. Default
+to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.compute.mosaic_biomass_whrc">
+<span class="sig-name descname"><span class="pre">mosaic_biomass_whrc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data_raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:3395'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/compute/mosaic_biomass_whrc.html#mosaic_biomass_whrc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.compute.mosaic_biomass_whrc" title="Link to this definition">¶</a></dt>
+<dd><p>Function to mosaic biomass images from WHRC.</p>
+<p>This function mosaics the biomass data obtained from GEE. No
+reprojection is performed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
+<li><p><strong>input_dir</strong> – Directory with input files for biomass.</p></li>
+<li><p><strong>output_dir</strong> – Output directory.</p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="sample">
+<h1>Sample<a class="headerlink" href="#sample" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nsamp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1234</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_forest_raster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'forest.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample.txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/sample.html#sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.sample" title="Link to this definition">¶</a></dt>
+<dd><p>Sample points and extract raster values.</p>
+<p>This function (i) randomly draws spatial points in deforested and
+forested areas and (ii) extract environmental variable values for
+each spatial point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nsamp</strong> – Number of random spatial points.</p></li>
+<li><p><strong>adapt</strong> – Boolean. Adapt <code class="docutils literal notranslate"><span class="pre">nsamp</span></code> to forest area: 1000 for 1 Mha of
+forest, with min=10000 and max=50000. Default to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>seed</strong> – Seed for random number generator.</p></li>
+<li><p><strong>csize</strong> – Spatial cell size in km.</p></li>
+<li><p><strong>var_dir</strong> – Directory with raster data.</p></li>
+<li><p><strong>input_forest_raster</strong> – Name of the forest raster file
+(1=forest, 0=deforested) in the var_dir directory.</p></li>
+<li><p><strong>output_file</strong> – Path to file to save sample points.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of lines per block.</p></li>
+<li><p><strong>verbose</strong> – Toogle progress bar.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Pandas DataFrame, each row being one observation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="various">
+<h1>Various<a class="headerlink" href="#various" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.get_vector_extent">
+<span class="sig-name descname"><span class="pre">get_vector_extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/extent_shp.html#get_vector_extent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.get_vector_extent" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the extent of a vector file.</p>
+<p>This function computes the extent (xmin, ymin, xmax, ymax) of a
+shapefile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_file</strong> – Path to the input vector file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The extent as a tuple (xmin, ymin, xmax, ymax).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.extent_shp">
+<span class="sig-name descname"><span class="pre">extent_shp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#forestatrisk.extent_shp" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the extent of a vector file.</p>
+<p>This function computes the extent (xmin, ymin, xmax, ymax) of a
+shapefile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_file</strong> – Path to the input vector file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The extent as a tuple (xmin, ymin, xmax, ymax).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/python_api/forestatrisk.data.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

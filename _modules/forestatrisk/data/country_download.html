@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>forestatrisk.data.country_download &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=b21ac067" />
+    <script src="../../../_static/documentation_options.js?v=00f267c6"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/logo-far.svg" alt="Logo" />
+    
+    <h1 class="logo logo-name">forestatrisk</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../articles.html">Articles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for forestatrisk.data.country_download</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Download country geospatial data.&quot;&quot;&quot;</span>
+
+<span class="c1"># Local application imports</span>
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">make_dir</span>
+<span class="kn">from</span> <span class="nn">.download</span> <span class="kn">import</span> <span class="n">download_forest</span><span class="p">,</span> <span class="n">download_osm</span>
+<span class="kn">from</span> <span class="nn">.download</span> <span class="kn">import</span> <span class="n">download_srtm</span><span class="p">,</span> <span class="n">download_wdpa</span><span class="p">,</span> <span class="n">download_gadm</span>
+
+
+<div class="viewcode-block" id="country_download">
+<a class="viewcode-back" href="../../../python_api/forestatrisk.data.html#forestatrisk.data.country_download">[docs]</a>
+<span class="k">def</span> <span class="nf">country_download</span><span class="p">(</span>
+        <span class="n">iso3</span><span class="p">,</span>
+        <span class="n">gdrive_remote_rclone</span><span class="p">,</span>
+        <span class="n">gdrive_folder</span><span class="p">,</span>
+        <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
+        <span class="n">gadm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">srtm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">wdpa</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">osm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">forest</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download country geospatial data.</span>
+
+<span class="sd">    Function to download all the data for a specific country. It</span>
+<span class="sd">    includes GEE forest data, GADM, OSM, SRTM, and WDPA data.</span>
+
+<span class="sd">    :param iso3: Country ISO 3166-1 alpha-3 code.</span>
+
+<span class="sd">    :param gdrive_remote_rclone: Google Drive remote name in rclone.</span>
+
+<span class="sd">    :param gdrive_folder: the Google Drive folder to download from.</span>
+
+<span class="sd">    :param output_dir: Directory where data is downloaded. Default to</span>
+<span class="sd">        current working directory.</span>
+
+<span class="sd">    :param gadm: Toggle GADM data download.</span>
+
+<span class="sd">    :param srtm: Toggle SRTM data download.</span>
+
+<span class="sd">    :param wdpa: Toggle SRTM data download.</span>
+
+<span class="sd">    :param osm: Toggle OSM data download.</span>
+
+<span class="sd">    :param forest: Toggle forest data download.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Message</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading data for country &quot;</span> <span class="o">+</span> <span class="n">iso3</span><span class="p">)</span>
+
+    <span class="c1"># Create directory</span>
+    <span class="n">make_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+
+    <span class="c1"># Download</span>
+    <span class="k">if</span> <span class="n">gadm</span><span class="p">:</span>
+        <span class="n">download_gadm</span><span class="p">(</span><span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">srtm</span><span class="p">:</span>
+        <span class="n">download_srtm</span><span class="p">(</span><span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">wdpa</span><span class="p">:</span>
+        <span class="n">download_wdpa</span><span class="p">(</span><span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">osm</span><span class="p">:</span>
+        <span class="n">download_osm</span><span class="p">(</span><span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">forest</span><span class="p">:</span>
+        <span class="n">download_forest</span><span class="p">(</span>
+            <span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span>
+            <span class="n">gdrive_remote_rclone</span><span class="o">=</span><span class="n">gdrive_remote_rclone</span><span class="p">,</span>
+            <span class="n">gdrive_folder</span><span class="o">=</span><span class="n">gdrive_folder</span><span class="p">,</span>
+            <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+
+<span class="c1"># End</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

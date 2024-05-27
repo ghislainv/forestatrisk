@@ -56,7 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebooks/get_started.html">Get started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../articles.html">Articles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../package_contents.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../python_api.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
@@ -128,7 +128,7 @@
 <span class="c1"># Plot vector objects</span>
 <span class="c1"># (https://github.com/cgarrard/osgeopy-code/blob/master/Chapter13/listing13_3.py)</span>
 <div class="viewcode-block" id="plot_polygon">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.plot_polygon">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.plot_polygon">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_polygon</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots a polygon using the given symbol.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">poly</span><span class="o">.</span><span class="n">GetGeometryCount</span><span class="p">()):</span>
@@ -140,7 +140,7 @@
 
 <span class="c1"># Use this function to fill polygons.</span>
 <div class="viewcode-block" id="plot_polygon_fill">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.plot_polygon_fill">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.plot_polygon_fill">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_polygon_fill</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots a polygon using the given symbol.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">poly</span><span class="o">.</span><span class="n">GetGeometryCount</span><span class="p">()):</span>
@@ -150,7 +150,7 @@
 
 
 <div class="viewcode-block" id="plot_line">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.plot_line">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.plot_line">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots a line using the given symbol.&quot;&quot;&quot;</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">line</span><span class="o">.</span><span class="n">GetPoints</span><span class="p">())</span>
@@ -159,7 +159,7 @@
 
 
 <div class="viewcode-block" id="plot_point">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.plot_point">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.plot_point">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_point</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;ko&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots a point using the given symbol.&quot;&quot;&quot;</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">point</span><span class="o">.</span><span class="n">GetX</span><span class="p">(),</span> <span class="n">point</span><span class="o">.</span><span class="n">GetY</span><span class="p">()</span>
@@ -168,7 +168,7 @@
 
 
 <div class="viewcode-block" id="plot_layer">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.plot_layer">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.plot_layer">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_layer</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">layer_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots an OGR layer using the given symbol.&quot;&quot;&quot;</span>
     <span class="n">ds</span> <span class="o">=</span> <span class="n">ogr</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -210,7 +210,7 @@
 
 <span class="c1"># Saving a matplotlib.pyplot figure as a border-less frame-less image</span>
 <div class="viewcode-block" id="figure_as_image">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.figure_as_image">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.figure_as_image">[docs]</a>
 <span class="k">def</span> <span class="nf">figure_as_image</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove borders and frames of a Matplotlib figure and save.</span>
 
@@ -233,7 +233,7 @@
 
 <span class="c1"># plot.correlation</span>
 <div class="viewcode-block" id="correlation">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.correlation">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.correlation">[docs]</a>
 <span class="k">def</span> <span class="nf">correlation</span><span class="p">(</span>
     <span class="n">y</span><span class="p">,</span>
     <span class="n">data</span><span class="p">,</span>
@@ -325,7 +325,7 @@
 
 <span class="c1"># plot.fcc</span>
 <div class="viewcode-block" id="fcc">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.fcc">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.fcc">[docs]</a>
 <span class="k">def</span> <span class="nf">fcc</span><span class="p">(</span>
     <span class="n">input_fcc_raster</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;fcc.png&quot;</span><span class="p">,</span>
@@ -452,7 +452,7 @@
 
 <span class="c1"># plot.fcc12345</span>
 <div class="viewcode-block" id="fcc12345">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.fcc12345">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.fcc12345">[docs]</a>
 <span class="k">def</span> <span class="nf">fcc12345</span><span class="p">(</span>
     <span class="n">input_fcc_raster</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;fcc12345.png&quot;</span><span class="p">,</span>
@@ -573,7 +573,7 @@
 
 <span class="c1"># plot.fcc123</span>
 <div class="viewcode-block" id="fcc123">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.fcc123">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.fcc123">[docs]</a>
 <span class="k">def</span> <span class="nf">fcc123</span><span class="p">(</span>
     <span class="n">input_fcc_raster</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;fcc123.png&quot;</span><span class="p">,</span>
@@ -688,7 +688,7 @@
 
 <span class="c1"># plot.forest</span>
 <div class="viewcode-block" id="forest">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.forest">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.forest">[docs]</a>
 <span class="k">def</span> <span class="nf">forest</span><span class="p">(</span>
     <span class="n">input_forest_raster</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;forest.png&quot;</span><span class="p">,</span>
@@ -803,7 +803,7 @@
 
 <span class="c1"># plot.prob</span>
 <div class="viewcode-block" id="prob">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.prob">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.prob">[docs]</a>
 <span class="k">def</span> <span class="nf">prob</span><span class="p">(</span>
     <span class="n">input_prob_raster</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;prob.png&quot;</span><span class="p">,</span>
@@ -915,7 +915,7 @@
 
 <span class="c1"># plot.obs</span>
 <div class="viewcode-block" id="obs">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.obs">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.obs">[docs]</a>
 <span class="k">def</span> <span class="nf">obs</span><span class="p">(</span>
     <span class="n">sample</span><span class="p">,</span>
     <span class="n">name_forest_var</span><span class="p">,</span>
@@ -1013,7 +1013,7 @@
 
 <span class="c1"># plot.differences</span>
 <div class="viewcode-block" id="differences">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.differences">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.differences">[docs]</a>
 <span class="k">def</span> <span class="nf">differences</span><span class="p">(</span>
     <span class="n">input_raster</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;differences.png&quot;</span><span class="p">,</span>
@@ -1117,7 +1117,7 @@
 
 <span class="c1"># plot.var</span>
 <div class="viewcode-block" id="var">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.var">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.var">[docs]</a>
 <span class="k">def</span> <span class="nf">var</span><span class="p">(</span>
     <span class="n">var_dir</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;var.pdf&quot;</span><span class="p">,</span> <span class="n">gridsize</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">11.69</span><span class="p">,</span> <span class="mf">8.27</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span>
 <span class="p">):</span>
@@ -1216,7 +1216,7 @@
 
 <span class="c1"># plot.rho</span>
 <div class="viewcode-block" id="rho">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.rho">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.rho">[docs]</a>
 <span class="k">def</span> <span class="nf">rho</span><span class="p">(</span>
     <span class="n">input_rho_raster</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;rho.png&quot;</span><span class="p">,</span>
@@ -1291,7 +1291,7 @@
 
 <span class="c1"># freq_prob</span>
 <div class="viewcode-block" id="freq_prob">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.plot.html#forestatrisk.plot.plot.freq_prob">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.plot.html#forestatrisk.plot.plot.freq_prob">[docs]</a>
 <span class="k">def</span> <span class="nf">freq_prob</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;freq_prob.png&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot distribution of probability values.</span>
 

@@ -56,7 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebooks/get_started.html">Get started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../articles.html">Articles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../package_contents.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../python_api.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
@@ -122,7 +122,7 @@
 
 <span class="c1"># Invlogit</span>
 <div class="viewcode-block" id="invlogit">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.misc.html#forestatrisk.misc.miscellaneous.invlogit">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.misc.html#forestatrisk.invlogit">[docs]</a>
 <span class="k">def</span> <span class="nf">invlogit</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the inverse-logit of a numpy array.</span>
 
@@ -144,7 +144,7 @@
 
 <span class="c1"># Function to make a directory</span>
 <div class="viewcode-block" id="make_dir">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.misc.html#forestatrisk.misc.miscellaneous.make_dir">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.misc.html#forestatrisk.make_dir">[docs]</a>
 <span class="k">def</span> <span class="nf">make_dir</span><span class="p">(</span><span class="n">newdir</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Make new directory</span>
 
@@ -175,8 +175,6 @@
 
 
 <span class="c1"># Makeblock</span>
-<div class="viewcode-block" id="makeblock">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.misc.html#forestatrisk.misc.miscellaneous.makeblock">[docs]</a>
 <span class="k">def</span> <span class="nf">makeblock</span><span class="p">(</span><span class="n">rasterfile</span><span class="p">,</span> <span class="n">blk_rows</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute block information.</span>
 
@@ -226,13 +224,10 @@
         <span class="n">ny</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">nrow</span> <span class="o">%</span> <span class="n">block_ysize</span>
     <span class="c1"># b = None</span>
     <span class="k">del</span> <span class="n">r</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">nblock</span><span class="p">,</span> <span class="n">nblock_x</span><span class="p">,</span> <span class="n">nblock_y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span></div>
-
+    <span class="k">return</span> <span class="p">(</span><span class="n">nblock</span><span class="p">,</span> <span class="n">nblock_x</span><span class="p">,</span> <span class="n">nblock_y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span>
 
 
 <span class="c1"># Make_square</span>
-<div class="viewcode-block" id="make_square">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.misc.html#forestatrisk.misc.miscellaneous.make_square">[docs]</a>
 <span class="k">def</span> <span class="nf">make_square</span><span class="p">(</span><span class="n">rasterfile</span><span class="p">,</span> <span class="n">square_size</span><span class="o">=</span><span class="mi">33</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute square information.</span>
 
@@ -271,13 +266,10 @@
         <span class="n">ny</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">nrow</span> <span class="o">%</span> <span class="n">square_size</span>
     <span class="c1"># b = None</span>
     <span class="k">del</span> <span class="n">r</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">nsquare</span><span class="p">,</span> <span class="n">nsquare_x</span><span class="p">,</span> <span class="n">nsquare_y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span></div>
-
+    <span class="k">return</span> <span class="p">(</span><span class="n">nsquare</span><span class="p">,</span> <span class="n">nsquare_x</span><span class="p">,</span> <span class="n">nsquare_y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span>
 
 
 <span class="c1"># Progress_bar</span>
-<div class="viewcode-block" id="progress_bar">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.misc.html#forestatrisk.misc.miscellaneous.progress_bar">[docs]</a>
 <span class="k">def</span> <span class="nf">progress_bar</span><span class="p">(</span><span class="n">niter</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw progress_bar</span>
 
@@ -295,13 +287,10 @@
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">niter</span><span class="p">:</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">100%</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span></div>
-
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 
 
 <span class="c1"># Rescale</span>
-<div class="viewcode-block" id="rescale">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.misc.html#forestatrisk.misc.miscellaneous.rescale">[docs]</a>
 <span class="k">def</span> <span class="nf">rescale</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Rescale probability values to 1-65535.</span>
 
@@ -318,8 +307,7 @@
     <span class="c1"># Avoid nodata value (0) for low proba</span>
     <span class="n">value</span><span class="p">[</span><span class="n">value</span> <span class="o">&lt;</span> <span class="mf">1e-06</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-06</span>
     <span class="c1"># Rescale and round to nearest integer</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(((</span><span class="n">value</span> <span class="o">*</span> <span class="mf">1e6</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">65534</span> <span class="o">/</span> <span class="mi">999999</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
-
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(((</span><span class="n">value</span> <span class="o">*</span> <span class="mf">1e6</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">65534</span> <span class="o">/</span> <span class="mi">999999</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
 
 <span class="c1"># End</span>

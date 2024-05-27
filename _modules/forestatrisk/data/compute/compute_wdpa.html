@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>forestatrisk.data.compute.compute_wdpa &#8212; forestatrisk — Modelling and forecasting deforestation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=b21ac067" />
+    <script src="../../../../_static/documentation_options.js?v=00f267c6"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="../../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/logo-far.svg" alt="Logo" />
+    
+    <h1 class="logo logo-name">forestatrisk</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Modelling and forecasting deforestation in the tropics</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ghislainv&repo=forestatrisk&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/get_started.html">Get started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../articles.html">Articles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indices.html">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for forestatrisk.data.compute.compute_wdpa</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Processing WDPA data.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span>
+
+
+<div class="viewcode-block" id="compute_wdpa">
+<a class="viewcode-back" href="../../../../python_api/forestatrisk.data.html#forestatrisk.data.compute.compute_wdpa">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_wdpa</span><span class="p">(</span><span class="n">iso</span><span class="p">,</span> <span class="n">proj</span><span class="p">,</span> <span class="n">extent</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process geospatial data on protected areas.</span>
+
+<span class="sd">    :param iso: Country iso code.</span>
+
+<span class="sd">    :param where: SQL statement to filter features. Default to</span>
+<span class="sd">        ``&quot;status=\&quot;Designated\&quot; OR status=\&quot;Inscribed\&quot; OR</span>
+<span class="sd">        status=\&quot;Established\&quot; OR (status=\&quot;Proposed\&quot; AND</span>
+<span class="sd">        CAST(SUBSTR(date,7,4) AS INTEGER) &lt; 2010)&quot;``</span>
+
+<span class="sd">    :param proj: Projection definition (EPSG, PROJ.4, WKT) as in</span>
+<span class="sd">        GDAL/OGR. Used for reprojecting data.</span>
+
+<span class="sd">    :param extent: Extent (xmin, ymin, xmax, ymax) of output rasters.</span>
+
+<span class="sd">    :param verbose: Logical. Whether to print messages or not. Default</span>
+<span class="sd">        to ``False``.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Callback</span>
+    <span class="n">cback</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TermProgress</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="c1"># Defaut value for where</span>
+    <span class="k">if</span> <span class="n">where</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">where_statement</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;status=&#39;Designated&#39; OR &quot;</span>
+            <span class="s2">&quot;status=&#39;Inscribed&#39; OR &quot;</span>
+            <span class="s2">&quot;status=&#39;Established&#39; OR &quot;</span>
+            <span class="s2">&quot;(status=&#39;Proposed&#39; AND &quot;</span>
+            <span class="s2">&quot;CAST(SUBSTR(date,7,4) AS INTEGER) &lt; 2010)&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">where_statement</span> <span class="o">=</span> <span class="n">where</span>
+
+    <span class="c1"># Reproject and filter</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslateOptions</span><span class="p">(</span>
+        <span class="n">accessMode</span><span class="o">=</span><span class="s2">&quot;overwrite&quot;</span><span class="p">,</span>
+        <span class="n">skipFailures</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;ESRI Shapefile&quot;</span><span class="p">,</span>
+        <span class="n">where</span><span class="o">=</span><span class="n">where_statement</span><span class="p">,</span>
+        <span class="n">srcSRS</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
+        <span class="n">dstSRS</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+        <span class="n">layerCreationOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ENCODING=UTF-8&quot;</span><span class="p">],</span>
+        <span class="n">callback</span><span class="o">=</span><span class="n">cback</span>
+    <span class="p">)</span>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslate</span><span class="p">(</span><span class="s2">&quot;pa_PROJ.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;pa_&quot;</span> <span class="o">+</span> <span class="n">iso</span> <span class="o">+</span> <span class="s2">&quot;.shp&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
+
+    <span class="c1"># Rasterize</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">RasterizeOptions</span><span class="p">(</span>
+        <span class="n">outputBounds</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
+        <span class="n">targetAlignedPixels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">burnValues</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">outputSRS</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+        <span class="n">initValues</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">noData</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span>
+        <span class="n">xRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+        <span class="n">yRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+        <span class="n">layers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pa_PROJ&quot;</span><span class="p">],</span>
+        <span class="n">outputType</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span><span class="p">,</span>
+        <span class="n">creationOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">],</span>
+        <span class="n">callback</span><span class="o">=</span><span class="n">cback</span>
+    <span class="p">)</span>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">Rasterize</span><span class="p">(</span><span class="s2">&quot;pa.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;pa_PROJ.shp&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># End</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2020, Ghislain Vieilledent.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

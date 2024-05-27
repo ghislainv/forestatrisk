@@ -56,7 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebooks/get_started.html">Get started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../articles.html">Articles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../package_contents.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../python_api.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
@@ -122,8 +122,6 @@
 
 
 <span class="c1"># Coarsen</span>
-<div class="viewcode-block" id="coarsen_sum">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.resample_sum.coarsen_sum">[docs]</a>
 <span class="k">def</span> <span class="nf">coarsen_sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Resample to coarser resolution using sum</span>
 
@@ -143,13 +141,12 @@
         <span class="n">a_ns</span><span class="p">[:</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">:</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">a</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="n">a_ns</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">ns</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">b</span></div>
-
+    <span class="k">return</span> <span class="n">b</span>
 
 
 <span class="c1"># Resample to coarser resolution with sum</span>
 <div class="viewcode-block" id="resample_sum">
-<a class="viewcode-back" href="../../../subpackages/forestatrisk.validate.html#forestatrisk.validate.resample_sum.resample_sum">[docs]</a>
+<a class="viewcode-back" href="../../../python_api/forestatrisk.validate.html#forestatrisk.resample_sum">[docs]</a>
 <span class="k">def</span> <span class="nf">resample_sum</span><span class="p">(</span><span class="n">input_raster</span><span class="p">,</span> <span class="n">output_raster</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Resample to coarser resolution with counts.</span>
 
