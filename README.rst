@@ -1,7 +1,7 @@
 ..
    # ==============================================================================
    # author          :Ghislain Vieilledent
-   # email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com
+   # email           :ghislain.vieilledent@cirad.fr
    # web             :https://ecology.ghislainv.fr
    # license         :GPLv3
    # ==============================================================================
@@ -34,11 +34,10 @@ towns, and forest edge), deforestation history (distance to previous
 deforestation), or land conservation status (eg. protected area) for
 example.
 
-.. image:: https://ecology.ghislainv.fr/forestatrisk/_static/forestatrisk.png
+.. image:: https://ecology.ghislainv.fr/forestatrisk/_static/banner_forestatrisk.png
    :align: center
    :target: https://ecology.ghislainv.fr/forestatrisk
-   :alt: prob_AFR
-   :width: 800px
+   :alt: banner_forestatrisk
 
 Scientific publication
 ======================
@@ -92,8 +91,58 @@ You will need several dependencies to run the ``forestatrisk`` Python
 package. The best way to install the package is to create a Python
 virtual environment, either through ``conda`` (recommended) or ``virtualenv``.
 
-Using ``conda`` (recommended)
-+++++++++++++++++++++++++++++
+Using ``virtualenv``
+++++++++++++++++++++
+
+The easiest way to install the ``forestatrisk`` Python package is via `pip <https://pip.pypa.io/en/stable/>`_ in the *OSGeo4W Shell* for Windows or in a virtual environment for Linux.
+
+For Linux, create and activate a virtual environment before installing ``geefcc`` with ``pip``:
+
+.. code-block:: shell
+
+   cd ~
+   # Create a directory for virtual environments
+   mkdir venvs
+   # Create the virtual environment with venv
+   python3 -m venv ~/venvs/venv-geefcc
+   # Activate (start) the virtual environment
+   source ~/venvs/venv-geefcc/bin/activate
+
+Install Python dependencies and ``forestatrisk`` in the *OSGeo4W Shell* or in the newly created virtual environment:
+   
+.. code-block:: shell
+   
+   # Upgrade pip, setuptools, and wheel
+   python3 -m pip install --upgrade pip setuptools wheel
+   # Install numpy
+   python3 -m numpy
+   # Install gdal Python bindings (the correct version)
+   python3 -m pip install gdal==$(gdal-config --version)
+   # Install forestatrisk. This will install all other dependencies
+   python3 -m pip install forestatrisk
+
+If you want to install the development version of ``forestatrisk``, replace the last line with:
+
+.. code-block:: shell
+
+   python3 -m pip install https://github.com/ghislainv/forestatrisk/archive/master.zip
+
+To deactivate and delete the virtual environment:
+
+.. code-block:: shell
+		
+   deactivate
+   rm -R ~/venvs/venv-forestatrisk # Just remove the repository
+
+In case of problem while installing GDAL Python bindings, try the following command:
+
+.. code-block:: shell
+		
+   python3 -m pip install --no-cache-dir --force-reinstall gdal==$(gdal-config --version)
+
+
+Using ``conda``
++++++++++++++++
 
 You first need to have ``miniconda3`` installed (see `here
 <https://docs.conda.io/en/latest/miniconda.html>`__).
@@ -104,12 +153,12 @@ and install the ``forestatrisk`` package with the following commands:
 
 .. code-block:: shell
 		
-   conda create --name conda-far -c conda-forge python=3.9 gdal numpy matplotlib pandas patsy pip statsmodels earthengine-api --yes
+   conda create --name conda-far -c conda-forge python gdal numpy matplotlib pandas patsy pip statsmodels earthengine-api --yes
    conda activate conda-far
    pip install pywdpa scikit-learn # Packages not available with conda
    pip install forestatrisk # For PyPI version
    # pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
-   # conda install -c conda-forge python-dotenv rclone --yes  # Potentially interesting libraries
+   # conda install -c conda-forge python-dotenv --yes  # Additional libraries if needed
 
 To deactivate and delete the conda environment:
 
@@ -117,36 +166,6 @@ To deactivate and delete the conda environment:
 		
    conda deactivate
    conda env remove --name conda-far
-
-Using ``virtualenv``
-++++++++++++++++++++
-
-You first need to have the ``virtualenv`` package installed (see `here <https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/>`__).
-
-Then, create a virtual environment and install the ``forestatrisk``
-package with the following commands:
-
-.. code-block:: shell
-
-   cd ~
-   mkdir venvs # Directory for virtual environments
-   cd venvs
-   virtualenv --python=/usr/bin/python3 venv-far
-   source ~/venvs/venv-far/bin/activate
-   # Install numpy first
-   pip install numpy
-   # Install gdal (the correct version) 
-   pip install --global-option=build_ext --global-option="-I/usr/include/gdal" gdal==$(gdal-config --version)
-   pip install forestatrisk # For PyPI version, this will install all other dependencies
-   # pip install https://github.com/ghislainv/forestatrisk/archive/master.zip # For GitHub dev version
-   pip install statsmodels # Optional additional packages
-
-To deactivate and delete the virtual environment:
-
-.. code-block:: shell
-		
-   deactivate
-   rm -R ~/venvs/venv-far # Just remove the repository
 
 Installation testing
 ++++++++++++++++++++
@@ -167,7 +186,7 @@ and the version number:
   # https://ecology.ghislainv.fr/forestatrisk/
   # forestatrisk version x.x.
 
-You can also test the package executing the commands in the `Get
+You can also test the package following the `Get
 started
 <https://ecology.ghislainv.fr/forestatrisk/notebooks/get_started.html>`__
 tutorial.
