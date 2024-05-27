@@ -110,7 +110,7 @@
   <section id="country-data">
 <h1>Country data<a class="headerlink" href="#country-data" title="Link to this heading">¶</a></h1>
 <section id="introduction">
-<h2>1 Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
 <p>This notebook presents the functions of the <code class="docutils literal notranslate"><span class="pre">forestatrisk</span></code> Python
 package that can be used to collect the spatial data needed for
 modeling and forecasting deforestation in a given country.</p>
@@ -120,7 +120,7 @@ variables to the analyses manually. To do so, the user must add
 GeoTIFF raster files with extension <code class="docutils literal notranslate"><span class="pre">.tif</span></code> in the <code class="docutils literal notranslate"><span class="pre">data</span></code> folder of the
 working directory.</p>
 <section id="importing-python-modules">
-<h3>1.1 Importing Python modules<a class="headerlink" href="#importing-python-modules" title="Link to this heading">¶</a></h3>
+<h3>Importing Python modules<a class="headerlink" href="#importing-python-modules" title="Link to this heading">¶</a></h3>
 <p>We import the Python modules needed for collecting the data.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Imports</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -148,7 +148,7 @@ function <code class="docutils literal notranslate"><span class="pre">far.make_d
 </div>
 </section>
 <section id="set-credentials">
-<h3>1.2 Set credentials<a class="headerlink" href="#set-credentials" title="Link to this heading">¶</a></h3>
+<h3>Set credentials<a class="headerlink" href="#set-credentials" title="Link to this heading">¶</a></h3>
 <p>We need to configure and set credentials for:</p>
 <ul class="simple">
 <li><p>Google Earth Engine (GEE) API</p></li>
@@ -158,7 +158,7 @@ function <code class="docutils literal notranslate"><span class="pre">far.make_d
 <p>You will need a <a class="reference external" href="https://www.google.com/account/about/">Google account</a> for using the GEE API and accessing
 Google Drive.</p>
 <section id="access-to-google-earth-engine-api">
-<h4>1.2.1 Access to Google Earth Engine API<a class="headerlink" href="#access-to-google-earth-engine-api" title="Link to this heading">¶</a></h4>
+<h4>Access to Google Earth Engine API<a class="headerlink" href="#access-to-google-earth-engine-api" title="Link to this heading">¶</a></h4>
 <p>Google Earth Engine is used to compute the past forest cover change
 from Vancutsem et al. 2021 or Hansen et al. 2013. To get credentials
 for using the Google Earth Engine API, follow these
@@ -177,13 +177,13 @@ at each session.</p>
 </div>
 </section>
 <section id="access-to-google-drive-with-rclone">
-<h4>1.2.2 Access to Google Drive with RClone<a class="headerlink" href="#access-to-google-drive-with-rclone" title="Link to this heading">¶</a></h4>
+<h4>Access to Google Drive with RClone<a class="headerlink" href="#access-to-google-drive-with-rclone" title="Link to this heading">¶</a></h4>
 <p>RClone is used to download the forest cover change raster locally from
 Google Drive. To install RClone, follow these <a class="reference external" href="https://rclone.org/install/">instructions</a>. To
 configure the access to your Google Drive, follow these <a class="reference external" href="https://rclone.org/drive/">instructions</a>.</p>
 </section>
 <section id="access-to-wdpa-api">
-<h4>1.2.3 Access to WDPA API<a class="headerlink" href="#access-to-wdpa-api" title="Link to this heading">¶</a></h4>
+<h4>Access to WDPA API<a class="headerlink" href="#access-to-wdpa-api" title="Link to this heading">¶</a></h4>
 <p>We will be using the <a class="reference external" href="https://ecology.ghislainv.fr/pywdpa/">pywda</a> Python package to collect the data on
 protected areas from the World Database on Protected Areas (WDPA) at
 <a class="reference external" href="https://www.protectedplanet.net">https://www.protectedplanet.net</a>. To access the Protected Planet API,
@@ -205,9 +205,9 @@ it will print an error message.</p>
 </section>
 </section>
 <section id="data">
-<h2>2 Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h2>
+<h2>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h2>
 <section id="compute-forest-cover-change">
-<h3>2.1 Compute forest cover change<a class="headerlink" href="#compute-forest-cover-change" title="Link to this heading">¶</a></h3>
+<h3>Compute forest cover change<a class="headerlink" href="#compute-forest-cover-change" title="Link to this heading">¶</a></h3>
 <p>We specify the <a class="reference external" href="https://fr.wikipedia.org/wiki/ISO_3166-1#Table_de_codage">iso3</a> code of the country we want the data for, for example <a class="reference external" href="https://en.wikipedia.org/wiki/Martinique">Martinique</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">iso3</span> <span class="o">=</span> <span class="s2">&quot;MTQ&quot;</span>
 </pre></div>
@@ -230,7 +230,7 @@ the name of the Google Drive folder to use. In this case, folder
 </div>
 </section>
 <section id="download-raw-data">
-<h3>2.2 Download raw data<a class="headerlink" href="#download-raw-data" title="Link to this heading">¶</a></h3>
+<h3>Download raw data<a class="headerlink" href="#download-raw-data" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download data</span>
 <span class="n">far</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">country_download</span><span class="p">(</span>
     <span class="n">iso3</span><span class="p">,</span>
@@ -246,7 +246,7 @@ the name of the Google Drive folder to use. In this case, folder
 </div>
 </section>
 <section id="compute-explanatory-variables">
-<h3>2.3 Compute explanatory variables<a class="headerlink" href="#compute-explanatory-variables" title="Link to this heading">¶</a></h3>
+<h3>Compute explanatory variables<a class="headerlink" href="#compute-explanatory-variables" title="Link to this heading">¶</a></h3>
 <p>We first set the projection in which we want the data to be, for example <a class="reference external" href="https://epsg.io/5490">EPSG:5490</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Projection</span>
 <span class="n">proj</span> <span class="o">=</span> <span class="s2">&quot;EPSG:5490&quot;</span>
@@ -266,7 +266,7 @@ the name of the Google Drive folder to use. In this case, folder
 </div>
 </section>
 <section id="files">
-<h3>2.4 Files<a class="headerlink" href="#files" title="Link to this heading">¶</a></h3>
+<h3>Files<a class="headerlink" href="#files" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">data</span></code> folder includes:</p>
 <ul class="simple">
 <li><p>Forest cover change data for the period 2010-2020 as a GeoTiff raster
@@ -341,7 +341,7 @@ data for computing carbon emissions.</p></li>
 </table>
 </section>
 <section id="plots">
-<h3>2.5 Plots<a class="headerlink" href="#plots" title="Link to this heading">¶</a></h3>
+<h3>Plots<a class="headerlink" href="#plots" title="Link to this heading">¶</a></h3>
 <p>We can plot the past deforestation for the period 2000–2010–2020:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot forest</span>
 <span class="n">ofile</span> <span class="o">=</span> <span class="s2">&quot;output/nb_ctrydata_fcc123.png&quot;</span>

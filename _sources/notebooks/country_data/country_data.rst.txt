@@ -5,8 +5,8 @@ Country data
 
 
 
-1 Introduction
---------------
+Introduction
+------------
 
 This notebook presents the functions of the ``forestatrisk`` Python
 package that can be used to collect the spatial data needed for
@@ -18,8 +18,8 @@ variables to the analyses manually. To do so, the user must add
 GeoTIFF raster files with extension ``.tif`` in the ``data`` folder of the
 working directory.
 
-1.1 Importing Python modules
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Importing Python modules
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 We import the Python modules needed for collecting the data.
 
@@ -52,8 +52,8 @@ We increase the cache for GDAL to increase computational speed.
     # GDAL
     os.environ["GDAL_CACHEMAX"] = "1024"
 
-1.2 Set credentials
-~~~~~~~~~~~~~~~~~~~
+Set credentials
+~~~~~~~~~~~~~~~
 
 We need to configure and set credentials for:
 
@@ -66,8 +66,8 @@ We need to configure and set credentials for:
 You will need a `Google account <https://www.google.com/account/about/>`_ for using the GEE API and accessing
 Google Drive.
 
-1.2.1 Access to Google Earth Engine API
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Access to Google Earth Engine API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Google Earth Engine is used to compute the past forest cover change
 from Vancutsem et al. 2021 or Hansen et al. 2013. To get credentials
@@ -89,15 +89,15 @@ Under Linux and Mac, credentials are stored in
 
     cat $HOME/.config/earthengine/credentials
 
-1.2.2 Access to Google Drive with RClone
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Access to Google Drive with RClone
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 RClone is used to download the forest cover change raster locally from
 Google Drive. To install RClone, follow these `instructions <https://rclone.org/install/>`_. To
 configure the access to your Google Drive, follow these `instructions <https://rclone.org/drive/>`_.
 
-1.2.3 Access to WDPA API
-^^^^^^^^^^^^^^^^^^^^^^^^
+Access to WDPA API
+^^^^^^^^^^^^^^^^^^
 
 We will be using the `pywda <https://ecology.ghislainv.fr/pywdpa/>`_ Python package to collect the data on
 protected areas from the World Database on Protected Areas (WDPA) at
@@ -120,11 +120,11 @@ The validity of your token can be checked with the function
 If your token is valid, the function will return its value. Otherwise
 it will print an error message.
 
-2 Data
-------
+Data
+----
 
-2.1 Compute forest cover change
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compute forest cover change
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We specify the `iso3 <https://fr.wikipedia.org/wiki/ISO_3166-1#Table_de_codage>`_ code of the country we want the data for, for example `Martinique <https://en.wikipedia.org/wiki/Martinique>`_. 
 
@@ -150,8 +150,8 @@ the name of the Google Drive folder to use. In this case, folder
         gdrive_remote_rclone="gdrive_gv",
         gdrive_folder="GEE/GEE-forestatrisk-notebooks")
 
-2.2 Download raw data
-~~~~~~~~~~~~~~~~~~~~~
+Download raw data
+~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -168,8 +168,8 @@ the name of the Google Drive folder to use. In this case, folder
     SRTM not existing for tile: 25_09
     Data for MTQ have been downloaded
 
-2.3 Compute explanatory variables
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compute explanatory variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We first set the projection in which we want the data to be, for example `EPSG:5490 <https://epsg.io/5490>`_.
 
@@ -192,8 +192,8 @@ We compute the explanatory variables from the raw data.
         data_forest=True,
         keep_temp_dir=True)
 
-2.4 Files
-~~~~~~~~~
+Files
+~~~~~
 
 The ``data`` folder includes:
 
@@ -232,8 +232,8 @@ Variable characteristics are summarized in the following table:
     | Protected areas              | WDPA                  | protected area presence        | --     |             30 |
     +------------------------------+-----------------------+--------------------------------+--------+----------------+
 
-2.5 Plots
-~~~~~~~~~
+Plots
+~~~~~
 
 We can plot the past deforestation for the period 2000--2010--2020:
 

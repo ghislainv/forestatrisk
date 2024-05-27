@@ -109,10 +109,10 @@
             
   <section id="new-caledonia">
 <h1>New Caledonia<a class="headerlink" href="#new-caledonia" title="Link to this heading">¶</a></h1>
-<a class="reference internal image-reference" href="../../_images/nb_newcal_banner.png"><img alt="../../_images/nb_newcal_banner.png" src="../../_images/nb_newcal_banner.png" style="width: 1100px;" />
+<a class="reference internal image-reference" href="../../_images/banner_newcal.jpg"><img alt="../../_images/banner_newcal.jpg" src="../../_images/banner_newcal.jpg" style="width: 1300px;" />
 </a>
 <section id="introduction">
-<h2>1 Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
 <p>This notebook presents the approach used to model and forecast
 deforestation in New Caledonia.</p>
 <p>The approach is based on a methodology described in the following
@@ -122,7 +122,7 @@ carbon emissions from tropical deforestation in the 21<sup>st</sup>century.</p>
 <p>More information on the method can be find at the ForestAtRisk
 website: <a class="reference external" href="https://forestatrisk.cirad.fr">https://forestatrisk.cirad.fr</a>.</p>
 <section id="importing-python-modules">
-<h3>1.1 Importing Python modules<a class="headerlink" href="#importing-python-modules" title="Link to this heading">¶</a></h3>
+<h3>Importing Python modules<a class="headerlink" href="#importing-python-modules" title="Link to this heading">¶</a></h3>
 <p>We import the Python modules needed for running the analysis.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Imports</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -165,7 +165,7 @@ function <code class="docutils literal notranslate"><span class="pre">far.make_d
 </div>
 </section>
 <section id="set-credentials">
-<h3>1.2 Set credentials<a class="headerlink" href="#set-credentials" title="Link to this heading">¶</a></h3>
+<h3>Set credentials<a class="headerlink" href="#set-credentials" title="Link to this heading">¶</a></h3>
 <p>We need to configure and set credentials for:</p>
 <ul class="simple">
 <li><p>Google Earth Engine (GEE) API</p></li>
@@ -175,7 +175,7 @@ function <code class="docutils literal notranslate"><span class="pre">far.make_d
 <p>You will need a <a class="reference external" href="https://www.google.com/account/about/">Google account</a> for using the GEE API and accessing
 Google Drive.</p>
 <section id="access-to-google-earth-engine-api">
-<h4>1.2.1 Access to Google Earth Engine API<a class="headerlink" href="#access-to-google-earth-engine-api" title="Link to this heading">¶</a></h4>
+<h4>Access to Google Earth Engine API<a class="headerlink" href="#access-to-google-earth-engine-api" title="Link to this heading">¶</a></h4>
 <p>Google Earth Engine is used to compute the past forest cover change
 from Vancutsem et al. 2021 or Hansen et al. 2013. To get credentials
 for using the Google Earth Engine API, follow these
@@ -194,14 +194,14 @@ at each session.</p>
 </div>
 </section>
 <section id="access-to-google-drive-with-rclone">
-<h4>1.2.2 Access to Google Drive with RClone<a class="headerlink" href="#access-to-google-drive-with-rclone" title="Link to this heading">¶</a></h4>
+<h4>Access to Google Drive with RClone<a class="headerlink" href="#access-to-google-drive-with-rclone" title="Link to this heading">¶</a></h4>
 <p>RClone is used to download the forest cover change raster locally from
 Google Drive. To install RClone, follow these <a class="reference external" href="https://rclone.org/install/">instructions for
 RClone</a>. To configure the access to your Google Drive, follow these
 <a class="reference external" href="https://rclone.org/drive/">instructions for accessing Google Drive</a>.</p>
 </section>
 <section id="access-to-wdpa-api">
-<h4>1.2.3 Access to WDPA API<a class="headerlink" href="#access-to-wdpa-api" title="Link to this heading">¶</a></h4>
+<h4>Access to WDPA API<a class="headerlink" href="#access-to-wdpa-api" title="Link to this heading">¶</a></h4>
 <p>We will be using the <a class="reference external" href="https://ecology.ghislainv.fr/pywdpa/">pywda</a> Python package to collect the data on
 protected areas from the World Database on Protected Areas (WDPA) at
 <a class="reference external" href="https://www.protectedplanet.net">https://www.protectedplanet.net</a>. To access the Protected Planet API,
@@ -223,9 +223,9 @@ it will print an error message.</p>
 </section>
 </section>
 <section id="data">
-<h2>2 Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h2>
+<h2>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h2>
 <section id="compute-forest-cover-change">
-<h3>2.1 Compute forest cover change<a class="headerlink" href="#compute-forest-cover-change" title="Link to this heading">¶</a></h3>
+<h3>Compute forest cover change<a class="headerlink" href="#compute-forest-cover-change" title="Link to this heading">¶</a></h3>
 <p>We specify the <a class="reference external" href="https://fr.wikipedia.org/wiki/ISO_3166-1#Table_de_codage">iso3</a> code of New Caledonia which is “NCL”.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">iso3</span> <span class="o">=</span> <span class="s2">&quot;NCL&quot;</span>
 </pre></div>
@@ -247,7 +247,7 @@ the name of the Google Drive folder to use.</p>
 </div>
 </section>
 <section id="download-raw-data">
-<h3>2.2 Download raw data<a class="headerlink" href="#download-raw-data" title="Link to this heading">¶</a></h3>
+<h3>Download raw data<a class="headerlink" href="#download-raw-data" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download data</span>
 <span class="n">far</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">country_download</span><span class="p">(</span>
     <span class="n">iso3</span><span class="p">,</span>
@@ -261,7 +261,7 @@ the name of the Google Drive folder to use.</p>
 </div>
 </section>
 <section id="compute-explanatory-variables">
-<h3>2.3 Compute explanatory variables<a class="headerlink" href="#compute-explanatory-variables" title="Link to this heading">¶</a></h3>
+<h3>Compute explanatory variables<a class="headerlink" href="#compute-explanatory-variables" title="Link to this heading">¶</a></h3>
 <p>We first set the projection for New-Caledonia which is RGNC91-93 /
 Lambert New Caledonia (<a class="reference external" href="https://epsg.io/3163">EPSG:3163</a>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Projection</span>
@@ -282,7 +282,7 @@ Lambert New Caledonia (<a class="reference external" href="https://epsg.io/3163"
 </div>
 </section>
 <section id="adding-data-on-ultramafic-soils">
-<h3>2.4 Adding data on ultramafic soils<a class="headerlink" href="#adding-data-on-ultramafic-soils" title="Link to this heading">¶</a></h3>
+<h3>Adding data on ultramafic soils<a class="headerlink" href="#adding-data-on-ultramafic-soils" title="Link to this heading">¶</a></h3>
 <p>Data can be downloaded from <a class="reference external" href="https://georep-dtsi-sgt.opendata.arcgis.com/datasets/40d5b1a5afa244b1a73dd3620df075de_0/explore?location=-21.087852%2C165.489950%2C8.00">Géorep</a>. We unzip the shapefile in the
 folder <code class="docutils literal notranslate"><span class="pre">gisdata/vectors/peridotite/</span></code>, reproject, and rasterize the
 data at 30m.</p>
@@ -374,7 +374,7 @@ gdal_rasterize<span class="w"> </span>-te<span class="w"> </span><span class="m"
 </div>
 </section>
 <section id="files">
-<h3>2.5 Files<a class="headerlink" href="#files" title="Link to this heading">¶</a></h3>
+<h3>Files<a class="headerlink" href="#files" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">data</span></code> folder includes:</p>
 <ul class="simple">
 <li><p>Forest cover change data for the period 2010-2020 as a GeoTiff raster
@@ -393,6 +393,9 @@ data for computing carbon emissions.</p></li>
     <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/fcc23.png&quot;</span><span class="p">,</span>
     <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
     <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Build</span> <span class="n">overview</span>
 </pre></div>
 </div>
 <p>Variable characteristics are summarized in the following table:</p>
@@ -465,9 +468,9 @@ data for computing carbon emissions.</p></li>
 </section>
 </section>
 <section id="sampling">
-<h2>3 Sampling<a class="headerlink" href="#sampling" title="Link to this heading">¶</a></h2>
+<h2>Sampling<a class="headerlink" href="#sampling" title="Link to this heading">¶</a></h2>
 <section id="sampling-the-observations">
-<h3>3.1 Sampling the observations<a class="headerlink" href="#sampling-the-observations" title="Link to this heading">¶</a></h3>
+<h3>Sampling the observations<a class="headerlink" href="#sampling-the-observations" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample points</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">nsamp</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">adapt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span> <span class="n">csize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                      <span class="n">var_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
@@ -510,7 +513,7 @@ data for computing carbon emissions.</p></li>
 </div>
 </section>
 <section id="correlation-plots">
-<h3>3.2 Correlation plots<a class="headerlink" href="#correlation-plots" title="Link to this heading">¶</a></h3>
+<h3>Correlation plots<a class="headerlink" href="#correlation-plots" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Correlation formula</span>
 <span class="n">formula_corr</span> <span class="o">=</span> <span class="s2">&quot;fcc23 ~ dist_road + dist_town + dist_river + </span><span class="se">\</span>
 <span class="s2">dist_defor + dist_edge + altitude + slope - 1&quot;</span>
@@ -532,9 +535,9 @@ data for computing carbon emissions.</p></li>
 </section>
 </section>
 <section id="model">
-<h2>4 Model<a class="headerlink" href="#model" title="Link to this heading">¶</a></h2>
+<h2>Model<a class="headerlink" href="#model" title="Link to this heading">¶</a></h2>
 <section id="model-preparation">
-<h3>4.1 Model preparation<a class="headerlink" href="#model-preparation" title="Link to this heading">¶</a></h3>
+<h3>Model preparation<a class="headerlink" href="#model-preparation" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Neighborhood for spatial-autocorrelation</span>
 <span class="n">nneigh</span><span class="p">,</span> <span class="n">adj</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">cellneigh</span><span class="p">(</span><span class="n">raster</span><span class="o">=</span><span class="s2">&quot;data/fcc23.tif&quot;</span><span class="p">,</span> <span class="n">csize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
@@ -553,7 +556,7 @@ data for computing carbon emissions.</p></li>
 </div>
 </section>
 <section id="variable-selection">
-<h3>4.2 Variable selection<a class="headerlink" href="#variable-selection" title="Link to this heading">¶</a></h3>
+<h3>Variable selection<a class="headerlink" href="#variable-selection" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Formula</span>
 <span class="n">right_part</span> <span class="o">=</span> <span class="s2">&quot; + &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; + cell&quot;</span>
 <span class="n">left_part</span> <span class="o">=</span> <span class="s2">&quot;I(1-fcc23) + trial ~ &quot;</span>
@@ -596,7 +599,7 @@ data for computing carbon emissions.</p></li>
 </div>
 </section>
 <section id="final-model">
-<h3>4.3 Final model<a class="headerlink" href="#final-model" title="Link to this heading">¶</a></h3>
+<h3>Final model<a class="headerlink" href="#final-model" title="Link to this heading">¶</a></h3>
 <p>We remove the protected areas and the distance to river from the list
 of explanatory variables as their effects seem not to be significant.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Formula</span>
@@ -648,9 +651,9 @@ of explanatory variables as their effects seem not to be significant.</p>
 </section>
 </section>
 <section id="model-comparison-and-validation">
-<h2>5 Model comparison and validation<a class="headerlink" href="#model-comparison-and-validation" title="Link to this heading">¶</a></h2>
+<h2>Model comparison and validation<a class="headerlink" href="#model-comparison-and-validation" title="Link to this heading">¶</a></h2>
 <section id="cross-validation">
-<h3>5.1 Cross-validation<a class="headerlink" href="#cross-validation" title="Link to this heading">¶</a></h3>
+<h3>Cross-validation<a class="headerlink" href="#cross-validation" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cross-validation for icar, glm and RF</span>
 <span class="n">CV_df_icar</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">cross_validation</span><span class="p">(</span>
   <span class="n">dataset</span><span class="p">,</span> <span class="n">formula</span><span class="p">,</span> <span class="n">mod_type</span><span class="o">=</span><span class="s2">&quot;icar&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">nrep</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
@@ -714,7 +717,7 @@ of explanatory variables as their effects seem not to be significant.</p>
 <p>The “icar” model has the best accuracy indices for the cross-validation.</p>
 </section>
 <section id="deviance">
-<h3>5.2 Deviance<a class="headerlink" href="#deviance" title="Link to this heading">¶</a></h3>
+<h3>Deviance<a class="headerlink" href="#deviance" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Null model</span>
 <span class="n">formula_null</span> <span class="o">=</span> <span class="s2">&quot;I(1-fcc23) ~ 1&quot;</span>
 <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">dmatrices</span><span class="p">(</span><span class="n">formula_null</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">NA_action</span><span class="o">=</span><span class="s2">&quot;drop&quot;</span><span class="p">)</span>
@@ -783,9 +786,9 @@ of explanatory variables as their effects seem not to be significant.</p>
 </section>
 </section>
 <section id="variables-effects">
-<h2>6 Variables’ effects<a class="headerlink" href="#variables-effects" title="Link to this heading">¶</a></h2>
+<h2>Variables’ effects<a class="headerlink" href="#variables-effects" title="Link to this heading">¶</a></h2>
 <section id="models-coefficients">
-<h3>6.1 Model’s coefficients<a class="headerlink" href="#models-coefficients" title="Link to this heading">¶</a></h3>
+<h3>Model’s coefficients<a class="headerlink" href="#models-coefficients" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Summary</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">mod_binomial_iCAR</span><span class="p">)</span>
 <span class="c1"># Write summary in file</span>
@@ -822,7 +825,7 @@ type. It could be that human activities inducing deforestation
 New-Caledonia, where the ultramafic soils are more present.</p>
 </section>
 <section id="effect-of-the-distances-to-road-and-forest-edge">
-<h3>6.2 Effect of the distances to road and forest edge<a class="headerlink" href="#effect-of-the-distances-to-road-and-forest-edge" title="Link to this heading">¶</a></h3>
+<h3>Effect of the distances to road and forest edge<a class="headerlink" href="#effect-of-the-distances-to-road-and-forest-edge" title="Link to this heading">¶</a></h3>
 <p>We define an inverse-logit function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Inverse-logit function</span>
 <span class="k">def</span> <span class="nf">inv_logit</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
@@ -992,7 +995,7 @@ for a distance &gt; 10 km is not shown).</p>
 </a>
 </section>
 <section id="effect-of-ultramafic-soils">
-<h3>6.3 Effect of ultramafic soils<a class="headerlink" href="#effect-of-ultramafic-soils" title="Link to this heading">¶</a></h3>
+<h3>Effect of ultramafic soils<a class="headerlink" href="#effect-of-ultramafic-soils" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Change in deforestation probability on ultramafic soils</span>
 <span class="n">alpha_normalized</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.85</span>
 <span class="n">coef_geol</span> <span class="o">=</span> <span class="mf">0.349</span>
@@ -1044,9 +1047,9 @@ for all observations in each class.</p>
 </section>
 </section>
 <section id="predictions">
-<h2>7 Predictions<a class="headerlink" href="#predictions" title="Link to this heading">¶</a></h2>
+<h2>Predictions<a class="headerlink" href="#predictions" title="Link to this heading">¶</a></h2>
 <section id="interpolate-spatial-random-effects">
-<h3>7.1 Interpolate spatial random effects<a class="headerlink" href="#interpolate-spatial-random-effects" title="Link to this heading">¶</a></h3>
+<h3>Interpolate spatial random effects<a class="headerlink" href="#interpolate-spatial-random-effects" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Spatial random effects</span>
 <span class="n">rho</span> <span class="o">=</span> <span class="n">mod_binomial_iCAR</span><span class="o">.</span><span class="n">rho</span>
 
@@ -1064,7 +1067,7 @@ for all observations in each class.</p>
 </div>
 </section>
 <section id="predict-deforestation-probability">
-<h3>7.2 Predict deforestation probability<a class="headerlink" href="#predict-deforestation-probability" title="Link to this heading">¶</a></h3>
+<h3>Predict deforestation probability<a class="headerlink" href="#predict-deforestation-probability" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update dist_edge and dist_defor at t3</span>
 <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;data/dist_edge.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_edge.tif.bak&quot;</span><span class="p">)</span>
 <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;data/dist_defor.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;data/dist_defor.tif.bak&quot;</span><span class="p">)</span>
@@ -1090,7 +1093,7 @@ for all observations in each class.</p>
 </section>
 </section>
 <section id="project-future-forest-cover-change">
-<h2>8 Project future forest cover change<a class="headerlink" href="#project-future-forest-cover-change" title="Link to this heading">¶</a></h2>
+<h2>Project future forest cover change<a class="headerlink" href="#project-future-forest-cover-change" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Forest cover</span>
 <span class="n">fc</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
 <span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;t1&quot;</span><span class="p">,</span> <span class="s2">&quot;2005&quot;</span><span class="p">,</span> <span class="s2">&quot;t2&quot;</span><span class="p">,</span> <span class="s2">&quot;2015&quot;</span><span class="p">,</span> <span class="s2">&quot;t3&quot;</span><span class="p">]</span>
@@ -1136,9 +1139,9 @@ for all observations in each class.</p>
 </div>
 </section>
 <section id="figures">
-<h2>9 Figures<a class="headerlink" href="#figures" title="Link to this heading">¶</a></h2>
+<h2>Figures<a class="headerlink" href="#figures" title="Link to this heading">¶</a></h2>
 <section id="historical-forest-cover-change">
-<h3>9.1 Historical forest cover change<a class="headerlink" href="#historical-forest-cover-change" title="Link to this heading">¶</a></h3>
+<h3>Historical forest cover change<a class="headerlink" href="#historical-forest-cover-change" title="Link to this heading">¶</a></h3>
 <p>Forest cover change for the period 2000-2010-2020</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot forest</span>
 <span class="n">ofile</span> <span class="o">=</span> <span class="s2">&quot;output/nb_newcal_fcc123.png&quot;</span>
@@ -1156,7 +1159,7 @@ for all observations in each class.</p>
 </a>
 </section>
 <section id="spatial-random-effects">
-<h3>9.2 Spatial random effects<a class="headerlink" href="#spatial-random-effects" title="Link to this heading">¶</a></h3>
+<h3>Spatial random effects<a class="headerlink" href="#spatial-random-effects" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Original spatial random effects</span>
 <span class="n">ofile</span> <span class="o">=</span> <span class="s2">&quot;output/nb_newcal_rho_orig.png&quot;</span>
 <span class="n">fig_rho_orig</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">rho</span><span class="p">(</span>
@@ -1181,7 +1184,7 @@ for all observations in each class.</p>
 </a>
 </section>
 <section id="spatial-probability-of-deforestation">
-<h3>9.3 Spatial probability of deforestation<a class="headerlink" href="#spatial-probability-of-deforestation" title="Link to this heading">¶</a></h3>
+<h3>Spatial probability of deforestation<a class="headerlink" href="#spatial-probability-of-deforestation" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Spatial probability of deforestation</span>
 <span class="n">ofile</span> <span class="o">=</span> <span class="s2">&quot;output/nb_newcal_prob.png&quot;</span>
 <span class="n">fig_prob</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span>
@@ -1199,7 +1202,7 @@ for all observations in each class.</p>
 </a>
 </section>
 <section id="future-forest-cover">
-<h3>9.4 Future forest cover<a class="headerlink" href="#future-forest-cover" title="Link to this heading">¶</a></h3>
+<h3>Future forest cover<a class="headerlink" href="#future-forest-cover" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ofile</span> <span class="o">=</span> <span class="s2">&quot;output/nb_newcal_fcc_2050.png&quot;</span>
 <span class="c1"># Projected forest cover change (2020-2050)</span>
 <span class="n">fcc_2050</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">fcc</span><span class="p">(</span>
