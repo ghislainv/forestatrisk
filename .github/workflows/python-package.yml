@@ -37,6 +37,9 @@ jobs:
         export CPLUS_INCLUDE_PATH=/usr/include/gdal
         export C_INCLUDE_PATH=/usr/include/gdal
         python3 -m pip install gdal==$(gdal-config --version)
+        # Install geefcc dev
+        python3 -m pip install https://github.com/ghislainv/geefcc/archive/master.zip
+        # Install other requirements
         python3 -m pip install -r requirements.txt
         python3 -m pip install .
     - name: Lint with flake8
