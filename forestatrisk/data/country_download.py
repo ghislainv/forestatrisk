@@ -1,6 +1,6 @@
 """Download country geospatial data."""
 
-from geefcc import get_fcc
+import geefcc as gf
 
 from ..misc import make_dir
 from .download import download_gadm, download_osm
@@ -62,7 +62,7 @@ def country_download(
     if osm:
         download_osm(iso3=iso3, output_dir=output_dir)
     if forest:
-        get_fcc(
+        gf.get_fcc(
             aoi=get_fcc_args["aoi"],
             buff=get_fcc_args.get("buff", 0),
             years=get_fcc_args.get("years", [2000, 2010, 2020]),
