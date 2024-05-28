@@ -26,6 +26,12 @@ def run_gee_forest(
 ):
     """Compute forest rasters per country with Google Earth Engine (GEE).
 
+    .. deprecated:: 1.1.4
+       Use function ``get_fcc`` in the ``geefcc`` package.
+
+    .. warning::
+       Will be removed in future versions.
+
     This function uses the iso3 code to download the country borders
     (as a shapefile) from `GADM <https://gadm.org>`_. Download is
     skipped if the shapefile is already present. Country borders are
@@ -36,12 +42,12 @@ def run_gee_forest(
     :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
         GDAL/OGR. Default to "EPSG:3395" (World Mercator).
 
-    :param output_dir: Directory where shapefile for country border is saved.
-        Additionaly, the forest raster is saved in this directory if "use_xee" is "True".
-        Default to "data_raw".
+    :param output_dir: Directory where shapefile for country border is
+        saved. Additionaly, the forest raster is saved in this
+        directory if ``use_xee`` is `True`. Default to "data_raw".
 
     :param keep_dir: Boolean to keep the output_dir folder. Default
-        to "True" (directory "data_raw" is not deleted).
+        to `True` (directory ``output_dir`` is not deleted).
 
     :param fcc_source: Source for forest-cover change data. Can be
         "gfc" (Global Forest Change) or "tmf" (Tropical Moist Forest)
@@ -49,18 +55,19 @@ def run_gee_forest(
         used in place of "tmf".
 
     :param perc: Tree cover percentage threshold to define forest
-        (only used if ``fcc_source="gfc"``\\ ).
+        (only used if ``fcc_source`` is set to "gfc").
 
-    :param use_xee: Boolean to use the xarray-EE package or not. If True, then the
-        forest raster is directly saved to disk in the "output_dir" directory.
-        If False, then the raster is saved to Google Drive, using
-        "gdrive_remote_rclone" and "gdrive_folder" parameters. Default to `False`.
+    :param use_xee: Boolean to use the Xarray-EE package or not. If
+        `True`, then the forest raster is directly saved to disk in
+        the "output_dir" directory.  If `False`, then the raster is
+        saved to Google Drive, using "gdrive_remote_rclone" and
+        "gdrive_folder" parameters. Default to `False`.
 
     :param gdrive_remote_rclone: Name of the Google Drive remote for
-        rclone. Only used if `use_xee` is `False`.
+        rclone. Only used if ``use_xee`` is `False`.
 
     :param gdrive_folder: Name of the Google Drive folder to use. Only used if
-        `use_xee` is `False`.
+        ``use_xee`` is `False`.
 
     """
     # Import GEE function according to "use_xee" parameter

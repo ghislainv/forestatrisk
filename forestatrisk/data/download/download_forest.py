@@ -10,6 +10,12 @@ def download_forest(iso3, gdrive_remote_rclone,
                     gdrive_folder, output_dir="."):
     """Download forest cover data from Google Drive.
 
+    .. deprecated:: 1.1.4
+       Use function ``get_fcc`` in the ``geefcc`` package.
+
+    .. warning::
+       Will be removed in future versions.
+
     Download forest cover data from Google Drive in the current
     working directory. Print a message if the file is not available.
 

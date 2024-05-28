@@ -1,15 +1,15 @@
 """Download country geospatial data."""
 
-# Local application imports
+from geefcc import get_fcc
+
 from ..misc import make_dir
-from .download import download_forest, download_osm
-from .download import download_srtm, download_wdpa, download_gadm
+from .download import download_gadm, download_osm
+from .download import download_srtm, download_wdpa
 
 
 def country_download(
         iso3,
-        gdrive_remote_rclone,
-        gdrive_folder,
+        get_fcc_args,
         output_dir=".",
         gadm=True,
         srtm=True,
@@ -21,11 +21,15 @@ def country_download(
     Function to download all the data for a specific country. It
     includes GEE forest data, GADM, OSM, SRTM, and WDPA data.
 
-    :param iso3: Country ISO 3166-1 alpha-3 code.
+    :param iso3: Country iso code used to download GADM, OSM, SRTM,
+        and WDPA data. The iso code should correspond to the country
+        to which the aoi provided in ``get_fcc_args`` belongs.
 
-    :param gdrive_remote_rclone: Google Drive remote name in rclone.
-
-    :param gdrive_folder: the Google Drive folder to download from.
+    :param get_fcc_args: Dictionary of arguments for function
+       ``get_fcc()`` from Python package ``geefcc``. For example:
+       ``{"aoi": "MTQ", "buff": 0.08983152841195216 , "years": [2000,
+       2010, 2020], "source": "tmf", "perc": 75, "tile_sze": 1,
+       "ncpu": None, "output_file": "forest_MTQ.tiff"}``.
 
     :param output_dir: Directory where data is downloaded. Default to
         current working directory.
@@ -34,7 +38,7 @@ def country_download(
 
     :param srtm: Toggle SRTM data download.
 
-    :param wdpa: Toggle SRTM data download.
+    :param wdpa: Toggle WDPA data download.
 
     :param osm: Toggle OSM data download.
 
@@ -58,12 +62,15 @@ def country_download(
     if osm:
         download_osm(iso3=iso3, output_dir=output_dir)
     if forest:
-        download_forest(
-            iso3=iso3,
-            gdrive_remote_rclone=gdrive_remote_rclone,
-            gdrive_folder=gdrive_folder,
-            output_dir=output_dir,
+        get_fcc(
+            aoi=get_fcc_args["aoi"],
+            buff=get_fcc_args.get("buff", 0),
+            years=get_fcc_args.get("years", [2000, 2010, 2020]),
+            source=get_fcc_args.get("source", "tmf"),
+            perc=get_fcc_args.get("perc", 75),
+            tile_size=get_fcc_args.get("tile_size", 1),
+            ncpu=get_fcc_args.get("ncpu", None),
+            output_file=get_fcc_args.get("output_file", "fcc.tif")
         )
-
 
 # End
