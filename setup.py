@@ -91,6 +91,7 @@ setup(
         "xarray",
         "rioxarray",
         "dask",
+        "geefcc",
     ],
     extras_require={
         "interactive": ["jupyter", "python-dotenv", "geopandas", "descartes", "folium"],
