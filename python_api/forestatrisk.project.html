@@ -55,21 +55,11 @@
 
 
 <h3>Navigation</h3>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/get_started.html">Get started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../articles.html">Articles</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../python_api.html">Python API</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../python_api.html#data">Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_api.html#model">Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_api.html#predict">Predict</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../python_api.html#project">Project</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_api.html#validate">Validate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_api.html#plot">Plot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_api.html#miscellaneous">Miscellaneous</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../python_api.html#submodules">Submodules</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
@@ -113,121 +103,7 @@
 
           <div class="body" role="main">
             
-  <dl class="py function">
-<dt class="sig sig-object py" id="forestatrisk.deforest_diffusion">
-<span class="sig-name descname"><span class="pre">deforest_diffusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forest_t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annual_defor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/deforest_diffusion.html#deforest_diffusion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.deforest_diffusion" title="Link to this definition">¶</a></dt>
-<dd><p>Diffusion of the deforestation between states of a country.</p>
-<p>Diffusion of the deforestation between states of a country. We
-suppose that the deforestation is constant at the country
-level. When a state has no more forest, its deforestation (annual
-area of deforestation) is attributed to the other states of the
-country still having forest. This function can be useful for
-Brazil for example.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>forest_t0</strong> – Forest area at t0 for each state. Numpy array.</p></li>
-<li><p><strong>t0</strong> – Year at t0.</p></li>
-<li><p><strong>annual_defor</strong> – Annual deforestation for each state. Numpy array.</p></li>
-<li><p><strong>t</strong> – Year at the end of the deforestation period.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionnary with forest at t0 (“forest_t0”), forest at
-time t (“forest_t”) and deforestation between t0 and t
-(“defor_t0_t”).</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="forestatrisk.deforest_diffusion_t_nofor">
-<span class="sig-name descname"><span class="pre">deforest_diffusion_t_nofor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forest_t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annual_defor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/deforest_diffusion.html#deforest_diffusion_t_nofor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.deforest_diffusion_t_nofor" title="Link to this definition">¶</a></dt>
-<dd><p>Compute the number of years until there is no forest in each state
-for of a deforestation with diffusion.</p>
-<p>Compute the number of years until there is no forest in each state
-for of a deforestation with diffusion. When a state has no more
-forest, its deforestation (annual area of deforestation) is
-attributed to the other states of the country still having
-forest. This function can be useful for Brazil for example.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>forest_t0</strong> – Forest area at t0 for each state. Numpy array.</p></li>
-<li><p><strong>t0</strong> – Year at t0.</p></li>
-<li><p><strong>annual_defor</strong> – Annual deforestation for each state. Numpy array.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionnary indicating the number of years (“ny”), for
-each state, after which all the forest will have disappeared, and
-the corresponding year (“y”, assuming forest_t0 was estimated at
-the beginning of the year).</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="forestatrisk.deforest">
-<span class="sig-name descname"><span class="pre">deforest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_raster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hectares</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output/fcc.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/deforest.html#deforest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.deforest" title="Link to this definition">¶</a></dt>
-<dd><p>Function to map the future forest-cover change.</p>
-<p>This function computes the future forest cover map based on (i) a
-raster of probability of deforestation (rescaled from 1 to 65535),
-and (ii) a surface (in hectares) to be deforested.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_raster</strong> – Raster of probability of deforestation (1 to 65535
-with 0 as nodata value).</p></li>
-<li><p><strong>hectares</strong> – Number of hectares to deforest.</p></li>
-<li><p><strong>output_file</strong> – Name of the raster file for forest cover map.</p></li>
-<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for block (else 256x256).</p></li>
-<li><p><strong>figsize</strong> – Figure size in inches.</p></li>
-<li><p><strong>dpi</strong> – Resolution for output image.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p>A dictionary of statistics (counts, hectares, threshold,
-error, error_perc, ndp, nfp).</p>
-<ul class="simple">
-<li><p>counts: histogram of deforestation probabilities.</p></li>
-<li><p>hectares: number of hectares to be deforested.</p></li>
-<li><p>threshold: probability threshold above which (&gt;=) pixels are
-deforested.</p></li>
-<li><p>error: difference between hectares to be deforested and
-hectares trully deforested (in ha).</p></li>
-<li><p>error_perc: percentage of error (must be &lt; 1%).</p></li>
-<li><p>ndp: number of deforested pixels.</p></li>
-<li><p>nfp: number of forest pixels before deforestation.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="forestatrisk.emissions">
-<span class="sig-name descname"><span class="pre">emissions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_stocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data/emissions/AGB.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_forest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output/forest_cover_2050.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.47</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/project/emissions.html#emissions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.emissions" title="Link to this definition">¶</a></dt>
-<dd><p>Predict the carbon emissions associated to future deforestation.</p>
-<p>This function predicts the carbon emissions associated to future
-deforestation. Computation are done by block and can be performed
-on large geographical areas.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_stocks</strong> – Path to raster of biomass or carbon stocks (in Mg/ha).</p></li>
-<li><p><strong>input_forest</strong> – Path to forest-cover change raster (0=deforestation).</p></li>
-<li><p><strong>coefficient</strong> – Coefficient to convert stocks in MgC/ha (can be 1).</p></li>
-<li><p><strong>blk_rows</strong> – If &gt; 0, number of rows for computation by block.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Emissions of carbon in MgC.</p>
-</dd>
-</dl>
-</dd></dl>
-
-
+  
 
           </div>
           
