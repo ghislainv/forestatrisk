@@ -10,30 +10,26 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
+import os
+import sys
+import datetime
 import re  # Regular expression
-
-# sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
 
 project = "forestatrisk"
-copyright = "2020, Ghislain Vieilledent"
-author = "Ghislain Vieilledent"
+_today = datetime.date.today()
+year = _today.year
+copyright = f"{year}, Cirad"
 
 # The full version, including alpha/beta/rc tags
-version = re.search(
-    r'^__version__\s*=\s*"(.*)"',
-    open("../forestatrisk/__init__.py").read(),
-    re.M
-).group(1)
+with open("../forestatrisk/__init__.py", encoding="utf-8") as init_file:
+    init_text = init_file.read()
+author = re.search('^__author__\\s*=\\s*"(.*)"', init_text, re.M).group(1)
+version = re.search('^__version__\\s*=\\s*"(.*)"', init_text, re.M).group(1)
 release = version
-
-# -- Sphynx options ----------------------------------------------------------
-add_module_names = False
-add_function_parentheses = True
 
 # -- General configuration ---------------------------------------------------
 

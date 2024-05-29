@@ -1,6 +1,7 @@
+numpy
 earthengine-api
 gdal
-numpy
+geefcc
 matplotlib
 pandas
 patsy
