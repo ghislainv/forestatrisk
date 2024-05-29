@@ -116,6 +116,35 @@
   <section id="download">
 <h1>Download<a class="headerlink" href="#download" title="Link to this heading">¶</a></h1>
 <dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.country_download">
+<span class="sig-prename descclassname"><span class="pre">forestatrisk.data.</span></span><span class="sig-name descname"><span class="pre">country_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_fcc_args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gadm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">srtm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wdpa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">osm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/country_download.html#country_download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.country_download" title="Link to this definition">¶</a></dt>
+<dd><p>Download country geospatial data.</p>
+<p>Function to download all the data for a specific country. It
+includes GEE forest data, GADM, OSM, SRTM, and WDPA data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iso3</strong> – Country iso code used to download GADM, OSM, SRTM,
+and WDPA data. The iso code should correspond to the country
+to which the aoi provided in <code class="docutils literal notranslate"><span class="pre">get_fcc_args</span></code> belongs.</p></li>
+<li><p><strong>get_fcc_args</strong> – Dictionary of arguments for function
+<code class="docutils literal notranslate"><span class="pre">get_fcc()</span></code> from Python package <code class="docutils literal notranslate"><span class="pre">geefcc</span></code>. For example:
+<code class="docutils literal notranslate"><span class="pre">{&quot;aoi&quot;:</span> <span class="pre">&quot;MTQ&quot;,</span> <span class="pre">&quot;buff&quot;:</span> <span class="pre">0.08983152841195216</span> <span class="pre">,</span> <span class="pre">&quot;years&quot;:</span> <span class="pre">[2000,</span>
+<span class="pre">2010,</span> <span class="pre">2020],</span> <span class="pre">&quot;source&quot;:</span> <span class="pre">&quot;tmf&quot;,</span> <span class="pre">&quot;perc&quot;:</span> <span class="pre">75,</span> <span class="pre">&quot;tile_sze&quot;:</span> <span class="pre">1,</span>
+<span class="pre">&quot;ncpu&quot;:</span> <span class="pre">None,</span> <span class="pre">&quot;output_file&quot;:</span> <span class="pre">&quot;forest_MTQ.tiff&quot;}</span></code>.</p></li>
+<li><p><strong>output_dir</strong> – Directory where data is downloaded. Default to
+current working directory.</p></li>
+<li><p><strong>gadm</strong> – Toggle GADM data download.</p></li>
+<li><p><strong>srtm</strong> – Toggle SRTM data download.</p></li>
+<li><p><strong>wdpa</strong> – Toggle WDPA data download.</p></li>
+<li><p><strong>osm</strong> – Toggle OSM data download.</p></li>
+<li><p><strong>forest</strong> – Toggle forest data download.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="forestatrisk.data.download.download_biomass_whrc">
 <span class="sig-prename descclassname"><span class="pre">forestatrisk.data.download.</span></span><span class="sig-name descname"><span class="pre">download_biomass_whrc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_remote_rclone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdrive_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/download/download_biomass_whrc.html#download_biomass_whrc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.download.download_biomass_whrc" title="Link to this definition">¶</a></dt>
 <dd><p>Download biomass data from Google Drive.</p>
@@ -434,9 +463,54 @@ GDAL/OGR. Default to “EPSG:3395” (World Mercator).</p></li>
 </section>
 <section id="sample">
 <h1>Sample<a class="headerlink" href="#sample" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.sample">
+<span class="sig-prename descclassname"><span class="pre">forestatrisk.</span></span><span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nsamp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1234</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_forest_raster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'forest.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample.txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/sample.html#sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.sample" title="Link to this definition">¶</a></dt>
+<dd><p>Sample points and extract raster values.</p>
+<p>This function (i) randomly draws spatial points in deforested and
+forested areas and (ii) extract environmental variable values for
+each spatial point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nsamp</strong> – Number of random spatial points.</p></li>
+<li><p><strong>adapt</strong> – Boolean. Adapt <code class="docutils literal notranslate"><span class="pre">nsamp</span></code> to forest area: 1000 for 1 Mha of
+forest, with min=10000 and max=50000. Default to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>seed</strong> – Seed for random number generator.</p></li>
+<li><p><strong>csize</strong> – Spatial cell size in km.</p></li>
+<li><p><strong>var_dir</strong> – Directory with raster data.</p></li>
+<li><p><strong>input_forest_raster</strong> – Name of the forest raster file
+(1=forest, 0=deforested) in the var_dir directory.</p></li>
+<li><p><strong>output_file</strong> – Path to file to save sample points.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of lines per block.</p></li>
+<li><p><strong>verbose</strong> – Toogle progress bar.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Pandas DataFrame, each row being one observation.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="various">
 <h1>Various<a class="headerlink" href="#various" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.get_vector_extent">
+<span class="sig-prename descclassname"><span class="pre">forestatrisk.</span></span><span class="sig-name descname"><span class="pre">get_vector_extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/extent_shp.html#get_vector_extent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.get_vector_extent" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the extent of a vector file.</p>
+<p>This function computes the extent (xmin, ymin, xmax, ymax) of a
+shapefile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_file</strong> – Path to the input vector file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The extent as a tuple (xmin, ymin, xmax, ymax).</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="deprecated">
 <h1>Deprecated<a class="headerlink" href="#deprecated" title="Link to this heading">¶</a></h1>
@@ -555,6 +629,29 @@ rclone. Only used if <code class="docutils literal notranslate"><span class="pre
 <li><p><strong>gdrive_folder</strong> – Name of the Google Drive folder to use. Only used if
 <code class="docutils literal notranslate"><span class="pre">use_xee</span></code> is <cite>False</cite>.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.extent_shp">
+<span class="sig-prename descclassname"><span class="pre">forestatrisk.</span></span><span class="sig-name descname"><span class="pre">extent_shp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/extent_shp.html#extent_shp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.extent_shp" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the extent of a vector file.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.1.4: </span>Use <a class="reference internal" href="#forestatrisk.get_vector_extent" title="forestatrisk.get_vector_extent"><code class="xref py py-func docutils literal notranslate"><span class="pre">forestatrisk.get_vector_extent()</span></code></a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Will be removed in future versions.</p>
+</div>
+<p>This function computes the extent (xmin, ymin, xmax, ymax) of a
+shapefile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_file</strong> – Path to the input vector file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The extent as a tuple (xmin, ymin, xmax, ymax).</p>
 </dd>
 </dl>
 </dd></dl>

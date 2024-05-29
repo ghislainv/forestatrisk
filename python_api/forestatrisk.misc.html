@@ -55,11 +55,21 @@
 
 
 <h3>Navigation</h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/get_started.html">Get started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../articles.html">Articles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../python_api.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#model">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#predict">Predict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#project">Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#validate">Validate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#plot">Plot</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../python_api.html#miscellaneous">Miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_api.html#submodules">Submodules</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../citation.html">Citation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
@@ -103,7 +113,61 @@
 
           <div class="body" role="main">
             
-  
+  <dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.countpix">
+<span class="sig-prename descclassname"><span class="pre">forestatrisk.</span></span><span class="sig-name descname"><span class="pre">countpix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_raster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/countpix.html#countpix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.countpix" title="Link to this definition">¶</a></dt>
+<dd><p>Count the number of pixels having a specific value.</p>
+<p>Count the number of pixels (and the corresponding area in ha)
+having a specific value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_raster</strong> – Input raster file.</p></li>
+<li><p><strong>value</strong> – Target value.</p></li>
+<li><p><strong>blk_rows</strong> – if &gt; 0, number of lines per block.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with the number of pixels having the              specified value (npix) and the total area (area, in ha).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.invlogit">
+<span class="sig-prename descclassname"><span class="pre">forestatrisk.</span></span><span class="sig-name descname"><span class="pre">invlogit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#invlogit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.invlogit" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the inverse-logit of a numpy array.</p>
+<p>We differenciate the positive and negative values to avoid
+under/overflow with the use of exp().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – Numpy array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Return the inverse-logit of the array.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.make_dir">
+<span class="sig-prename descclassname"><span class="pre">forestatrisk.</span></span><span class="sig-name descname"><span class="pre">make_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/misc/miscellaneous.html#make_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.make_dir" title="Link to this definition">¶</a></dt>
+<dd><p>Make new directory</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Already exists, silently complete</p></li>
+<li><p>Regular file in the way, raise an exception</p></li>
+<li><p>Parent directory(ies) does not exist, make them as well</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>newdir</strong> – Directory path to create.</p>
+</dd>
+</dl>
+</dd></dl>
+
+
 
           </div>
           
