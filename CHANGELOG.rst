@@ -1,6 +1,15 @@
 Changelog
 =========
 
+forestatrisk 1.2
+++++++++++++++++++
+
+* Removing dependencies to Earth Engine API and RClone which were used to interact with Google Earth Engine and Google Drive to compute and download forest and WHRC biomass data.
+* Removing functions ``run_gee_forest()`` (and alias ``country_forest_run()``), ``download_forest()``, and dependencies.
+* Removing functions ``run_gee_biomass_whrc()``, ``download_biomass_whrc()``, and dependencies.
+* Package `geefcc <https://ecology.ghislainv.fr/geefcc/>`_ can now be used to compute and download forest from GEE.
+* Adding dependency to ``geefcc``.
+
 forestatrisk 1.1.3
 ++++++++++++++++++
 

@@ -8,8 +8,8 @@ from .download import download_srtm, download_wdpa
 
 
 def country_download(
-        iso3,
         get_fcc_args,
+        iso3,
         output_dir=".",
         gadm=True,
         srtm=True,
@@ -21,15 +21,21 @@ def country_download(
     Function to download all the data for a specific country. It
     includes GEE forest data, GADM, OSM, SRTM, and WDPA data.
 
-    :param iso3: Country iso code used to download GADM, OSM, SRTM,
-        and WDPA data. The iso code should correspond to the country
-        to which the aoi provided in ``get_fcc_args`` belongs.
+    .. versionadded:: 1.2
+       The ``get_fcc_args`` parameter.
+
+    .. versionremoved:: 1.2
+       The ``gdrive_remote_rclone`` and ``gdrive_folder`` parameters.
 
     :param get_fcc_args: Dictionary of arguments for function
        ``get_fcc()`` from Python package ``geefcc``. For example:
        ``{"aoi": "MTQ", "buff": 0.08983152841195216 , "years": [2000,
-       2010, 2020], "source": "tmf", "perc": 75, "tile_sze": 1,
+       2010, 2020], "source": "tmf", "perc": 75, "tile_size": 1,
        "ncpu": None, "output_file": "forest_MTQ.tiff"}``.
+
+    :param iso3: Country iso code used to download GADM, OSM, SRTM,
+        and WDPA data. The iso code should correspond to the country
+        to which the aoi provided in ``get_fcc_args`` belongs.
 
     :param output_dir: Directory where data is downloaded. Default to
         current working directory.

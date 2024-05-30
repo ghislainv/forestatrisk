@@ -29,7 +29,7 @@ def compute_forest(iso, proj, extent, verbose=False):
     copts = ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"]
 
     # Build vrt file
-    tif_forest_files = glob("forest_" + iso + "*.tif")
+    tif_forest_files = glob("forest_*.tif")
     gdal.BuildVRT("forest.vrt", tif_forest_files, callback=cback)
 
     # Reproject

@@ -19,17 +19,17 @@ import numpy.distutils.misc_util
 
 
 # find_version
-def find_version():
+def find_version(pkg_name):
     """Finding package version."""
-    with open("forestatrisk/__init__.py", encoding="utf-8") as init_file:
+    with open(f"{pkg_name}/__init__.py", encoding="utf-8") as init_file:
         init_text = init_file.read()
-    far_version = (re.search('^__version__\\s*=\\s*"(.*)"',
-                             init_text, re.M)
-                   .group(1))
-    return far_version
+    _version = (re.search('^__version__\\s*=\\s*"(.*)"',
+                          init_text, re.M)
+                .group(1))
+    return _version
 
 
-version = find_version()
+version = find_version("forestatrisk")
 
 # reStructuredText README file
 with io.open("README.rst", encoding="utf-8") as f:
@@ -43,7 +43,8 @@ project_urls = {
 }
 
 # Informations to compile internal hbm module (hierarchical bayesian model)
-hbm_module = Extension("forestatrisk.hbm", sources=["C/binomial_iCAR.c", "C/useful.c"])
+hbm_module = Extension("forestatrisk.hbm",
+                       sources=["C/binomial_iCAR.c", "C/useful.c"])
 
 # Setup
 setup(
@@ -59,14 +60,13 @@ setup(
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
     keywords="deforestation hbm hierarchical logistic model probability "
     "risk Bayesian spatial autocorrelation",
-    python_requires=">=2.7",
+    python_requires=">=3.6",
     ext_modules=[hbm_module],
     packages=find_packages(),
     package_dir={"forestatrisk": "forestatrisk"},
@@ -78,7 +78,8 @@ setup(
         ]
     },
     include_package_data=True,
-    entry_points={"console_scripts": ["forestatrisk = forestatrisk.forestatrisk:main"]},
+    entry_points={"console_scripts": [
+        "forestatrisk = forestatrisk.forestatrisk:main"]},
     install_requires=[
         "earthengine-api",
         "gdal",
@@ -88,13 +89,11 @@ setup(
         "patsy",
         "pywdpa",
         "scikit-learn",
-        "xarray",
-        "rioxarray",
-        "dask",
         "geefcc",
     ],
     extras_require={
-        "interactive": ["jupyter", "python-dotenv", "geopandas", "descartes", "folium"],
+        "interactive": ["jupyter", "python-dotenv", "geopandas",
+                        "descartes", "folium"],
         "dev": ["pre-commit"],
     },
     include_dirs=numpy.distutils.misc_util.get_numpy_include_dirs(),

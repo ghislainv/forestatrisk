@@ -26,7 +26,7 @@ def get_vector_extent(input_file):
 def extent_shp(input_file):
     """Compute the extent of a vector file.
 
-    .. deprecated:: 1.1.4
+    .. deprecated:: 1.2
        Use :func:`forestatrisk.get_vector_extent`.
 
     .. warning::
