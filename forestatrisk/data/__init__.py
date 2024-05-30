@@ -3,6 +3,6 @@
 from .country_compute import country_compute
 from .country_download import country_download
 from .sample import sample
-from .extent_shp import extent_shp, get_vector_extent
+from .get_vector_extent import get_vector_extent, extent_shp
 
 # EOF

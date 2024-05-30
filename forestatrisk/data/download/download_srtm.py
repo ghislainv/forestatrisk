@@ -13,8 +13,9 @@ except ImportError:
     from urllib2 import HTTPError  # HTTPError with Python 2
 
 from ...misc import make_dir
-from ..extent_shp import extent_shp
+from ..get_vector_extent import get_vector_extent
 from .tiles_srtm import tiles_srtm
+from .download_gadm import download_gadm
 
 
 def download_srtm(iso3, output_dir="."):
@@ -38,23 +39,12 @@ def download_srtm(iso3, output_dir="."):
     make_dir(output_dir)
 
     # Check for existing data
-    shp_name = os.path.join(output_dir, "gadm36_" + iso3 + "_0.shp")
-    if os.path.isfile(shp_name) is not True:
-
-        # Download the zipfile from gadm.org
-        fname = os.path.join(output_dir, iso3 + "_shp.zip")
-        url = (
-            "https://biogeo.ucdavis.edu/data/gadm3.6/"
-            "shp/gadm36_" + iso3 + "_shp.zip"
-        )
-        urlretrieve(url, fname)
-
-        # Extract files from zip
-        with ZipFile(fname) as file:
-            file.extractall(output_dir)
+    gpkg_name = os.path.join(output_dir, "gadm41_" + iso3 + "_0.gpkg")
+    if os.path.isfile(gpkg_name) is not True:
+        download_gadm(iso3, gpkg_name)
 
     # Compute extent and SRTM tiles
-    extent_latlong = extent_shp(shp_name)
+    extent_latlong = get_vector_extent(gpkg_name)
     tiles_long, tiles_lat = tiles_srtm(extent_latlong)
     tiles_long = tiles_long.split("-")
     tiles_lat = tiles_lat.split("-")

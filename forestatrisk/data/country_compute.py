@@ -11,7 +11,7 @@ from ..misc import make_dir
 from .compute import compute_biomass_avitabile, compute_osm
 from .compute import compute_srtm, compute_wdpa
 from .compute import compute_forest
-from .extent_shp import extent_shp
+from .get_vector_extent import get_vector_extent
 
 
 def country_compute(
@@ -53,21 +53,21 @@ def country_compute(
     """
 
     # Reproject GADM
-    ofile = os.path.join(temp_dir, "ctry_PROJ.shp")
-    ifile = os.path.join(temp_dir, "gadm36_" + iso3 + "_0.shp")
+    ofile = os.path.join(temp_dir, "ctry_PROJ.gpkg")
+    ifile = os.path.join(temp_dir, "gadm41_" + iso3 + "_0.gpkg")
     param = gdal.VectorTranslateOptions(
         accessMode="overwrite",
         srcSRS="EPSG:4326",
         dstSRS=proj,
         reproject=True,
-        format="ESRI Shapefile",
+        format="GPKG",
         layerCreationOptions=["ENCODING=UTF-8"],
     )
     gdal.VectorTranslate(ofile, ifile, options=param)
 
     # Compute extent
-    ifile = os.path.join(temp_dir, "ctry_PROJ.shp")
-    extent_proj = extent_shp(ifile)
+    ifile = os.path.join(temp_dir, "ctry_PROJ.gpkg")
+    extent_proj = get_vector_extent(ifile)
 
     # Region with buffer of 5km
     xmin_reg = np.floor(extent_proj[0] - 5000)

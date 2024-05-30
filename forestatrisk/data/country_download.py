@@ -1,10 +1,14 @@
 """Download country geospatial data."""
 
+import os
+
 import geefcc as gf
 
 from ..misc import make_dir
 from .download import download_gadm, download_osm
 from .download import download_srtm, download_wdpa
+
+opj = os.path.join
 
 
 def country_download(
@@ -60,7 +64,8 @@ def country_download(
 
     # Download
     if gadm:
-        download_gadm(iso3=iso3, output_dir=output_dir)
+        ofile = opj(output_dir, "gadm41_" + iso3 + "_0.gpkg")
+        download_gadm(iso3=iso3, output_file=ofile)
     if srtm:
         download_srtm(iso3=iso3, output_dir=output_dir)
     if wdpa:

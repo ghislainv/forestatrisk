@@ -17,7 +17,7 @@ from osgeo import gdal
 
 # Local imports
 # Data
-from .data import sample, extent_shp, get_vector_extent
+from .data import sample, get_vector_extent, extent_shp
 
 # Model
 from .model import cellneigh, cellneigh_ctry

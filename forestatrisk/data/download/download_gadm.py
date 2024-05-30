@@ -1,13 +1,10 @@
 """Download GADM data."""
 
 import os
-from zipfile import ZipFile
 from urllib.request import urlretrieve
 
-from ...misc import make_dir
 
-
-def download_gadm(iso3, output_dir="."):
+def download_gadm(iso3, output_file):
     """Download GADM data for a country.
 
     Download GADM (Global Administrative Areas) for a specific
@@ -15,29 +12,17 @@ def download_gadm(iso3, output_dir="."):
 
     :param iso3: Country ISO 3166-1 alpha-3 code.
 
-    :param output_dir: Directory where data is downloaded. Default to
-        current working directory.
+    :param output_file: Path to output GPKG file.
 
     """
 
-    # Create directory
-    make_dir(output_dir)
+    # Check for existing file
+    if not os.path.isfile(output_file):
 
-    # Check for existing data
-    shp_name = os.path.join(output_dir, "gadm41_" + iso3 + "_0.shp")
-    if os.path.isfile(shp_name) is not True:
-
-        # Download the zipfile from gadm.org
-        fname = os.path.join(output_dir, iso3 + "_shp.zip")
-        url = (
-            "https://geodata.ucdavis.edu/gadm/gadm4.1/"
-            "shp/gadm41_" + iso3 + "_shp.zip"
-        )
-        urlretrieve(url, fname)
-
-        # Extract files from zip
-        with ZipFile(fname) as file:
-            file.extractall(output_dir)
+        # Download the file from gadm.org
+        url = ("https://geodata.ucdavis.edu/gadm/gadm4.1/"
+               f"gpkg/gadm41_{iso3}.gpkg")
+        urlretrieve(url, output_file)
 
 
 # End
