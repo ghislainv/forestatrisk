@@ -117,7 +117,7 @@
 <h1>Download<a class="headerlink" href="#download" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="forestatrisk.data.download.download_gadm">
-<span class="sig-prename descclassname"><span class="pre">forestatrisk.data.download.</span></span><span class="sig-name descname"><span class="pre">download_gadm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/download/download_gadm.html#download_gadm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.download.download_gadm" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">forestatrisk.data.download.</span></span><span class="sig-name descname"><span class="pre">download_gadm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/download/download_gadm.html#download_gadm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.download.download_gadm" title="Link to this definition">¶</a></dt>
 <dd><p>Download GADM data for a country.</p>
 <p>Download GADM (Global Administrative Areas) for a specific
 country. See <a class="reference external" href="https://gadm.org">https://gadm.org</a>.</p>
@@ -125,8 +125,7 @@ country. See <a class="reference external" href="https://gadm.org">https://gadm.
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>iso3</strong> – Country ISO 3166-1 alpha-3 code.</p></li>
-<li><p><strong>output_dir</strong> – Directory where data is downloaded. Default to
-current working directory.</p></li>
+<li><p><strong>output_file</strong> – Path to output GPKG file.</p></li>
 </ul>
 </dd>
 </dl>
@@ -347,7 +346,7 @@ to <code class="docutils literal notranslate"><span class="pre">False</span></co
 
 <dl class="py function">
 <dt class="sig sig-object py" id="forestatrisk.data.compute.compute_forest">
-<span class="sig-prename descclassname"><span class="pre">forestatrisk.data.compute.</span></span><span class="sig-name descname"><span class="pre">compute_forest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/compute/compute_forest.html#compute_forest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.compute.compute_forest" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">forestatrisk.data.compute.</span></span><span class="sig-name descname"><span class="pre">compute_forest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/compute/compute_forest.html#compute_forest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.compute.compute_forest" title="Link to this definition">¶</a></dt>
 <dd><p>Processing forest data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

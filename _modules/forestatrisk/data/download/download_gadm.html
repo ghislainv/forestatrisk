@@ -102,15 +102,12 @@
 <span></span><span class="sd">&quot;&quot;&quot;Download GADM data.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
 <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
-
-<span class="kn">from</span> <span class="nn">...misc</span> <span class="kn">import</span> <span class="n">make_dir</span>
 
 
 <div class="viewcode-block" id="download_gadm">
 <a class="viewcode-back" href="../../../../python_api/forestatrisk.data.html#forestatrisk.data.download.download_gadm">[docs]</a>
-<span class="k">def</span> <span class="nf">download_gadm</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">download_gadm</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Download GADM data for a country.</span>
 
 <span class="sd">    Download GADM (Global Administrative Areas) for a specific</span>
@@ -118,29 +115,17 @@
 
 <span class="sd">    :param iso3: Country ISO 3166-1 alpha-3 code.</span>
 
-<span class="sd">    :param output_dir: Directory where data is downloaded. Default to</span>
-<span class="sd">        current working directory.</span>
+<span class="sd">    :param output_file: Path to output GPKG file.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># Create directory</span>
-    <span class="n">make_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+    <span class="c1"># Check for existing file</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_file</span><span class="p">):</span>
 
-    <span class="c1"># Check for existing data</span>
-    <span class="n">shp_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;gadm41_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">shp_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
-
-        <span class="c1"># Download the zipfile from gadm.org</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span><span class="p">)</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;https://geodata.ucdavis.edu/gadm/gadm4.1/&quot;</span>
-            <span class="s2">&quot;shp/gadm41_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
-        <span class="p">)</span>
-        <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
-
-        <span class="c1"># Extract files from zip</span>
-        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-            <span class="n">file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span></div>
+        <span class="c1"># Download the file from gadm.org</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;https://geodata.ucdavis.edu/gadm/gadm4.1/&quot;</span>
+               <span class="sa">f</span><span class="s2">&quot;gpkg/gadm41_</span><span class="si">{</span><span class="n">iso3</span><span class="si">}</span><span class="s2">.gpkg&quot;</span><span class="p">)</span>
+        <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span></div>
 
 
 

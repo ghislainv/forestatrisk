@@ -114,8 +114,9 @@
     <span class="kn">from</span> <span class="nn">urllib2</span> <span class="kn">import</span> <span class="n">HTTPError</span>  <span class="c1"># HTTPError with Python 2</span>
 
 <span class="kn">from</span> <span class="nn">...misc</span> <span class="kn">import</span> <span class="n">make_dir</span>
-<span class="kn">from</span> <span class="nn">..extent_shp</span> <span class="kn">import</span> <span class="n">extent_shp</span>
+<span class="kn">from</span> <span class="nn">..get_vector_extent</span> <span class="kn">import</span> <span class="n">get_vector_extent</span>
 <span class="kn">from</span> <span class="nn">.tiles_srtm</span> <span class="kn">import</span> <span class="n">tiles_srtm</span>
+<span class="kn">from</span> <span class="nn">.download_gadm</span> <span class="kn">import</span> <span class="n">download_gadm</span>
 
 
 <div class="viewcode-block" id="download_srtm">
@@ -141,23 +142,12 @@
     <span class="n">make_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
     <span class="c1"># Check for existing data</span>
-    <span class="n">shp_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">shp_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
-
-        <span class="c1"># Download the zipfile from gadm.org</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span><span class="p">)</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;https://biogeo.ucdavis.edu/data/gadm3.6/&quot;</span>
-            <span class="s2">&quot;shp/gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_shp.zip&quot;</span>
-        <span class="p">)</span>
-        <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
-
-        <span class="c1"># Extract files from zip</span>
-        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-            <span class="n">file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+    <span class="n">gpkg_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;gadm41_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.gpkg&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">gpkg_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">download_gadm</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">gpkg_name</span><span class="p">)</span>
 
     <span class="c1"># Compute extent and SRTM tiles</span>
-    <span class="n">extent_latlong</span> <span class="o">=</span> <span class="n">extent_shp</span><span class="p">(</span><span class="n">shp_name</span><span class="p">)</span>
+    <span class="n">extent_latlong</span> <span class="o">=</span> <span class="n">get_vector_extent</span><span class="p">(</span><span class="n">gpkg_name</span><span class="p">)</span>
     <span class="n">tiles_long</span><span class="p">,</span> <span class="n">tiles_lat</span> <span class="o">=</span> <span class="n">tiles_srtm</span><span class="p">(</span><span class="n">extent_latlong</span><span class="p">)</span>
     <span class="n">tiles_long</span> <span class="o">=</span> <span class="n">tiles_long</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
     <span class="n">tiles_lat</span> <span class="o">=</span> <span class="n">tiles_lat</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>

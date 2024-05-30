@@ -112,7 +112,7 @@
 <span class="kn">from</span> <span class="nn">.compute</span> <span class="kn">import</span> <span class="n">compute_biomass_avitabile</span><span class="p">,</span> <span class="n">compute_osm</span>
 <span class="kn">from</span> <span class="nn">.compute</span> <span class="kn">import</span> <span class="n">compute_srtm</span><span class="p">,</span> <span class="n">compute_wdpa</span>
 <span class="kn">from</span> <span class="nn">.compute</span> <span class="kn">import</span> <span class="n">compute_forest</span>
-<span class="kn">from</span> <span class="nn">.extent_shp</span> <span class="kn">import</span> <span class="n">extent_shp</span>
+<span class="kn">from</span> <span class="nn">.get_vector_extent</span> <span class="kn">import</span> <span class="n">get_vector_extent</span>
 
 
 <div class="viewcode-block" id="country_compute">
@@ -156,21 +156,21 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Reproject GADM</span>
-    <span class="n">ofile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;ctry_PROJ.shp&quot;</span><span class="p">)</span>
-    <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;gadm36_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.shp&quot;</span><span class="p">)</span>
+    <span class="n">ofile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;ctry_PROJ.gpkg&quot;</span><span class="p">)</span>
+    <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;gadm41_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.gpkg&quot;</span><span class="p">)</span>
     <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslateOptions</span><span class="p">(</span>
         <span class="n">accessMode</span><span class="o">=</span><span class="s2">&quot;overwrite&quot;</span><span class="p">,</span>
         <span class="n">srcSRS</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
         <span class="n">dstSRS</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
         <span class="n">reproject</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;ESRI Shapefile&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GPKG&quot;</span><span class="p">,</span>
         <span class="n">layerCreationOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ENCODING=UTF-8&quot;</span><span class="p">],</span>
     <span class="p">)</span>
     <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslate</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="n">ifile</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
 
     <span class="c1"># Compute extent</span>
-    <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;ctry_PROJ.shp&quot;</span><span class="p">)</span>
-    <span class="n">extent_proj</span> <span class="o">=</span> <span class="n">extent_shp</span><span class="p">(</span><span class="n">ifile</span><span class="p">)</span>
+    <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;ctry_PROJ.gpkg&quot;</span><span class="p">)</span>
+    <span class="n">extent_proj</span> <span class="o">=</span> <span class="n">get_vector_extent</span><span class="p">(</span><span class="n">ifile</span><span class="p">)</span>
 
     <span class="c1"># Region with buffer of 5km</span>
     <span class="n">xmin_reg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">extent_proj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">5000</span><span class="p">)</span>
