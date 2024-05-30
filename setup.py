@@ -81,7 +81,6 @@ setup(
     entry_points={"console_scripts": [
         "forestatrisk = forestatrisk.forestatrisk:main"]},
     install_requires=[
-        "earthengine-api",
         "gdal",
         "numpy",
         "matplotlib",
@@ -93,8 +92,7 @@ setup(
     ],
     extras_require={
         "interactive": ["jupyter", "python-dotenv", "geopandas",
-                        "descartes", "folium"],
-        "dev": ["pre-commit"],
+                        "descartes", "folium"]
     },
     include_dirs=numpy.distutils.misc_util.get_numpy_include_dirs(),
     zip_safe=False,
