@@ -176,7 +176,8 @@ def nice_plot_prob(
     fig = plt.figure(figsize=figsize, dpi=dpi)
     plt.subplot(111, projection=projection)
     # Raster data
-    plt.imshow(ov_arr, cmap=color_map, extent=extent, vmin=0.01, vmax=65535)
+    plt.imshow(ov_arr, cmap=color_map, extent=extent,
+               vmin=0.01, vmax=65535, resample=False)
     if borders is not None:
         _plot_layer(borders, symbol="k-", **kwargs)
 

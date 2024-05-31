@@ -35,7 +35,8 @@ def country_download(
        ``get_fcc()`` from Python package ``geefcc``. For example:
        ``{"aoi": "MTQ", "buff": 0.08983152841195216 , "years": [2000,
        2010, 2020], "source": "tmf", "perc": 75, "tile_size": 1,
-       "ncpu": None, "output_file": "forest_MTQ.tiff"}``.
+       "parallel": True, "ncpu": None, "output_file":
+       "forest_MTQ.tiff"}``.
 
     :param iso3: Country iso code used to download GADM, OSM, SRTM,
         and WDPA data. The iso code should correspond to the country
@@ -80,6 +81,7 @@ def country_download(
             source=get_fcc_args.get("source", "tmf"),
             perc=get_fcc_args.get("perc", 75),
             tile_size=get_fcc_args.get("tile_size", 1),
+            parallel=get_fcc_args.get("parallel", True),
             ncpu=get_fcc_args.get("ncpu", None),
             output_file=get_fcc_args.get("output_file", "fcc.tif")
         )
