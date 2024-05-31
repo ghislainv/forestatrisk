@@ -3,8 +3,8 @@
 import os
 from glob import glob
 from shutil import rmtree, copy2
+import math
 
-import numpy as np
 from osgeo import gdal
 
 from ..misc import make_dir
@@ -70,10 +70,10 @@ def country_compute(
     extent_proj = get_vector_extent(ifile)
 
     # Region with buffer of 5km
-    xmin_reg = np.floor(extent_proj[0] - 5000)
-    ymin_reg = np.floor(extent_proj[1] - 5000)
-    xmax_reg = np.ceil(extent_proj[2] + 5000)
-    ymax_reg = np.ceil(extent_proj[3] + 5000)
+    xmin_reg = math.floor(extent_proj[0] - 5000)
+    ymin_reg = math.floor(extent_proj[1] - 5000)
+    xmax_reg = math.ceil(extent_proj[2] + 5000)
+    ymax_reg = math.ceil(extent_proj[3] + 5000)
     extent_reg = (xmin_reg, ymin_reg, xmax_reg, ymax_reg)
 
     # Computing country data
@@ -89,8 +89,8 @@ def country_compute(
         # Moving created files
         make_dir(os.path.join(wd, output_dir, "emissions"))
         copy2("AGB.tif", os.path.join(wd, output_dir, "emissions"))
-        dist_files = glob("dist_*.tif")
-        proj_files = glob("*_PROJ.*")
+        dist_files = [f for f in glob("dist_*.tif") if f[-6] != "t"]
+        proj_files = [f for f in glob("*_PROJ.*") if f != "ctry_PROJ.tif"]
         other_files = ["altitude.tif", "slope.tif", "pa.tif"]
         files = dist_files + proj_files + other_files
         for file in files:
