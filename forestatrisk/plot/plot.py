@@ -303,7 +303,8 @@ def fcc(
     ax1.set_frame_on(False)
     ax1.set_xticks([])
     ax1.set_yticks([])
-    plt.imshow(ov_arr, cmap=color_map, extent=extent, resample=False)
+    plt.imshow(ov_arr, cmap=color_map, extent=extent,
+               resample=False, interpolation="nearest")
     if borders is not None:
         plot_layer(borders, symbol="k-", **kwargs)
     plt.axis("off")
@@ -313,7 +314,8 @@ def fcc(
         )
         ax1.add_patch(z)
         ax2 = plt.subplot(222)
-        plt.imshow(ov_arr, cmap=color_map, extent=extent, resample=False)
+        plt.imshow(ov_arr, cmap=color_map, extent=extent,
+                   resample=False, interpolation="nearest")
         plt.xlim(zoom[0], zoom[1])
         plt.ylim(zoom[2], zoom[3])
         ax2.set_xticks([])
@@ -421,7 +423,8 @@ def fcc12345(
     ax1.set_frame_on(False)
     ax1.set_xticks([])
     ax1.set_yticks([])
-    plt.imshow(ov_arr, cmap=color_map, extent=extent, resample=False)
+    plt.imshow(ov_arr, cmap=color_map, extent=extent,
+               resample=False, interpolation="nearest")
     if borders is not None:
         plot_layer(borders, symbol="k-", **kwargs)
     plt.axis("off")
@@ -431,7 +434,8 @@ def fcc12345(
         )
         ax1.add_patch(z)
         ax2 = plt.subplot(222)
-        plt.imshow(ov_arr, cmap=color_map, extent=extent, resample=False)
+        plt.imshow(ov_arr, cmap=color_map, extent=extent,
+                   resample=False, interpolation="nearest")
         plt.xlim(zoom[0], zoom[1])
         plt.ylim(zoom[2], zoom[3])
         ax2.set_xticks([])
@@ -533,7 +537,8 @@ def fcc123(
     ax1.set_frame_on(False)
     ax1.set_xticks([])
     ax1.set_yticks([])
-    plt.imshow(ov_arr, cmap=color_map, extent=extent, resample=False)
+    plt.imshow(ov_arr, cmap=color_map, extent=extent,
+               resample=False, interpolation="nearest")
     if borders is not None:
         plot_layer(borders, symbol="k-", **kwargs)
     plt.axis("off")
@@ -543,7 +548,8 @@ def fcc123(
         )
         ax1.add_patch(z)
         ax2 = plt.subplot(222)
-        plt.imshow(ov_arr, cmap=color_map, extent=extent, resample=False)
+        plt.imshow(ov_arr, cmap=color_map, extent=extent,
+                   resample=False, interpolation="nearest")
         plt.xlim(zoom[0], zoom[1])
         plt.ylim(zoom[2], zoom[3])
         ax2.set_xticks([])
@@ -645,7 +651,8 @@ def forest(
     ax1.set_frame_on(False)
     ax1.set_xticks([])
     ax1.set_yticks([])
-    plt.imshow(ov_arr, cmap=color_map, extent=extent, resample=False)
+    plt.imshow(ov_arr, cmap=color_map, extent=extent,
+               resample=False, interpolation="nearest")
     if borders is not None:
         plot_layer(borders, symbol="k-", **kwargs)
     plt.axis("off")
@@ -655,7 +662,8 @@ def forest(
         )
         ax1.add_patch(z)
         ax2 = plt.subplot(222)
-        plt.imshow(ov_arr, cmap=color_map, extent=extent, resample=False)
+        plt.imshow(ov_arr, cmap=color_map, extent=extent,
+                   resample=False, interpolation="nearest")
         plt.xlim(zoom[0], zoom[1])
         plt.ylim(zoom[2], zoom[3])
         ax2.set_xticks([])
@@ -759,14 +767,16 @@ def prob(
     fig = plt.figure(figsize=figsize, dpi=dpi)
     plt.subplot(111)
     plt.imshow(ov_arr, cmap=color_map, extent=extent,
-               vmin=0.01, vmax=65535, resample=False)
+               vmin=0.01, vmax=65535,
+               resample=False, interpolation="nearest")
     if borders is not None:
         plot_layer(borders, symbol="k-", **kwargs)
 
     # Legend
     if legend is True:
         t = np.linspace(1, 65535, 5, endpoint=True)
-        cbar = plt.colorbar(ticks=t, orientation="vertical", shrink=0.5, aspect=20)
+        cbar = plt.colorbar(ticks=t, orientation="vertical",
+                            shrink=0.5, aspect=20)
         vl = np.linspace(0, 1, 5, endpoint=True)
         cbar.ax.set_yticklabels(vl)
 
@@ -853,7 +863,8 @@ def obs(
     ax1.set_yticks([])
     plt.axis("off")
     # Raster
-    plt.imshow(ov_arr, cmap=color_map, extent=extent, resample=False)
+    plt.imshow(ov_arr, cmap=color_map, extent=extent,
+               resample=False, interpolation="nearest")
     # Points
     f = name_forest_var
     x_defor = sample[sample[f] == 0]["X"]
@@ -951,7 +962,8 @@ def differences(
     ax1.set_frame_on(False)
     ax1.set_xticks([])
     ax1.set_yticks([])
-    plt.imshow(ov_arr, cmap=color_map, extent=extent, resample=False)
+    plt.imshow(ov_arr, cmap=color_map, extent=extent,
+               resample=False, interpolation="nearest")
     if borders is not None:
         plot_layer(borders, symbol="k-", **kwargs)
     plt.axis("off")
@@ -961,7 +973,8 @@ def differences(
         )
         ax1.add_patch(z)
         ax2 = plt.subplot(222)
-        plt.imshow(ov_arr, cmap=color_map, extent=extent, resample=False)
+        plt.imshow(ov_arr, cmap=color_map, extent=extent,
+                   resample=False, interpolation="nearest")
         plt.xlim(zoom[0], zoom[1])
         plt.ylim(zoom[2], zoom[3])
         ax2.set_xticks([])
