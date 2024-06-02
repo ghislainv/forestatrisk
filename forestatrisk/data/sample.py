@@ -318,6 +318,13 @@ def sample(
     # Export and return value
     # =============================================
 
+    # Save csize for interpolation of rhos
+    ofile = os.path.join(os.path.dirname(output_file),
+                         "csize_icar.txt")
+    with open(ofile, "w", encoding="utf-8") as f:
+        csize_km = csize / 1000
+        f.write(str(csize_km))
+
     if verbose:
         text = "Export results to file {}"
         print(text.format(output_file))
