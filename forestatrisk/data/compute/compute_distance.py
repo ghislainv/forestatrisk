@@ -77,4 +77,16 @@ def compute_distance(input_file, dist_file, values=0,
     dstband = None
     del src_ds, dst_ds
 
+
+# # Test
+# import os
+# os.chdir("/home/ghislain/deforisk/MTQ_2000_2010_2020_jrc_7221/data_raw/")
+# compute_distance(
+#     input_file="forest_t1.tif",
+#     dist_file="dist_edge_t1_test.tif",
+#     values=0,
+#     nodata=4294967295,
+#     input_nodata=False,
+#     verbose=True)
+
 # End

@@ -170,7 +170,7 @@ def correlation(
             x[j] = inf + (sup - inf) / 2
             y_bin = y[(data[varname] > inf) & (data[varname] <= sup)]
             y_bin = np.array(y_bin)  # Transform into np.array to compute sum
-            s = float(sum(y_bin == 1))  # success
+            s = float(np.sum(y_bin == 1))  # success
             n = len(y_bin)  # trials
             if n != 0:
                 theta[j] = s / n
