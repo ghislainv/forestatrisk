@@ -12,7 +12,6 @@
 # Standard library imports
 from __future__ import division, print_function  # Python 3 compatibility
 import os
-import sys
 
 # Third party imports
 import numpy as np
@@ -173,14 +172,11 @@ def progress_bar(niter, i):
 
     step = 1 if niter <= 100 else niter // 100
     if i == 1:
-        sys.stdout.write("0%")
-        sys.stdout.flush()
+        print("0%", end="", flush=True)
     elif i % step == 0:
-        sys.stdout.write("\r{}%".format((100 * i) // niter))
-        sys.stdout.flush()
+        print(f"\r{(100 * i) // niter}%", end="", flush=True)
     if i == niter:
-        sys.stdout.write("\r100%\n")
-        sys.stdout.flush()
+        print("\r100%", flush=True)
 
 
 # Rescale
