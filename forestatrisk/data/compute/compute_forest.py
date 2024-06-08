@@ -133,7 +133,22 @@ def compute_forest(proj, extent, verbose=False):
         subprocess.run(cmd, shell=True, check=True,
                        capture_output=False)
 
-    # Create raster fcc123.tif
+    # Compute raster fcc13.tif for forecast (no need to crop with borders)
+    cmd_str = (
+        'gdal_calc.py --overwrite '
+        '-A {0} -B {1} '
+        '--outfile={2} --type=Byte '
+        '--calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" '
+        '--co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
+        '--NoDataValue=255 --quiet')
+    rast_a = "forest_t1.tif"
+    rast_b = "forest_t3.tif"
+    fcc_out = "fcc13.tif"
+    cmd = cmd_str.format(rast_a, rast_b, fcc_out)
+    subprocess.run(cmd, shell=True, check=True,
+                   capture_output=False)
+
+    # Compute raster fcc123.tif
     # (0: nodata, 1: t1, 2: t2, 3: t3)
     cmd = (
         'gdal_calc.py --overwrite '

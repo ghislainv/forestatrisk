@@ -120,7 +120,7 @@ def country_compute(
             if os.path.isfile(file):
                 copy2(file, os.path.join(wd, output_dir, "validation"))
         # Copy files for forecast
-        files = ["dist_edge_t3.tif", "dist_defor_t3.tif"]
+        files = ["dist_edge_t3.tif", "dist_defor_t3.tif", "fcc13.tif"]
         for file in files:
             if os.path.isfile(file):
                 copy2(file, os.path.join(wd, output_dir, "forecast"))
