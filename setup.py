@@ -66,7 +66,7 @@ setup(
     ],
     keywords="deforestation hbm hierarchical logistic model probability "
     "risk Bayesian spatial autocorrelation",
-    python_requires=">=3.6",
+    python_requires=">=3.6, <3.12",
     ext_modules=[hbm_module],
     packages=find_packages(),
     package_dir={"forestatrisk": "forestatrisk"},
