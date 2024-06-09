@@ -99,7 +99,8 @@ def predict_raster_binomial_iCAR(
     raster_names.append("fmask")
 
     # Make vrt with gdalbuildvrt
-    print("Make virtual raster with variables as raster bands")
+    if verbose:
+        print("Make virtual raster with variables as raster bands")
     param = gdal.BuildVRTOptions(
         resolution="user",
         outputBounds=(Xmin, Ymin, Xmax, Ymax),
@@ -107,7 +108,9 @@ def predict_raster_binomial_iCAR(
         yRes=-gt[5],
         separate=True,
     )
-    gdal.BuildVRT("/vsimem/var.vrt", raster_list, options=param)
+    cback = gdal.TermProgress if verbose else 0
+    gdal.BuildVRT("/vsimem/var.vrt", raster_list,
+                  options=param, callback=cback)
     stack = gdal.Open("/vsimem/var.vrt")
     nband = stack.RasterCount
     proj = stack.GetProjection()
@@ -118,7 +121,8 @@ def predict_raster_binomial_iCAR(
         band = stack.GetRasterBand(k + 1)
         bandND[k] = band.GetNoDataValue()
         if (bandND[k] is None) or (bandND[k] is np.nan):
-            print("NoData value is not specified for" " input raster file {}".format(k))
+            print("NoData value is not specified for "
+                  f"input raster file {k}")
             sys.exit(1)
     bandND = bandND.astype(np.float32)
 
@@ -130,10 +134,12 @@ def predict_raster_binomial_iCAR(
     y = blockinfo[4]
     nx = blockinfo[5]
     ny = blockinfo[6]
-    print("Divide region in {} blocks".format(nblock))
+    if verbose:
+        print(f"Divide region in {nblock} blocks")
 
     # Raster of predictions
-    print("Create a raster file on disk for projections")
+    if verbose:
+        print("Create a raster file on disk for projections")
     driver = gdal.GetDriverByName("GTiff")
     Pdrv = driver.Create(
         output_file,
@@ -150,7 +156,8 @@ def predict_raster_binomial_iCAR(
 
     # Predict by block
     # Message
-    print("Predict deforestation probability by block")
+    if verbose:
+        print("Predict deforestation probability by block")
     # Loop on blocks of data
     for b in range(nblock):
         # Progress bar
@@ -197,7 +204,8 @@ def predict_raster_binomial_iCAR(
         Pband.WriteArray(pred, x[px], y[py])
 
     # Compute statistics
-    print("Compute statistics")
+    if verbose:
+        print("Compute statistics")
     Pband.FlushCache()  # Write cache data to disk
     Pband.ComputeStatistics(False)
 
