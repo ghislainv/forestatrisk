@@ -69,7 +69,7 @@ def compute_forest(proj, extent, verbose=False):
     # for modelling, validating, and forecasting, respectively
     for i in range(3):
         compute_distance(f"forest_t{i + 1}_src.tif",
-                         f"dist_edge_t{i + 1}.tif",
+                         f"dist_edge_t{i + 1}_src.tif",
                          values=0, nodata=0, verbose=verbose)
 
     # Compute fcc
@@ -95,14 +95,31 @@ def compute_forest(proj, extent, verbose=False):
     if nbands == 4:
         for i in range(nbands - 1):
             # Compute distance to past deforestation at t1, t2, and t3
+            fcc_in = f"fcc{i + k}{i + 1 + k}_src.tif"
             dist_out = f"dist_defor_t{i + 1}.tif"
-            compute_distance(fcc_out, dist_out,
+            compute_distance(fcc_in, dist_out,
                              values=0, nodata=0, input_nodata=True,
                              verbose=verbose)
 
     # Mask forest rasters with country border
     rast_in = [f"forest_t{i + k}_src.tif" for i in range(nbands)]
     rast_out = [f"forest_t{i + k}.tif" for i in range(nbands)]
+    cmd_str = (
+        'gdal_calc.py --overwrite '
+        '-A {0} -B ctry_PROJ.tif '
+        '--outfile={1} --type=Byte '
+        '--calc="A*B" '
+        '--co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
+        '--quiet'
+    )
+    for (i, j) in zip(rast_in, rast_out):
+        cmd = cmd_str.format(i, j)
+        subprocess.run(cmd, shell=True, check=True,
+                       capture_output=False)
+
+    # Mask dist_edge rasters with country border
+    rast_in = [f"dist_edge_t{i + k}_src.tif" for i in range(nbands)]
+    rast_out = [f"dist_edge_t{i + k}.tif" for i in range(nbands)]
     cmd_str = (
         'gdal_calc.py --overwrite '
         '-A {0} -B ctry_PROJ.tif '
