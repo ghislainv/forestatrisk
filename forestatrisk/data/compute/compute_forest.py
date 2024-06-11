@@ -29,7 +29,7 @@ def compute_forest(proj, extent, verbose=False):
 
     # Reproject
     param = gdal.WarpOptions(
-        options=["overwrite"],
+        warpOptions=["overwrite"],
         srcSRS="EPSG:4326",
         dstSRS=proj,
         outputBounds=extent,

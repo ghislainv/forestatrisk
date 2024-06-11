@@ -39,7 +39,7 @@ def compute_srtm(proj, extent, verbose=False):
 
     # Merge and reproject
     param = gdal.WarpOptions(
-        options=["overwrite"],
+        warpOptions=["overwrite"],
         srcSRS="EPSG:4326",
         dstSRS=proj,
         outputBounds=extent,

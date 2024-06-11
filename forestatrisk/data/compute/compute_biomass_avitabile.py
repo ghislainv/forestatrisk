@@ -40,7 +40,7 @@ def compute_biomass_avitabile(proj, extent, verbose=False):
         "tropics/agb/Avitabile_AGB_Map_cog.tif"
     )
     param = gdal.WarpOptions(
-        options=["overwrite"],
+        warpOptions=["overwrite"],
         srcSRS="EPSG:4326",
         dstSRS=proj,
         outputBounds=extent,
