@@ -132,7 +132,7 @@
 
     <span class="c1"># Reproject</span>
     <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">WarpOptions</span><span class="p">(</span>
-        <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">],</span>
+        <span class="n">warpOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">],</span>
         <span class="n">srcSRS</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
         <span class="n">dstSRS</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
         <span class="n">outputBounds</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
@@ -173,7 +173,9 @@
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
         <span class="n">compute_distance</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;forest_t</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">_src.tif&quot;</span><span class="p">,</span>
                          <span class="sa">f</span><span class="s2">&quot;dist_edge_t</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">.tif&quot;</span><span class="p">,</span>
-                         <span class="n">values</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+                         <span class="n">values</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                         <span class="n">input_nodata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
     <span class="c1"># Compute fcc</span>
     <span class="c1"># Command to compute fcc</span>
@@ -198,9 +200,11 @@
     <span class="k">if</span> <span class="n">nbands</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbands</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
             <span class="c1"># Compute distance to past deforestation at t1, t2, and t3</span>
+            <span class="n">fcc_in</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;fcc</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">k</span><span class="si">}{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">k</span><span class="si">}</span><span class="s2">_src.tif&quot;</span>
             <span class="n">dist_out</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;dist_defor_t</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">.tif&quot;</span>
-            <span class="n">compute_distance</span><span class="p">(</span><span class="n">fcc_out</span><span class="p">,</span> <span class="n">dist_out</span><span class="p">,</span>
-                             <span class="n">values</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">input_nodata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">compute_distance</span><span class="p">(</span><span class="n">fcc_in</span><span class="p">,</span> <span class="n">dist_out</span><span class="p">,</span>
+                             <span class="n">values</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                             <span class="n">input_nodata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                              <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
     <span class="c1"># Mask forest rasters with country border</span>
