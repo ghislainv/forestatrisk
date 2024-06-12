@@ -41,7 +41,7 @@ def defrate_per_cat(fcc_file, riskmap_file, time_interval,
         change observations.
 
     :param period: Either "calibration" (from t1 to t2), "validation"
-        (or "confirmation" from t2 to t3), or "historical" (full
+        (from t2 to t3), "historical" or "forecast" (full
         historical period from t1 to t3). Default to "calibration".
 
     :param tab_file_defrate: Path to the ``.csv`` output file with
@@ -114,10 +114,10 @@ def defrate_per_cat(fcc_file, riskmap_file, time_interval,
         if period == "calibration":
             data_for = defor_cat_data[fcc_data > 0]
             data_defor = defor_cat_data[fcc_data == 1]
-        elif period in ["validation", "confirmation"]:
+        elif period == "validation":
             data_for = defor_cat_data[fcc_data > 1]
             data_defor = defor_cat_data[fcc_data == 2]
-        elif period == "historical":
+        elif period in ["historical", "forecast"]:
             data_for = defor_cat_data[fcc_data > 0]
             data_defor = defor_cat_data[np.isin(fcc_data, [1, 2])]
         # nfor_per_cat
@@ -127,7 +127,7 @@ def defrate_per_cat(fcc_file, riskmap_file, time_interval,
         cat_defor = pd.Categorical(data_defor.flatten(), categories=cat)
         df["ndefor"] += cat_defor.value_counts().values
 
-    # Annual deforestation rates per category
+    # Annual deforestation rates per category (just fo info)
     df["rate_obs"] = 1 - (1 - df["ndefor"] / df["nfor"]) ** (1 / time_interval)
 
     # Relative spatial deforestation probability from model
