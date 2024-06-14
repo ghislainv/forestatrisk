@@ -542,7 +542,6 @@ class model_binomial_iCAR(object):
         pdf_pages = PdfPages(output_file)
         # Generate the pages
         nb_plots = len(varnames)
-        grid_size = (plots_per_page, 2)
         # List of figures to be returned
         figures = []
         # Loop on parameters
@@ -550,8 +549,10 @@ class model_binomial_iCAR(object):
             # Create a figure instance (ie. a new page) if needed
             if i % plots_per_page == 0:
                 fig = plt.figure(figsize=figsize, dpi=dpi)
+                gs = fig.add_gridspec(plots_per_page, 2)
             # Trace
-            ax1 = plt.subplot2grid(grid_size, (i % plots_per_page, 0))
+            irow = i % plots_per_page
+            ax1 = fig.add_subplot(gs[irow, 0])
             ax1.axhline(y=posterior_means[i], linewidth=1, color="r")
             ax1.plot(MCMC[:, i], color="#000000")
             ax1.text(
@@ -564,7 +565,7 @@ class model_binomial_iCAR(object):
                 transform=ax1.transAxes,
             )
             # Posterior distribution
-            ax2 = plt.subplot2grid(grid_size, (i % plots_per_page, 1))
+            ax2 = fig.add_subplot(gs[irow, 1])
             ax2.hist(MCMC[:, i], density=1, bins=20, color="#808080")
             ax2.axvline(x=posterior_means[i], linewidth=1, color="r")
             # Close the page if needed
