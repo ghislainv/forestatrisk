@@ -514,9 +514,8 @@ class model_binomial_iCAR(object):
             rho = np.mean(self.rho, axis=0)[cell]
         return invlogit(np.dot(X, self.betas) + rho)
 
-    def plot(
-        self, output_file="mcmc.pdf", plots_per_page=5, figsize=(8.27, 11.69), dpi=100
-    ):
+    def plot(self, output_file="mcmc.pdf", plots_per_page=5,
+             figsize=(8.27, 11.69), dpi=100):
         """Plot traces and posterior distributions.
 
         This function plots the traces and posterior distributions of
@@ -552,25 +551,25 @@ class model_binomial_iCAR(object):
             if i % plots_per_page == 0:
                 fig = plt.figure(figsize=figsize, dpi=dpi)
             # Trace
-            ax = plt.subplot2grid(grid_size, (i % plots_per_page, 0))
-            plt.axhline(y=posterior_means[i], linewidth=1, color="r")
-            plt.plot(MCMC[:, i], color="#000000")
-            plt.text(
+            ax1 = plt.subplot2grid(grid_size, (i % plots_per_page, 0))
+            ax1.axhline(y=posterior_means[i], linewidth=1, color="r")
+            ax1.plot(MCMC[:, i], color="#000000")
+            ax1.text(
                 0,
                 1,
                 varnames[i],
                 horizontalalignment="left",
                 verticalalignment="bottom",
                 fontsize=11,
-                transform=ax.transAxes,
+                transform=ax1.transAxes,
             )
             # Posterior distribution
-            plt.subplot2grid(grid_size, (i % plots_per_page, 1))
-            plt.hist(MCMC[:, i], density=1, bins=20, color="#808080")
-            plt.axvline(x=posterior_means[i], linewidth=1, color="r")
+            ax2 = plt.subplot2grid(grid_size, (i % plots_per_page, 1))
+            ax2.hist(MCMC[:, i], density=1, bins=20, color="#808080")
+            ax2.axvline(x=posterior_means[i], linewidth=1, color="r")
             # Close the page if needed
             if (i + 1) % plots_per_page == 0 or (i + 1) == nb_plots:
-                plt.tight_layout()
+                fig.tight_layout()
                 figures.append(fig)
                 pdf_pages.savefig(fig)
         # Write the PDF document to the disk
