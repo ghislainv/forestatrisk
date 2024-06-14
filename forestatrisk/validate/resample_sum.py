@@ -11,6 +11,7 @@
 
 # Standard library imports
 from __future__ import division, print_function  # Python 3 compatibility
+import os
 
 # Third party imports
 import numpy as np
@@ -85,6 +86,8 @@ def resample_sum(input_raster, output_raster, val=0, window_size=2):
     # Raster of result
     print("Create output raster file on disk")
     driver = gdal.GetDriverByName("GTiff")
+    if os.path.isfile(output_raster):
+        os.remove(output_raster)
     ds_out = driver.Create(
         output_raster,
         ncol_out,

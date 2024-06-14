@@ -52,8 +52,8 @@ def validation_udef_arp(
         deforestation, 3: remaining forest at the end of the second
         period. No data value must be 0 (zero).
 
-    :param period: Either "calibration" (from t1 to t2), or
-        "validation" (or "confirmation" from t2 to t3).
+    :param period: Either "calibration" (from t1 to t2), "validation"
+        (from t2 to t3), or "historical" (from t1 to t3).
 
     :param time_interval: Duration (in years) of the period.
 
@@ -148,9 +148,12 @@ def validation_udef_arp(
         if period == "calibration":
             df.loc[s, "nfor_obs"] = np.sum(fcc_data > 0)
             df.loc[s, "ndefor_obs"] = np.sum(fcc_data == 1)
-        elif period in ["validation", "confirmation"]:
+        elif period == "validation":
             df.loc[s, "nfor_obs"] = np.sum(fcc_data > 1)
             df.loc[s, "ndefor_obs"] = np.sum(fcc_data == 2)
+        else:  # historical
+            df.loc[s, "nfor_obs"] = np.sum(fcc_data > 0)
+            df.loc[s, "ndefor_obs"] = np.sum(np.isin(fcc_data, [1, 2]))
 
         # Predicted deforestation
         defor_cat_data = defor_cat_band.ReadAsArray(

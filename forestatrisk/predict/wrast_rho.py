@@ -57,7 +57,14 @@ def wrast_rho(rho, input_raster, csize=10, output_file="output/rho_orig.tif"):
     dirname = os.path.dirname(output_file)
     rho_orig_filename = os.path.join(dirname, "rho_orig.tif")
     driver = gdal.GetDriverByName("GTiff")
-    rho_R = driver.Create(rho_orig_filename, ncell_X, ncell_Y, 1, gdal.GDT_Float64)
+    if os.path.isfile(rho_orig_filename):
+        os.remove(rho_orig_filename)
+    rho_R = driver.Create(
+        rho_orig_filename,
+        ncell_X,
+        ncell_Y,
+        1,
+        gdal.GDT_Float64)
     rho_R.SetProjection(r.GetProjection())
     gt = list(gt)
     gt[1] = csize_m

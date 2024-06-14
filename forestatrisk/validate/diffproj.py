@@ -11,6 +11,7 @@
 
 # Standard library imports
 from __future__ import division, print_function  # Python 3 compatibility
+import os
 
 # Third party imports
 import numpy as np
@@ -59,6 +60,8 @@ def r_diffproj(inputA, inputB, output_file="diffproj.tif", blk_rows=128):
     # Raster of predictions
     print("Create a raster file on disk for projections")
     driver = gdal.GetDriverByName("GTiff")
+    if os.path.isfile(output_file):
+        os.remove(output_file)
     ds_out = driver.Create(
         output_file,
         ncol,

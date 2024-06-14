@@ -23,6 +23,7 @@ def compute_osm(proj, extent, verbose=False):
     # Convert osm.pbf to o5m
     cmd = "osmconvert country.osm.pbf -o=country.o5m"
     rtn = subprocess.run(cmd, shell=True,
+                         check=True,
                          capture_output=True,
                          text=True)
     if verbose:

@@ -11,6 +11,7 @@
 
 # Standard library imports
 from __future__ import division, print_function  # Python 3 compatibility
+import os
 import warnings
 
 # Third party imports
@@ -128,6 +129,8 @@ def deforest(input_raster, hectares, output_file="output/fcc.tif", blk_rows=128)
     # Raster of predictions
     print("Create a raster file on disk for forest-cover change")
     driver = gdal.GetDriverByName("GTiff")
+    if os.path.isfile(output_file):
+        os.remove(output_file)
     fccR = driver.Create(
         output_file,
         ncol,

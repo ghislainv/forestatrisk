@@ -123,6 +123,8 @@ def predict_raster(
     if verbose:
         print("Create a raster file on disk for projections")
     driver = gdal.GetDriverByName("GTiff")
+    if os.path.isfile(output_file):
+        os.remove(output_file)
     Pdrv = driver.Create(
         output_file,
         ncol,
