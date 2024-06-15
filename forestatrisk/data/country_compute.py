@@ -3,15 +3,14 @@
 import os
 from glob import glob
 from shutil import rmtree, copy2
-import math
-
-from osgeo import gdal
 
 from ..misc import make_dir
 from .compute import compute_forest
-from .compute import compute_srtm, compute_wdpa, compute_osm
+from .compute import (
+    compute_gadm, compute_srtm,
+    compute_wdpa, compute_osm
+)
 from .compute import compute_biomass_avitabile
-from .get_vector_extent import get_vector_extent
 
 
 def country_compute(
@@ -55,28 +54,10 @@ def country_compute(
     # Create output directory
     make_dir(output_dir)
 
-    # Reproject GADM
-    ofile = os.path.join(temp_dir, "ctry_PROJ.gpkg")
+    # Compute aoi file and extent from GADM file
     ifile = os.path.join(temp_dir, "gadm41_" + iso3 + "_0.gpkg")
-    param = gdal.VectorTranslateOptions(
-        accessMode="overwrite",
-        srcSRS="EPSG:4326",
-        dstSRS=proj,
-        reproject=True,
-        format="GPKG",
-    )
-    gdal.VectorTranslate(ofile, ifile, options=param)
-
-    # Compute extent
-    ifile = os.path.join(temp_dir, "ctry_PROJ.gpkg")
-    extent_proj = get_vector_extent(ifile)
-
-    # Region with buffer of 5km
-    xmin_reg = math.floor(extent_proj[0] - 5000)
-    ymin_reg = math.floor(extent_proj[1] - 5000)
-    xmax_reg = math.ceil(extent_proj[2] + 5000)
-    ymax_reg = math.ceil(extent_proj[3] + 5000)
-    extent_reg = (xmin_reg, ymin_reg, xmax_reg, ymax_reg)
+    ofile = os.path.join(temp_dir, "aoi_proj.gpkg")
+    extent_reg = compute_gadm(ifile, ofile, proj)
 
     # Computing country data
     if data_country:
@@ -90,7 +71,7 @@ def country_compute(
         compute_biomass_avitabile(proj, extent_reg)
         # Moving created files
         dist_files = [f for f in glob("dist_*.tif") if f[-6] != "t"]
-        proj_files = [f for f in glob("*_PROJ.*") if f != "ctry_PROJ.tif"]
+        proj_files = [f for f in glob("*_proj.*") if f != "aoi_proj.tif"]
         other_files = ["altitude.tif", "slope.tif", "pa.tif", "AGB.tif"]
         ifiles = dist_files + proj_files + other_files
         for ifile in ifiles:

@@ -14,6 +14,7 @@ Compute
 .. autofunction:: forestatrisk.data.compute.compute_biomass_avitabile
 .. autofunction:: forestatrisk.data.compute.compute_biomass_whrc
 .. autofunction:: forestatrisk.data.compute.compute_distance
+.. autofunction:: forestatrisk.data.compute.compute_gadm	
 .. autofunction:: forestatrisk.data.compute.compute_osm
 .. autofunction:: forestatrisk.data.compute.compute_srtm
 .. autofunction:: forestatrisk.data.compute.compute_wdpa
