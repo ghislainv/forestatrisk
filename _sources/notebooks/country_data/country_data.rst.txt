@@ -246,7 +246,7 @@ We can plot the past deforestation for the period 2000--2010--2020:
         input_fcc_raster="data/forest/fcc123.tif",
         maxpixels=1e8,
         output_file=ofile,
-        borders="data/ctry_PROJ.shp",
+        borders="data/aoi_proj.shp",
         linewidth=0.3,
         figsize=(6, 5), dpi=500)
     ofile

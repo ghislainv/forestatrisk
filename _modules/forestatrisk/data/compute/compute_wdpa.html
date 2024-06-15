@@ -152,7 +152,7 @@
         <span class="n">layerCreationOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ENCODING=UTF-8&quot;</span><span class="p">],</span>
         <span class="n">callback</span><span class="o">=</span><span class="n">cback</span>
     <span class="p">)</span>
-    <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslate</span><span class="p">(</span><span class="s2">&quot;pa_PROJ.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;pa_&quot;</span> <span class="o">+</span> <span class="n">iso</span> <span class="o">+</span> <span class="s2">&quot;.shp&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslate</span><span class="p">(</span><span class="s2">&quot;pa_proj.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;pa_&quot;</span> <span class="o">+</span> <span class="n">iso</span> <span class="o">+</span> <span class="s2">&quot;.shp&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
 
     <span class="c1"># Rasterize</span>
     <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">RasterizeOptions</span><span class="p">(</span>
@@ -164,12 +164,12 @@
         <span class="n">noData</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span>
         <span class="n">xRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
         <span class="n">yRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-        <span class="n">layers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pa_PROJ&quot;</span><span class="p">],</span>
+        <span class="n">layers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pa_proj&quot;</span><span class="p">],</span>
         <span class="n">outputType</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span><span class="p">,</span>
         <span class="n">creationOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">],</span>
         <span class="n">callback</span><span class="o">=</span><span class="n">cback</span>
     <span class="p">)</span>
-    <span class="n">gdal</span><span class="o">.</span><span class="n">Rasterize</span><span class="p">(</span><span class="s2">&quot;pa.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;pa_PROJ.shp&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span></div>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">Rasterize</span><span class="p">(</span><span class="s2">&quot;pa.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;pa_proj.shp&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span></div>
 
 
 

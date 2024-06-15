@@ -288,7 +288,7 @@ folder <code class="docutils literal notranslate"><span class="pre">gisdata/vect
 data at 30m.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3163&quot;</span>
 <span class="nv">f1</span><span class="o">=</span><span class="s2">&quot;gisdata/vectors/peridotite/2de32d40-dc86-4bd9-9b83-420699bc672e2020413-1-13dmpoq.2hll.shp&quot;</span>
-<span class="nv">f2</span><span class="o">=</span><span class="s2">&quot;gisdata/vectors/peridotite/geol_PROJ.shp&quot;</span>
+<span class="nv">f2</span><span class="o">=</span><span class="s2">&quot;gisdata/vectors/peridotite/geol_proj.shp&quot;</span>
 ogr2ogr<span class="w"> </span>-overwrite<span class="w"> </span>-s_srs<span class="w"> </span>EPSG:4326<span class="w"> </span>-t_srs<span class="w"> </span><span class="nv">$proj</span><span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;ESRI Shapefile&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">        </span>-lco<span class="w"> </span><span class="nv">ENCODING</span><span class="o">=</span>UTF-8<span class="w"> </span><span class="nv">$f2</span><span class="w"> </span><span class="nv">$f1</span>
 </pre></div>
@@ -363,13 +363,13 @@ and 0 when not. Extent is obtained from file <code class="docutils literal notra
 </pre></div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3163&quot;</span>
-<span class="nv">f2</span><span class="o">=</span><span class="s2">&quot;gisdata/vectors/peridotite/geol_PROJ.shp&quot;</span>
+<span class="nv">f2</span><span class="o">=</span><span class="s2">&quot;gisdata/vectors/peridotite/geol_proj.shp&quot;</span>
 <span class="nv">f3</span><span class="o">=</span><span class="s2">&quot;data/geol.tif&quot;</span>
 gdal_rasterize<span class="w"> </span>-te<span class="w"> </span><span class="m">139830</span><span class="w"> </span><span class="m">145470</span><span class="w"> </span><span class="m">568710</span><span class="w"> </span><span class="m">521700</span><span class="w"> </span>-tap<span class="w"> </span>-burn<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
 <span class="w">               </span>-co<span class="w"> </span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="w"> </span>-co<span class="w"> </span><span class="s2">&quot;PREDICTOR=2&quot;</span><span class="w"> </span>-co<span class="w"> </span><span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">           </span>-init<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
 <span class="w">               </span>-a_nodata<span class="w"> </span><span class="m">255</span><span class="w"> </span>-a_srs<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$proj</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>-ot<span class="w"> </span>Byte<span class="w"> </span>-tr<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="m">30</span><span class="w"> </span>-l<span class="w"> </span>geol_PROJ<span class="w"> </span><span class="nv">$f2</span><span class="w"> </span><span class="nv">$f3</span>
+<span class="w">           </span>-ot<span class="w"> </span>Byte<span class="w"> </span>-tr<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="m">30</span><span class="w"> </span>-l<span class="w"> </span>geol_proj<span class="w"> </span><span class="nv">$f2</span><span class="w"> </span><span class="nv">$f3</span>
 </pre></div>
 </div>
 </section>
@@ -391,7 +391,7 @@ data for computing carbon emissions.</p></li>
     <span class="n">input_fcc_raster</span><span class="o">=</span><span class="s2">&quot;data/fcc23.tif&quot;</span><span class="p">,</span>
     <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;output/fcc23.png&quot;</span><span class="p">,</span>
-    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/aoi_proj.shp&quot;</span><span class="p">,</span>
     <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1149,7 +1149,7 @@ for all observations in each class.</p>
     <span class="n">input_fcc_raster</span><span class="o">=</span><span class="s2">&quot;data/forest/fcc123.tif&quot;</span><span class="p">,</span>
     <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="n">ofile</span><span class="p">,</span>
-    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/aoi_proj.shp&quot;</span><span class="p">,</span>
     <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 <span class="n">ofile</span>
@@ -1164,7 +1164,7 @@ for all observations in each class.</p>
 <span class="n">ofile</span> <span class="o">=</span> <span class="s2">&quot;output/nb_newcal_rho_orig.png&quot;</span>
 <span class="n">fig_rho_orig</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">rho</span><span class="p">(</span>
     <span class="s2">&quot;output/rho_orig.tif&quot;</span><span class="p">,</span>
-    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/aoi_proj.shp&quot;</span><span class="p">,</span>
     <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="n">ofile</span><span class="p">,</span>
     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
@@ -1173,7 +1173,7 @@ for all observations in each class.</p>
 <span class="n">ofile</span> <span class="o">=</span> <span class="s2">&quot;output/nb_newcal_rho.png&quot;</span>
 <span class="n">fig_rho</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">rho</span><span class="p">(</span>
     <span class="s2">&quot;output/rho.tif&quot;</span><span class="p">,</span>
-    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/aoi_proj.shp&quot;</span><span class="p">,</span>
     <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="n">ofile</span><span class="p">,</span>
     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
@@ -1190,7 +1190,7 @@ for all observations in each class.</p>
 <span class="n">fig_prob</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span>
     <span class="s2">&quot;output/prob.tif&quot;</span><span class="p">,</span>
     <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
-    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/aoi_proj.shp&quot;</span><span class="p">,</span>
     <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="n">ofile</span><span class="p">,</span>
@@ -1208,7 +1208,7 @@ for all observations in each class.</p>
 <span class="n">fcc_2050</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">fcc</span><span class="p">(</span>
     <span class="s2">&quot;output/fcc_2050.tif&quot;</span><span class="p">,</span>
     <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
-    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/aoi_proj.shp&quot;</span><span class="p">,</span>
     <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="n">ofile</span><span class="p">,</span>
     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
@@ -1222,7 +1222,7 @@ for all observations in each class.</p>
 <span class="n">fcc_2100</span> <span class="o">=</span> <span class="n">far</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">fcc</span><span class="p">(</span>
     <span class="s2">&quot;output/fcc_2100.tif&quot;</span><span class="p">,</span>
     <span class="n">maxpixels</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
-    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/ctry_PROJ.shp&quot;</span><span class="p">,</span>
+    <span class="n">borders</span><span class="o">=</span><span class="s2">&quot;data/aoi_proj.shp&quot;</span><span class="p">,</span>
     <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
     <span class="n">output_file</span><span class="o">=</span><span class="n">ofile</span><span class="p">,</span>
     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
