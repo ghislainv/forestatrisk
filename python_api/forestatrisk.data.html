@@ -289,6 +289,29 @@ to <code class="docutils literal notranslate"><span class="pre">True</span></cod
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.data.compute.compute_gadm">
+<span class="sig-prename descclassname"><span class="pre">forestatrisk.data.compute.</span></span><span class="sig-name descname"><span class="pre">compute_gadm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ifile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ofile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/compute/compute_gadm.html#compute_gadm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.compute.compute_gadm" title="Link to this definition">¶</a></dt>
+<dd><p>Processing GADM data.</p>
+<p>Extract layers to a new GPKG file called “aoi_latlong.gpkg” and
+reproject this file to output file. Layer names for country border
+and subjurisdictions are “aoi” (for “area of interest”) and “subj”
+respectively. The extent of the area of interest is returned with
+a buffer of 5 km.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_file</strong> – Path to input GADM GPKG file.</p></li>
+<li><p><strong>output_file</strong> – Path to GPKG output file.</p></li>
+<li><p><strong>proj</strong> – Projection definition (EPSG, PROJ.4, WKT) as in
+GDAL/OGR. Used for reprojecting data.</p></li>
+<li><p><strong>verbose</strong> – Logical. Whether to print messages or not. Default
+to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="forestatrisk.data.compute.compute_osm">
 <span class="sig-prename descclassname"><span class="pre">forestatrisk.data.compute.</span></span><span class="sig-name descname"><span class="pre">compute_osm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/compute/compute_osm.html#compute_osm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.data.compute.compute_osm" title="Link to this definition">¶</a></dt>
 <dd><p>Compute distance to road, town, and river.</p>
