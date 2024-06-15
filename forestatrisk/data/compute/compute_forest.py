@@ -59,7 +59,7 @@ def compute_forest(proj, extent, verbose=False):
     # Rasterize country border
     # (by default: zero outside, without nodata value)
     gdal.Rasterize("aoi_proj.tif", "aoi_proj.gpkg",
-                   layers="ADM_ADM_0",
+                   layers="aoi",
                    outputBounds=extent,
                    xRes=30, yRes=30, targetAlignedPixels=True,
                    burnValues=[1], outputType=gdal.GDT_Byte,

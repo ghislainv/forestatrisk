@@ -258,7 +258,7 @@ def gstart():
         input_fcc_raster="data/forest/fcc123.tif",
         maxpixels=1e8,
         output_file="output/fcc123.png",
-        borders="data/aoi_proj.shp",
+        borders="data/ctry_PROJ.shp",
         linewidth=0.3,
         figsize=(6, 5),
         dpi=500,
@@ -269,7 +269,7 @@ def gstart():
     # Original spatial random effects
     fig_rho_orig = far.plot.rho(
         "output/rho_orig.tif",
-        borders="data/aoi_proj.shp",
+        borders="data/ctry_PROJ.shp",
         linewidth=0.5,
         output_file="output/rho_orig.png",
         figsize=(9, 5),
@@ -279,7 +279,7 @@ def gstart():
     # Interpolated spatial random effects
     fig_rho = far.plot.rho(
         "output/rho.tif",
-        borders="data/aoi_proj.shp",
+        borders="data/ctry_PROJ.shp",
         linewidth=0.5,
         output_file="output/rho.png",
         figsize=(9, 5),
@@ -292,7 +292,7 @@ def gstart():
     fig_prob = far.plot.prob(
         "output/prob.tif",
         maxpixels=1e8,
-        borders="data/aoi_proj.shp",
+        borders="data/ctry_PROJ.shp",
         linewidth=0.3,
         legend=True,
         output_file="output/prob.png",
@@ -306,7 +306,7 @@ def gstart():
     fcc_2050 = far.plot.fcc(
         "output/fcc_2050.tif",
         maxpixels=1e8,
-        borders="data/aoi_proj.shp",
+        borders="data/ctry_PROJ.shp",
         linewidth=0.3,
         output_file="output/fcc_2050.png",
         figsize=(6, 5),
