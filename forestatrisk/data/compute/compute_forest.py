@@ -58,7 +58,7 @@ def compute_forest(proj, extent, verbose=False):
 
     # Rasterize country border
     # (by default: zero outside, without nodata value)
-    gdal.Rasterize("ctry_PROJ.tif", "ctry_PROJ.gpkg",
+    gdal.Rasterize("aoi_proj.tif", "aoi_proj.gpkg",
                    layers="ADM_ADM_0",
                    outputBounds=extent,
                    xRes=30, yRes=30, targetAlignedPixels=True,
@@ -109,7 +109,7 @@ def compute_forest(proj, extent, verbose=False):
     rast_out = [f"forest_t{i + k}.tif" for i in range(nbands)]
     cmd_str = (
         'gdal_calc.py --overwrite '
-        '-A {0} -B ctry_PROJ.tif '
+        '-A {0} -B aoi_proj.tif '
         '--outfile={1} --type=Byte '
         '--calc="A*B" '
         '--co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
@@ -125,7 +125,7 @@ def compute_forest(proj, extent, verbose=False):
     rast_out = [f"fcc{i + k}{i + k + 1}.tif" for i in range(nbands - 1)]
     cmd_str = (
         'gdal_calc.py --overwrite '
-        '-A {0} -B ctry_PROJ.tif '
+        '-A {0} -B aoi_proj.tif '
         '--outfile={1} --type=Byte '
         '--calc={2} '
         '--co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" '

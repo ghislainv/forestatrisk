@@ -102,7 +102,7 @@ def compute_osm(proj, extent, verbose=False):
             dstSRS=proj,
             callback=cback,
         )
-        gdal.VectorTranslate(cat + "_PROJ.shp", cat + ".shp", options=param)
+        gdal.VectorTranslate(cat + "_proj.shp", cat + ".shp", options=param)
         # Rasterize
         param = gdal.RasterizeOptions(
             outputBounds=extent,
@@ -112,12 +112,12 @@ def compute_osm(proj, extent, verbose=False):
             noData=255,
             xRes=150,
             yRes=150,
-            layers=[cat + "_PROJ"],
+            layers=[cat + "_proj"],
             outputType=gdal.GDT_Byte,
             creationOptions=copts,
             callback=cback,
         )
-        gdal.Rasterize(cat + ".tif", cat + "_PROJ.shp", options=param)
+        gdal.Rasterize(cat + ".tif", cat + "_proj.shp", options=param)
         # Compute distances
         compute_distance(
             input_file=cat + ".tif",

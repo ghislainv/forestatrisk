@@ -48,25 +48,25 @@ ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' -progress \
 # with ogr2ogr can lead to different projection definition (see WKT)
 # towns
 ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs "$proj" -f 'ESRI Shapefile' \
-        -lco ENCODING=UTF-8 towns_PROJ.shp towns.shp
+        -lco ENCODING=UTF-8 towns_proj.shp towns.shp
 gdal_rasterize -te $extent -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" -ot Byte \
                -a_nodata 255 -a_srs "$proj" \
-               -tr 150 150 -l towns_PROJ towns_PROJ.shp towns.tif
+               -tr 150 150 -l towns_proj towns_proj.shp towns.tif
 # roads
 ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs "$proj" -f 'ESRI Shapefile' \
-        -lco ENCODING=UTF-8 roads_PROJ.shp roads.shp
+        -lco ENCODING=UTF-8 roads_proj.shp roads.shp
 gdal_rasterize -te $extent -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" -ot Byte \
                -a_nodata 255 -a_srs "$proj" \
-               -tr 150 150 -l roads_PROJ roads_PROJ.shp roads.tif
+               -tr 150 150 -l roads_proj roads_proj.shp roads.tif
 # rivers
 ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs "$proj" -f 'ESRI Shapefile' \
-        -lco ENCODING=UTF-8 rivers_PROJ.shp rivers.shp
+        -lco ENCODING=UTF-8 rivers_proj.shp rivers.shp
 gdal_rasterize -te $extent -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" -ot Byte \
                -a_nodata 255 -a_srs "$proj" \
-               -tr 150 150 -l rivers_PROJ rivers_PROJ.shp rivers.tif
+               -tr 150 150 -l rivers_proj rivers_proj.shp rivers.tif
 
 # Compute distances
 gdal_proximity.py roads.tif _dist_road.tif \
@@ -132,14 +132,14 @@ input_file="pa_"$iso".shp"
 ogr2ogr -overwrite -skipfailures -f "ESRI Shapefile" \
 	-where "status='Designated' OR status='Inscribed' OR status='Established' OR (status='Proposed' AND CAST(SUBSTR(date,7,4) AS INTEGER) < 2010)" \
         -s_srs EPSG:4326 -t_srs "$proj" \
-        -lco ENCODING=UTF-8 pa_PROJ.shp $input_file
+        -lco ENCODING=UTF-8 pa_proj.shp $input_file
 
 # Rasterize
 gdal_rasterize -te $extent -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
                -init 0 \
                -a_nodata 255 -a_srs "$proj" \
-               -ot Byte -tr 30 30 -l pa_PROJ pa_PROJ.shp pa.tif
+               -ot Byte -tr 30 30 -l pa_proj pa_proj.shp pa.tif
 
 # ===========================
 # Carbon
@@ -167,7 +167,7 @@ echo "Cleaning directory\n"
 mkdir -p ../$output_dir
 mkdir -p ../$output_dir/emissions
 # Copy files
-cp -t ../$output_dir dist_*.tif *_PROJ.* altitude.tif slope.tif pa.tif
+cp -t ../$output_dir dist_*.tif *_proj.* altitude.tif slope.tif pa.tif
 cp -t ../$output_dir/emissions AGB.tif
 # Return to working director
 cd ../

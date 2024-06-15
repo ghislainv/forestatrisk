@@ -298,7 +298,7 @@ fig_fcc123 <- far$plot$fcc123(
     input_fcc_raster="data/forest/fcc123.tif",
     maxpixels=1e8,
     output_file="output/fcc123.png",
-    borders="data/ctry_PROJ.shp",
+    borders="data/aoi_proj.shp",
     linewidth=0.2,
     figsize=c(5, 4), dpi=800)
 
@@ -310,7 +310,7 @@ knitr::include_graphics("output/fcc123.png")
 ```{r plot-rho-orig}
 # Original spatial random effects
 fig_rho_orig <- far$plot$rho("output/rho_orig.tif",
-                            borders="data/ctry_PROJ.shp",
+                            borders="data/aoi_proj.shp",
                             linewidth=0.5,
                             output_file="output/rho_orig.png",
                             figsize=c(9,5), dpi=150)
@@ -321,7 +321,7 @@ knitr::include_graphics("output/rho_orig.png")
 ```{r plot-rho}
 # Interpolated spatial random effects
 fig_rho <- far$plot$rho("output/rho.tif",
-                       borders="data/ctry_PROJ.shp",
+                       borders="data/aoi_proj.shp",
                        linewidth=0.5,
                        output_file="output/rho.png",
                        figsize=c(9,5), dpi=150)
@@ -335,7 +335,7 @@ knitr::include_graphics("output/rho.png")
 # Spatial probability of deforestation
 fig_prob <- far$plot$prob("output/prob.tif",
                          maxpixels=1e8,
-                         borders="data/ctry_PROJ.shp",
+                         borders="data/aoi_proj.shp",
                          linewidth=0.2,
                          legend=TRUE,
                          output_file="output/prob.png",
@@ -350,7 +350,7 @@ knitr::include_graphics("output/prob.png")
 # Projected forest cover change (2020-2050)
 fcc_2050 <- far$plot$fcc("output/fcc_2050.tif",
                         maxpixels=1e8,
-                        borders="data/ctry_PROJ.shp",
+                        borders="data/aoi_proj.shp",
                         linewidth=0.2,
                         output_file="output/fcc_2050.png",
                         figsize=c(5, 4), dpi=800)

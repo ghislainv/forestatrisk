@@ -196,7 +196,7 @@ def nice_plot_prob(
 fig = nice_plot_prob(
     "output/prob.tif",
     maxpixels=1e8,
-    borders="data/ctry_PROJ.gpkg",
+    borders="data/aoi_proj.gpkg",
     linewidth=0.2,
     legend=True,
     figsize=(5, 4),

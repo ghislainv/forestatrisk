@@ -62,7 +62,7 @@ gdal_rasterize -te $extent -tr 30 30 -tap \
 	       -burn 1 \
 	       -ot Byte \
 	       -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
-	       ctry_PROJ.shp ctry_PROJ.tif
+	       aoi_proj.shp aoi_proj.tif
 
 # =====
 # 1. Compute distance to forest edge at t2
@@ -142,31 +142,31 @@ gdal_translate -a_nodata 0 \
 echo "Mask forest rasters with country border\n"
 
 # Mask forest with country border
-gdal_calc.py --overwrite -A forest_t1_src.tif -B ctry_PROJ.tif \
+gdal_calc.py --overwrite -A forest_t1_src.tif -B aoi_proj.tif \
              --outfile=forest_t1.tif --type=Byte \
              --calc="A*B" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --quiet
 
-gdal_calc.py --overwrite -A forest_t2_src.tif -B ctry_PROJ.tif \
+gdal_calc.py --overwrite -A forest_t2_src.tif -B aoi_proj.tif \
              --outfile=forest_t2.tif --type=Byte \
              --calc="A*B" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --quiet
 
-gdal_calc.py --overwrite -A forest_t3_src.tif -B ctry_PROJ.tif \
+gdal_calc.py --overwrite -A forest_t3_src.tif -B aoi_proj.tif \
              --outfile=forest_t3.tif --type=Byte \
              --calc="A*B" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --quiet
 
-gdal_calc.py --overwrite -A forest_2005_src.tif -B ctry_PROJ.tif \
+gdal_calc.py --overwrite -A forest_2005_src.tif -B aoi_proj.tif \
              --outfile=forest_2005.tif --type=Byte \
              --calc="A*B" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
              --quiet
 
-gdal_calc.py --overwrite -A forest_2015_src.tif -B ctry_PROJ.tif \
+gdal_calc.py --overwrite -A forest_2015_src.tif -B aoi_proj.tif \
              --outfile=forest_2015.tif --type=Byte \
              --calc="A*B" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \
@@ -181,7 +181,7 @@ echo "Computing forest-cover change rasters\n"
 
 ## fcc23
 # Mask fcc23 with country border
-gdal_calc.py --overwrite -A fcc23_src.tif -B ctry_PROJ.tif \
+gdal_calc.py --overwrite -A fcc23_src.tif -B aoi_proj.tif \
              --outfile=fcc23.tif --type=Byte \
              --calc="255-254*(A==1)*(B==1)-255*(A==0)*(B==1)" \
              --co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" \

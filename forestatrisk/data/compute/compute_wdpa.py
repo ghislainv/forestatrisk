@@ -49,7 +49,7 @@ def compute_wdpa(iso, proj, extent, where=None, verbose=False):
         layerCreationOptions=["ENCODING=UTF-8"],
         callback=cback
     )
-    gdal.VectorTranslate("pa_PROJ.shp", "pa_" + iso + ".shp", options=param)
+    gdal.VectorTranslate("pa_proj.shp", "pa_" + iso + ".shp", options=param)
 
     # Rasterize
     param = gdal.RasterizeOptions(
@@ -61,12 +61,12 @@ def compute_wdpa(iso, proj, extent, where=None, verbose=False):
         noData=255,
         xRes=30,
         yRes=30,
-        layers=["pa_PROJ"],
+        layers=["pa_proj"],
         outputType=gdal.GDT_Byte,
         creationOptions=["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
         callback=cback
     )
-    gdal.Rasterize("pa.tif", "pa_PROJ.shp", options=param)
+    gdal.Rasterize("pa.tif", "pa_proj.shp", options=param)
 
 
 # End

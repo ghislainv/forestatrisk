@@ -222,7 +222,7 @@ data at 30m.
 
     proj="EPSG:3163"
     f1="gisdata/vectors/peridotite/2de32d40-dc86-4bd9-9b83-420699bc672e2020413-1-13dmpoq.2hll.shp"
-    f2="gisdata/vectors/peridotite/geol_PROJ.shp"
+    f2="gisdata/vectors/peridotite/geol_proj.shp"
     ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs $proj -f 'ESRI Shapefile' \
             -lco ENCODING=UTF-8 $f2 $f1
 
@@ -301,13 +301,13 @@ and 0 when not. Extent is obtained from file ``pa.tif`` with command
 .. code:: shell
 
     proj="EPSG:3163"
-    f2="gisdata/vectors/peridotite/geol_PROJ.shp"
+    f2="gisdata/vectors/peridotite/geol_proj.shp"
     f3="data/geol.tif"
     gdal_rasterize -te 139830 145470 568710 521700 -tap -burn 1 \
                    -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
     	       -init 0 \
                    -a_nodata 255 -a_srs "$proj" \
-    	       -ot Byte -tr 30 30 -l geol_PROJ $f2 $f3
+    	       -ot Byte -tr 30 30 -l geol_proj $f2 $f3
 
 Files
 ~~~~~
@@ -332,7 +332,7 @@ The ``data`` folder includes:
         input_fcc_raster="data/fcc23.tif",
         maxpixels=1e8,
         output_file="output/fcc23.png",
-        borders="data/ctry_PROJ.shp",
+        borders="data/aoi_proj.shp",
         linewidth=0.3, dpi=500)
 
 ::
@@ -1130,7 +1130,7 @@ Forest cover change for the period 2000-2010-2020
         input_fcc_raster="data/forest/fcc123.tif",
         maxpixels=1e8,
         output_file=ofile,
-        borders="data/ctry_PROJ.shp",
+        borders="data/aoi_proj.shp",
         linewidth=0.3,
         figsize=(6, 5), dpi=500)
     ofile
@@ -1147,7 +1147,7 @@ Spatial random effects
     ofile = "output/nb_newcal_rho_orig.png"
     fig_rho_orig = far.plot.rho(
         "output/rho_orig.tif",
-        borders="data/ctry_PROJ.shp",
+        borders="data/aoi_proj.shp",
         linewidth=0.5,
         output_file=ofile,
         figsize=(9,5), dpi=80)
@@ -1156,7 +1156,7 @@ Spatial random effects
     ofile = "output/nb_newcal_rho.png"
     fig_rho = far.plot.rho(
         "output/rho.tif",
-        borders="data/ctry_PROJ.shp",
+        borders="data/aoi_proj.shp",
         linewidth=0.5,
         output_file=ofile,
         figsize=(9,5), dpi=80)
@@ -1175,7 +1175,7 @@ Spatial probability of deforestation
     fig_prob = far.plot.prob(
         "output/prob.tif",
         maxpixels=1e8,
-        borders="data/ctry_PROJ.shp",
+        borders="data/aoi_proj.shp",
         linewidth=0.3,
         legend=True,
         output_file=ofile,
@@ -1195,7 +1195,7 @@ Future forest cover
     fcc_2050 = far.plot.fcc(
         "output/fcc_2050.tif",
         maxpixels=1e8,
-        borders="data/ctry_PROJ.shp",
+        borders="data/aoi_proj.shp",
         linewidth=0.3,
         output_file=ofile,
         figsize=(6, 5), dpi=500)
@@ -1211,7 +1211,7 @@ Future forest cover
     fcc_2100 = far.plot.fcc(
         "output/fcc_2100.tif",
         maxpixels=1e8,
-        borders="data/ctry_PROJ.shp",
+        borders="data/aoi_proj.shp",
         linewidth=0.3,
         output_file=ofile,
         figsize=(6, 5), dpi=500)

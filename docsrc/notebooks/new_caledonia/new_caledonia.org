@@ -243,7 +243,7 @@ data at 30m.
 #+begin_src shell :results output :session :exports both
 proj="EPSG:3163"
 f1="gisdata/vectors/peridotite/2de32d40-dc86-4bd9-9b83-420699bc672e2020413-1-13dmpoq.2hll.shp"
-f2="gisdata/vectors/peridotite/geol_PROJ.shp"
+f2="gisdata/vectors/peridotite/geol_proj.shp"
 ogr2ogr -overwrite -s_srs EPSG:4326 -t_srs $proj -f 'ESRI Shapefile' \
         -lco ENCODING=UTF-8 $f2 $f1
 #+end_src
@@ -325,13 +325,13 @@ Band 1 Block=14296x1 Type=Byte, ColorInterp=Gray
 
 #+begin_src shell :exports code
 proj="EPSG:3163"
-f2="gisdata/vectors/peridotite/geol_PROJ.shp"
+f2="gisdata/vectors/peridotite/geol_proj.shp"
 f3="data/geol.tif"
 gdal_rasterize -te 139830 145470 568710 521700 -tap -burn 1 \
                -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "BIGTIFF=YES" \
 	       -init 0 \
                -a_nodata 255 -a_srs "$proj" \
-	       -ot Byte -tr 30 30 -l geol_PROJ $f2 $f3
+	       -ot Byte -tr 30 30 -l geol_proj $f2 $f3
 #+end_src
 
 #+RESULTS:
@@ -356,7 +356,7 @@ fig_fcc23 = far.plot.fcc(
     input_fcc_raster="data/fcc23.tif",
     maxpixels=1e8,
     output_file="output/fcc23.png",
-    borders="data/ctry_PROJ.shp",
+    borders="data/aoi_proj.shp",
     linewidth=0.3, dpi=500)
 #+end_src
 
@@ -1123,7 +1123,7 @@ fig_fcc123 = far.plot.fcc123(
     input_fcc_raster="data/forest/fcc123.tif",
     maxpixels=1e8,
     output_file=ofile,
-    borders="data/ctry_PROJ.shp",
+    borders="data/aoi_proj.shp",
     linewidth=0.3,
     figsize=(6, 5), dpi=500)
 ofile
@@ -1140,7 +1140,7 @@ ofile
 ofile = "output/nb_newcal_rho_orig.png"
 fig_rho_orig = far.plot.rho(
     "output/rho_orig.tif",
-    borders="data/ctry_PROJ.shp",
+    borders="data/aoi_proj.shp",
     linewidth=0.5,
     output_file=ofile,
     figsize=(9,5), dpi=80)
@@ -1149,7 +1149,7 @@ fig_rho_orig = far.plot.rho(
 ofile = "output/nb_newcal_rho.png"
 fig_rho = far.plot.rho(
     "output/rho.tif",
-    borders="data/ctry_PROJ.shp",
+    borders="data/aoi_proj.shp",
     linewidth=0.5,
     output_file=ofile,
     figsize=(9,5), dpi=80)
@@ -1168,7 +1168,7 @@ ofile = "output/nb_newcal_prob.png"
 fig_prob = far.plot.prob(
     "output/prob.tif",
     maxpixels=1e8,
-    borders="data/ctry_PROJ.shp",
+    borders="data/aoi_proj.shp",
     linewidth=0.3,
     legend=True,
     output_file=ofile,
@@ -1188,7 +1188,7 @@ ofile = "output/nb_newcal_fcc_2050.png"
 fcc_2050 = far.plot.fcc(
     "output/fcc_2050.tif",
     maxpixels=1e8,
-    borders="data/ctry_PROJ.shp",
+    borders="data/aoi_proj.shp",
     linewidth=0.3,
     output_file=ofile,
     figsize=(6, 5), dpi=500)
@@ -1205,7 +1205,7 @@ ofile = "output/nb_newcal_fcc_2100.png"
 fcc_2100 = far.plot.fcc(
     "output/fcc_2100.tif",
     maxpixels=1e8,
-    borders="data/ctry_PROJ.shp",
+    borders="data/aoi_proj.shp",
     linewidth=0.3,
     output_file=ofile,
     figsize=(6, 5), dpi=500)
