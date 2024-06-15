@@ -80,7 +80,7 @@ def gstart():
         input_fcc_raster="data/fcc23.tif",
         maxpixels=1e8,
         output_file="output/fcc23.png",
-        borders="data/aoi_proj.shp",
+        borders="data/ctry_PROJ.shp",
         linewidth=0.3,
         dpi=500,
     )
