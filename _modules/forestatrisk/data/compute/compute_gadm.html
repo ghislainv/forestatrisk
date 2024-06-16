@@ -117,14 +117,14 @@
 <span class="k">def</span> <span class="nf">compute_gadm</span><span class="p">(</span><span class="n">ifile</span><span class="p">,</span> <span class="n">ofile</span><span class="p">,</span> <span class="n">proj</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Processing GADM data.</span>
 
-<span class="sd">    Extract layers to a new GPKG file called &quot;aoi_latlong.gpkg&quot; and</span>
-<span class="sd">    reproject this file to output file. Layer names for country border</span>
-<span class="sd">    and subjurisdictions are &quot;aoi&quot; (for &quot;area of interest&quot;) and &quot;subj&quot;</span>
-<span class="sd">    respectively. The extent of the area of interest is returned with</span>
-<span class="sd">    a buffer of 5 km.</span>
+<span class="sd">    Extract layers to a new GPKG file called &quot;aoi_latlong.gpkg&quot; (if it</span>
+<span class="sd">    doesn&#39;t exist yet) and reproject this file to output file. Layer</span>
+<span class="sd">    names for country border and subjurisdictions are &quot;aoi&quot; (for &quot;area</span>
+<span class="sd">    of interest&quot;) and &quot;subj&quot; respectively. The extent of the area of</span>
+<span class="sd">    interest is returned with a buffer of 5 km.</span>
 
 <span class="sd">    :param input_file: Path to input GADM GPKG file.</span>
-<span class="sd">    :param output_file: Path to GPKG output file.</span>
+<span class="sd">    :param output_file: Path to aoi GPKG output file.</span>
 <span class="sd">    :param proj: Projection definition (EPSG, PROJ.4, WKT) as in</span>
 <span class="sd">        GDAL/OGR. Used for reprojecting data.</span>
 <span class="sd">    :param verbose: Logical. Whether to print messages or not. Default</span>
@@ -136,23 +136,26 @@
 
     <span class="n">cb</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TermProgress</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="mi">0</span>
 
-    <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslate</span><span class="p">(</span>
-        <span class="n">aoi_latlon_file</span><span class="p">,</span> <span class="n">ifile</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GPKG&quot;</span><span class="p">,</span>
-        <span class="n">layers</span><span class="o">=</span><span class="s2">&quot;ADM_ADM_0&quot;</span><span class="p">,</span>
-        <span class="n">layerName</span><span class="o">=</span><span class="s2">&quot;aoi&quot;</span><span class="p">,</span>
-        <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="c1"># Use update access mode to not overwrite the file.</span>
-    <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslate</span><span class="p">(</span>
-        <span class="n">aoi_latlon_file</span><span class="p">,</span> <span class="n">ifile</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GPKG&quot;</span><span class="p">,</span>
-        <span class="n">layers</span><span class="o">=</span><span class="s2">&quot;ADM_ADM_1&quot;</span><span class="p">,</span>
-        <span class="n">layerName</span><span class="o">=</span><span class="s2">&quot;subj&quot;</span><span class="p">,</span>
-        <span class="n">accessMode</span><span class="o">=</span><span class="s2">&quot;update&quot;</span><span class="p">,</span>
-        <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="c1"># Change layer and file names</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">aoi_latlon_file</span><span class="p">):</span>
+        <span class="c1"># Change layer ADM_ADM_0 and file name</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslate</span><span class="p">(</span>
+            <span class="n">aoi_latlon_file</span><span class="p">,</span> <span class="n">ifile</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GPKG&quot;</span><span class="p">,</span>
+            <span class="n">layers</span><span class="o">=</span><span class="s2">&quot;ADM_ADM_0&quot;</span><span class="p">,</span>
+            <span class="n">layerName</span><span class="o">=</span><span class="s2">&quot;aoi&quot;</span><span class="p">,</span>
+            <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Change layer ADM_ADM_1</span>
+        <span class="c1"># NB: Use update access mode to not overwrite the file.</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslate</span><span class="p">(</span>
+            <span class="n">aoi_latlon_file</span><span class="p">,</span> <span class="n">ifile</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GPKG&quot;</span><span class="p">,</span>
+            <span class="n">layers</span><span class="o">=</span><span class="s2">&quot;ADM_ADM_1&quot;</span><span class="p">,</span>
+            <span class="n">layerName</span><span class="o">=</span><span class="s2">&quot;subj&quot;</span><span class="p">,</span>
+            <span class="n">accessMode</span><span class="o">=</span><span class="s2">&quot;update&quot;</span><span class="p">,</span>
+            <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="c1"># Reproject AOI</span>
     <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslateOptions</span><span class="p">(</span>

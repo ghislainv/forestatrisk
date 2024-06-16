@@ -102,7 +102,6 @@
 <span></span><span class="sd">&quot;&quot;&quot;Download SRTM data.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlretrieve</span>  <span class="c1"># Python 3</span>
@@ -141,13 +140,17 @@
     <span class="c1"># Create directory</span>
     <span class="n">make_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
-    <span class="c1"># Check for existing data</span>
-    <span class="n">gpkg_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;gadm41_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.gpkg&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">gpkg_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">download_gadm</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">gpkg_name</span><span class="p">)</span>
+    <span class="c1"># Check for existing data (either gadm or aoi)</span>
+    <span class="n">gpkg_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;gadm41_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.gpkg&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">gpkg_file</span><span class="p">):</span>
+        <span class="n">aoi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;aoi_latlon.gpkg&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">aoi_file</span><span class="p">):</span>
+            <span class="n">gpkg_file</span> <span class="o">=</span> <span class="n">aoi_file</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">download_gadm</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">gpkg_file</span><span class="p">)</span>
 
     <span class="c1"># Compute extent and SRTM tiles</span>
-    <span class="n">extent_latlong</span> <span class="o">=</span> <span class="n">get_vector_extent</span><span class="p">(</span><span class="n">gpkg_name</span><span class="p">)</span>
+    <span class="n">extent_latlong</span> <span class="o">=</span> <span class="n">get_vector_extent</span><span class="p">(</span><span class="n">gpkg_file</span><span class="p">)</span>
     <span class="n">tiles_long</span><span class="p">,</span> <span class="n">tiles_lat</span> <span class="o">=</span> <span class="n">tiles_srtm</span><span class="p">(</span><span class="n">extent_latlong</span><span class="p">)</span>
     <span class="n">tiles_long</span> <span class="o">=</span> <span class="n">tiles_long</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
     <span class="n">tiles_lat</span> <span class="o">=</span> <span class="n">tiles_lat</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
