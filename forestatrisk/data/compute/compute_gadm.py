@@ -14,14 +14,14 @@ opd = os.path.dirname
 def compute_gadm(ifile, ofile, proj, verbose=False):
     """Processing GADM data.
 
-    Extract layers to a new GPKG file called "aoi_latlong.gpkg" and
-    reproject this file to output file. Layer names for country border
-    and subjurisdictions are "aoi" (for "area of interest") and "subj"
-    respectively. The extent of the area of interest is returned with
-    a buffer of 5 km.
+    Extract layers to a new GPKG file called "aoi_latlong.gpkg" (if it
+    doesn't exist yet) and reproject this file to output file. Layer
+    names for country border and subjurisdictions are "aoi" (for "area
+    of interest") and "subj" respectively. The extent of the area of
+    interest is returned with a buffer of 5 km.
 
     :param input_file: Path to input GADM GPKG file.
-    :param output_file: Path to GPKG output file.
+    :param output_file: Path to aoi GPKG output file.
     :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
         GDAL/OGR. Used for reprojecting data.
     :param verbose: Logical. Whether to print messages or not. Default
@@ -33,23 +33,26 @@ def compute_gadm(ifile, ofile, proj, verbose=False):
 
     cb = gdal.TermProgress if verbose else 0
 
-    gdal.VectorTranslate(
-        aoi_latlon_file, ifile,
-        format="GPKG",
-        layers="ADM_ADM_0",
-        layerName="aoi",
-        callback=cb,
-    )
-
-    # Use update access mode to not overwrite the file.
-    gdal.VectorTranslate(
-        aoi_latlon_file, ifile,
-        format="GPKG",
-        layers="ADM_ADM_1",
-        layerName="subj",
-        accessMode="update",
-        callback=cb,
-    )
+    # Change layer and file names
+    if not os.path.isfile(aoi_latlon_file):
+        # Change layer ADM_ADM_0 and file name
+        gdal.VectorTranslate(
+            aoi_latlon_file, ifile,
+            format="GPKG",
+            layers="ADM_ADM_0",
+            layerName="aoi",
+            callback=cb,
+        )
+        # Change layer ADM_ADM_1
+        # NB: Use update access mode to not overwrite the file.
+        gdal.VectorTranslate(
+            aoi_latlon_file, ifile,
+            format="GPKG",
+            layers="ADM_ADM_1",
+            layerName="subj",
+            accessMode="update",
+            callback=cb,
+        )
 
     # Reproject AOI
     param = gdal.VectorTranslateOptions(

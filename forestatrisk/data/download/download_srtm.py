@@ -1,7 +1,6 @@
 """Download SRTM data."""
 
 import os
-from zipfile import ZipFile
 
 try:
     from urllib.request import urlretrieve  # Python 3
@@ -38,13 +37,17 @@ def download_srtm(iso3, output_dir="."):
     # Create directory
     make_dir(output_dir)
 
-    # Check for existing data
-    gpkg_name = os.path.join(output_dir, "gadm41_" + iso3 + "_0.gpkg")
-    if os.path.isfile(gpkg_name) is not True:
-        download_gadm(iso3, gpkg_name)
+    # Check for existing data (either gadm or aoi)
+    gpkg_file = os.path.join(output_dir, "gadm41_" + iso3 + "_0.gpkg")
+    if not os.path.isfile(gpkg_file):
+        aoi_file = os.path.join(output_dir, "aoi_latlon.gpkg")
+        if os.path.isfile(aoi_file):
+            gpkg_file = aoi_file
+        else:
+            download_gadm(iso3, gpkg_file)
 
     # Compute extent and SRTM tiles
-    extent_latlong = get_vector_extent(gpkg_name)
+    extent_latlong = get_vector_extent(gpkg_file)
     tiles_long, tiles_lat = tiles_srtm(extent_latlong)
     tiles_long = tiles_long.split("-")
     tiles_lat = tiles_lat.split("-")
