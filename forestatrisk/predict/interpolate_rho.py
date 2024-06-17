@@ -102,7 +102,7 @@ def interpolate_rho(
         xRes=csize_new * 1000,
         yRes=csize_new * 1000,
         resampleAlg=gdal.GRA_CubicSpline,
-        creationOptions=["COMPRESS=DEFLATE", "PREDICTOR=2"],
+        creationOptions=["COMPRESS=DEFLATE"],
     )
     gdal.Warp(output_file, rho_orig_filename, options=param)
 
