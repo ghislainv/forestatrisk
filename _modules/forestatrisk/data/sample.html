@@ -106,6 +106,7 @@
 <span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>  <span class="c1"># To explore files in a folder</span>
 <span class="kn">import</span> <span class="nn">os</span>  <span class="c1"># Operating system interfaces</span>
 <span class="kn">import</span> <span class="nn">sys</span>  <span class="c1"># To read and write files</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
 
 <span class="c1"># Third party imports</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  <span class="c1"># For arrays</span>
@@ -366,8 +367,10 @@
         <span class="n">yRes</span><span class="o">=-</span><span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
         <span class="n">separate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRT</span><span class="p">(</span><span class="s2">&quot;/vsimem/var.vrt&quot;</span><span class="p">,</span> <span class="n">raster_list</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
-    <span class="n">stack</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="s2">&quot;/vsimem/var.vrt&quot;</span><span class="p">)</span>
+    <span class="n">rand_uuid</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span>
+    <span class="n">vrt_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/vsimem/var_</span><span class="si">{</span><span class="n">rand_uuid</span><span class="si">}</span><span class="s2">.vrt&quot;</span>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRT</span><span class="p">(</span><span class="n">vrt_file</span><span class="p">,</span> <span class="n">raster_list</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">vrt_file</span><span class="p">)</span>
 
     <span class="c1"># List of nodata values</span>
     <span class="n">nband</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">RasterCount</span>
