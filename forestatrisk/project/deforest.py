@@ -168,7 +168,7 @@ def deforest(input_raster, hectares, output_file="output/fcc.tif", blk_rows=128)
         # Number of pixels that are really deforested
         deforpix = np.nonzero(prob_data >= threshold)
         # Forest-cover change
-        for_data = np.ones(shape=prob_data.shape).astype(np.int8)
+        for_data = np.ones(shape=prob_data.shape).astype(int)
         for_data = for_data * 255  # nodata
         for_data[prob_data != 0] = 1
         for_data[deforpix] = 0
