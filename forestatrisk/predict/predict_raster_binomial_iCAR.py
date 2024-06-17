@@ -14,7 +14,7 @@ from __future__ import division, print_function  # Python 3 compatibility
 from glob import glob
 import os
 import sys
-import random
+import uuid
 
 # Third party imports
 import numpy as np
@@ -109,8 +109,8 @@ def predict_raster_binomial_iCAR(
         yRes=-gt[5],
         separate=True,
     )
-    rand_int = random.randint(1, 999999)
-    vrt_file = f"/vsimem/var_{rand_int:06}.vrt"
+    rand_uuid = uuid.uuid4()
+    vrt_file = f"/vsimem/var_{rand_uuid}.vrt"
     cback = gdal.TermProgress if verbose else 0
     gdal.BuildVRT(vrt_file, raster_list,
                   options=param, callback=cback)

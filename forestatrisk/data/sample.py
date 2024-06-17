@@ -5,6 +5,7 @@ from __future__ import division, print_function  # Python 3 compatibility
 from glob import glob  # To explore files in a folder
 import os  # Operating system interfaces
 import sys  # To read and write files
+import uuid
 
 # Third party imports
 import numpy as np  # For arrays
@@ -263,8 +264,10 @@ def sample(
         yRes=-gt[5],
         separate=True,
     )
-    gdal.BuildVRT("/vsimem/var.vrt", raster_list, options=param)
-    stack = gdal.Open("/vsimem/var.vrt")
+    rand_uuid = uuid.uuid4()
+    vrt_file = f"/vsimem/var_{rand_uuid}.vrt"
+    gdal.BuildVRT(vrt_file, raster_list, options=param)
+    stack = gdal.Open(vrt_file)
 
     # List of nodata values
     nband = stack.RasterCount
