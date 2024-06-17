@@ -81,17 +81,14 @@ def interpolate_rho(
     print("Write spatial random effect data to disk")
     rho_B = rho_R.GetRasterBand(1)
     rho_B.WriteArray(rho_arr)
-    rho_B.FlushCache()
-    rho_B.SetNoDataValue(-9999)
+    rho_B.FlushCache()  # Write cache data to disk
 
     # Compute statistics
     print("Compute statistics")
-    rho_B.FlushCache()  # Write cache data to disk
     rho_B.ComputeStatistics(False)
 
-    # Build overviews
-    print("Build overview")
-    rho_R.BuildOverviews("average", [2, 4, 8, 16, 32])
+    # Set nodata value
+    rho_B.SetNoDataValue(-9999)
 
     # Dereference driver
     rho_B = None
@@ -100,12 +97,12 @@ def interpolate_rho(
     # Cubicspline interpolation to csize_new*1000 km
     print("Resampling spatial random effects to file " + output_file)
     param = gdal.WarpOptions(
-        srcNodata=-9999,
+        warpOptions=["overwrite"],
+        format="GTiff",
         xRes=csize_new * 1000,
         yRes=csize_new * 1000,
         resampleAlg=gdal.GRA_CubicSpline,
-        outputType=gdal.GDT_Float32,
-        creationOptions=["COMPRESS=LZW", "PREDICTOR=3", "BIGTIFF=YES"],
+        creationOptions=["COMPRESS=DEFLATE", "PREDICTOR=2"],
     )
     gdal.Warp(output_file, rho_orig_filename, options=param)
 
