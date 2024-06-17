@@ -152,7 +152,7 @@
         <span class="n">src_ds</span><span class="o">.</span><span class="n">RasterYSize</span><span class="p">,</span>
         <span class="mi">1</span><span class="p">,</span>
         <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_UInt32</span><span class="p">,</span>
-        <span class="p">[</span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;COMPRESS=DEFLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">],</span>
     <span class="p">)</span>
     <span class="n">dst_ds</span><span class="o">.</span><span class="n">SetGeoTransform</span><span class="p">(</span><span class="n">src_ds</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">())</span>
     <span class="n">dst_ds</span><span class="o">.</span><span class="n">SetProjection</span><span class="p">(</span><span class="n">src_ds</span><span class="o">.</span><span class="n">GetProjectionRef</span><span class="p">())</span>

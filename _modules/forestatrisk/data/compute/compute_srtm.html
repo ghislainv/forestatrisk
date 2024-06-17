@@ -127,7 +127,7 @@
     <span class="n">cback</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TermProgress</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="mi">0</span>
 
     <span class="c1"># Creation options</span>
-    <span class="n">copts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">]</span>
+    <span class="n">copts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;COMPRESS=DEFLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">]</span>
 
     <span class="c1"># Unzip files</span>
     <span class="n">zipfiles</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="s2">&quot;SRTM_*.zip&quot;</span><span class="p">)</span>

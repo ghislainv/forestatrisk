@@ -128,7 +128,7 @@
     <span class="n">cback</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TermProgress</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="mi">0</span>
 
     <span class="c1"># Creation options</span>
-    <span class="n">copts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">]</span>
+    <span class="n">copts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;COMPRESS=DEFLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">]</span>
 
     <span class="c1"># Reproject</span>
     <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">WarpOptions</span><span class="p">(</span>
@@ -184,7 +184,7 @@
         <span class="s1">&#39;-A </span><span class="si">{0}</span><span class="s1"> -B </span><span class="si">{1}</span><span class="s1"> &#39;</span>
         <span class="s1">&#39;--outfile=</span><span class="si">{2}</span><span class="s1"> --type=Byte &#39;</span>
         <span class="s1">&#39;--calc=&quot;255-254*(A==1)*(B==1)-255*(A==1)*(B==0)&quot; &#39;</span>
-        <span class="s1">&#39;--co &quot;COMPRESS=LZW&quot; --co &quot;PREDICTOR=2&quot; --co &quot;BIGTIFF=YES&quot; &#39;</span>
+        <span class="s1">&#39;--co &quot;COMPRESS=DEFLATE&quot; --co &quot;PREDICTOR=2&quot; --co &quot;BIGTIFF=YES&quot; &#39;</span>
         <span class="s1">&#39;--NoDataValue=255 --quiet&#39;</span><span class="p">)</span>
     <span class="c1"># Loop on bands</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbands</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
@@ -215,7 +215,7 @@
         <span class="s1">&#39;-A </span><span class="si">{0}</span><span class="s1"> -B aoi_proj.tif &#39;</span>
         <span class="s1">&#39;--outfile=</span><span class="si">{1}</span><span class="s1"> --type=Byte &#39;</span>
         <span class="s1">&#39;--calc=&quot;A*B&quot; &#39;</span>
-        <span class="s1">&#39;--co &quot;COMPRESS=LZW&quot; --co &quot;PREDICTOR=2&quot; --co &quot;BIGTIFF=YES&quot; &#39;</span>
+        <span class="s1">&#39;--co &quot;COMPRESS=DEFLATE&quot; --co &quot;PREDICTOR=2&quot; --co &quot;BIGTIFF=YES&quot; &#39;</span>
         <span class="s1">&#39;--quiet&#39;</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">rast_in</span><span class="p">,</span> <span class="n">rast_out</span><span class="p">):</span>
@@ -231,7 +231,7 @@
         <span class="s1">&#39;-A </span><span class="si">{0}</span><span class="s1"> -B aoi_proj.tif &#39;</span>
         <span class="s1">&#39;--outfile=</span><span class="si">{1}</span><span class="s1"> --type=Byte &#39;</span>
         <span class="s1">&#39;--calc=</span><span class="si">{2}</span><span class="s1"> &#39;</span>
-        <span class="s1">&#39;--co &quot;COMPRESS=LZW&quot; --co &quot;PREDICTOR=2&quot; --co &quot;BIGTIFF=YES&quot; &#39;</span>
+        <span class="s1">&#39;--co &quot;COMPRESS=DEFLATE&quot; --co &quot;PREDICTOR=2&quot; --co &quot;BIGTIFF=YES&quot; &#39;</span>
         <span class="s1">&#39;--NoDataValue=255 --quiet&#39;</span>
     <span class="p">)</span>
     <span class="n">calc_expr</span> <span class="o">=</span> <span class="s1">&#39;&quot;255-254*(A==1)*(B==1)-255*(A==0)*(B==1)&quot;&#39;</span>
@@ -246,7 +246,7 @@
         <span class="s1">&#39;-A </span><span class="si">{0}</span><span class="s1"> -B </span><span class="si">{1}</span><span class="s1"> &#39;</span>
         <span class="s1">&#39;--outfile=</span><span class="si">{2}</span><span class="s1"> --type=Byte &#39;</span>
         <span class="s1">&#39;--calc=&quot;255-254*(A==1)*(B==1)-255*(A==1)*(B==0)&quot; &#39;</span>
-        <span class="s1">&#39;--co &quot;COMPRESS=LZW&quot; --co &quot;PREDICTOR=2&quot; --co &quot;BIGTIFF=YES&quot; &#39;</span>
+        <span class="s1">&#39;--co &quot;COMPRESS=DEFLATE&quot; --co &quot;PREDICTOR=2&quot; --co &quot;BIGTIFF=YES&quot; &#39;</span>
         <span class="s1">&#39;--NoDataValue=255 --quiet&#39;</span><span class="p">)</span>
     <span class="n">rast_a</span> <span class="o">=</span> <span class="s2">&quot;forest_t1.tif&quot;</span>
     <span class="n">rast_b</span> <span class="o">=</span> <span class="s2">&quot;forest_t3.tif&quot;</span>
@@ -262,7 +262,7 @@
         <span class="s1">&#39;-A forest_t1.tif -B forest_t2.tif -C forest_t3.tif &#39;</span>
         <span class="s1">&#39;--outfile=fcc123.tif --type=Byte &#39;</span>
         <span class="s1">&#39;--calc=&quot;A+B+C&quot; &#39;</span>
-        <span class="s1">&#39;--co &quot;COMPRESS=LZW&quot; --co &quot;PREDICTOR=2&quot; --co &quot;BIGTIFF=YES&quot; &#39;</span>
+        <span class="s1">&#39;--co &quot;COMPRESS=DEFLATE&quot; --co &quot;PREDICTOR=2&quot; --co &quot;BIGTIFF=YES&quot; &#39;</span>
         <span class="s1">&#39;--NoDataValue=0 --quiet&#39;</span>
     <span class="p">)</span>
     <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
