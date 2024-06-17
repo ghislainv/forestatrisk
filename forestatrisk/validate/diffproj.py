@@ -68,7 +68,7 @@ def r_diffproj(inputA, inputB, output_file="diffproj.tif", blk_rows=128):
         nrow,
         1,
         gdal.GDT_Byte,
-        ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
+        ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"],
     )
     ds_out.SetGeoTransform(gt)
     ds_out.SetProjection(proj)

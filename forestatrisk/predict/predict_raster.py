@@ -131,7 +131,7 @@ def predict_raster(
         nrow,
         1,
         gdal.GDT_UInt16,
-        ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
+        ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"],
     )
     Pdrv.SetGeoTransform(gt)
     Pdrv.SetProjection(proj)

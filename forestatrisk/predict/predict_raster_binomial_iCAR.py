@@ -149,7 +149,7 @@ def predict_raster_binomial_iCAR(
         nrow,
         1,
         gdal.GDT_UInt16,
-        ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
+        ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"],
     )
     Pdrv.SetGeoTransform(gt)
     Pdrv.SetProjection(proj)
@@ -210,10 +210,6 @@ def predict_raster_binomial_iCAR(
         print("Compute statistics")
     Pband.FlushCache()  # Write cache data to disk
     Pband.ComputeStatistics(False)
-
-    # # Build overviews
-    # print("Build overviews")
-    # Pdrv.BuildOverviews("nearest", [4, 8, 16, 32])
 
     # Dereference driver
     Pband = None

@@ -137,7 +137,7 @@ def deforest(input_raster, hectares, output_file="output/fcc.tif", blk_rows=128)
         nrow,
         1,
         gdal.GDT_Byte,
-        ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
+        ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"],
     )
     fccR.SetGeoTransform(gt)
     fccR.SetProjection(proj)

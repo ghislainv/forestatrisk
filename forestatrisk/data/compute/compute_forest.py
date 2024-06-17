@@ -25,7 +25,7 @@ def compute_forest(proj, extent, verbose=False):
     cback = gdal.TermProgress if verbose else 0
 
     # Creation options
-    copts = ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"]
+    copts = ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"]
 
     # Reproject
     param = gdal.WarpOptions(
@@ -81,7 +81,7 @@ def compute_forest(proj, extent, verbose=False):
         '-A {0} -B {1} '
         '--outfile={2} --type=Byte '
         '--calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" '
-        '--co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
+        '--co "COMPRESS=DEFLATE" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
         '--NoDataValue=255 --quiet')
     # Loop on bands
     for i in range(nbands - 1):
@@ -112,7 +112,7 @@ def compute_forest(proj, extent, verbose=False):
         '-A {0} -B aoi_proj.tif '
         '--outfile={1} --type=Byte '
         '--calc="A*B" '
-        '--co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
+        '--co "COMPRESS=DEFLATE" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
         '--quiet'
     )
     for (i, j) in zip(rast_in, rast_out):
@@ -128,7 +128,7 @@ def compute_forest(proj, extent, verbose=False):
         '-A {0} -B aoi_proj.tif '
         '--outfile={1} --type=Byte '
         '--calc={2} '
-        '--co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
+        '--co "COMPRESS=DEFLATE" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
         '--NoDataValue=255 --quiet'
     )
     calc_expr = '"255-254*(A==1)*(B==1)-255*(A==0)*(B==1)"'
@@ -143,7 +143,7 @@ def compute_forest(proj, extent, verbose=False):
         '-A {0} -B {1} '
         '--outfile={2} --type=Byte '
         '--calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" '
-        '--co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
+        '--co "COMPRESS=DEFLATE" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
         '--NoDataValue=255 --quiet')
     rast_a = "forest_t1.tif"
     rast_b = "forest_t3.tif"
@@ -159,7 +159,7 @@ def compute_forest(proj, extent, verbose=False):
         '-A forest_t1.tif -B forest_t2.tif -C forest_t3.tif '
         '--outfile=fcc123.tif --type=Byte '
         '--calc="A+B+C" '
-        '--co "COMPRESS=LZW" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
+        '--co "COMPRESS=DEFLATE" --co "PREDICTOR=2" --co "BIGTIFF=YES" '
         '--NoDataValue=0 --quiet'
     )
     subprocess.run(cmd, shell=True, check=True,

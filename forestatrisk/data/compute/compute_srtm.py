@@ -24,7 +24,7 @@ def compute_srtm(proj, extent, verbose=False):
     cback = gdal.TermProgress if verbose else 0
 
     # Creation options
-    copts = ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"]
+    copts = ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"]
 
     # Unzip files
     zipfiles = glob("SRTM_*.zip")

@@ -63,7 +63,7 @@ def compute_wdpa(iso, proj, extent, where=None, verbose=False):
         yRes=30,
         layers=["pa_proj"],
         outputType=gdal.GDT_Byte,
-        creationOptions=["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
+        creationOptions=["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"],
         callback=cback
     )
     gdal.Rasterize("pa.tif", "pa_proj.shp", options=param)

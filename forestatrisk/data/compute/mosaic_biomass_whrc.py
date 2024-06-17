@@ -48,7 +48,7 @@ def mosaic_biomass_whrc(
             "TILED=YES",
             "BLOCKXSIZE=256",
             "BLOCKYSIZE=256",
-            "COMPRESS=LZW",
+            "COMPRESS=DEFLATE",
             "PREDICTOR=2",
             "BIGTIFF=YES",
         ],

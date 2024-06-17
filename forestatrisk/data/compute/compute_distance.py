@@ -49,7 +49,7 @@ def compute_distance(input_file, dist_file, values=0,
         src_ds.RasterYSize,
         1,
         gdal.GDT_UInt32,
-        ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
+        ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"],
     )
     dst_ds.SetGeoTransform(src_ds.GetGeoTransform())
     dst_ds.SetProjection(src_ds.GetProjectionRef())

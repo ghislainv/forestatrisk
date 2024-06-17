@@ -68,7 +68,7 @@ def compute_osm(proj, extent, verbose=False):
     cback = gdal.TermProgress if verbose else 0
 
     # Creation options
-    copts = ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"]
+    copts = ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"]
 
     # Useful lists
     line_cat = ["roads", "towns", "rivers"]

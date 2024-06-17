@@ -94,7 +94,7 @@ def resample_sum(input_raster, output_raster, val=0, window_size=2):
         nrow_out,
         1,
         gdal.GDT_UInt32,
-        ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"],
+        ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"],
     )
     ds_out.SetGeoTransform(gt_out)
     ds_out.SetProjection(ds_in.GetProjection())  # Copy projection info
@@ -152,7 +152,7 @@ def resample_sum(input_raster, output_raster, val=0, window_size=2):
 # driver = gdal.GetDriverByName("GTiff")
 # ds = driver.Create("test.tif", 11, 11, 1,
 #                    gdal.GDT_UInt32,
-#                    ["COMPRESS=LZW", "PREDICTOR=2", "BIGTIFF=YES"])
+#                    ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"])
 # band = ds.GetRasterBand(1)
 # band.WriteArray(a, 0, 0)
 # band.FlushCache()
