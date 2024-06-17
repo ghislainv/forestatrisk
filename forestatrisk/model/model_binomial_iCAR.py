@@ -16,7 +16,7 @@ from __future__ import division, print_function  # Python 3 compatibility
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
 import numpy as np
-from patsy import dmatrices, build_design_matrices, EvalEnvironment
+from patsy.highlevel import dmatrices, build_design_matrices, EvalEnvironment
 from sklearn.linear_model import LogisticRegression
 
 # Local application imports
