@@ -13,11 +13,11 @@
 # Import
 import io
 import re
-from distutils.core import Extension
-from setuptools import setup, find_packages
-import numpy.distutils.misc_util
+from setuptools import setup, find_packages, Extension
+import numpy
 
-
+# Get the numpy include directory.
+numpy_include_dir = numpy.get_include()
 # find_version
 def find_version(pkg_name):
     """Finding package version."""
@@ -66,7 +66,7 @@ setup(
     ],
     keywords="deforestation hbm hierarchical logistic model probability "
     "risk Bayesian spatial autocorrelation",
-    python_requires=">=3.6, <3.12",
+    python_requires=">=3.6",
     ext_modules=[hbm_module],
     packages=find_packages(),
     package_dir={"forestatrisk": "forestatrisk"},
@@ -94,7 +94,7 @@ setup(
         "interactive": ["jupyter", "python-dotenv", "geopandas",
                         "descartes", "folium"]
     },
-    include_dirs=numpy.distutils.misc_util.get_numpy_include_dirs(),
+    include_dirs=[numpy_include_dir],
     zip_safe=False,
 )
 
