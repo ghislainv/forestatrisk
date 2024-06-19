@@ -1,16 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """Installation setup."""
 
-# ================================================================
-# author          :Ghislain Vieilledent
-# email           :ghislain.vieilledent@cirad.fr
-# web             :https://ecology.ghislainv.fr
-# python_version  :>=2.7
-# license         :GPLv3
-# ================================================================
-
-# Import
 import io
 import re
 from setuptools import setup, find_packages, Extension
@@ -18,7 +7,8 @@ import numpy
 
 # Get the numpy include directory.
 numpy_include_dir = numpy.get_include()
-# find_version
+
+
 def find_version(pkg_name):
     """Finding package version."""
     with open(f"{pkg_name}/__init__.py", encoding="utf-8") as init_file:
