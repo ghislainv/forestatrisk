@@ -9,7 +9,13 @@ forestatrisk 1.2
 * Removing functions ``run_gee_biomass_whrc()``, ``download_biomass_whrc()``, and dependencies.
 * Package `geefcc <https://ecology.ghislainv.fr/geefcc/>`_ can now be used to compute and download forest from GEE.
 * Adding dependency to ``geefcc``.
-
+* Upgrading GADM to v4.1.
+* New Python API doc on website.
+* Modifying random forest to accept number of trees and max depth.
+* Update progress bar to mimic gdal progress.
+* Compatibility with Python >= 3.12 and Numpy >= 1.23
+* Several other improvements and bug corrections: https://github.com/ghislainv/forestatrisk/compare/v1.1.3...v1.2
+  
 forestatrisk 1.1.3
 ++++++++++++++++++
 
