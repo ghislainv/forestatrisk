@@ -1,0 +1,122 @@
+id	cont_run	ctry_run	iso3	ctry_long_name	ctry_geofab	cont_geofab	ctry_osmfr	cont_osmfr	area_code	area_name	area_ctry	area_cont
+1	Africa	Angola	AGO	Angola	angola	africa	angola	africa	AGO	Angola	Angola	Africa
+2	Africa	Burundi	BDI	Burundi	burundi	africa	burundi	africa	BDI	Burundi	Burundi	Africa
+3	Africa	Benin	BEN	Benin	benin	africa	benin	africa	BEN	Benin	Benin	Africa
+4	Africa	CAR	CAF	Central African Republic	central-african-republic	africa	central_african_republic	africa	CAF	CAR	CAR	Africa
+5	Africa	Ivory Coast	CIV	Côte D'Ivoire	ivory-coast	africa	ivory_coast	africa	CIV	Ivory Coast	Ivory Coast	Africa
+6	Africa	Cameroon	CMR	Cameroon	cameroon	africa	cameroon	africa	CMR	Cameroon	Cameroon	Africa
+7	Africa	DRC	COD	Democratic Republic of the Congo	congo-democratic-republic	africa	congo_kinshasa	africa	COD	DRC	DRC	Africa
+8	Africa	Congo	COG	Congo	congo-brazzaville	africa	congo_brazzaville	africa	COG	Congo	Congo	Africa
+9	Africa	Comoros	COM	Comoros	comores	africa	comoros	africa	COM	Comoros	Comoros	Africa
+10	Africa	Ethiopia	ETH	Ethiopia	ethiopia	africa	NA	NA	ETH	Ethiopia	Ethiopia	Africa
+11	Africa	Gabon	GAB	Gabon	gabon	africa	gabon	africa	GAB	Gabon	Gabon	Africa
+12	Africa	Ghana	GHA	Ghana	ghana	africa	ghana	africa	GHA	Ghana	Ghana	Africa
+13	Africa	Guinea	GIN	Guinea	guinea	africa	guinea	africa	GIN	Guinea	Guinea	Africa
+14	Africa	Gambia	GMB	Gambia (Islamic Republic of the)	senegal-and-gambia	africa	gambia	africa	GMB	Gambia	Gambia	Africa
+15	Africa	Guinea Bissau	GNB	Guinea Bissau	guinea-bissau	africa	NA	NA	GNB	Guinea Bissau	Guinea Bissau	Africa
+16	Africa	Eq. Guinea	GNQ	Equatorial Guinea	equatorial-guinea	africa	equatorial_guinea	africa	GNQ	Eq. Guinea	Eq. Guinea	Africa
+17	Africa	Kenya	KEN	Kenya	kenya	africa	kenya	africa	KEN	Kenya	Kenya	Africa
+18	Africa	Liberia	LBR	Liberia	liberia	africa	NA	NA	LBR	Liberia	Liberia	Africa
+19	Africa	Madagascar	MDG	Madagascar	madagascar	africa	NA	NA	MDG	Madagascar	Madagascar	Africa
+20	Africa	Mauritius	MUS	Mauritius	mauritius	africa	mauritius	africa	MUS	Mauritius	Mauritius	Africa
+21	Africa	Malawi	MWI	Malawi	malawi	africa	malawi	africa	MWI	Malawi	Malawi	Africa
+22	Africa	Mayotte	MYT	Mayotte	france/mayotte	europe	mayotte	africa	MYT	Mayotte	Mayotte	Africa
+23	Africa	Nigeria	NGA	Nigeria	nigeria	africa	NA	NA	NGA	Nigeria	Nigeria	Africa
+24	Africa	Reunion	REU	Reunion	france/reunion	europe	reunion	africa	REU	Reunion	Reunion	Africa
+25	Africa	Rwanda	RWA	Rwanda	rwanda	africa	rwanda	africa	RWA	Rwanda	Rwanda	Africa
+26	Africa	Senegal	SEN	Senegal	senegal-and-gambia	africa	senegal	africa	SEN	Senegal	Senegal	Africa
+27	Africa	Sierra Leone	SLE	Sierra Leone	sierra-leone	africa	NA	NA	SLE	Sierra Leone	Sierra Leone	Africa
+28	Africa	South Sudan	SSD	South Sudan	south-sudan	africa	south_sudan	africa	SSD	South Sudan	South Sudan	Africa
+29	Africa	Sao Tome and P.	STP	Sao Tome and Principe	sao-tome-and-principe	africa	sao_tome_and_principe	africa	STP	Sao Tome and P.	Sao Tome and P.	Africa
+30	Africa	Togo	TGO	Togo	togo	africa	togo	africa	TGO	Togo	Togo	Africa
+31	Africa	Tanzania	TZA	United Republic of Tanzania	tanzania	africa	NA	NA	TZA	Tanzania	Tanzania	Africa
+32	Africa	Uganda	UGA	Uganda	uganda	africa	uganda	africa	UGA	Uganda	Uganda	Africa
+33	Africa	Zambia	ZMB	Zambia	zambia	africa	zambia	africa	ZMB	Zambia	Zambia	Africa
+34	America	Antigua and B.	ATG	Antigua and Barbuda	NA	NA	antigua_and_barbuda	central-america	ATG	Antigua and B.	Antigua and B.	America
+35	America	Bahamas	BHS	Bahamas	bahamas	central-america	bahamas	central-america	BHS	Bahamas	Bahamas	America
+36	America	Belize	BLZ	Belize	belize	central-america	NA	NA	BLZ	Belize	Belize	America
+37	America	Bolivia	BOL	Bolivia (Plurinational State of)	bolivia	south-america	NA	NA	BOL	Bolivia	Bolivia	America
+38	America	Barbados	BRB	Barbados	NA	NA	barbados	central-america	BRB	Barbados	Barbados	America
+39	America	Chile	CHL	Chile	chile	south-america	chile	south-america	CHL	Chile	Chile	America
+40	America	Colombia	COL	Colombia	colombia	south-america	NA	NA	COL	Colombia	Colombia	America
+41	America	Costa Rica	CRI	Costa Rica	NA	NA	costa_rica	central-america	CRI	Costa Rica	Costa Rica	America
+42	America	Cuba	CUB	Cuba	cuba	central-america	NA	NA	CUB	Cuba	Cuba	America
+43	America	Dominica	DMA	Dominica	NA	NA	dominica	central-america	DMA	Dominica	Dominica	America
+44	America	Dominican Rep.	DOM	Dominican Republic	haiti-and-domrep	central-america	NA	NA	DOM	Dominican Rep.	Dominican Rep.	America
+45	America	Ecuador	ECU	Ecuador	ecuador	south-america	NA	NA	ECU	Ecuador	Ecuador	America
+46	America	Guadeloupe	GLP	Guadeloupe	france/guadeloupe	europe	guadeloupe	central-america	GLP	Guadeloupe	Guadeloupe	America
+47	America	Grenada	GRD	Grenada	NA	NA	grenada	central-america	GRD	Grenada	Grenada	America
+48	America	Guatemala	GTM	Guatemala	guatemala	central-america	NA	NA	GTM	Guatemala	Guatemala	America
+49	America	French Guiana	GUF	French Guiana	france/guyane	europe	guyane	south-america	GUF	French Guiana	French Guiana	America
+50	America	Guyana	GUY	Guyana	NA	NA	guyana	south-america	GUY	Guyana	Guyana	America
+51	America	Honduras	HND	Honduras	NA	NA	honduras	central-america	HND	Honduras	Honduras	America
+52	America	Haiti	HTI	Haiti	haiti-and-domrep	central-america	NA	NA	HTI	Haiti	Haiti	America
+53	America	Jamaica	JAM	Jamaica	jamaica	central-america	jamaica	central-america	JAM	Jamaica	Jamaica	America
+54	America	Saint Kitts and N.	KNA	Saint Kitts and Nevis	NA	NA	saint_kitts_and_nevis	central-america	KNA	Saint Kitts and N.	Saint Kitts and N.	America
+55	America	Saint Lucia	LCA	Saint Lucia	NA	NA	saint_lucia	central-america	LCA	Saint Lucia	Saint Lucia	America
+56	America	Saint Martin	MAF	Saint Martin (French part)	NA	NA	saint_martin	central-america	MAF	Saint Martin	Saint Martin	America
+57	America	Mexico	MEX	Mexico	mexico	north-america	NA	NA	MEX	Mexico	Mexico	America
+58	America	Montserrat	MSR	Montserrat	NA	NA	montserrat	central-america	MSR	Montserrat	Montserrat	America
+59	America	Martinique	MTQ	Martinique	france/martinique	europe	martinique	central-america	MTQ	Martinique	Martinique	America
+60	America	Nicaragua	NIC	Nicaragua	nicaragua	central-america	nicaragua	central-america	NIC	Nicaragua	Nicaragua	America
+61	America	Panama	PAN	Panama	NA	NA	panama	central-america	PAN	Panama	Panama	America
+62	America	Peru	PER	Peru	peru	south-america	NA	NA	PER	Peru	Peru	America
+63	America	Puerto Rico	PRI	Puerto Rico	us/puerto-rico	north-america	puerto_rico	central-america	PRI	Puerto Rico	Puerto Rico	America
+64	America	Paraguay	PRY	Paraguay	paraguay	south-america	paraguay	south-america	PRY	Paraguay	Paraguay	America
+65	America	El Salvador	SLV	El Salvador	NA	NA	el_salvador	central-america	SLV	El Salvador	El Salvador	America
+66	America	Suriname	SUR	Suriname	suriname	south-america	suriname	south-america	SUR	Suriname	Suriname	America
+67	America	Sint Maarten	SXM	Sint Maarten (Dutch part)	NA	NA	sint_maarten	central-america	SXM	Sint Maarten	Sint Maarten	America
+68	America	Trinidad and Tobago	TTO	Trinidad and Tobago	NA	NA	trinidad_and_tobago	south-america	TTO	Trinidad and Tobago	Trinidad and Tobago	America
+69	America	Saint Vincent	VCT	Saint Vincent and the Grenadines	NA	NA	saint_vincent_and_the_grenadines	central-america	VCT	Saint Vincent	Saint Vincent	America
+70	America	Venezuela	VEN	Venezuela, Bolivarian Republic of	venezuela	south-america	venezuela	south-america	VEN	Venezuela	Venezuela	America
+71	America	Virgin Isl. UK	VGB	Virgin Islands, British	NA	NA	british_virgin_islands	central-america	VGB	Virgin Isl. UK	Virgin Isl. UK	America
+72	America	Virgin Isl. US	VIR	Virgin Islands, U.S.	NA	NA	usa_virgin_islands	central-america	VIR	Virgin Isl. US	Virgin Isl. US	America
+73	Asia	Queensland	AUS-QLD	Queensland	NA	NA	australia/queensland	oceania	QLD	Australia – Queensland	Australia	Asia
+74	Asia	Bangladesh	BGD	Bangladesh	bangladesh	asia	NA	NA	BGD	Bangladesh	Bangladesh	Asia
+75	Asia	Brunei	BRN	Brunei Darussalam	NA	NA	brunei	asia	BRN	Brunei	Brunei	Asia
+76	Asia	Bhutan	BTN	Bhutan	bhutan	asia	bhutan	asia	BTN	Bhutan	Bhutan	Asia
+77	Asia	Fiji	FJI	Fiji	fiji	australia-oceania	NA	NA	FJI	Fiji	Fiji	Asia
+78	Asia	Indonesia	IDN	Indonesia	indonesia	asia	indonesia	asia	IDN	Indonesia	Indonesia	Asia
+79	Asia	Ind. Andaman	IND-AND	India, Andaman and Nicobar	india	asia	india	asia	AN	India – Andaman and N.	India	Asia
+80	Asia	Ind. Ghats	IND-WEST	India, Western Ghats	india	asia	india	asia	WG	India – West. Ghats	India	Asia
+81	Asia	Ind. North-East	IND-EAST	India, North-East	india	asia	india	asia	NE	India – North-East	India	Asia
+82	Asia	Cambodia	KHM	Cambodia	cambodia	asia	cambodia	asia	KHM	Cambodia	Cambodia	Asia
+83	Asia	Laos	LAO	Lao People's Democratic Republic	laos	asia	laos	asia	LAO	Laos	Laos	Asia
+84	Asia	Sri Lanka	LKA	Sri Lanka	sri-lanka	asia	NA	NA	LKA	Sri Lanka	Sri Lanka	Asia
+85	Asia	Myanmar	MMR	Myanmar	myanmar	asia	mayanmar	asia	MMR	Myanmar	Myanmar	Asia
+86	Asia	Malaysia	MYS	Malaysia	malaysia-singapore-brunei	asia	malaysia	asia	MYS	Malaysia	Malaysia	Asia
+87	Asia	New Caledonia	NCL	New Caledonia	new-caledonia	australia-oceania	new_caledonia	oceania	NCL	New Caledonia	New Caledonia	Asia
+88	Asia	Philippines	PHL	Philippines	philippines	asia	NA	NA	PHL	Philippines	Philippines	Asia
+89	Asia	Papua New Guinea	PNG	Papua New Guinea	papua-new-guinea	australia-oceania	papua_new_guinea	oceania	PNG	Papua New Guinea	Papua New Guinea	Asia
+90	Asia	Singapore	SGP	Singapore	NA	NA	singapore	asia	SGP	Singapore	Singapore	Asia
+91	Asia	Solomon Isl.	SLB	Solomon Islands	NA	NA	solomon_islands	oceania	SLB	Solomon Isl.	Solomon Isl.	Asia
+92	Asia	Thailand	THA	Thailand	thailand	asia	NA	NA	THA	Thailand	Thailand	Asia
+93	Asia	Timor-Leste	TLS	Timor-Leste	NA	NA	east_timor	asia	TLS	Timor-Leste	Timor-Leste	Asia
+94	Asia	Vietnam	VNM	Viet Nam	vietnam	asia	NA	NA	VNM	Vietnam	Vietnam	Asia
+95	Asia	Vanuatu	VUT	Vanuatu	NA	NA	vanuatu	oceania	VUT	Vanuatu	Vanuatu	Asia
+96	Brazil	Acre	BRA-AC	Acre	NA	NA	north/acre	south-america/brazil	AC	Brazil – Acre	Brazil	America
+97	Brazil	Alagoas	BRA-AL	Alagoas	NA	NA	northeast/alagoas	south-america/brazil	AL	Brazil – Alagoas	Brazil	America
+98	Brazil	Amazonas	BRA-AM	Amazonas	NA	NA	north/amazonas	south-america/brazil	AM	Brazil – Amazonas	Brazil	America
+99	Brazil	Amapa	BRA-AP	Amapá	NA	NA	north/amapa	south-america/brazil	AP	Brazil – Amapa	Brazil	America
+100	Brazil	Bahia	BRA-BA	Bahia	NA	NA	northeast/bahia	south-america/brazil	BA	Brazil – Bahia	Brazil	America
+101	Brazil	Ceara	BRA-CE	Ceará	NA	NA	northeast/ceara	south-america/brazil	CE	Brazil – Ceara	Brazil	America
+102	Brazil	Espirito Santo	BRA-ES	Espírito Santo	NA	NA	southeast/espirito-santo	south-america/brazil	ES	Brazil – Espirito Santo	Brazil	America
+103	Brazil	Goias	BRA-GO	Goiás	NA	NA	central-west/goias	south-america/brazil	GO	Brazil – Goias	Brazil	America
+104	Brazil	Maranhao	BRA-MA	Maranhão	NA	NA	northeast/maranhao	south-america/brazil	MA	Brazil – Maranhao	Brazil	America
+105	Brazil	Minas Gerais	BRA-MG	Minas Gerais	NA	NA	southeast/minas-gerais	south-america/brazil	MG	Brazil – Minas Gerais	Brazil	America
+106	Brazil	Mato Grosso do Sul	BRA-MS	Mato Grosso do Sul	NA	NA	central-west/mato-grosso-do-sul	south-america/brazil	MS	Brazil – Mato Grosso do Sul	Brazil	America
+107	Brazil	Mato Grosso	BRA-MT	Mato Grosso	NA	NA	central-west/mato-grosso	south-america/brazil	MT	Brazil – Mato Grosso	Brazil	America
+108	Brazil	Para	BRA-PA	Pará	NA	NA	north/para	south-america/brazil	PA	Brazil – Para	Brazil	America
+109	Brazil	Paraiba	BRA-PB	Paraíba	NA	NA	northeast/paraiba	south-america/brazil	PB	Brazil – Paraiba	Brazil	America
+110	Brazil	Pernambouco	BRA-PE	Pernambouco	NA	NA	northeast/pernambuco	south-america/brazil	PE	Brazil – Pernambouco	Brazil	America
+111	Brazil	Piaui	BRA-PI	Piauí	NA	NA	northeast/piaui	south-america/brazil	PI	Brazil – Piaui	Brazil	America
+112	Brazil	Parana	BRA-PR	Paraná	NA	NA	south/parana	south-america/brazil	PR	Brazil – Parana	Brazil	America
+113	Brazil	Rio de Janeiro	BRA-RJ	Rio de Janeiro	NA	NA	southeast/rio-de-janeiro	south-america/brazil	RJ	Brazil – Rio de Janeiro	Brazil	America
+114	Brazil	Rio Grande do Norte	BRA-RN	Rio Grande do Norte	NA	NA	northeast/rio-grande-do-norte	south-america/brazil	RN	Brazil – Rio Grande do Norte	Brazil	America
+115	Brazil	Rondonia	BRA-RO	Rondônia	NA	NA	north/rondonia	south-america/brazil	RO	Brazil – Rondonia	Brazil	America
+116	Brazil	Roraima	BRA-RR	Roraima	NA	NA	north/roraima	south-america/brazil	RR	Brazil – Roraima	Brazil	America
+117	Brazil	Rio Grande do Sul	BRA-RS	Rio Grande do Sul	NA	NA	south/rio-grande-do-sul	south-america/brazil	RS	Brazil – Rio Grande do Sul	Brazil	America
+118	Brazil	Santa Catarina	BRA-SC	Santa Catarina	NA	NA	south/santa-catarina	south-america/brazil	SC	Brazil – Santa Catarina	Brazil	America
+119	Brazil	Sergipe	BRA-SE	Sergipe	NA	NA	northeast/sergipe	south-america/brazil	SE	Brazil – Sergipe	Brazil	America
+120	Brazil	Sao Paulo	BRA-SP	São Paulo	NA	NA	southeast/sao-paulo	south-america/brazil	SP	Brazil – Sao Paulo	Brazil	America
+121	Brazil	Tocantins	BRA-TO	Tocantins	NA	NA	north/tocantins	south-america/brazil	TO	Brazil – Tocantins	Brazil	America
