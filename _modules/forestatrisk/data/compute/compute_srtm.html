@@ -164,10 +164,11 @@
 
     <span class="c1"># Convert to Int16</span>
     <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TranslateOptions</span><span class="p">(</span>
-        <span class="n">outputType</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Int16</span><span class="p">,</span> <span class="n">creationOptions</span><span class="o">=</span><span class="n">copts</span><span class="p">,</span>
+        <span class="n">outputType</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Int16</span><span class="p">,</span>
+        <span class="n">creationOptions</span><span class="o">=</span><span class="n">copts</span><span class="p">,</span>
         <span class="n">callback</span><span class="o">=</span><span class="n">cback</span>
     <span class="p">)</span>
-    <span class="n">gdal</span><span class="o">.</span><span class="n">Translate</span><span class="p">(</span><span class="s2">&quot;slope.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;_slope.tif&quot;</span><span class="p">)</span></div>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">Translate</span><span class="p">(</span><span class="s2">&quot;slope.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;_slope.tif&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span></div>
 
 
 
