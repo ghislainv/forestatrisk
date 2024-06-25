@@ -61,10 +61,11 @@ def compute_srtm(proj, extent, verbose=False):
 
     # Convert to Int16
     param = gdal.TranslateOptions(
-        outputType=gdal.GDT_Int16, creationOptions=copts,
+        outputType=gdal.GDT_Int16,
+        creationOptions=copts,
         callback=cback
     )
-    gdal.Translate("slope.tif", "_slope.tif")
+    gdal.Translate("slope.tif", "_slope.tif", options=param)
 
 
 # End
