@@ -18,6 +18,8 @@ import numpy
 
 # Get the numpy include directory.
 numpy_include_dir = numpy.get_include()
+
+
 # find_version
 def find_version(pkg_name):
     """Finding package version."""
