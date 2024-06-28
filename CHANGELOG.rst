@@ -1,6 +1,13 @@
 Changelog
 =========
 
+forestatrisk 1.2.1
+++++++++++++++++++
+
+* Compatibility with Python 3.12
+* Bug corrections.
+* List of changes: https://github.com/ghislainv/forestatrisk/compare/v1.2...v1.2.1
+
 forestatrisk 1.2
 ++++++++++++++++++
 
