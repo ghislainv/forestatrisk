@@ -61,7 +61,7 @@ def compute_distance(input_file, dist_file, values=0,
     # Compute distance
     val = "VALUES=" + str(values)
     use_input_nodata = "USE_INPUT_NODATA=" + ui_nodata
-    cb = gdal.TermProgress if verbose else 0
+    cb = gdal.TermProgress_nocb if verbose else 0
     gdal.ComputeProximity(
         srcband,
         dstband,

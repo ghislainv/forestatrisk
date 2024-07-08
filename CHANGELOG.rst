@@ -1,6 +1,12 @@
 Changelog
 =========
 
+forestatrisk 1.2.2
+++++++++++++++++++
+
+* Replacing ``gdal.TermProgress`` with ``gdal.TermProgress_nocb``.
+* Changes: https://github.com/ghislainv/forestatrisk/compare/v1.2.1...v1.2.2
+
 forestatrisk 1.2.1
 ++++++++++++++++++
 

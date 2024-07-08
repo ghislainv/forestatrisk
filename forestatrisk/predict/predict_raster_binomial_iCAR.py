@@ -111,7 +111,7 @@ def predict_raster_binomial_iCAR(
     )
     rand_uuid = uuid.uuid4()
     vrt_file = f"/vsimem/var_{rand_uuid}.vrt"
-    cback = gdal.TermProgress if verbose else 0
+    cback = gdal.TermProgress_nocb if verbose else 0
     gdal.BuildVRT(vrt_file, raster_list,
                   options=param, callback=cback)
     stack = gdal.Open(vrt_file)

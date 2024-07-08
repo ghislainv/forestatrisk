@@ -31,7 +31,7 @@ def compute_gadm(ifile, ofile, proj, verbose=False):
 
     aoi_latlon_file = opj(opd(ofile), "aoi_latlon.gpkg")
 
-    cb = gdal.TermProgress if verbose else 0
+    cb = gdal.TermProgress_nocb if verbose else 0
 
     # Change layer and file names
     if not os.path.isfile(aoi_latlon_file):

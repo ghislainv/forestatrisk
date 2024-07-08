@@ -1,6 +1,7 @@
 """Processing forest data."""
 
 import subprocess
+from glob import glob
 
 from osgeo import gdal
 
@@ -22,10 +23,20 @@ def compute_forest(proj, extent, verbose=False):
     """
 
     # Callback
-    cback = gdal.TermProgress if verbose else 0
+    cback = gdal.TermProgress_nocb if verbose else 0
 
     # Creation options
     copts = ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"]
+
+    # Make vrt
+    tif_forest_files = glob("forest_tiles/forest_*.tif")
+    forest_vrt = gdal.BuildVRT(
+        "forest.vrt",
+        tif_forest_files,
+        callback=cback)
+    # Flush cache
+    forest_vrt.FlushCache()
+    forest_vrt = None
 
     # Reproject
     param = gdal.WarpOptions(

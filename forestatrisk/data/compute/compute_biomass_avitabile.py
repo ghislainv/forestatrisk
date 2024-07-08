@@ -29,7 +29,7 @@ def compute_biomass_avitabile(proj, extent, verbose=False):
     """
 
     # Callback
-    cback = gdal.TermProgress if verbose else 0
+    cback = gdal.TermProgress_nocb if verbose else 0
 
     # Creation options
     copts = ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"]

@@ -24,7 +24,7 @@ def compute_wdpa(iso, proj, extent, where=None, verbose=False):
     """
 
     # Callback
-    cback = gdal.TermProgress if verbose else 0
+    cback = gdal.TermProgress_nocb if verbose else 0
 
     # Defaut value for where
     if where is None:
