@@ -88,7 +88,7 @@ def compute_forest(proj, extent, verbose=False):
     # Compute fcc
     # Command to compute fcc
     cmd_str = (
-        'gdal_calc.py --overwrite '
+        'gdal_calc --overwrite '
         '-A {0} -B {1} '
         '--outfile={2} --type=Byte '
         '--calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" '
@@ -119,7 +119,7 @@ def compute_forest(proj, extent, verbose=False):
     rast_in = [f"forest_t{i + k}_src.tif" for i in range(nbands)]
     rast_out = [f"forest_t{i + k}.tif" for i in range(nbands)]
     cmd_str = (
-        'gdal_calc.py --overwrite '
+        'gdal_calc --overwrite '
         '-A {0} -B aoi_proj.tif '
         '--outfile={1} --type=Byte '
         '--calc="A*B" '
@@ -135,7 +135,7 @@ def compute_forest(proj, extent, verbose=False):
     rast_in = [f"fcc{i + k}{i + k + 1}_src.tif" for i in range(nbands - 1)]
     rast_out = [f"fcc{i + k}{i + k + 1}.tif" for i in range(nbands - 1)]
     cmd_str = (
-        'gdal_calc.py --overwrite '
+        'gdal_calc --overwrite '
         '-A {0} -B aoi_proj.tif '
         '--outfile={1} --type=Byte '
         '--calc={2} '
@@ -150,7 +150,7 @@ def compute_forest(proj, extent, verbose=False):
 
     # Compute raster fcc13.tif for forecast (no need to crop with borders)
     cmd_str = (
-        'gdal_calc.py --overwrite '
+        'gdal_calc --overwrite '
         '-A {0} -B {1} '
         '--outfile={2} --type=Byte '
         '--calc="255-254*(A==1)*(B==1)-255*(A==1)*(B==0)" '
@@ -166,7 +166,7 @@ def compute_forest(proj, extent, verbose=False):
     # Compute raster fcc123.tif
     # (0: nodata, 1: t1, 2: t2, 3: t3)
     cmd = (
-        'gdal_calc.py --overwrite '
+        'gdal_calc --overwrite '
         '-A forest_t1.tif -B forest_t2.tif -C forest_t3.tif '
         '--outfile=fcc123.tif --type=Byte '
         '--calc="A+B+C" '
