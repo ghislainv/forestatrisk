@@ -11,12 +11,12 @@ opd = os.path.dirname
 
 def allocate_deforestation(riskmap_juris_file, defor_rate_tab,
                            defor_juris_ha, years_forecast,
-                           project_boundaries,
+                           project_borders,
                            output_file="defor_project.csv",
                            verbose=False):
     """Allocating deforestation.
 
-    :param riskmap_juris: Raster file with classes of deforestation
+    :param riskmap_juris_file: Raster file with classes of deforestation
       risk at the jurisdictional level.
 
     :param defor_rate_tab: CSV file including the table with
@@ -27,7 +27,7 @@ def allocate_deforestation(riskmap_juris_file, defor_rate_tab,
 
     :param years_forecast: Length of the forecasting period (in years).
 
-    :param project_boundaries: Vector file for project boundaries.
+    :param project_borders: Vector file for project borders.
 
     :param output_file: Output file with deforestation
       allocated to the project.
@@ -51,7 +51,7 @@ def allocate_deforestation(riskmap_juris_file, defor_rate_tab,
     gdal.Warp(ofile, riskmap_juris_file,
               cropToCutline=True,
               warpOptions=["CUTLINE_ALL_TOUCHED=TRUE"],
-              cutlineDSName=project_boundaries,
+              cutlineDSName=project_borders,
               creationOptions=copts,
               callback=cback)
 
@@ -89,6 +89,10 @@ def allocate_deforestation(riskmap_juris_file, defor_rate_tab,
     # Deforestation density (ha/pixel/yr)
     df_rate["defor_dens"] = df_rate["rate_abs"] * pixel_area / years_forecast
 
+    # Save the df_rate table
+    ofile = opj(out_dir, "defrate_cat_forecast.csv")
+    df_rate.to_csv()
+
     # -----------------------------
     # Join tables
     # -----------------------------
@@ -101,21 +105,27 @@ def allocate_deforestation(riskmap_juris_file, defor_rate_tab,
     # Save results
     data = {
         "period": ["annual", "entire"],
-        "deforestation (ha)": [round(defor_project, 1), round(defor_project * years_forecast, 1)]
+        "length (yr)": [1, years_forecast],
+        "deforestation (ha)": [
+            round(defor_project, 1),
+            round(defor_project * years_forecast, 1)
+        ]
     }
     res = pd.DataFrame(data)
     res.to_csv(output_file, header=True, index=False)
 
 
-# Test
-import os
-os.chdir(os.path.expanduser("~/deforisk/MTQ-tuto-bak/outputs/far_models/forecast/"))
-allocate_deforestation(
-    riskmap_juris_file="prob_icar_t3.tif",
-    defor_rate_tab="defrate_cat_icar_forecast.csv",
-    defor_juris_ha=4000,  # About 400 ha/yr in MTQ on 2010-2020.
-    years_forecast=10,
-    project_boundaries="project_boundaries.gpkg",
-    output_file="defor_project.csv",
-    verbose=False,
-)
+# # Test
+# import os
+# os.chdir(os.path.expanduser("~/deforisk/MTQ-tuto-bak/outputs/far_models/forecast/"))
+# allocate_deforestation(
+#     riskmap_juris_file="prob_icar_t3.tif",
+#     defor_rate_tab="defrate_cat_icar_forecast.csv",
+#     defor_juris_ha=4000,  # About 400 ha/yr in MTQ on 2010-2020.
+#     years_forecast=10,
+#     project_boundaries="project_boundaries.gpkg",
+#     output_file="defor_project.csv",
+#     verbose=False,
+# )
+
+# End Of File

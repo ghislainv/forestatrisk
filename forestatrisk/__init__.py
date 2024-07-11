@@ -34,6 +34,7 @@ from .predict import defrate_per_cat
 # Project
 from .project import deforest_diffusion, deforest_diffusion_t_nofor
 from .project import deforest, emissions
+from .project import allocate_deforestation
 
 # Validate
 from .validate import computeAUC, accuracy_indices, cross_validation

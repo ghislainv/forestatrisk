@@ -12,5 +12,6 @@
 from .deforest_diffusion import deforest_diffusion, deforest_diffusion_t_nofor
 from .deforest import deforest
 from .emissions import emissions
+from .allocate_deforestation import allocate_deforestation
 
 # EOF
