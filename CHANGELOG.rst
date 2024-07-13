@@ -1,6 +1,12 @@
 Changelog
 =========
 
+forestatrisk 1.2.3
+++++++++++++++++++
+
+* Adding function to allocate deforestation.
+* Changes: https://github.com/ghislainv/forestatrisk/compare/v1.2.2...v1.2.3
+
 forestatrisk 1.2.2
 ++++++++++++++++++
 
