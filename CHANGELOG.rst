@@ -1,6 +1,12 @@
 Changelog
 =========
 
+forestatrisk 1.2.4
+++++++++++++++++++
+
+* Bug correction when downloading protected areas from WDPA at state level.
+* Changes: https://github.com/ghislainv/forestatrisk/compare/v1.2.3...v1.2.4
+
 forestatrisk 1.2.3
 ++++++++++++++++++
 
