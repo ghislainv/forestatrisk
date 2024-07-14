@@ -102,7 +102,9 @@
 <span></span><span class="sd">&quot;&quot;&quot;Download country geospatial data.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">importlib.resources</span> <span class="k">as</span> <span class="nn">importlib_resources</span>
 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">geefcc</span> <span class="k">as</span> <span class="nn">gf</span>
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">make_dir</span>
@@ -166,6 +168,14 @@
     <span class="c1"># Create directory</span>
     <span class="n">make_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
+    <span class="c1"># iso_wpda</span>
+    <span class="n">relative_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;csv&quot;</span><span class="p">,</span> <span class="s2">&quot;ctry_run.csv&quot;</span><span class="p">)</span>
+    <span class="n">ref</span> <span class="o">=</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;forestatrisk&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">relative_path</span>
+    <span class="k">with</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">as_file</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
+        <span class="n">data_run</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">iso_wdpa</span> <span class="o">=</span> <span class="n">data_run</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data_run</span><span class="p">[</span><span class="s2">&quot;iso3&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">iso3</span><span class="p">,</span>
+                            <span class="s2">&quot;iso_wdpa&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
     <span class="c1"># Download</span>
     <span class="k">if</span> <span class="n">gadm</span><span class="p">:</span>
         <span class="n">ofile</span> <span class="o">=</span> <span class="n">opj</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;gadm41_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.gpkg&quot;</span><span class="p">)</span>
@@ -173,7 +183,7 @@
     <span class="k">if</span> <span class="n">srtm</span><span class="p">:</span>
         <span class="n">download_srtm</span><span class="p">(</span><span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">wdpa</span><span class="p">:</span>
-        <span class="n">download_wdpa</span><span class="p">(</span><span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
+        <span class="n">download_wdpa</span><span class="p">(</span><span class="n">iso3</span><span class="o">=</span><span class="n">iso_wdpa</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">osm</span><span class="p">:</span>
         <span class="n">download_osm</span><span class="p">(</span><span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">forest</span><span class="p">:</span>
