@@ -3,6 +3,9 @@
 import os
 from glob import glob
 from shutil import rmtree, copy2
+import importlib.resources as importlib_resources
+
+import pandas as pd
 
 from ..misc import make_dir
 from .compute import compute_forest
@@ -54,6 +57,14 @@ def country_compute(
     # Create output directory
     make_dir(output_dir)
 
+    # iso_wpda
+    relative_path = os.path.join("csv", "ctry_run.csv")
+    ref = importlib_resources.files("forestatrisk") / relative_path
+    with importlib_resources.as_file(ref) as path:
+        data_run = pd.read_csv(path, sep=";", header=0)
+    iso_wdpa = data_run.loc[data_run["iso3"] == iso3,
+                            "iso_wdpa"].values[0]
+
     # Compute aoi file and extent from GADM file
     ifile = os.path.join(temp_dir, "gadm41_" + iso3 + "_0.gpkg")
     ofile = os.path.join(temp_dir, "aoi_proj.gpkg")
@@ -67,7 +78,7 @@ def country_compute(
         # Perform computations
         compute_osm(proj, extent_reg)
         compute_srtm(proj, extent_reg)
-        compute_wdpa(iso3, proj, extent_reg)
+        compute_wdpa(iso_wdpa, proj, extent_reg)
         compute_biomass_avitabile(proj, extent_reg)
         # Moving created files
         dist_files = [f for f in glob("dist_*.tif") if f[-6] != "t"]

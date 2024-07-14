@@ -1,7 +1,9 @@
 """Download country geospatial data."""
 
 import os
+import importlib.resources as importlib_resources
 
+import pandas as pd
 import geefcc as gf
 
 from ..misc import make_dir
@@ -63,6 +65,14 @@ def country_download(
     # Create directory
     make_dir(output_dir)
 
+    # iso_wpda
+    relative_path = os.path.join("csv", "ctry_run.csv")
+    ref = importlib_resources.files("forestatrisk") / relative_path
+    with importlib_resources.as_file(ref) as path:
+        data_run = pd.read_csv(path, sep=";", header=0)
+    iso_wdpa = data_run.loc[data_run["iso3"] == iso3,
+                            "iso_wdpa"].values[0]
+
     # Download
     if gadm:
         ofile = opj(output_dir, "gadm41_" + iso3 + "_0.gpkg")
@@ -70,7 +80,7 @@ def country_download(
     if srtm:
         download_srtm(iso3=iso3, output_dir=output_dir)
     if wdpa:
-        download_wdpa(iso3=iso3, output_dir=output_dir)
+        download_wdpa(iso3=iso_wdpa, output_dir=output_dir)
     if osm:
         download_osm(iso3=iso3, output_dir=output_dir)
     if forest:
