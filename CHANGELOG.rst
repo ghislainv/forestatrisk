@@ -1,6 +1,12 @@
 Changelog
 =========
 
+forestatrisk 1.2.5
+++++++++++++++++++
+
+* Allow computing forest rasters (``forest_t1.tif``, ``fcc12.tif``, etc.) and variables (``dist_edge_t1``, etc.) if the user provides a ``forest_src.tif`` file.
+* Changes: https://github.com/ghislainv/forestatrisk/compare/v1.2.4...v1.2.5
+
 forestatrisk 1.2.4
 ++++++++++++++++++
 
