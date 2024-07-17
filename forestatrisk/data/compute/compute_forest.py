@@ -1,5 +1,6 @@
 """Processing forest data."""
 
+import os
 import subprocess
 from glob import glob
 
@@ -28,30 +29,33 @@ def compute_forest(proj, extent, verbose=False):
     # Creation options
     copts = ["COMPRESS=DEFLATE", "PREDICTOR=2", "BIGTIFF=YES"]
 
-    # Make vrt
-    tif_forest_files = glob("forest_tiles/forest_*.tif")
-    forest_vrt = gdal.BuildVRT(
-        "forest.vrt",
-        tif_forest_files,
-        callback=cback)
-    # Flush cache
-    forest_vrt.FlushCache()
-    forest_vrt = None
+    # Only execute the following if forest_src.tif is absent
+    # Useful to use user's fcc data
+    if not os.path.isfile("forest_src.tif"):
+        # Make vrt
+        tif_forest_files = glob("forest_tiles/forest_*.tif")
+        forest_vrt = gdal.BuildVRT(
+            "forest.vrt",
+            tif_forest_files,
+            callback=cback)
+        # Flush cache
+        forest_vrt.FlushCache()
+        forest_vrt = None
 
-    # Reproject
-    param = gdal.WarpOptions(
-        warpOptions=["overwrite"],
-        srcSRS="EPSG:4326",
-        dstSRS=proj,
-        outputBounds=extent,
-        targetAlignedPixels=True,
-        resampleAlg=gdal.GRA_NearestNeighbour,
-        xRes=30,
-        yRes=30,
-        creationOptions=copts,
-        callback=cback,
-    )
-    gdal.Warp("forest_src.tif", "forest.vrt", options=param)
+        # Reproject
+        param = gdal.WarpOptions(
+            warpOptions=["overwrite"],
+            srcSRS="EPSG:4326",
+            dstSRS=proj,
+            outputBounds=extent,
+            targetAlignedPixels=True,
+            resampleAlg=gdal.GRA_NearestNeighbour,
+            xRes=30,
+            yRes=30,
+            creationOptions=copts,
+            callback=cback,
+        )
+        gdal.Warp("forest_src.tif", "forest.vrt", options=param)
 
     # Number of bands (or years)
     with gdal.Open("forest_src.tif") as ds:
