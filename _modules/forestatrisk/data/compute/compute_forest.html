@@ -24,7 +24,7 @@
   </head><body>
   <div class="document">
     
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../../../index.html">
@@ -101,6 +101,7 @@
   <h1>Source code for forestatrisk.data.compute.compute_forest</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Processing forest data.&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
 
@@ -131,30 +132,33 @@
     <span class="c1"># Creation options</span>
     <span class="n">copts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;COMPRESS=DEFLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span> <span class="s2">&quot;BIGTIFF=YES&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Make vrt</span>
-    <span class="n">tif_forest_files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="s2">&quot;forest_tiles/forest_*.tif&quot;</span><span class="p">)</span>
-    <span class="n">forest_vrt</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRT</span><span class="p">(</span>
-        <span class="s2">&quot;forest.vrt&quot;</span><span class="p">,</span>
-        <span class="n">tif_forest_files</span><span class="p">,</span>
-        <span class="n">callback</span><span class="o">=</span><span class="n">cback</span><span class="p">)</span>
-    <span class="c1"># Flush cache</span>
-    <span class="n">forest_vrt</span><span class="o">.</span><span class="n">FlushCache</span><span class="p">()</span>
-    <span class="n">forest_vrt</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Only execute the following if forest_src.tif is absent</span>
+    <span class="c1"># Useful to use user&#39;s fcc data</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="s2">&quot;forest_src.tif&quot;</span><span class="p">):</span>
+        <span class="c1"># Make vrt</span>
+        <span class="n">tif_forest_files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="s2">&quot;forest_tiles/forest_*.tif&quot;</span><span class="p">)</span>
+        <span class="n">forest_vrt</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRT</span><span class="p">(</span>
+            <span class="s2">&quot;forest.vrt&quot;</span><span class="p">,</span>
+            <span class="n">tif_forest_files</span><span class="p">,</span>
+            <span class="n">callback</span><span class="o">=</span><span class="n">cback</span><span class="p">)</span>
+        <span class="c1"># Flush cache</span>
+        <span class="n">forest_vrt</span><span class="o">.</span><span class="n">FlushCache</span><span class="p">()</span>
+        <span class="n">forest_vrt</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="c1"># Reproject</span>
-    <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">WarpOptions</span><span class="p">(</span>
-        <span class="n">warpOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">],</span>
-        <span class="n">srcSRS</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
-        <span class="n">dstSRS</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
-        <span class="n">outputBounds</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
-        <span class="n">targetAlignedPixels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">resampleAlg</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GRA_NearestNeighbour</span><span class="p">,</span>
-        <span class="n">xRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-        <span class="n">yRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-        <span class="n">creationOptions</span><span class="o">=</span><span class="n">copts</span><span class="p">,</span>
-        <span class="n">callback</span><span class="o">=</span><span class="n">cback</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">gdal</span><span class="o">.</span><span class="n">Warp</span><span class="p">(</span><span class="s2">&quot;forest_src.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;forest.vrt&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
+        <span class="c1"># Reproject</span>
+        <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">WarpOptions</span><span class="p">(</span>
+            <span class="n">warpOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">],</span>
+            <span class="n">srcSRS</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
+            <span class="n">dstSRS</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+            <span class="n">outputBounds</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
+            <span class="n">targetAlignedPixels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">resampleAlg</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GRA_NearestNeighbour</span><span class="p">,</span>
+            <span class="n">xRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+            <span class="n">yRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+            <span class="n">creationOptions</span><span class="o">=</span><span class="n">copts</span><span class="p">,</span>
+            <span class="n">callback</span><span class="o">=</span><span class="n">cback</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">Warp</span><span class="p">(</span><span class="s2">&quot;forest_src.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;forest.vrt&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
 
     <span class="c1"># Number of bands (or years)</span>
     <span class="k">with</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="s2">&quot;forest_src.tif&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ds</span><span class="p">:</span>
@@ -293,7 +297,7 @@
       &#169;2024, Cirad.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.5</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
     </div>
