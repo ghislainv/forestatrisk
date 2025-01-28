@@ -82,7 +82,8 @@ def country_compute(
         compute_biomass_avitabile(proj, extent_reg)
         # Moving created files
         dist_files = [f for f in glob("dist_*.tif") if f[-6] != "t"]
-        proj_files = [f for f in glob("*_proj.*") if f != "aoi_proj.tif"]
+        aoi_files = ["aoi_proj.tif", "aoi_proj.gpkg"]
+        proj_files = [f for f in glob("*_proj.*") if f not in aoi_files]
         other_files = ["altitude.tif", "slope.tif", "pa.tif", "AGB.tif"]
         ifiles = dist_files + proj_files + other_files
         for ifile in ifiles:
@@ -101,7 +102,9 @@ def country_compute(
         dist_edge_files = [f"dist_edge_t{i + 1}.tif" for i in range(3)]
         dist_defor_files = [f"dist_defor_t{i + 1}.tif" for i in range(3)]
         fcc_files = ["fcc12.tif", "fcc13.tif", "fcc123.tif"]
-        ifiles = forest_files + dist_edge_files + dist_defor_files + fcc_files
+        aoi_file = ["aoi_proj.gpkg"]
+        ifiles = (forest_files + dist_edge_files +
+                  dist_defor_files + fcc_files + aoi_file)
         for ifile in ifiles:
             if os.path.isfile(ifile):
                 copy2(ifile, os.path.join(wd, output_dir))

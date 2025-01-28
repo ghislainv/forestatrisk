@@ -54,3 +54,4 @@ def compute_biomass_avitabile(proj, extent, verbose=False):
     gdal.Warp("AGB.tif", ifile, options=param)
 
 # End
+
