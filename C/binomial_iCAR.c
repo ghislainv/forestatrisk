@@ -213,6 +213,8 @@ static PyObject *binomial_iCAR(PyObject *self, PyObject *args, PyObject *keywds)
   }
 
   // Interpret the input Python objects as Numpy arrays
+  // Remember that NPY_ARRAY_IN_ARRAY is equivalent to (NPY_ARRAY_C_CONTIGUOUS and NPY_ARRAY_ALIGNED)
+  // Must be cast to PyArrayObject with gcc 14 for compilation
   PyArrayObject *Y_array = (PyArrayObject*) PyArray_FROM_OTF(Y_obj, NPY_INT32, NPY_ARRAY_IN_ARRAY);
   PyArrayObject *T_array = (PyArrayObject*) PyArray_FROM_OTF(T_obj, NPY_INT32, NPY_ARRAY_IN_ARRAY);
   PyArrayObject *X_array = (PyArrayObject*) PyArray_FROM_OTF(X_obj, NPY_FLOAT64, NPY_ARRAY_IN_ARRAY);
@@ -246,18 +248,18 @@ static PyObject *binomial_iCAR(PyObject *self, PyObject *args, PyObject *keywds)
   }
 
   // Get pointers to the data as C-types
-  int *Y_vect = (int*)PyArray_DATA(Y_array);
-  int *T_vect = (int*)PyArray_DATA(T_array);
-  double *X_vect = (double*)PyArray_DATA(X_array);
-  int *C_vect = (int*)PyArray_DATA(C_array);
-  int *nNeigh_vect = (int*)PyArray_DATA(nNeigh_array);
-  int *Neigh_vect = (int*)PyArray_DATA(Neigh_array);
-  double *X_pred_vect = (double*)PyArray_DATA(X_pred_array);
-  int *C_pred_vect = (int*)PyArray_DATA(C_pred_array);
-  double *beta_start_vect = (double*)PyArray_DATA(beta_start_array);
-  double *rho_start_vect = (double*)PyArray_DATA(rho_start_array);
-  double *mubeta_vect = (double*)PyArray_DATA(mubeta_array);
-  double *Vbeta_vect = (double*)PyArray_DATA(Vbeta_array);
+  int *Y_vect = (int*) PyArray_DATA(Y_array);
+  int *T_vect = (int*) PyArray_DATA(T_array);
+  double *X_vect = (double*) PyArray_DATA(X_array);
+  int *C_vect = (int*) PyArray_DATA(C_array);
+  int *nNeigh_vect = (int*) PyArray_DATA(nNeigh_array);
+  int *Neigh_vect = (int*) PyArray_DATA(Neigh_array);
+  double *X_pred_vect = (double*) PyArray_DATA(X_pred_array);
+  int *C_pred_vect = (int*) PyArray_DATA(C_pred_array);
+  double *beta_start_vect = (double*) PyArray_DATA(beta_start_array);
+  double *rho_start_vect = (double*) PyArray_DATA(rho_start_array);
+  double *mubeta_vect = (double*) PyArray_DATA(mubeta_array);
+  double *Vbeta_vect = (double*) PyArray_DATA(Vbeta_array);
   
   ////////////////////////////////////////////////////////////////////////////////
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
