@@ -8,6 +8,7 @@
 
 // Python libraries
 #include <Python.h>
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <numpy/arrayobject.h>
 // C libraries
 //#include <stdio.h>  // already in Python.h
@@ -212,18 +213,18 @@ static PyObject *binomial_iCAR(PyObject *self, PyObject *args, PyObject *keywds)
   }
 
   // Interpret the input Python objects as Numpy arrays
-  PyObject *Y_array = PyArray_FROM_OTF(Y_obj, NPY_INT32, NPY_IN_ARRAY);
-  PyObject *T_array = PyArray_FROM_OTF(T_obj, NPY_INT32, NPY_IN_ARRAY);
-  PyObject *X_array = PyArray_FROM_OTF(X_obj, NPY_FLOAT64, NPY_IN_ARRAY);
-  PyObject *C_array = PyArray_FROM_OTF(C_obj, NPY_INT32, NPY_IN_ARRAY);
-  PyObject *nNeigh_array = PyArray_FROM_OTF(nNeigh_obj, NPY_INT32, NPY_IN_ARRAY);
-  PyObject *Neigh_array = PyArray_FROM_OTF(Neigh_obj, NPY_INT32, NPY_IN_ARRAY);
-  PyObject *X_pred_array = PyArray_FROM_OTF(X_pred_obj, NPY_FLOAT64, NPY_IN_ARRAY);
-  PyObject *C_pred_array = PyArray_FROM_OTF(C_pred_obj, NPY_INT32, NPY_IN_ARRAY);
-  PyObject *beta_start_array = PyArray_FROM_OTF(beta_start_obj, NPY_FLOAT64, NPY_IN_ARRAY);
-  PyObject *rho_start_array = PyArray_FROM_OTF(rho_start_obj, NPY_FLOAT64, NPY_IN_ARRAY);
-  PyObject *mubeta_array = PyArray_FROM_OTF(mubeta_obj, NPY_FLOAT64, NPY_IN_ARRAY);
-  PyObject *Vbeta_array = PyArray_FROM_OTF(Vbeta_obj, NPY_FLOAT64, NPY_IN_ARRAY);
+  PyArrayObject *Y_array = (PyArrayObject*) PyArray_FROM_OTF(Y_obj, NPY_INT32, NPY_ARRAY_IN_ARRAY);
+  PyArrayObject *T_array = (PyArrayObject*) PyArray_FROM_OTF(T_obj, NPY_INT32, NPY_ARRAY_IN_ARRAY);
+  PyArrayObject *X_array = (PyArrayObject*) PyArray_FROM_OTF(X_obj, NPY_FLOAT64, NPY_ARRAY_IN_ARRAY);
+  PyArrayObject *C_array = (PyArrayObject*) PyArray_FROM_OTF(C_obj, NPY_INT32, NPY_ARRAY_IN_ARRAY);
+  PyArrayObject *nNeigh_array = (PyArrayObject*) PyArray_FROM_OTF(nNeigh_obj, NPY_INT32, NPY_ARRAY_IN_ARRAY);
+  PyArrayObject *Neigh_array = (PyArrayObject*) PyArray_FROM_OTF(Neigh_obj, NPY_INT32, NPY_ARRAY_IN_ARRAY);
+  PyArrayObject *X_pred_array = (PyArrayObject*) PyArray_FROM_OTF(X_pred_obj, NPY_FLOAT64, NPY_ARRAY_IN_ARRAY);
+  PyArrayObject *C_pred_array = (PyArrayObject*) PyArray_FROM_OTF(C_pred_obj, NPY_INT32, NPY_ARRAY_IN_ARRAY);
+  PyArrayObject *beta_start_array = (PyArrayObject*) PyArray_FROM_OTF(beta_start_obj, NPY_FLOAT64, NPY_ARRAY_IN_ARRAY);
+  PyArrayObject *rho_start_array = (PyArrayObject*) PyArray_FROM_OTF(rho_start_obj, NPY_FLOAT64, NPY_ARRAY_IN_ARRAY);
+  PyArrayObject *mubeta_array = (PyArrayObject*) PyArray_FROM_OTF(mubeta_obj, NPY_FLOAT64, NPY_ARRAY_IN_ARRAY);
+  PyArrayObject *Vbeta_array = (PyArrayObject*) PyArray_FROM_OTF(Vbeta_obj, NPY_FLOAT64, NPY_ARRAY_IN_ARRAY);
 
   // If that didn't work, throw an exception
   if (Y_array == NULL || T_array == NULL || X_array == NULL || C_array == NULL || nNeigh_array == NULL ||
