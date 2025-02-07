@@ -14,10 +14,9 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@v5
         with:
-           python-version: '3.11'
+           python-version: '3.12'
       - name: Install system libraries
         run: |
-          sudo add-apt-repository --yes ppa:ubuntugis/ppa
           sudo apt-get --quiet update
           sudo apt-get install --yes gdal-bin libgdal-dev
           sudo apt-get install pandoc

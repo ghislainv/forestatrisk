@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11', '3.12']
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -24,7 +24,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install system libraries
       run: |
-        sudo add-apt-repository --yes ppa:ubuntugis/ppa
         sudo apt-get --quiet update
         sudo apt-get install --yes libgdal-dev gdal-bin
     - name: Install Python dependencies
