@@ -5,10 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>forestatrisk.validate.map_accuracy &#8212; forestatrisk — Modelling and forecasting deforestation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=b21ac067" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=d35aba6c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=8fb1bb4b" />
     <script src="../../../_static/documentation_options.js?v=36f53d34"></script>
-    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="icon" href="../../../_static/favicon.ico"/>
@@ -51,7 +52,16 @@
 
 
 
-<h3>Navigation</h3>
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notebooks/get_started.html">Get started</a></li>
@@ -72,16 +82,6 @@
   </ul></li>
 </ul>
 </div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -111,20 +111,20 @@
 <span class="c1"># ==============================================================================</span>
 
 <span class="c1"># Standard library imports</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 3 compatibility</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 3 compatibility</span>
 
 <span class="c1"># Third party imports</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">osgeo</span><span class="w"> </span><span class="kn">import</span> <span class="n">gdal</span>
 
 <span class="c1"># Local application imports</span>
-<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">progress_bar</span><span class="p">,</span> <span class="n">makeblock</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">progress_bar</span><span class="p">,</span> <span class="n">makeblock</span>
 
 
 <span class="c1"># Percentage_correct</span>
 <div class="viewcode-block" id="map_confmat">
 <a class="viewcode-back" href="../../../python_api/forestatrisk.validate.html#forestatrisk.map_confmat">[docs]</a>
-<span class="k">def</span> <span class="nf">map_confmat</span><span class="p">(</span><span class="n">r_obs0</span><span class="p">,</span> <span class="n">r_obs1</span><span class="p">,</span> <span class="n">r_pred0</span><span class="p">,</span> <span class="n">r_pred1</span><span class="p">,</span> <span class="n">blk_rows</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">map_confmat</span><span class="p">(</span><span class="n">r_obs0</span><span class="p">,</span> <span class="n">r_obs1</span><span class="p">,</span> <span class="n">r_pred0</span><span class="p">,</span> <span class="n">r_pred1</span><span class="p">,</span> <span class="n">blk_rows</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute a confusion matrix.</span>
 
 <span class="sd">    This function computes a confusion matrix at a given</span>
@@ -209,7 +209,7 @@
 <span class="c1"># map_accuracy</span>
 <div class="viewcode-block" id="map_accuracy">
 <a class="viewcode-back" href="../../../python_api/forestatrisk.validate.html#forestatrisk.map_accuracy">[docs]</a>
-<span class="k">def</span> <span class="nf">map_accuracy</span><span class="p">(</span><span class="n">mat</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">map_accuracy</span><span class="p">(</span><span class="n">mat</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute accuracy indices from a confusion matrix.</span>
 
 <span class="sd">    Compute Overall Accuracy, Expected Accuracy, Figure of Merit,</span>
@@ -265,11 +265,11 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &#169;2024, Cirad.
+      &#169;2025, Cirad.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.5</a>
-      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
     </div>
 
