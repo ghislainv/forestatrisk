@@ -139,31 +139,21 @@
 
 <span class="sd">    :param verbose: Toogle progress bar.</span>
 
-<span class="sd">    :return: A dictionary with ``err``: a number (0 if OK, 1 if error)</span>
-<span class="sd">       and ``err_smg``: an error message.</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Initialize variables</span>
-    <span class="n">err</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">err_msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;No error detected regarding the &quot;</span>
-               <span class="s2">&quot;forest cover change file.&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Open file</span>
-    <span class="n">fcc</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">fcc_file</span><span class="p">)</span>
 
     <span class="c1"># ===========================</span>
     <span class="c1"># Check that the file is a raster that can be opened with gdal</span>
-    <span class="k">if</span> <span class="n">fcc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">err</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">fcc</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">fcc_file</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
         <span class="n">err_msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Forest cover change file is not a raster &quot;</span>
                    <span class="s2">&quot;file that can be opened with gdal.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
 
     <span class="c1"># ===========================</span>
     <span class="c1"># Check that the file is a multiple band raster file</span>
     <span class="n">nbands</span> <span class="o">=</span> <span class="n">fcc</span><span class="o">.</span><span class="n">RasterCount</span>
     <span class="k">if</span> <span class="n">nbands</span> <span class="o">&lt;</span> <span class="n">nbands_min</span><span class="p">:</span>
-        <span class="n">err</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">err_msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Forest cover change file must be a &quot;</span>
                    <span class="s2">&quot;multiple band raster file with at &quot;</span>
                    <span class="sa">f</span><span class="s2">&quot;least </span><span class="si">{</span><span class="n">nbands_min</span><span class="si">}</span><span class="s2"> bands.&quot;</span><span class="p">)</span>
@@ -174,10 +164,10 @@
     <span class="n">proj_fcc</span> <span class="o">=</span> <span class="n">proj_fcc</span><span class="o">.</span><span class="n">GetAttrValue</span><span class="p">(</span><span class="s2">&quot;AUTHORITY&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">proj_fcc</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;EPSG:</span><span class="si">{</span><span class="n">proj_fcc</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">if</span> <span class="n">proj_fcc</span> <span class="o">!=</span> <span class="n">proj</span><span class="p">:</span>
-        <span class="n">err</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">err_msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Forest cover change file projection &quot;</span>
                    <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">proj_fcc</span><span class="si">}</span><span class="s2">) must be the same &quot;</span>
                    <span class="sa">f</span><span class="s2">&quot;as the project (</span><span class="si">{</span><span class="n">proj</span><span class="si">}</span><span class="s2">).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span>
 
     <span class="c1"># ===========================</span>
     <span class="c1"># Check that raster values are in {0, 1}</span>
@@ -217,16 +207,14 @@
 
     <span class="c1"># Evaluation</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">min_fcc</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">max_fcc</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]):</span>
-        <span class="n">err</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">err_msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Forest cover change raster must &quot;</span>
                    <span class="s2">&quot;have only two values: 1 for forest &quot;</span>
                    <span class="s2">&quot;pixels and 0 for non-forest pixels.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span>
 
     <span class="c1"># Close</span>
-    <span class="n">fcc</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">fcc</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-    <span class="c1"># Return</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;err&quot;</span><span class="p">:</span> <span class="n">err</span><span class="p">,</span> <span class="s2">&quot;err_msg&quot;</span><span class="p">:</span> <span class="n">err_msg</span><span class="p">}</span></div>
 
 
 <span class="c1"># End of file</span>
