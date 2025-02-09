@@ -476,6 +476,43 @@ forest, with min=10000 and max=50000. Default to <code class="docutils literal n
 <section id="various">
 <h1>Various<a class="headerlink" href="#various" title="Link to this heading">¶</a></h1>
 <dl class="py function">
+<dt class="sig sig-object py" id="forestatrisk.check_fcc">
+<span class="sig-prename descclassname"><span class="pre">forestatrisk.</span></span><span class="sig-name descname"><span class="pre">check_fcc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fcc_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbands_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blk_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/check_fcc.html#check_fcc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.check_fcc" title="Link to this definition">¶</a></dt>
+<dd><p>Check forest cover change file.</p>
+<p>The forest cover change file should have the following
+characteristics:</p>
+<ol class="arabic simple">
+<li><p>It must be a multiple band raster file with each band
+representing the forest cover at one date.</p></li>
+<li><p>Bands must be ordered (first band for t, second band for t+1,
+etc.).</p></li>
+<li><p>Raster should only have two values: 1 for forest pixels and 0
+for non-forest pixels (the raster can thus be of type Byte).</p></li>
+<li><p>The raster file should be projected in the coordinate reference
+system of the project.</p></li>
+<li><p>The raster must cover at least all the area of the
+jurisdiction.</p></li>
+</ol>
+<p>We check here conditions 1, 3, and 4. Other conditions must be
+checked by the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fcc_file</strong> – Forest cover change file.</p></li>
+<li><p><strong>proj</strong> – Project’s projection.</p></li>
+<li><p><strong>nbands_min</strong> – Minimal number of bands.</p></li>
+<li><p><strong>blk_rows</strong> – If &gt; 0, number of lines per block.</p></li>
+<li><p><strong>verbose</strong> – Toogle progress bar.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with <code class="docutils literal notranslate"><span class="pre">err</span></code>: a number (0 if OK, 1 if error)
+and <code class="docutils literal notranslate"><span class="pre">err_smg</span></code>: an error message.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="forestatrisk.get_vector_extent">
 <span class="sig-prename descclassname"><span class="pre">forestatrisk.</span></span><span class="sig-name descname"><span class="pre">get_vector_extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/forestatrisk/data/get_vector_extent.html#get_vector_extent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#forestatrisk.get_vector_extent" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the extent of a vector file.</p>

@@ -314,6 +314,10 @@
     <span class="n">Ymin</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrow_r</span>
     <span class="n">Ymax</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
 
+    <span class="c1"># Dereference driver</span>
+    <span class="n">forestB</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">del</span> <span class="n">forestR</span>
+
     <span class="c1"># Concatenate selected pixels</span>
     <span class="n">select</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">deforselect</span><span class="p">,</span> <span class="n">forselect</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
