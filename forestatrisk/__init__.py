@@ -10,7 +10,7 @@ from __future__ import division, print_function  # Python 3 compatibility
 # https://peps.python.org/pep-0008/#module-level-dunder-names
 __author__ = "Ghislain Vieilledent"
 __email__ = "ghislain.vieilledent@cirad.fr"
-__version__ = "1.2.5"
+__version__ = "1.2.6"
 
 # GDAL exceptions
 from osgeo import gdal
@@ -19,6 +19,7 @@ from osgeo import gdal
 # Data
 from .data import sample, get_vector_extent
 from .data import extent_shp, create_symbolic_links
+from .data import check_fcc
 
 # Model
 from .model import cellneigh, cellneigh_ctry

@@ -6,7 +6,7 @@ Download
 .. autofunction:: forestatrisk.data.download.download_osm
 .. autofunction:: forestatrisk.data.download.download_srtm
 .. autofunction:: forestatrisk.data.download.download_wdpa
-
+		  
 Compute
 -------
 
@@ -29,6 +29,7 @@ Sample
 Various
 -------
 
+.. autofunction:: forestatrisk.check_fcc
 .. autofunction:: forestatrisk.get_vector_extent
 
 Deprecated
