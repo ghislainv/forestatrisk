@@ -4,7 +4,7 @@
 # You can set these variables from the command line, and also
 # from the environment for the first two.
 SPHINXOPTS    ?= -E
-SPHINXBUILD   ?= ~/venvs/gee/bin/sphinx-build
+SPHINXBUILD   ?= ~/venvs/deforisk/bin/sphinx-build
 SOURCEDIR     = docsrc
 BUILDDIR      = build
 

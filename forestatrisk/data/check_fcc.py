@@ -36,31 +36,21 @@ def check_fcc(fcc_file, proj, nbands_min=3, blk_rows=0, verbose=True):
 
     :param verbose: Toogle progress bar.
 
-    :return: A dictionary with ``err``: a number (0 if OK, 1 if error)
-       and ``err_smg``: an error message.
-
     """
-
-    # Initialize variables
-    err = 0
-    err_msg = ("No error detected regarding the "
-               "forest cover change file.")
-
-    # Open file
-    fcc = gdal.Open(fcc_file)
 
     # ===========================
     # Check that the file is a raster that can be opened with gdal
-    if fcc is None:
-        err = 1
+    try:
+        fcc = gdal.Open(fcc_file)
+    except RuntimeError as exc:
         err_msg = ("Forest cover change file is not a raster "
                    "file that can be opened with gdal.")
+        raise ValueError(err_msg) from exc
 
     # ===========================
     # Check that the file is a multiple band raster file
     nbands = fcc.RasterCount
     if nbands < nbands_min:
-        err = 1
         err_msg = ("Forest cover change file must be a "
                    "multiple band raster file with at "
                    f"least {nbands_min} bands.")
@@ -71,10 +61,10 @@ def check_fcc(fcc_file, proj, nbands_min=3, blk_rows=0, verbose=True):
     proj_fcc = proj_fcc.GetAttrValue("AUTHORITY", 1)
     proj_fcc = f"EPSG:{proj_fcc}"
     if proj_fcc != proj:
-        err = 1
         err_msg = ("Forest cover change file projection "
                    f"({proj_fcc}) must be the same "
                    f"as the project ({proj}).")
+        raise ValueError(err_msg)
 
     # ===========================
     # Check that raster values are in {0, 1}
@@ -114,15 +104,13 @@ def check_fcc(fcc_file, proj, nbands_min=3, blk_rows=0, verbose=True):
 
     # Evaluation
     if (min_fcc not in [0, 1] or max_fcc not in [0, 1]):
-        err = 1
         err_msg = ("Forest cover change raster must "
                    "have only two values: 1 for forest "
                    "pixels and 0 for non-forest pixels.")
+        raise ValueError(err_msg)
 
     # Close
     fcc = None
 
-    # Return
-    return {"err": err, "err_msg": err_msg}
 
 # End of file
