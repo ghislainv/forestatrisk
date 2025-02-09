@@ -211,6 +211,10 @@ def sample(
     Ymin = gt[3] + gt[5] * nrow_r
     Ymax = gt[3]
 
+    # Dereference driver
+    forestB = None
+    del forestR
+
     # Concatenate selected pixels
     select = np.concatenate((deforselect, forselect), axis=0)
 
