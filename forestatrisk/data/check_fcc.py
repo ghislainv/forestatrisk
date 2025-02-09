@@ -54,6 +54,7 @@ def check_fcc(fcc_file, proj, nbands_min=3, blk_rows=0, verbose=True):
         err_msg = ("Forest cover change file must be a "
                    "multiple band raster file with at "
                    f"least {nbands_min} bands.")
+        raise ValueError(err_msg)
 
     # ===========================
     # Check projection
