@@ -34,6 +34,7 @@ def compute_gadm(ifile, ofile, proj, verbose=False):
     cb = gdal.TermProgress_nocb if verbose else 0
 
     # Change layer and file names
+    # if using file downloaded from GADM
     if not os.path.isfile(aoi_latlon_file):
         # Change layer ADM_ADM_0 and file name
         gdal.VectorTranslate(

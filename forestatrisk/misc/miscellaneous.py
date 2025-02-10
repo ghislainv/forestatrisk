@@ -75,6 +75,7 @@ def makeblock(rasterfile, blk_rows=128):
     consider.
 
     :param rasterfile: Path to a raster file.
+
     :param blk_rows: If > 0, number of rows for block. If <=0, the
         block size will be 256 x 256.
 
