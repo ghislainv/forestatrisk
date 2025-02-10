@@ -157,6 +157,7 @@ def predict_raster(
         npix = nx[px] * ny[py]
         # Data for one block of the stack (shape = (nband,nrow,ncol))
         data = stack.ReadAsArray(x[px], y[py], nx[px], ny[py])
+        data = data.astype(float)  # From uint to float
         # Replace ND values with -9999
         for i in range(nband):
             data[i][np.nonzero(data[i] == bandND[i])] = -9999
@@ -173,7 +174,7 @@ def predict_raster(
         Y = Y[np.newaxis, :, :]
         # Forest mask
         fmaskA = fmaskB.ReadAsArray(x[px], y[py], nx[px], ny[py])
-        fmaskA = fmaskA.astype(np.float32)  # From uint to float
+        fmaskA = fmaskA.astype(float)  # From uint to float
         fmaskA[np.nonzero(fmaskA != 1)] = -9999
         fmaskA = fmaskA[np.newaxis, :, :]
         # Concatenate forest mask with stack
