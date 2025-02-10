@@ -110,6 +110,7 @@
 
 <span class="n">opj</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span>
 <span class="n">opd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span>
+<span class="n">opb</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span>
 
 
 <div class="viewcode-block" id="compute_gadm">
@@ -123,8 +124,8 @@
 <span class="sd">    of interest&quot;) and &quot;subj&quot; respectively. The extent of the area of</span>
 <span class="sd">    interest is returned with a buffer of 5 km.</span>
 
-<span class="sd">    :param input_file: Path to input GADM GPKG file.</span>
-<span class="sd">    :param output_file: Path to aoi GPKG output file.</span>
+<span class="sd">    :param ifile: Path to input GADM or aoi GPKG file.</span>
+<span class="sd">    :param ofile: Path to aoi GPKG output file.</span>
 <span class="sd">    :param proj: Projection definition (EPSG, PROJ.4, WKT) as in</span>
 <span class="sd">        GDAL/OGR. Used for reprojecting data.</span>
 <span class="sd">    :param verbose: Logical. Whether to print messages or not. Default</span>
@@ -132,13 +133,18 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># Lat/lon AOI file</span>
     <span class="n">aoi_latlon_file</span> <span class="o">=</span> <span class="n">opj</span><span class="p">(</span><span class="n">opd</span><span class="p">(</span><span class="n">ofile</span><span class="p">),</span> <span class="s2">&quot;aoi_latlon.gpkg&quot;</span><span class="p">)</span>
 
     <span class="n">cb</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TermProgress_nocb</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="mi">0</span>
 
     <span class="c1"># Change layer and file names</span>
     <span class="c1"># if using file downloaded from GADM</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">aoi_latlon_file</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">opb</span><span class="p">(</span><span class="n">ifile</span><span class="p">)[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;gadm&quot;</span><span class="p">:</span>
+        <span class="c1"># Remove intermediate output file</span>
+        <span class="c1"># if it exists</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">aoi_latlon_file</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">aoi_latlon_file</span><span class="p">)</span>
         <span class="c1"># Change layer ADM_ADM_0 and file name</span>
         <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslate</span><span class="p">(</span>
             <span class="n">aoi_latlon_file</span><span class="p">,</span> <span class="n">ifile</span><span class="p">,</span>

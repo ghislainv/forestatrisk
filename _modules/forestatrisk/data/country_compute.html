@@ -169,7 +169,10 @@
                             <span class="s2">&quot;iso_wdpa&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Reproject aoi file and compute extent</span>
+    <span class="c1"># with compute_gadm()</span>
     <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;gadm41_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.gpkg&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">ifile</span><span class="p">):</span>
+        <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;aoi_latlon.gpkg&quot;</span><span class="p">)</span>
     <span class="n">ofile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;aoi_proj.gpkg&quot;</span><span class="p">)</span>
     <span class="n">extent_reg</span> <span class="o">=</span> <span class="n">compute_gadm</span><span class="p">(</span><span class="n">ifile</span><span class="p">,</span> <span class="n">ofile</span><span class="p">,</span> <span class="n">proj</span><span class="p">)</span>
 
