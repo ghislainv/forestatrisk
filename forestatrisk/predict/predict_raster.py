@@ -157,12 +157,15 @@ def predict_raster(
         py = b // nblock_x
         # Number of pixels
         npix = nx[px] * ny[py]
-        # Data for one block of the stack (shape = (nband,nrow,ncol))
+        # Data for one block of the stack (shape = (nband, nrow, ncol))
         data = stack.ReadAsArray(x[px], y[py], nx[px], ny[py])
         data = data.astype(float)  # From uint to float
         # Replace ND values with -9999
         for i in range(nband):
             data[i][np.nonzero(data[i] == bandND[i])] = -9999
+        # Add a dimension if there is only one variable
+        if len(data.shape) == 2:
+            data = data[np.newaxis, :, :]
         # Coordinates of the center of the pixels of the block
         X_col = (
             gt[0] + x[px] * gt[1] + (np.arange(nx[px]) + 0.5) * gt[1]
