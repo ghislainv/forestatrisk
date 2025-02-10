@@ -9,6 +9,7 @@ from ..get_vector_extent import get_vector_extent
 
 opj = os.path.join
 opd = os.path.dirname
+opb = os.path.basename
 
 
 def compute_gadm(ifile, ofile, proj, verbose=False):
@@ -20,8 +21,8 @@ def compute_gadm(ifile, ofile, proj, verbose=False):
     of interest") and "subj" respectively. The extent of the area of
     interest is returned with a buffer of 5 km.
 
-    :param input_file: Path to input GADM GPKG file.
-    :param output_file: Path to aoi GPKG output file.
+    :param ifile: Path to input GADM or aoi GPKG file.
+    :param ofile: Path to aoi GPKG output file.
     :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
         GDAL/OGR. Used for reprojecting data.
     :param verbose: Logical. Whether to print messages or not. Default
@@ -29,13 +30,18 @@ def compute_gadm(ifile, ofile, proj, verbose=False):
 
     """
 
+    # Lat/lon AOI file
     aoi_latlon_file = opj(opd(ofile), "aoi_latlon.gpkg")
 
     cb = gdal.TermProgress_nocb if verbose else 0
 
     # Change layer and file names
     # if using file downloaded from GADM
-    if not os.path.isfile(aoi_latlon_file):
+    if opb(ifile)[:4] == "gadm":
+        # Remove intermediate output file
+        # if it exists
+        if os.path.isfile(aoi_latlon_file):
+            os.remove(aoi_latlon_file)
         # Change layer ADM_ADM_0 and file name
         gdal.VectorTranslate(
             aoi_latlon_file, ifile,

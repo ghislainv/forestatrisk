@@ -66,7 +66,10 @@ def country_compute(
                             "iso_wdpa"].values[0]
 
     # Reproject aoi file and compute extent
+    # with compute_gadm()
     ifile = os.path.join(temp_dir, "gadm41_" + iso3 + "_0.gpkg")
+    if not os.path.isfile(ifile):
+        ifile = os.path.join(temp_dir, "aoi_latlon.gpkg")
     ofile = os.path.join(temp_dir, "aoi_proj.gpkg")
     extent_reg = compute_gadm(ifile, ofile, proj)
 
