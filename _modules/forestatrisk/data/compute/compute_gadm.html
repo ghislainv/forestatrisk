@@ -137,6 +137,7 @@
     <span class="n">cb</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TermProgress_nocb</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="mi">0</span>
 
     <span class="c1"># Change layer and file names</span>
+    <span class="c1"># if using file downloaded from GADM</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">aoi_latlon_file</span><span class="p">):</span>
         <span class="c1"># Change layer ADM_ADM_0 and file name</span>
         <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslate</span><span class="p">(</span>
