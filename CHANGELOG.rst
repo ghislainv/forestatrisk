@@ -1,6 +1,14 @@
 Changelog
 =========
 
+forestatrisk 1.2.6
+++++++++++++++++++
+
+* Adding function `check_fcc()` to check multiband forest cover change raster.
+* Compatibility with gcc 14.
+* Bug correction when there is only one explicative variable with GLM and RF models.
+* Changes: https://github.com/ghislainv/forestatrisk/compare/v1.2.5...v1.2.6
+
 forestatrisk 1.2.5
 ++++++++++++++++++
 
