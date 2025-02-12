@@ -1,6 +1,12 @@
 Changelog
 =========
 
+forestatrisk 1.2.7
+++++++++++++++++++
+
+* Copy files if symbolic links cannot be created.
+* Changes: https://github.com/ghislainv/forestatrisk/compare/v1.2.6...v1.2.7
+
 forestatrisk 1.2.6
 ++++++++++++++++++
 

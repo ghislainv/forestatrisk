@@ -1,14 +1,20 @@
 """Create symbolic links."""
 
 import os
+import shutil
 
 from ..misc import make_dir
 
 opj = os.path.join
 
 
-def create_symlinks(data_dir, new_dir, iforest, oforest):
-    """Create symlinks."""
+def create_symlinks_or_copy(data_dir, new_dir, iforest, oforest):
+    """Create symlinks or copy files.
+
+    If symlinks cannot be created, files will be copied (for
+    example if the developer mode is not activated on Windows).
+
+    """
     make_dir(new_dir)
     variables = ["dist_river.tif", "dist_road.tif", "dist_town.tif",
                  "pa.tif", "altitude.tif", "slope.tif"]
@@ -20,7 +26,10 @@ def create_symlinks(data_dir, new_dir, iforest, oforest):
             dst_file = opj(new_dir, ro)
             if os.path.isfile(dst_file):
                 os.remove(dst_file)
-            os.symlink(src_file, dst_file)
+            try:
+                os.symlink(src_file, dst_file)
+            except OSError:
+                shutil.copyfile(src_file, dst_file)
 
 
 def create_symbolic_links(data_dir):
@@ -44,19 +53,19 @@ def create_symbolic_links(data_dir):
     # Data calibration
     iforest = ["fcc12.tif", "dist_edge_t1.tif", "dist_defor_t1.tif"]
     oforest = ["fcc.tif", "dist_edge.tif", "dist_defor.tif"]
-    create_symlinks(data_dir, "data_calibration", iforest, oforest)
+    create_symlinks_or_copy(data_dir, "data_calibration", iforest, oforest)
     # Data validation
     iforest = ["dist_edge_t2.tif", "dist_defor_t2.tif"]
     oforest = ["dist_edge.tif", "dist_defor.tif"]
-    create_symlinks(data_dir, "data_validation", iforest, oforest)
+    create_symlinks_or_copy(data_dir, "data_validation", iforest, oforest)
     # Data historical
     iforest = ["fcc13.tif", "dist_edge_t1.tif", "dist_defor_t1.tif"]
     oforest = ["fcc.tif", "dist_edge.tif", "dist_defor.tif"]
-    create_symlinks(data_dir, "data_historical", iforest, oforest)
+    create_symlinks_or_copy(data_dir, "data_historical", iforest, oforest)
     # Data forecast
     iforest = ["dist_edge_t3.tif", "dist_defor_t3.tif"]
     oforest = ["dist_edge.tif", "dist_defor.tif"]
-    create_symlinks(data_dir, "data_forecast", iforest, oforest)
+    create_symlinks_or_copy(data_dir, "data_forecast", iforest, oforest)
 
 
 # End
