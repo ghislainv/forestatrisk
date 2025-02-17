@@ -163,6 +163,9 @@
     <span class="c1"># Number of bands (or years)</span>
     <span class="k">with</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="s2">&quot;forest_src.tif&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ds</span><span class="p">:</span>
         <span class="n">nbands</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">RasterCount</span>
+        <span class="n">xmin</span><span class="p">,</span> <span class="n">xres</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">yres</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="n">xmin</span> <span class="o">+</span> <span class="n">xres</span> <span class="o">*</span> <span class="n">ds</span><span class="o">.</span><span class="n">RasterXSize</span>
+        <span class="n">ymin</span> <span class="o">=</span> <span class="n">ymax</span> <span class="o">+</span> <span class="n">yres</span> <span class="o">*</span> <span class="n">ds</span><span class="o">.</span><span class="n">RasterYSize</span>
 
     <span class="c1"># Index offset if band == 3</span>
     <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">nbands</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">0</span>
@@ -178,8 +181,9 @@
     <span class="c1"># (by default: zero outside, without nodata value)</span>
     <span class="n">gdal</span><span class="o">.</span><span class="n">Rasterize</span><span class="p">(</span><span class="s2">&quot;aoi_proj.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;aoi_proj.gpkg&quot;</span><span class="p">,</span>
                    <span class="n">layers</span><span class="o">=</span><span class="s2">&quot;aoi&quot;</span><span class="p">,</span>
-                   <span class="n">outputBounds</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
-                   <span class="n">xRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">yRes</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">targetAlignedPixels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                   <span class="n">outputBounds</span><span class="o">=</span><span class="p">[</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">],</span>
+                   <span class="n">xRes</span><span class="o">=</span><span class="n">xres</span><span class="p">,</span> <span class="n">yRes</span><span class="o">=-</span><span class="n">yres</span><span class="p">,</span>
+                   <span class="n">targetAlignedPixels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                    <span class="n">burnValues</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">outputType</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span><span class="p">,</span>
                    <span class="n">creationOptions</span><span class="o">=</span><span class="n">copts</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cback</span><span class="p">)</span>
 

@@ -177,7 +177,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">ifile</span><span class="p">):</span>
         <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;aoi_latlon.gpkg&quot;</span><span class="p">)</span>
     <span class="n">ofile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;aoi_proj.gpkg&quot;</span><span class="p">)</span>
-    <span class="n">extent_reg</span> <span class="o">=</span> <span class="n">compute_gadm</span><span class="p">(</span><span class="n">ifile</span><span class="p">,</span> <span class="n">ofile</span><span class="p">,</span> <span class="n">proj</span><span class="p">)</span>
+    <span class="n">extent_reg</span> <span class="o">=</span> <span class="n">compute_gadm</span><span class="p">(</span><span class="n">ifile</span><span class="p">,</span> <span class="n">ofile</span><span class="p">,</span> <span class="n">proj</span><span class="p">,</span> <span class="n">buff</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
 
     <span class="c1"># Computing country data</span>
     <span class="k">if</span> <span class="n">data_country</span><span class="p">:</span>

@@ -115,7 +115,7 @@
 
 <div class="viewcode-block" id="compute_gadm">
 <a class="viewcode-back" href="../../../../python_api/forestatrisk.data.html#forestatrisk.data.compute.compute_gadm">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_gadm</span><span class="p">(</span><span class="n">ifile</span><span class="p">,</span> <span class="n">ofile</span><span class="p">,</span> <span class="n">proj</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_gadm</span><span class="p">(</span><span class="n">ifile</span><span class="p">,</span> <span class="n">ofile</span><span class="p">,</span> <span class="n">proj</span><span class="p">,</span> <span class="n">buff</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Processing GADM data.</span>
 
 <span class="sd">    Extract layers to a new GPKG file called &quot;aoi_latlong.gpkg&quot; (if it</span>
@@ -128,6 +128,7 @@
 <span class="sd">    :param ofile: Path to aoi GPKG output file.</span>
 <span class="sd">    :param proj: Projection definition (EPSG, PROJ.4, WKT) as in</span>
 <span class="sd">        GDAL/OGR. Used for reprojecting data.</span>
+<span class="sd">    :param buff: Buffer in meter (m) used to extend the extent.</span>
 <span class="sd">    :param verbose: Logical. Whether to print messages or not. Default</span>
 <span class="sd">        to ``False``.</span>
 
@@ -145,7 +146,7 @@
         <span class="c1"># if it exists</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">aoi_latlon_file</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">aoi_latlon_file</span><span class="p">)</span>
-        <span class="c1"># Change layer ADM_ADM_0 and file name</span>
+        <span class="c1"># Change layer ADM_ADM_0 and file name</span>
         <span class="n">gdal</span><span class="o">.</span><span class="n">VectorTranslate</span><span class="p">(</span>
             <span class="n">aoi_latlon_file</span><span class="p">,</span> <span class="n">ifile</span><span class="p">,</span>
             <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GPKG&quot;</span><span class="p">,</span>
@@ -179,11 +180,11 @@
     <span class="c1"># Compute extent</span>
     <span class="n">extent_proj</span> <span class="o">=</span> <span class="n">get_vector_extent</span><span class="p">(</span><span class="n">ofile</span><span class="p">)</span>
 
-    <span class="c1"># Region with buffer of 5km</span>
-    <span class="n">xmin_reg</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">extent_proj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">5000</span><span class="p">)</span>
-    <span class="n">ymin_reg</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">extent_proj</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">5000</span><span class="p">)</span>
-    <span class="n">xmax_reg</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">extent_proj</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">5000</span><span class="p">)</span>
-    <span class="n">ymax_reg</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">extent_proj</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="mi">5000</span><span class="p">)</span>
+    <span class="c1"># Region with buffer</span>
+    <span class="n">xmin_reg</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">extent_proj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">buff</span><span class="p">)</span>
+    <span class="n">ymin_reg</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">extent_proj</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">buff</span><span class="p">)</span>
+    <span class="n">xmax_reg</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">extent_proj</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">buff</span><span class="p">)</span>
+    <span class="n">ymax_reg</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">extent_proj</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">buff</span><span class="p">)</span>
     <span class="n">extent_reg</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmin_reg</span><span class="p">,</span> <span class="n">ymin_reg</span><span class="p">,</span> <span class="n">xmax_reg</span><span class="p">,</span> <span class="n">ymax_reg</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">extent_reg</span></div>
