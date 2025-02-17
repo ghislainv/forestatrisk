@@ -1,6 +1,13 @@
 Changelog
 =========
 
+forestatrisk 1.2.8
+++++++++++++++++++
+
+* Bug corrections.
+* Rasterize the aoi based on forest resolution and extent.
+* Changes: https://github.com/ghislainv/forestatrisk/compare/v1.2.7...v1.2.8
+
 forestatrisk 1.2.7
 ++++++++++++++++++
 
