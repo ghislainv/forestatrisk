@@ -12,7 +12,7 @@ opd = os.path.dirname
 opb = os.path.basename
 
 
-def compute_gadm(ifile, ofile, proj, verbose=False):
+def compute_gadm(ifile, ofile, proj, buff, verbose=False):
     """Processing GADM data.
 
     Extract layers to a new GPKG file called "aoi_latlong.gpkg" (if it
@@ -25,6 +25,7 @@ def compute_gadm(ifile, ofile, proj, verbose=False):
     :param ofile: Path to aoi GPKG output file.
     :param proj: Projection definition (EPSG, PROJ.4, WKT) as in
         GDAL/OGR. Used for reprojecting data.
+    :param buff: Buffer in meter (m) used to extend the extent.
     :param verbose: Logical. Whether to print messages or not. Default
         to ``False``.
 
@@ -42,7 +43,7 @@ def compute_gadm(ifile, ofile, proj, verbose=False):
         # if it exists
         if os.path.isfile(aoi_latlon_file):
             os.remove(aoi_latlon_file)
-        # Change layer ADM_ADM_0 and file name
+        # Change layer ADM_ADM_0 and file name
         gdal.VectorTranslate(
             aoi_latlon_file, ifile,
             format="GPKG",
@@ -76,11 +77,11 @@ def compute_gadm(ifile, ofile, proj, verbose=False):
     # Compute extent
     extent_proj = get_vector_extent(ofile)
 
-    # Region with buffer of 5km
-    xmin_reg = math.floor(extent_proj[0] - 5000)
-    ymin_reg = math.floor(extent_proj[1] - 5000)
-    xmax_reg = math.ceil(extent_proj[2] + 5000)
-    ymax_reg = math.ceil(extent_proj[3] + 5000)
+    # Region with buffer
+    xmin_reg = math.floor(extent_proj[0] - buff)
+    ymin_reg = math.floor(extent_proj[1] - buff)
+    xmax_reg = math.ceil(extent_proj[2] + buff)
+    ymax_reg = math.ceil(extent_proj[3] + buff)
     extent_reg = (xmin_reg, ymin_reg, xmax_reg, ymax_reg)
 
     return extent_reg
