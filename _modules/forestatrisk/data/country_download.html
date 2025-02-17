@@ -178,8 +178,10 @@
 
     <span class="c1"># Download</span>
     <span class="k">if</span> <span class="n">gadm</span><span class="p">:</span>
-        <span class="n">ofile</span> <span class="o">=</span> <span class="n">opj</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;gadm41_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.gpkg&quot;</span><span class="p">)</span>
-        <span class="n">download_gadm</span><span class="p">(</span><span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="n">ofile</span><span class="p">)</span>
+        <span class="c1"># AOI arg must be used here, not iso3</span>
+        <span class="n">aoi</span> <span class="o">=</span> <span class="n">get_fcc_args</span><span class="p">[</span><span class="s2">&quot;aoi&quot;</span><span class="p">]</span>
+        <span class="n">ofile</span> <span class="o">=</span> <span class="n">opj</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;gadm41_&quot;</span> <span class="o">+</span> <span class="n">aoi</span> <span class="o">+</span> <span class="s2">&quot;_0.gpkg&quot;</span><span class="p">)</span>
+        <span class="n">download_gadm</span><span class="p">(</span><span class="n">iso3</span><span class="o">=</span><span class="n">aoi</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="n">ofile</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">srtm</span><span class="p">:</span>
         <span class="n">download_srtm</span><span class="p">(</span><span class="n">iso3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">wdpa</span><span class="p">:</span>

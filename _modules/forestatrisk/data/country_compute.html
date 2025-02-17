@@ -120,7 +120,8 @@
 <div class="viewcode-block" id="country_compute">
 <a class="viewcode-back" href="../../../python_api/forestatrisk.data.html#forestatrisk.data.country_compute">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">country_compute</span><span class="p">(</span>
-    <span class="n">iso3</span><span class="p">,</span>
+    <span class="n">aoi_code</span><span class="p">,</span>
+    <span class="n">iso_code</span><span class="p">,</span>
     <span class="n">temp_dir</span><span class="o">=</span><span class="s2">&quot;data_raw&quot;</span><span class="p">,</span>
     <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
     <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">,</span>
@@ -135,7 +136,9 @@
 <span class="sd">    (default to &quot;data_raw&quot;). Then data are copied to an output</span>
 <span class="sd">    directory (default to &quot;data&quot;).</span>
 
-<span class="sd">    :param iso3: Country ISO 3166-1 alpha-3 code.</span>
+<span class="sd">    :param aoi_code: Area of Interest isocode. Used for GADM.</span>
+
+<span class="sd">    :param iso_code: Country/state isocode. Used for WDPA and OSM.</span>
 
 <span class="sd">    :param temp_dir: Temporary directory for computation. Relative</span>
 <span class="sd">        path to the current working directory.</span>
@@ -165,12 +168,12 @@
     <span class="n">ref</span> <span class="o">=</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;forestatrisk&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">relative_path</span>
     <span class="k">with</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">as_file</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
         <span class="n">data_run</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">iso_wdpa</span> <span class="o">=</span> <span class="n">data_run</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data_run</span><span class="p">[</span><span class="s2">&quot;iso3&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">iso3</span><span class="p">,</span>
+    <span class="n">iso_wdpa</span> <span class="o">=</span> <span class="n">data_run</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data_run</span><span class="p">[</span><span class="s2">&quot;iso3&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">iso_code</span><span class="p">,</span>
                             <span class="s2">&quot;iso_wdpa&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Reproject aoi file and compute extent</span>
     <span class="c1"># with compute_gadm()</span>
-    <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;gadm41_&quot;</span> <span class="o">+</span> <span class="n">iso3</span> <span class="o">+</span> <span class="s2">&quot;_0.gpkg&quot;</span><span class="p">)</span>
+    <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;gadm41_&quot;</span> <span class="o">+</span> <span class="n">aoi_code</span> <span class="o">+</span> <span class="s2">&quot;_0.gpkg&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">ifile</span><span class="p">):</span>
         <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;aoi_latlon.gpkg&quot;</span><span class="p">)</span>
     <span class="n">ofile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;aoi_proj.gpkg&quot;</span><span class="p">)</span>
