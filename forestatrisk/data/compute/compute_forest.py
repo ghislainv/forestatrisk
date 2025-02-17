@@ -60,6 +60,9 @@ def compute_forest(proj, extent, verbose=False):
     # Number of bands (or years)
     with gdal.Open("forest_src.tif") as ds:
         nbands = ds.RasterCount
+        xmin, xres, _, ymax, _, yres = ds.GetGeoTransform()
+        xmax = xmin + xres * ds.RasterXSize
+        ymin = ymax + yres * ds.RasterYSize
 
     # Index offset if band == 3
     k = 1 if nbands == 3 else 0
@@ -75,8 +78,9 @@ def compute_forest(proj, extent, verbose=False):
     # (by default: zero outside, without nodata value)
     gdal.Rasterize("aoi_proj.tif", "aoi_proj.gpkg",
                    layers="aoi",
-                   outputBounds=extent,
-                   xRes=30, yRes=30, targetAlignedPixels=True,
+                   outputBounds=[xmin, ymin, xmax, ymax],
+                   xRes=xres, yRes=-yres,
+                   targetAlignedPixels=False,
                    burnValues=[1], outputType=gdal.GDT_Byte,
                    creationOptions=copts, callback=cback)
 
