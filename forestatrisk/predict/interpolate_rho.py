@@ -38,25 +38,21 @@ def interpolate_rho(
     """
 
     # Region
-    r = gdal.Open(input_raster)
-    ncol = r.RasterXSize
-    nrow = r.RasterYSize
-    gt = r.GetGeoTransform()
-    xres = gt[1]
-    yres = -gt[5]
-    Xmin = gt[0]
-    Xmax = gt[0] + xres * ncol
-    Ymin = gt[3] - yres * nrow
-    Ymax = gt[3]
+    with gdal.Open(input_raster) as ds:
+        gt = ds.GetGeoTransform()
+        xmin, xres, _, ymax, _, yres = gt
+        xmax = xmin + xres * ds.RasterXSize
+        ymin = ymax + yres * ds.RasterYSize
+        proj = ds.GetProjection()
 
     # Cell number from region
     csize_orig = csize_orig * 1000  # Transform km in m
-    ncell_X = int(np.ceil((Xmax - Xmin) / csize_orig))
-    ncell_Y = int(np.ceil((Ymax - Ymin) / csize_orig))
+    ncell_x = int(np.ceil((xmax - xmin) / csize_orig))
+    ncell_y = int(np.ceil((ymax - ymin) / csize_orig))
 
     # NumpyArray
     rho = np.array(rho)
-    rho_arr = rho.reshape(ncell_Y, ncell_X)
+    rho_arr = rho.reshape(ncell_y, ncell_x)
 
     # Create .tif file
     dirname = os.path.dirname(output_file)
@@ -64,35 +60,35 @@ def interpolate_rho(
     driver = gdal.GetDriverByName("GTiff")
     if os.path.isfile(rho_orig_filename):
         os.remove(rho_orig_filename)
-    rho_R = driver.Create(
+    rho_r = driver.Create(
         rho_orig_filename,
-        ncell_X,
-        ncell_Y,
+        ncell_x,
+        ncell_y,
         1,
         gdal.GDT_Float64
     )
-    rho_R.SetProjection(r.GetProjection())
-    gt = list(gt)
-    gt[1] = csize_orig
-    gt[5] = -csize_orig
-    rho_R.SetGeoTransform(gt)
+    rho_r.SetProjection(proj)
+    gt_new = list(gt)
+    gt_new[1] = csize_orig
+    gt_new[5] = -csize_orig
+    rho_r.SetGeoTransform(gt_new)
 
     # Write data
     print("Write spatial random effect data to disk")
-    rho_B = rho_R.GetRasterBand(1)
-    rho_B.WriteArray(rho_arr)
-    rho_B.FlushCache()  # Write cache data to disk
+    rho_b = rho_r.GetRasterBand(1)
+    rho_b.WriteArray(rho_arr)
+    rho_b.FlushCache()  # Write cache data to disk
 
     # Compute statistics
     print("Compute statistics")
-    rho_B.ComputeStatistics(False)
+    rho_b.ComputeStatistics(False)
 
     # Set nodata value
-    rho_B.SetNoDataValue(-9999)
+    rho_b.SetNoDataValue(-9999)
 
     # Dereference driver
-    rho_B = None
-    del rho_R
+    rho_b = None
+    del rho_r
 
     # Cubicspline interpolation to csize_new*1000 km
     print("Resampling spatial random effects to file " + output_file)
@@ -104,7 +100,7 @@ def interpolate_rho(
         resampleAlg=gdal.GRA_CubicSpline,
         creationOptions=["COMPRESS=DEFLATE"],
     )
-    gdal.Warp(output_file, rho_orig_filename, options=param)
-
+    ds_rho = gdal.Warp(output_file, rho_orig_filename, options=param)
+    del ds_rho
 
 # End
