@@ -75,8 +75,10 @@ def country_download(
 
     # Download
     if gadm:
-        ofile = opj(output_dir, "gadm41_" + iso3 + "_0.gpkg")
-        download_gadm(iso3=iso3, output_file=ofile)
+        # AOI arg must be used here, not iso3
+        aoi = get_fcc_args["aoi"]
+        ofile = opj(output_dir, "gadm41_" + aoi + "_0.gpkg")
+        download_gadm(iso3=aoi, output_file=ofile)
     if srtm:
         download_srtm(iso3=iso3, output_dir=output_dir)
     if wdpa:

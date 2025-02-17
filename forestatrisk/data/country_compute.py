@@ -17,7 +17,8 @@ from .compute import compute_biomass_avitabile
 
 
 def country_compute(
-    iso3,
+    aoi_code,
+    iso_code,
     temp_dir="data_raw",
     output_dir="data",
     proj="EPSG:3395",
@@ -32,7 +33,9 @@ def country_compute(
     (default to "data_raw"). Then data are copied to an output
     directory (default to "data").
 
-    :param iso3: Country ISO 3166-1 alpha-3 code.
+    :param aoi_code: Area of Interest isocode. Used for GADM.
+
+    :param iso_code: Country/state isocode. Used for WDPA and OSM.
 
     :param temp_dir: Temporary directory for computation. Relative
         path to the current working directory.
@@ -62,12 +65,12 @@ def country_compute(
     ref = importlib_resources.files("forestatrisk") / relative_path
     with importlib_resources.as_file(ref) as path:
         data_run = pd.read_csv(path, sep=";", header=0)
-    iso_wdpa = data_run.loc[data_run["iso3"] == iso3,
+    iso_wdpa = data_run.loc[data_run["iso3"] == iso_code,
                             "iso_wdpa"].values[0]
 
     # Reproject aoi file and compute extent
     # with compute_gadm()
-    ifile = os.path.join(temp_dir, "gadm41_" + iso3 + "_0.gpkg")
+    ifile = os.path.join(temp_dir, "gadm41_" + aoi_code + "_0.gpkg")
     if not os.path.isfile(ifile):
         ifile = os.path.join(temp_dir, "aoi_latlon.gpkg")
     ofile = os.path.join(temp_dir, "aoi_proj.gpkg")
