@@ -74,7 +74,7 @@ def country_compute(
     if not os.path.isfile(ifile):
         ifile = os.path.join(temp_dir, "aoi_latlon.gpkg")
     ofile = os.path.join(temp_dir, "aoi_proj.gpkg")
-    extent_reg = compute_gadm(ifile, ofile, proj)
+    extent_reg = compute_gadm(ifile, ofile, proj, buff=5000)
 
     # Computing country data
     if data_country:
