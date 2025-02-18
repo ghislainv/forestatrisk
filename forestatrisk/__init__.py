@@ -13,13 +13,13 @@ __email__ = "ghislain.vieilledent@cirad.fr"
 __version__ = "1.2.8"
 
 # GDAL exceptions
-from osgeo import gdal
+from osgeo import gdal, ogr
 
 # Local imports
 # Data
 from .data import sample, get_vector_extent
 from .data import extent_shp, create_symbolic_links
-from .data import check_fcc
+from .data import check_fcc, check_aoi
 
 # Model
 from .model import cellneigh, cellneigh_ctry
@@ -54,5 +54,6 @@ from .misc import countpix, invlogit, make_dir
 
 # GDAL exceptions
 gdal.UseExceptions()
+ogr.UseExceptions()
 
 # EOF
