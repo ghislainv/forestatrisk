@@ -1,6 +1,13 @@
 Changelog
 =========
 
+forestatrisk 1.2.9
+++++++++++++++++++
+
+* Adding ``check_aoi()`` function.
+* Adding internal function ``get_iso_wdpa()``.
+* Changes: https://github.com/ghislainv/forestatrisk/compare/v1.2.8...v1.2.9
+
 forestatrisk 1.2.8
 ++++++++++++++++++
 
