@@ -16,6 +16,27 @@ from .compute import (
 from .compute import compute_biomass_avitabile
 
 
+def get_iso_wdpa(isocode):
+    """Get isocode for WDPA from country/state isocode.
+
+    The isocode for WDPA is always three letters (XXX) while the
+    country/state isocode can be three letters (XXX) or more
+    (XXX-XX).
+
+    :param isocode: Country/state isocode.
+
+    :return: isocode for wdpa.
+
+    """
+    relative_path = os.path.join("csv", "ctry_run.csv")
+    ref = importlib_resources.files("forestatrisk") / relative_path
+    with importlib_resources.as_file(ref) as path:
+        data_run = pd.read_csv(path, sep=";", header=0)
+    iso_wdpa = data_run.loc[data_run["iso3"] == isocode,
+                            "iso_wdpa"].values[0]
+    return iso_wdpa
+
+
 def country_compute(
     aoi_code,
     iso_code,
@@ -60,14 +81,6 @@ def country_compute(
     # Create output directory
     make_dir(output_dir)
 
-    # iso_wpda
-    relative_path = os.path.join("csv", "ctry_run.csv")
-    ref = importlib_resources.files("forestatrisk") / relative_path
-    with importlib_resources.as_file(ref) as path:
-        data_run = pd.read_csv(path, sep=";", header=0)
-    iso_wdpa = data_run.loc[data_run["iso3"] == iso_code,
-                            "iso_wdpa"].values[0]
-
     # Reproject aoi file and compute extent
     # with compute_gadm()
     ifile = os.path.join(temp_dir, "gadm41_" + aoi_code + "_0.gpkg")
@@ -81,6 +94,8 @@ def country_compute(
         # Changing working directory
         wd = os.getcwd()
         os.chdir(temp_dir)
+        # Get iso for wdpa
+        iso_wdpa = get_iso_wdpa(iso_code)
         # Perform computations
         compute_osm(proj, extent_reg)
         compute_srtm(proj, extent_reg)
