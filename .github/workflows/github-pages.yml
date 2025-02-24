@@ -30,7 +30,7 @@ jobs:
           export C_INCLUDE_PATH=/usr/include/gdal
           python3 -m pip install gdal==$(gdal-config --version)
           python3 -m pip install -r requirements.txt
-          python3 -m pip install sphinx nbsphinx ipython
+          python3 -m pip install sphinx==8.1.3 nbsphinx ipython
           python3 -m pip install -e .
       - name: Building documentation
         run: sphinx-build docsrc docs/html -b html -d docs/doctree
