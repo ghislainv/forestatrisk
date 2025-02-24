@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
     <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=d35aba6c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=8fb1bb4b" />
-    <script src="../../../_static/documentation_options.js?v=4d6f9085"></script>
+    <script src="../../../_static/documentation_options.js?v=e917149c"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -117,6 +117,27 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.compute</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_biomass_avitabile</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">get_iso_wdpa</span><span class="p">(</span><span class="n">isocode</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get isocode for WDPA from country/state isocode.</span>
+
+<span class="sd">    The isocode for WDPA is always three letters (XXX) while the</span>
+<span class="sd">    country/state isocode can be three letters (XXX) or more</span>
+<span class="sd">    (XXX-XX).</span>
+
+<span class="sd">    :param isocode: Country/state isocode.</span>
+
+<span class="sd">    :return: isocode for wdpa.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">relative_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;csv&quot;</span><span class="p">,</span> <span class="s2">&quot;ctry_run.csv&quot;</span><span class="p">)</span>
+    <span class="n">ref</span> <span class="o">=</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;forestatrisk&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">relative_path</span>
+    <span class="k">with</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">as_file</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
+        <span class="n">data_run</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">iso_wdpa</span> <span class="o">=</span> <span class="n">data_run</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data_run</span><span class="p">[</span><span class="s2">&quot;iso3&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">isocode</span><span class="p">,</span>
+                            <span class="s2">&quot;iso_wdpa&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">iso_wdpa</span>
+
+
 <div class="viewcode-block" id="country_compute">
 <a class="viewcode-back" href="../../../python_api/forestatrisk.data.html#forestatrisk.data.country_compute">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">country_compute</span><span class="p">(</span>
@@ -163,14 +184,6 @@
     <span class="c1"># Create output directory</span>
     <span class="n">make_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
 
-    <span class="c1"># iso_wpda</span>
-    <span class="n">relative_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;csv&quot;</span><span class="p">,</span> <span class="s2">&quot;ctry_run.csv&quot;</span><span class="p">)</span>
-    <span class="n">ref</span> <span class="o">=</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;forestatrisk&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">relative_path</span>
-    <span class="k">with</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">as_file</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
-        <span class="n">data_run</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">iso_wdpa</span> <span class="o">=</span> <span class="n">data_run</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data_run</span><span class="p">[</span><span class="s2">&quot;iso3&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">iso_code</span><span class="p">,</span>
-                            <span class="s2">&quot;iso_wdpa&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
     <span class="c1"># Reproject aoi file and compute extent</span>
     <span class="c1"># with compute_gadm()</span>
     <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;gadm41_&quot;</span> <span class="o">+</span> <span class="n">aoi_code</span> <span class="o">+</span> <span class="s2">&quot;_0.gpkg&quot;</span><span class="p">)</span>
@@ -184,6 +197,8 @@
         <span class="c1"># Changing working directory</span>
         <span class="n">wd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+        <span class="c1"># Get iso for wdpa</span>
+        <span class="n">iso_wdpa</span> <span class="o">=</span> <span class="n">get_iso_wdpa</span><span class="p">(</span><span class="n">iso_code</span><span class="p">)</span>
         <span class="c1"># Perform computations</span>
         <span class="n">compute_osm</span><span class="p">(</span><span class="n">proj</span><span class="p">,</span> <span class="n">extent_reg</span><span class="p">)</span>
         <span class="n">compute_srtm</span><span class="p">(</span><span class="n">proj</span><span class="p">,</span> <span class="n">extent_reg</span><span class="p">)</span>
