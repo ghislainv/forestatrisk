@@ -44,7 +44,7 @@ jobs:
         include:
           # Window 64 bit
           - os: windows-latest
-            python: 39
+            python: 313
             platform_id: win_amd64
           - os: windows-latest
             python: 310
@@ -58,7 +58,7 @@ jobs:
 
           # Linux 64 bit manylinux2014
           - os: ubuntu-latest
-            python: 39
+            python: 313
             platform_id: manylinux_x86_64
             manylinux_image: manylinux2014
           - os: ubuntu-latest
@@ -76,7 +76,7 @@ jobs:
 
           # MacOS x86_64
           - os: macos-13
-            python: 39
+            python: 313
             platform_id: macosx_x86_64
           - os: macos-13
             python: 310
@@ -90,7 +90,7 @@ jobs:
 
           # MacOS arm64
           - os: macos-latest
-            python: 39
+            python: 313
             platform_id: macosx_arm64
           - os: macos-latest
             python: 310
@@ -106,7 +106,7 @@ jobs:
       - uses: actions/setup-python@v5
         name: Install Python
         with:
-          python-version: '3.11'
+          python-version: '3.13'
       - name: Install NumPy and cibuildwheel
         run: |
           python3 -m pip install --upgrade pip
@@ -133,7 +133,7 @@ jobs:
       - uses: actions/setup-python@v5
         name: Install Python
         with:
-          python-version: '3.11'
+          python-version: '3.13'
       - name: Install Python dependencies
         run: |
           python3 -m pip install --upgrade pip setuptools wheel

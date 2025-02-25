@@ -1,3 +1,5 @@
 include README.rst
 include CHANGELOG.rst
 include LICENSE
+include forestatrisk/csv/*.csv
+include forestatrisk/shell/*.sh
