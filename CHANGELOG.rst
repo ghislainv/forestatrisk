@@ -1,6 +1,13 @@
 Changelog
 =========
 
+forestatrisk 1.3.1
+++++++++++++++++++
+
+* Upgrading tests with Python 3.13.
+* Checking installation setup.
+* Changes: https://github.com/ghislainv/forestatrisk/compare/v1.3...v1.3.1
+
 forestatrisk 1.3
 ++++++++++++++++
 
