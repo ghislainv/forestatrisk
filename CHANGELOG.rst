@@ -1,6 +1,12 @@
 Changelog
 =========
 
+forestatrisk 1.3
+++++++++++++++++
+
+* Adding the possibility to obtain a deforestation density map in ``allocate_deforestation()``.
+* Changes: https://github.com/ghislainv/forestatrisk/compare/v1.2.9...v1.3
+
 forestatrisk 1.2.9
 ++++++++++++++++++
 
