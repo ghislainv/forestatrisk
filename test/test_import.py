@@ -12,6 +12,7 @@
 
 # test_import
 def test_import():
+    """Testing import."""
     imp = True
     try:
         import forestatrisk

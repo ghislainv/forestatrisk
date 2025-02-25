@@ -130,6 +130,7 @@ def test_model_binomial_icar(gstart):
 
     assert np.allclose(gstart["pred_icar"][0:100], pred_icar_first100)
 
+
 def test_rho(gstart):
     """Test rho."""
 
