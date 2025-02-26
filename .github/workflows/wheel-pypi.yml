@@ -110,7 +110,7 @@ jobs:
       - name: Install NumPy and cibuildwheel
         run: |
           python3 -m pip install --upgrade pip
-          python3 -m pip install cibuildwheel==2.19.1
+          python3 -m pip install cibuildwheel==2.22.0
       - name: Build wheels
         run: |
           python3 -m cibuildwheel --output-dir wheelhouse
