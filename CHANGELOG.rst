@@ -1,6 +1,12 @@
 Changelog
 =========
 
+forestatrisk 1.3.2
+++++++++++++++++++
+
+* Adding Nepal and Mongolia to list of countries.
+* Changes: https://github.com/ghislainv/forestatrisk/compare/v1.3.1...v1.3.2
+
 forestatrisk 1.3.1
 ++++++++++++++++++
 
