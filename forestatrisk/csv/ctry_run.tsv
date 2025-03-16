@@ -137,3 +137,5 @@ id	cont_run	ctry_run	iso3	iso_wdpa	ctry_long_name	ctry_geofab	cont_geofab	ctry_o
 136	Chile	Santiago	CHL-XIII	CHL	Santiago	NA	NA	santiago	south-america/chile	XIII	Chile – Santiago	Chile	America
 137	Chile	Tarapaca	CHL-I	CHL	Tarapaca	NA	NA	tarapaca	south-america/chile	I	Chile – Taracapa	Chile	America
 138	Chile	Valparaiso	CHL-V	CHL	Valparaíso	NA	NA	valparaiso	south-america/chile	V	Chile – Valparaiso	Chile	America
+139	Asia	Nepal	NPL	NPL	Nepal	nepal	asia	NA	NA	NPL	Nepal	Nepal	Asia
+140	Asia	Mongolia	MNG	MNG	Mongolia	mongolia	asia	NA	NA	MNG	Mongolia	Mongolia	Asia
