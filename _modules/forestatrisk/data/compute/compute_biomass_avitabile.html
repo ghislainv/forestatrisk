@@ -142,6 +142,8 @@
         <span class="s2">&quot;/vsicurl/https://forestatrisk.cirad.fr/&quot;</span>
         <span class="s2">&quot;tropics/agb/Avitabile_AGB_Map_cog.tif&quot;</span>
     <span class="p">)</span>
+    <span class="c1"># Make GDAL skip the certificate check</span>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s2">&quot;GDAL_HTTP_UNSAFESSL&quot;</span><span class="p">,</span> <span class="s2">&quot;YES&quot;</span><span class="p">)</span>
     <span class="n">param</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">WarpOptions</span><span class="p">(</span>
         <span class="n">warpOptions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;overwrite&quot;</span><span class="p">],</span>
         <span class="n">srcSRS</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
@@ -154,11 +156,12 @@
         <span class="n">creationOptions</span><span class="o">=</span><span class="n">copts</span><span class="p">,</span>
         <span class="n">callback</span><span class="o">=</span><span class="n">cback</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">gdal</span><span class="o">.</span><span class="n">Warp</span><span class="p">(</span><span class="s2">&quot;AGB.tif&quot;</span><span class="p">,</span> <span class="n">ifile</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span></div>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">Warp</span><span class="p">(</span><span class="s2">&quot;AGB.tif&quot;</span><span class="p">,</span> <span class="n">ifile</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
+    <span class="c1"># Reset GDAL configuration option</span>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s2">&quot;GDAL_HTTP_UNSAFESSL&quot;</span><span class="p">,</span> <span class="s2">&quot;NO&quot;</span><span class="p">)</span></div>
 
 
 <span class="c1"># End</span>
-
 </pre></div>
 
           </div>

@@ -148,6 +148,7 @@
     <span class="n">proj</span><span class="o">=</span><span class="s2">&quot;EPSG:3395&quot;</span><span class="p">,</span>
     <span class="n">data_country</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">data_forest</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">data_agb</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">keep_temp_dir</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Process country geospatial data.</span>
@@ -176,6 +177,9 @@
 <span class="sd">    :param data_forest: Boolean to compute forest variables. Default</span>
 <span class="sd">        to &quot;True&quot;.</span>
 
+<span class="sd">    :param data_agb: Boolean to compute AGB. Default</span>
+<span class="sd">        to &quot;False&quot;.</span>
+
 <span class="sd">    :param keep_temp_dir: Boolean to keep the temporary</span>
 <span class="sd">        directory. Default to &quot;False&quot;.</span>
 
@@ -203,12 +207,15 @@
         <span class="n">compute_osm</span><span class="p">(</span><span class="n">proj</span><span class="p">,</span> <span class="n">extent_reg</span><span class="p">)</span>
         <span class="n">compute_srtm</span><span class="p">(</span><span class="n">proj</span><span class="p">,</span> <span class="n">extent_reg</span><span class="p">)</span>
         <span class="n">compute_wdpa</span><span class="p">(</span><span class="n">iso_wdpa</span><span class="p">,</span> <span class="n">proj</span><span class="p">,</span> <span class="n">extent_reg</span><span class="p">)</span>
-        <span class="n">compute_biomass_avitabile</span><span class="p">(</span><span class="n">proj</span><span class="p">,</span> <span class="n">extent_reg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data_agb</span><span class="p">:</span>
+            <span class="n">compute_biomass_avitabile</span><span class="p">(</span><span class="n">proj</span><span class="p">,</span> <span class="n">extent_reg</span><span class="p">)</span>
         <span class="c1"># Moving created files</span>
         <span class="n">dist_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="s2">&quot;dist_*.tif&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;t&quot;</span><span class="p">]</span>
         <span class="n">aoi_files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;aoi_proj.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;aoi_proj.gpkg&quot;</span><span class="p">]</span>
         <span class="n">proj_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*_proj.*&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">aoi_files</span><span class="p">]</span>
-        <span class="n">other_files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;altitude.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;slope.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;pa.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;AGB.tif&quot;</span><span class="p">]</span>
+        <span class="n">other_files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;altitude.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;slope.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;pa.tif&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">data_agb</span><span class="p">:</span>
+            <span class="n">other_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;AGB.tif&quot;</span><span class="p">)</span>
         <span class="n">ifiles</span> <span class="o">=</span> <span class="n">dist_files</span> <span class="o">+</span> <span class="n">proj_files</span> <span class="o">+</span> <span class="n">other_files</span>
         <span class="k">for</span> <span class="n">ifile</span> <span class="ow">in</span> <span class="n">ifiles</span><span class="p">:</span>
             <span class="n">copy2</span><span class="p">(</span><span class="n">ifile</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wd</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">))</span>
