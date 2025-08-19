@@ -45,6 +45,7 @@ def country_compute(
     proj="EPSG:3395",
     data_country=True,
     data_forest=True,
+    data_agb=False,
     keep_temp_dir=False,
 ):
     """Process country geospatial data.
@@ -73,6 +74,9 @@ def country_compute(
     :param data_forest: Boolean to compute forest variables. Default
         to "True".
 
+    :param data_agb: Boolean to compute AGB. Default
+        to "False".
+
     :param keep_temp_dir: Boolean to keep the temporary
         directory. Default to "False".
 
@@ -100,12 +104,15 @@ def country_compute(
         compute_osm(proj, extent_reg)
         compute_srtm(proj, extent_reg)
         compute_wdpa(iso_wdpa, proj, extent_reg)
-        compute_biomass_avitabile(proj, extent_reg)
+        if data_agb:
+            compute_biomass_avitabile(proj, extent_reg)
         # Moving created files
         dist_files = [f for f in glob("dist_*.tif") if f[-6] != "t"]
         aoi_files = ["aoi_proj.tif", "aoi_proj.gpkg"]
         proj_files = [f for f in glob("*_proj.*") if f not in aoi_files]
-        other_files = ["altitude.tif", "slope.tif", "pa.tif", "AGB.tif"]
+        other_files = ["altitude.tif", "slope.tif", "pa.tif"]
+        if data_agb:
+            other_files.append("AGB.tif")
         ifiles = dist_files + proj_files + other_files
         for ifile in ifiles:
             copy2(ifile, os.path.join(wd, output_dir))
