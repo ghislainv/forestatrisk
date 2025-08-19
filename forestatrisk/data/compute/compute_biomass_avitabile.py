@@ -39,6 +39,8 @@ def compute_biomass_avitabile(proj, extent, verbose=False):
         "/vsicurl/https://forestatrisk.cirad.fr/"
         "tropics/agb/Avitabile_AGB_Map_cog.tif"
     )
+    # Make GDAL skip the certificate check
+    gdal.SetConfigOption("GDAL_HTTP_UNSAFESSL", "YES")
     param = gdal.WarpOptions(
         warpOptions=["overwrite"],
         srcSRS="EPSG:4326",
@@ -52,6 +54,7 @@ def compute_biomass_avitabile(proj, extent, verbose=False):
         callback=cback,
     )
     gdal.Warp("AGB.tif", ifile, options=param)
+    # Reset GDAL configuration option
+    gdal.SetConfigOption("GDAL_HTTP_UNSAFESSL", "NO")
 
 # End
-
